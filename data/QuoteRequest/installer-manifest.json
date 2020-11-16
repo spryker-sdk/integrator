@@ -1,0 +1,51 @@
+{
+    "wire-plugin": [
+        {
+            "target": "\\Spryker\\Client\\Quote\\QuoteDependencyProvider::getDatabaseStrategyPreCheckPlugins",
+            "source": "\\Spryker\\Client\\QuoteRequest\\Plugin\\Quote\\QuoteRequestDatabaseStrategyPreCheckPlugin"
+        },
+        {
+            "target": "\\Spryker\\Zed\\QuoteApproval\\QuoteApprovalDependencyProvider::getQuoteApprovalUnlockPreCheckPlugins",
+            "source": "\\Spryker\\Zed\\QuoteRequest\\Communication\\Plugin\\QuoteApproval\\QuoteRequestQuoteApprovalUnlockPreCheckPlugin"
+        },
+        {
+            "target": "\\Spryker\\Zed\\Cart\\CartDependencyProvider::getQuoteLockPreResetPlugins",
+            "source": "\\Spryker\\Zed\\QuoteRequest\\Communication\\Plugin\\Cart\\SanitizeQuoteRequestQuoteLockPreResetPlugin"
+        },
+        {
+            "target": "\\Spryker\\Zed\\Checkout\\CheckoutDependencyProvider::getCheckoutPreConditions",
+            "source": "\\Spryker\\Zed\\QuoteRequest\\Communication\\Plugin\\Checkout\\QuoteRequestPreCheckPlugin"
+        },
+        {
+            "target": "\\Spryker\\Zed\\Checkout\\CheckoutDependencyProvider::getCheckoutPostHooks",
+            "source": "\\Spryker\\Zed\\QuoteRequest\\Communication\\Plugin\\Checkout\\CloseQuoteRequestCheckoutPostSaveHookPlugin"
+        },
+        {
+            "target": "\\Spryker\\Zed\\CompanyUser\\CompanyUserDependencyProvider::getCompanyUserPreDeletePlugins",
+            "source": "\\Spryker\\Zed\\QuoteRequest\\Communication\\Plugin\\CompanyUserExtension\\QuoteRequestCompanyUserPreDeletePlugin"
+        }
+    ],
+    "configure-module": [
+        {
+            "target": "\\Spryker\\Zed\\QuoteRequest\\QuoteRequestConfig::getQuoteFieldsAllowedForSaving",
+            "value": [
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::CUSTOMER_REFERENCE",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::CUSTOMER",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::STORE",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::ITEMS",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::TOTALS",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::CURRENCY",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::PRICE_MODE",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::BUNDLE_ITEMS",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::EXPENSES",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::VOUCHER_DISCOUNTS",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::CART_RULE_DISCOUNTS",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::PROMOTION_ITEMS",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::QUOTE_APPROVALS",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::BILLING_ADDRESS",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::SHIPMENT",
+                "\\Generated\\Shared\\Transfer\\QuoteTransfer::SHIPPING_ADDRESS"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "wire-plugin": [
+        {
+            "target": "\\Spryker\\Client\\QuoteRequest\\QuoteRequestDependencyProvider::getQuoteRequestQuoteCheckPlugins",
+            "source": "\\Spryker\\Client\\QuoteApproval\\Plugin\\QuoteRequest\\QuoteApprovalQuoteRequestQuoteCheckPlugin"
+        }
+    ]
+}

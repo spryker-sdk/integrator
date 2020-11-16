@@ -1,0 +1,16 @@
+{
+    "wire-plugin": [
+        {
+            "target": "\\Spryker\\Yves\\Router\\RouterDependencyProvider::getRouteProvider",
+            "source": "\\SprykerShop\\Yves\\QuoteRequestAgentWidget\\Plugin\\Router\\QuoteRequestAgentWidgetRouteProviderPlugin"
+        }
+    ],
+    "wire-widget": [
+        {
+            "source": "\\SprykerShop\\Yves\\QuoteRequestAgentWidget\\Widget\\QuoteRequestAgentOverviewWidget"
+        },
+        {
+            "source": "\\SprykerShop\\Yves\\QuoteRequestAgentWidget\\Widget\\QuoteRequestAgentCancelWidget"
+        }
+    ]
+}

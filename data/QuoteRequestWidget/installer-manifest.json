@@ -1,0 +1,25 @@
+{
+    "wire-plugin": [
+        {
+            "target": "\\Spryker\\Yves\\Router\\RouterDependencyProvider::getRouteProvider",
+            "source": "\\SprykerShop\\Yves\\QuoteRequestWidget\\Plugin\\Router\\QuoteRequestWidgetRouteProviderPlugin"
+        }
+    ],
+    "wire-widget": [
+        {
+            "source": "\\SprykerShop\\Yves\\QuoteRequestWidget\\Widget\\QuoteRequestMenuItemWidget"
+        },
+        {
+            "source": "\\SprykerShop\\Yves\\QuoteRequestWidget\\Widget\\QuoteRequestCreateWidget"
+        },
+        {
+            "source": "\\SprykerShop\\Yves\\QuoteRequestWidget\\Widget\\QuoteRequestCartWidget"
+        },
+        {
+            "source": "\\SprykerShop\\Yves\\QuoteRequestWidget\\Widget\\QuoteRequestCancelWidget"
+        },
+        {
+            "source": "\\SprykerShop\\Yves\\QuoteRequestWidget\\Widget\\QuoteRequestActionsWidget"
+        }
+    ]
+}

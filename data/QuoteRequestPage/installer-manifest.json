@@ -1,0 +1,28 @@
+{
+    "wire-plugin": [
+        {
+            "target": "\\SprykerShop\\Yves\\CheckoutPage\\CheckoutPageDependencyProvider::getCheckoutStepResolverStrategyPlugins",
+            "source": "\\SprykerShop\\Yves\\QuoteRequestPage\\Plugin\\CheckoutPage\\QuoteRequestCheckoutWorkflowStepResolverStrategyPlugin"
+        },
+        {
+            "target": "\\SprykerShop\\Yves\\CheckoutPage\\CheckoutPageDependencyProvider::getCheckoutStepResolverStrategyPlugins",
+            "source": "\\SprykerShop\\Yves\\QuoteRequestPage\\Plugin\\CheckoutPage\\QuoteWithCustomShipmentPriceCheckoutWorkflowStepResolverStrategyPlugin"
+        },
+        {
+            "target": "\\SprykerShop\\Yves\\QuoteRequestPage\\QuoteRequestPageDependencyProvider::getQuoteRequestFormMetadataFieldPlugins",
+            "source": "\\SprykerShop\\Yves\\QuoteRequestPage\\Plugin\\QuoteRequestPage\\PurchaseOrderNumberMetadataFieldPlugin"
+        },
+        {
+            "target": "\\SprykerShop\\Yves\\QuoteRequestPage\\QuoteRequestPageDependencyProvider::getQuoteRequestFormMetadataFieldPlugins",
+            "source": "\\SprykerShop\\Yves\\QuoteRequestPage\\Plugin\\QuoteRequestPage\\DeliveryDateMetadataFieldPlugin"
+        },
+        {
+            "target": "\\SprykerShop\\Yves\\QuoteRequestPage\\QuoteRequestPageDependencyProvider::getQuoteRequestFormMetadataFieldPlugins",
+            "source": "\\SprykerShop\\Yves\\QuoteRequestPage\\Plugin\\QuoteRequestPage\\NoteMetadataFieldPlugin"
+        },
+        {
+            "target": "\\Spryker\\Yves\\Router\\RouterDependencyProvider::getRouteProvider",
+            "source": "\\SprykerShop\\Yves\\QuoteRequestPage\\Plugin\\Router\\QuoteRequestPageRouteProviderPlugin"
+        }
+    ]
+}
