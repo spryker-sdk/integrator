@@ -20,8 +20,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
+use SprykerSdk\Zed\Integrator\Business\Builder\Checker\ClassMethodChecker;
 use SprykerSdk\Zed\Integrator\Business\Builder\Finder\ClassNodeFinder;
-use SprykerSdk\Zed\Integrator\Business\Builder\Helper\ClassHelper;
 use SprykerSdk\Zed\Integrator\Business\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Zed\Integrator\Business\Builder\Visitor\CloneNodeWithClearPositionVisitor;
 use SprykerSdk\Zed\Integrator\Business\Builder\Visitor\RemoveMethodVisitor;
@@ -68,7 +68,7 @@ class CommonClassModifier
         $methodAst = $nodeTraverser->traverse([$methodAst])[0];
 
         $methodBody = [];
-        if ((new ClassHelper())->isMethodReturnArray($methodAst)) {
+        if ((new ClassMethodChecker())->isMethodReturnArray($methodAst)) {
             $builder = new BuilderFactory();
             $methodBody = [new Return_(new Array_())];
             if (!$this->isMethodReturnArrayEmpty($methodAst)) {

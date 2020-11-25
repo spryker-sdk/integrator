@@ -31,12 +31,18 @@ class SprykerLockReader
      */
     public function getLockFileData(): array
     {
-        $lockFilePath = $this->config->getLockFilePath();
+        $integratorLockFilePath = $this->config->getIntegratorLockFilePath();
 
-        if (!file_exists($lockFilePath)) {
+        if (!file_exists($integratorLockFilePath)) {
             return [];
         }
 
-        return json_decode(file_get_contents($lockFilePath), true);
+        $lockData = json_decode(file_get_contents($integratorLockFilePath), true);
+
+        if (json_last_error()) {
+            return [];
+        }
+
+        return $lockData;
     }
 }

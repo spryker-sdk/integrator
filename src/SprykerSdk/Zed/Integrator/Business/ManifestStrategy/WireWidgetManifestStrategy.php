@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Zed\Integrator\Business\ManifestStrategy;
 
-use SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface;
+use SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Zed\Integrator\IntegratorConfig;
 
 class WireWidgetManifestStrategy extends AbstractManifestStrategy
@@ -25,12 +25,12 @@ class WireWidgetManifestStrategy extends AbstractManifestStrategy
     /**
      * @param string[] $manifest
      * @param string $moduleName
-     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface $inputOutput
+     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
      * @return bool
      */
-    public function apply(array $manifest, string $moduleName, IOInterface $inputOutput, bool $isDry): bool
+    public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
         $targetClassName = '\SprykerShop\Yves\ShopApplication\ShopApplicationDependencyProvider';
         $targetMethodName = 'getGlobalWidgets';
@@ -58,7 +58,7 @@ class WireWidgetManifestStrategy extends AbstractManifestStrategy
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $classInformationTransfer->getClassName(),
                 $targetMethodName
-            ), IOInterface::DEBUG);
+            ), InputOutputInterface::DEBUG);
         }
 
         return true;

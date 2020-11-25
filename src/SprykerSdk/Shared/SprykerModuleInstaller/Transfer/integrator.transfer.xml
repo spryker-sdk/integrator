@@ -8,8 +8,8 @@
         <property name="className" type="string"/>
         <property name="filePath" type="string"/>
         <property name="parent" type="ClassInformation"/>
-        <property name="classTokenTree" type="array" singular="classToken"/>
-        <property name="originalClassTokenTree" type="array" singular="originalClassToken"/>
+        <property name="classTokenTree" type="array" singular="astData"/>
+        <property name="originalClassTokenTree" type="array" singular="originalAstData"/>
         <property name="tokens" type="array" singular="token"/>
     </transfer>
 

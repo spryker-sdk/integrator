@@ -18,7 +18,7 @@ class IntegratorConfig extends AbstractBundleConfig
     public const MANIFEST_KEY_TARGET = 'target';
     public const MANIFEST_KEY_SOURCE = 'source';
     public const MANIFEST_KEY_VALUE = 'value';
-    public const MANIFEST_KEY_DEFAULT_VALUE = 'defaultValue';
+    public const MANIFEST_KEY_DEFAULT_VALUE = 'default';
     public const MANIFEST_KEY_CHOICES = 'choices';
     public const MANIFEST_KEY_POSITION = 'position';
     public const MANIFEST_KEY_POSITION_BEFORE = 'before';
@@ -126,8 +126,38 @@ class IntegratorConfig extends AbstractBundleConfig
      *
      * @return string
      */
-    public function getLockFilePath(): string
+    public function getIntegratorLockFilePath(): string
     {
         return $this->getProjectRootDirectory() . 'integrator.lock';
+    }
+
+    /**
+     * @api
+     *
+     * @return string
+     */
+    public function getComposerLockFilePath(): string
+    {
+        return $this->getProjectRootDirectory() . 'composer.lock';
+    }
+
+    /**
+     * @api
+     *
+     * @return string
+     */
+    public function getRecipiesDirectory(): string
+    {
+        return $this->getProjectRootDirectory() . 'vendor/spryker-sdk/integrator/data/recipies/';
+    }
+
+    /**
+     * @api
+     *
+     * @return string
+     */
+    public function getRecipiesRepository(): string
+    {
+        return 'https://github.com/spryker-sdk/integrator-recipes/archive/master.zip';
     }
 }

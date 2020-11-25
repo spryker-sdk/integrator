@@ -13,7 +13,7 @@ use Generated\Shared\Transfer\ModuleFilterTransfer;
 use Generated\Shared\Transfer\ModuleTransfer;
 use Generated\Shared\Transfer\OrganizationTransfer;
 use Spryker\Zed\Kernel\Communication\Console\Console;
-use SprykerSdk\Zed\Integrator\Dependency\Console\SymfonyConsoleIOAdapter;
+use SprykerSdk\Zed\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -56,7 +56,7 @@ class ModuleInstallerConsole extends Console
         $moduleList = $this->getModuleList($input);
         $isDry = $this->getDryOptionValue($input);
 
-        $this->getFacade()->runInstallation($moduleList, new SymfonyConsoleIOAdapter($io), $isDry);
+        $this->getFacade()->runInstallation($moduleList, new SymfonyConsoleInputOutputAdapter($io), $isDry);
 
         return 0;
     }

@@ -7,7 +7,7 @@
 
 namespace SprykerSdk\Zed\Integrator\Business\ManifestStrategy;
 
-use SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface;
+use SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Zed\Integrator\IntegratorConfig;
 use Symfony\Component\Process\Process;
 
@@ -24,12 +24,12 @@ class ExecuteConsoleManifestStrategy extends AbstractManifestStrategy
     /**
      * @param string[] $manifest
      * @param string $moduleName
-     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface $inputOutput
+     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
      * @return bool
      */
-    public function apply(array $manifest, string $moduleName, IOInterface $inputOutput, bool $isDry): bool
+    public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
         $target = $manifest[IntegratorConfig::MANIFEST_KEY_TARGET];
         $process = $this->getProcess(explode(' ', $target));

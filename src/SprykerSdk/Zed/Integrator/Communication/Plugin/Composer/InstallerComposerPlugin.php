@@ -26,7 +26,7 @@ use Spryker\Zed\Console\Business\Model\Environment;
 use Spryker\Zed\ModuleFinder\Business\ModuleFinderFacade;
 use SprykerSdk\Zed\Integrator\Business\IntegratorFacade;
 use SprykerSdk\Zed\Integrator\Business\IntegratorFacadeInterface;
-use SprykerSdk\Zed\Integrator\Dependency\Console\ComposerIOAdapter;
+use SprykerSdk\Zed\Integrator\Dependency\Console\ComposerInputOutputAdapter;
 
 class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterface
 {
@@ -140,7 +140,7 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
 
         $updatedModules = $this->createModuleFinderFacade()->getModules();
 
-        $this->getIntegratorFacade()->runInstallation($updatedModules, new ComposerIOAdapter($this->io));
+        $this->getIntegratorFacade()->runInstallation($updatedModules, new ComposerInputOutputAdapter($this->io));
         $this->io->write('runInstallerEnd' . PHP_EOL);
     }
 

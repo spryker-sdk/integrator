@@ -12,7 +12,7 @@ namespace SprykerSdk\Zed\Integrator\Business\ManifestStrategy;
 use Generated\Shared\Transfer\ClassInformationTransfer;
 use ReflectionClassConstant;
 use ReflectionException;
-use SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface;
+use SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Zed\Integrator\IntegratorConfig;
 
 class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
@@ -28,12 +28,12 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
     /**
      * @param string[] $manifest
      * @param string $moduleName
-     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface $inputOutput
+     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
      * @return bool
      */
-    public function apply(array $manifest, string $moduleName, IOInterface $inputOutput, bool $isDry): bool
+    public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
         [$targetClassName, $targetPointName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
         $value = $manifest[IntegratorConfig::MANIFEST_KEY_VALUE] ?? null;
@@ -74,7 +74,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
                 'Configuration was added to %s::%s',
                 $classInformationTransfer->getClassName(),
                 $targetPointName
-            ), IOInterface::DEBUG);
+            ), InputOutputInterface::DEBUG);
         }
 
         return $applied;

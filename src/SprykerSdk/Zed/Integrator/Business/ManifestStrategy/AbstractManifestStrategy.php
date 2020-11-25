@@ -10,7 +10,7 @@ declare(strict_types = 1);
 namespace SprykerSdk\Zed\Integrator\Business\ManifestStrategy;
 
 use SprykerSdk\Zed\Integrator\Business\Builder\ClassBuilderFacade;
-use SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface;
+use SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Zed\Integrator\IntegratorConfig;
 
 abstract class AbstractManifestStrategy implements ManifestStrategyInterface
@@ -39,12 +39,12 @@ abstract class AbstractManifestStrategy implements ManifestStrategyInterface
     /**
      * @param string $question
      * @param array $choices
-     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface $inputOutput
+     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param string|null $defaultValue
      *
      * @return bool|float|int|mixed
      */
-    protected function askValue(string $question, array $choices, IOInterface $inputOutput, ?string $defaultValue)
+    protected function askValue(string $question, array $choices, InputOutputInterface $inputOutput, ?string $defaultValue)
     {
         if ($choices) {
             $value = $inputOutput->choice($question, $choices, (string)$defaultValue);

@@ -26,6 +26,7 @@ use SprykerSdk\Zed\Integrator\Business\Builder\ClassResolver\ClassResolver;
 use SprykerSdk\Zed\Integrator\Business\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Zed\Integrator\Business\Builder\Printer\ClassDiffPrinter;
 use SprykerSdk\Zed\Integrator\Business\Builder\Printer\ClassPrinter;
+use SprykerSdk\Zed\Integrator\Business\Composer\ComposerLockReader;
 use SprykerSdk\Zed\Integrator\Business\Executor\ManifestExecutor;
 use SprykerSdk\Zed\Integrator\Business\Manifest\ManifestReader;
 use SprykerSdk\Zed\Integrator\Business\ManifestStrategy\ConfigureEnvManifestStrategy;
@@ -89,11 +90,19 @@ class IntegratorBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
+     * @return \SprykerSdk\Zed\Integrator\Business\Composer\ComposerLockReader
+     */
+    public function createComposerLockReader(): ComposerLockReader
+    {
+        return new ComposerLockReader($this->getConfig());
+    }
+
+    /**
      * @return \SprykerSdk\Zed\Integrator\Business\Manifest\ManifestReader
      */
     public function createManifestReader(): ManifestReader
     {
-        return new ManifestReader($this->getConfig());
+        return new ManifestReader($this->createComposerLockReader(), $this->getConfig());
     }
 
     /**

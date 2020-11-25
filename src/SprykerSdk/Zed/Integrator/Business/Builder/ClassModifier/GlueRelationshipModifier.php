@@ -20,10 +20,10 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use RuntimeException;
 use SprykerSdk\Zed\Integrator\Business\Builder\Finder\ClassNodeFinder;
-use SprykerSdk\Zed\Integrator\Business\Builder\Helper\ClassHelper;
 use SprykerSdk\Zed\Integrator\Business\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Zed\Integrator\Business\Builder\Visitor\MethodBodyExtendVisitor;
 use SprykerSdk\Zed\Integrator\Business\Builder\Visitor\RemoveGlueRelationshipFromClassListVisitor;
+use SprykerSdk\Zed\Integrator\Business\Helper\ClassHelper;
 
 class GlueRelationshipModifier
 {

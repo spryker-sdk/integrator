@@ -14,7 +14,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\New_;
 use PhpParser\NodeVisitorAbstract;
-use SprykerSdk\Zed\Integrator\Business\Builder\Helper\ClassHelper;
+use SprykerSdk\Zed\Integrator\Business\Helper\ClassHelper;
 
 class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 {

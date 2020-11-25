@@ -13,7 +13,7 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\NodeVisitorAbstract;
-use SprykerSdk\Zed\Integrator\Business\Builder\Helper\ClassHelper;
+use SprykerSdk\Zed\Integrator\Business\Helper\ClassHelper;
 
 class AddClassToClassListVisitor extends NodeVisitorAbstract
 {

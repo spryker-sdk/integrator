@@ -9,10 +9,9 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Zed\Integrator\Business\ManifestStrategy;
 
-use Generated\Shared\Transfer\ClassInformationTransfer;
 use ReflectionClass;
-use SprykerSdk\Zed\Integrator\Business\Builder\Helper\ClassHelper;
-use SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface;
+use SprykerSdk\Zed\Integrator\Business\Helper\ClassHelper;
+use SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Zed\Integrator\IntegratorConfig;
 
 class WirePluginManifestStrategy extends AbstractManifestStrategy
@@ -28,12 +27,12 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
     /**
      * @param string[] $manifest
      * @param string $moduleName
-     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface $inputOutput
+     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
      * @return bool
      */
-    public function apply(array $manifest, string $moduleName, IOInterface $inputOutput, bool $isDry): bool
+    public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
         [$targetClassName, $targetMethodName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
 
@@ -43,7 +42,7 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
                 'Target module %s/%s does not exists in your system.',
                 $classHelper->getOrganisationName($targetClassName),
                 $classHelper->getModuleName($targetClassName)
-            ), IOInterface::DEBUG);
+            ), InputOutputInterface::DEBUG);
 
             return false;
         }
@@ -55,7 +54,7 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
                 'Your version of module %s/%s does not support needed plugin stack. Please, update it to use full functionality.',
                 $classHelper->getOrganisationName($targetClassName),
                 $classHelper->getModuleName($targetClassName)
-            ), IOInterface::DEBUG);
+            ), InputOutputInterface::DEBUG);
 
             return false;
         }
@@ -85,7 +84,7 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $classInformationTransfer->getClassName(),
                 $targetMethodName
-            ), IOInterface::DEBUG);
+            ), InputOutputInterface::DEBUG);
         }
 
         return true;

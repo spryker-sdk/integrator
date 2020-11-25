@@ -13,9 +13,13 @@ use Generated\Shared\Transfer\OrganizationTransfer;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Return_;
 use RuntimeException;
+use SebastianBergmann\Diff\Differ;
+use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
 use Spryker\Zed\Kernel\Communication\Console\Console;
-use SprykerSdk\Zed\Integrator\Business\Builder\Helper\ClassHelper;
+use SprykerSdk\Zed\Integrator\Business\Composer\ComposerLockReader;
+use SprykerSdk\Zed\Integrator\Business\Helper\ClassHelper;
 use SprykerSdk\Zed\Integrator\Business\IntegratorBusinessFactory;
+use SprykerSdk\Zed\Integrator\Business\Manifest\ManifestWriter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -315,7 +319,7 @@ class ManifestGeneratorConsole extends Console
 
                 $existingManifests[$manifestModuleKey]['configure-module'][] = [
                     'target' => $target,
-                    (is_array($value)) ? 'value' : 'defaultValue' => $value,
+                    (is_array($value)) ? 'value' : 'default' => $value,
                 ];
             }
 
@@ -338,14 +342,24 @@ class ManifestGeneratorConsole extends Console
             }
         }
 
+        if (isset($unsupportable)) {
+
+            $io->writeln(str_repeat('-', 15));
+            $io->writeln('Unsupported code');
+            foreach ($unsupportable as $line) {
+                $io->writeln($line);
+            }
+            $io->writeln(str_repeat('-', 15));
+        }
+
         if (!$isDry) {
-            (new \SprykerSdk\Zed\Integrator\Business\Manifest\ManifestWriter())
+            (new ManifestWriter($this->createComposerLockReader()))
                 ->storeManifest($indexedCoreModuleList, $existingManifests);
         } else {
-            $builder = new \SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder(
+            $builder = new DiffOnlyOutputBuilder(
                 "--- Original\n+++ New\n"
             );
-            $differ = (new \SebastianBergmann\Diff\Differ($builder));
+            $differ = new Differ($builder);
             foreach ($existingManifests as $module => $manifest) {
                 $source = $originalManifests[$module] ?? [];
                 $diff = $differ->diff(
@@ -552,7 +566,7 @@ class ManifestGeneratorConsole extends Console
                 $data['unwire-widget'][] = $manifest['source'];
             }
             foreach ($existingManifest['configure-module'] ?? [] as $manifest) {
-                $value = $manifest['value'] ?? $manifest['defaultValue'] ?? null;
+                $value = $manifest['value'] ?? $manifest['default'] ?? null;
 
                 if (is_array($value)) {
                     $data['configure-module'][$manifest['target']] = array_merge(($data['configure-module'][$manifest['target']] ?? []), $value);
@@ -615,5 +629,13 @@ class ManifestGeneratorConsole extends Console
     protected function getDryOptionValue(InputInterface $input): bool
     {
         return (bool)$input->getOption(static::FLAG_DRY);
+    }
+
+    /**
+     * @return \SprykerSdk\Zed\Integrator\Business\Composer\ComposerLockReader
+     */
+    protected function createComposerLockReader(): ComposerLockReader
+    {
+        return new ComposerLockReader($this->getFactory()->getConfig());
     }
 }

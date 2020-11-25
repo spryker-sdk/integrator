@@ -10,7 +10,7 @@ declare(strict_types = 1);
 namespace SprykerSdk\Zed\Integrator\Business;
 
 use Spryker\Zed\Kernel\Business\AbstractFacade;
-use SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface;
+use SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface;
 
 /**
  * @method \SprykerSdk\Zed\Integrator\Business\IntegratorBusinessFactory getFactory()
@@ -23,12 +23,12 @@ class IntegratorFacade extends AbstractFacade implements IntegratorFacadeInterfa
      * @api
      *
      * @param \Generated\Shared\Transfer\ModuleTransfer[] $moduleTransfers
-     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface $input
+     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface $input
      * @param bool $isDry
      *
      * @return int
      */
-    public function runInstallation(array $moduleTransfers, IOInterface $input, bool $isDry = false): int
+    public function runInstallation(array $moduleTransfers, InputOutputInterface $input, bool $isDry = false): int
     {
         return $this->getFactory()
             ->creatManifestExecutor()

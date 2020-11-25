@@ -14,7 +14,7 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
 use Spryker\Service\UtilText\Model\Filter\CamelCaseToSeparator;
 use SprykerSdk\Zed\Integrator\Business\Builder\ClassLoader\ClassLoader;
-use SprykerSdk\Zed\Integrator\Business\Builder\Helper\ClassHelper;
+use SprykerSdk\Zed\Integrator\Business\Helper\ClassHelper;
 use SprykerSdk\Zed\Integrator\IntegratorConfig;
 
 class ClassGenerator

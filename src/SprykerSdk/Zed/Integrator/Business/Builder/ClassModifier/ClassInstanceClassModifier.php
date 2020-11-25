@@ -13,11 +13,12 @@ use Generated\Shared\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
+use SprykerSdk\Zed\Integrator\Business\Builder\Checker\ClassMethodChecker;
 use SprykerSdk\Zed\Integrator\Business\Builder\Finder\ClassNodeFinder;
-use SprykerSdk\Zed\Integrator\Business\Builder\Helper\ClassHelper;
 use SprykerSdk\Zed\Integrator\Business\Builder\Visitor\AddPluginToPluginListVisitor;
 use SprykerSdk\Zed\Integrator\Business\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Zed\Integrator\Business\Builder\Visitor\RemovePluginFromPluginListVisitor;
+use SprykerSdk\Zed\Integrator\Business\Helper\ClassHelper;
 
 class ClassInstanceClassModifier
 {
@@ -73,8 +74,8 @@ class ClassInstanceClassModifier
             $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         }
 
-        $classHelper = new ClassHelper();
-        if ($classHelper->isMethodReturnArray($methodNode)) {
+        $classMethodChecker = new ClassMethodChecker();
+        if ($classMethodChecker->isMethodReturnArray($methodNode)) {
             $nodeTraverser = new NodeTraverser();
             $nodeTraverser->addVisitor(new AddUseVisitor($classNameToAdd));
             $nodeTraverser->addVisitor(
@@ -95,6 +96,7 @@ class ClassInstanceClassModifier
         $nodeTraverser->addVisitor(new AddUseVisitor($classNameToAdd));
         $classInformationTransfer->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
 
+        $classHelper = new ClassHelper();
         $methodBody = [new Return_((new BuilderFactory())->new($classHelper->getShortClassName($classNameToAdd)))];
         $this->commonClassModifier->replaceMethodBody($classInformationTransfer, $targetMethodName, $methodBody);
 
@@ -118,7 +120,7 @@ class ClassInstanceClassModifier
             return null;
         }
 
-        if (!(new ClassHelper())->isMethodReturnArray($methodNode)) {
+        if (!(new ClassMethodChecker())->isMethodReturnArray($methodNode)) {
             return $this->commonClassModifier->removeClassMethod($classInformationTransfer, $targetMethodName);
         }
 

@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Zed\Integrator\Business;
 
-use SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface;
+use SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface;
 
 /**
  * @method \SprykerSdk\Zed\Integrator\Business\IntegratorBusinessFactory getFactory()
@@ -23,10 +23,10 @@ interface IntegratorFacadeInterface
      * @api
      *
      * @param \Generated\Shared\Transfer\ModuleTransfer[] $moduleTransfers
-     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface $input
+     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface $input
      * @param bool $isDry
      *
      * @return int
      */
-    public function runInstallation(array $moduleTransfers, IOInterface $input, bool $isDry = false): int;
+    public function runInstallation(array $moduleTransfers, InputOutputInterface $input, bool $isDry = false): int;
 }

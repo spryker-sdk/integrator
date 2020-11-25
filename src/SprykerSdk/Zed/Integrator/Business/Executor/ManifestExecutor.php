@@ -14,7 +14,7 @@ use SprykerSdk\Zed\Integrator\Business\Manifest\ManifestReader;
 use SprykerSdk\Zed\Integrator\Business\ManifestStrategy\ManifestStrategyInterface;
 use SprykerSdk\Zed\Integrator\Business\SprykerLock\SprykerLockReader;
 use SprykerSdk\Zed\Integrator\Business\SprykerLock\SprykerLockWriter;
-use SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface;
+use SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface;
 
 class ManifestExecutor
 {
@@ -58,12 +58,12 @@ class ManifestExecutor
 
     /**
      * @param \Generated\Shared\Transfer\ModuleTransfer[] $moduleTransfers
-     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface $inputOutput
+     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
      * @return int
      */
-    public function runModuleManifestExecution(array $moduleTransfers, IOInterface $inputOutput, bool $isDry): int
+    public function runModuleManifestExecution(array $moduleTransfers, InputOutputInterface $inputOutput, bool $isDry): int
     {
         $this->assertModuleData($moduleTransfers);
 

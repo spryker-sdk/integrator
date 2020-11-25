@@ -7,7 +7,7 @@
 
 namespace SprykerSdk\Zed\Integrator\Business\ManifestStrategy;
 
-use SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface;
+use SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Zed\Integrator\IntegratorConfig;
 use Zend\Filter\Word\CamelCaseToSeparator;
 
@@ -24,12 +24,12 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
     /**
      * @param string[] $manifest
      * @param string $moduleName
-     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\IOInterface $inputOutput
+     * @param \SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
      * @return bool
      */
-    public function apply(array $manifest, string $moduleName, IOInterface $inputOutput, bool $isDry): bool
+    public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
         $source = $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE];
         $sourcePath = $this->getSourcePath($source, $moduleName);
@@ -47,7 +47,7 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
             'File %s was copied to %s',
             $source,
             $targetPath
-        ), IOInterface::DEBUG);
+        ), InputOutputInterface::DEBUG);
 
         return true;
     }

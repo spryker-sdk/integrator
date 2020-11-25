@@ -35,7 +35,7 @@ class SprykerLockWriter
      */
     public function storeLock(array $lockData): int
     {
-        $lockFilePath = $this->config->getLockFilePath();
+        $lockFilePath = $this->config->getIntegratorLockFilePath();
         $json = json_encode($lockData, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
         $json = preg_replace(static::REPLACE_4_WITH_2_SPACES, '$1', $json) . PHP_EOL;
         if (file_put_contents($lockFilePath, $json) === false) {
