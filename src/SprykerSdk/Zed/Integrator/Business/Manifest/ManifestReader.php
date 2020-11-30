@@ -93,10 +93,7 @@ class ManifestReader
     protected function resolveManifestVersion(ModuleTransfer $moduleTransfer, string $moduleVersion)
     {
         $archiveDir = 'integrator-recipes-master/';
-        $moduleRecipiesDir = $this->config->getRecipiesDirectory(). $archiveDir . sprintf(
-                '%s/',
-                $moduleTransfer->getName()
-            );
+        $moduleRecipiesDir = sprintf('%s%s%s/', $this->config->getRecipiesDirectory(), $archiveDir, $moduleTransfer->getName());
 
         if (!is_dir($moduleRecipiesDir)) {
             return null;
@@ -111,6 +108,25 @@ class ManifestReader
             return $filePath;
         }
 
+        $nextSuitableVersion = $this->findNextSuitableVersion($moduleRecipiesDir);
+
+        if (!$nextSuitableVersion) {
+            return null;
+        }
+
+        return $moduleRecipiesDir . sprintf(
+                '%s/installer-manifest.json',
+                $nextSuitableVersion
+            );
+    }
+
+    /**
+     * @param string $moduleRecipiesDir
+     *
+     * @return string|null
+     */
+    protected function findNextSuitableVersion(string $moduleRecipiesDir): ?string
+    {
         $versions = [];
         foreach (scandir($moduleRecipiesDir) as $dir) {
             if (!is_dir($dir)) {
@@ -120,19 +136,16 @@ class ManifestReader
 
             $version = end($dirParts);
 
-            if (version_compare($moduleVersion, $version, 'gt')) {
-                continue;
-            }
-
             $versions[] = $version;
         }
 
-        $versions = $this->sortArray($versions);
+        if (!$versions) {
+            return null;
+        }
 
-        return $moduleRecipiesDir . sprintf(
-                '%s/installer-manifest.json',
-                end($moduleVersion)
-            );
+        sort($versions);
+
+        return end($versions);
     }
 
     /**

@@ -133,6 +133,11 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
      */
     public function runInstaller(Event $event): void
     {
+        //Disable installer on update actions in travis
+        if (getenv('TRAVIS')) {
+            return;
+        }
+
         $autoloadFile = $this->composer->getConfig()->get('vendor-dir') . '/autoload.php';
         include $autoloadFile;
 
