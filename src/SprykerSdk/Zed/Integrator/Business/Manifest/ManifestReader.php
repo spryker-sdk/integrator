@@ -108,7 +108,7 @@ class ManifestReader
             return $filePath;
         }
 
-        $nextSuitableVersion = $this->findNextSuitableVersion($moduleRecipiesDir);
+        $nextSuitableVersion = $this->findNextSuitableVersion($moduleRecipiesDir, $moduleVersion);
 
         if (!$nextSuitableVersion) {
             return null;
@@ -121,20 +121,26 @@ class ManifestReader
     }
 
     /**
-     * @param string $moduleRecipiesDir
+     * @param string $moduleRecipesDir
+     * @param string $moduleVersion
      *
      * @return string|null
      */
-    protected function findNextSuitableVersion(string $moduleRecipiesDir): ?string
+    protected function findNextSuitableVersion(string $moduleRecipesDir, string $moduleVersion): ?string
     {
         $versions = [];
-        foreach (scandir($moduleRecipiesDir) as $dir) {
+
+        foreach (scandir($moduleRecipesDir) as $dir) {
             if (!is_dir($dir)) {
                 continue;
             }
             $dirParts = explode('/', $dir);
 
             $version = end($dirParts);
+
+            if (version_compare($version, $moduleVersion, 'gt')) {
+                continue;
+            }
 
             $versions[] = $version;
         }
@@ -143,7 +149,7 @@ class ManifestReader
             return null;
         }
 
-        sort($versions);
+        $versions = $this->sortArray($versions);
 
         return end($versions);
     }

@@ -133,8 +133,8 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
      */
     public function runInstaller(Event $event): void
     {
-        //Disable installer on update actions in travis
-        if (getenv('TRAVIS')) {
+        //Disable installer on shop pre-install phase
+        if (!class_exists(ModuleTransfer::class)) {
             return;
         }
 
