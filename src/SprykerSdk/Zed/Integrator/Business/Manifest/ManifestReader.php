@@ -10,6 +10,7 @@ declare(strict_types = 1);
 namespace SprykerSdk\Zed\Integrator\Business\Manifest;
 
 use Generated\Shared\Transfer\ModuleTransfer;
+use mysql_xdevapi\SqlStatementResult;
 use SprykerSdk\Zed\Integrator\Business\Composer\ComposerLockReader;
 use SprykerSdk\Zed\Integrator\IntegratorConfig;
 
@@ -130,14 +131,7 @@ class ManifestReader
     {
         $versions = [];
 
-        foreach (scandir($moduleRecipesDir) as $dir) {
-            if (!is_dir($dir)) {
-                continue;
-            }
-            $dirParts = explode('/', $dir);
-
-            $version = end($dirParts);
-
+        foreach ($this->getValidModuleVersions($moduleRecipesDir) as $version) {
             if (version_compare($version, $moduleVersion, 'gt')) {
                 continue;
             }
@@ -152,6 +146,28 @@ class ManifestReader
         $versions = $this->sortArray($versions);
 
         return end($versions);
+    }
+
+    /**
+     * @param string $moduleRecipesDir
+     *
+     * @return string[]
+     */
+    protected function getValidModuleVersions(string $moduleRecipesDir): array
+    {
+        $validModuleVersions = [];
+        $moduleVersionDirectories = scandir($moduleRecipesDir);
+        $moduleVersionDirectories = array_diff($moduleVersionDirectories, ['.', '..']);
+
+        foreach ($moduleVersionDirectories as $moduleVersionDirectory) {
+            if (!is_dir($moduleRecipesDir . $moduleVersionDirectory)) {
+                continue;
+            }
+
+            $validModuleVersions[] = $moduleVersionDirectory;
+        }
+
+        return $validModuleVersions;
     }
 
     /**
