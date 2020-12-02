@@ -10,7 +10,6 @@ declare(strict_types = 1);
 namespace SprykerSdk\Zed\Integrator\Business\Manifest;
 
 use Generated\Shared\Transfer\ModuleTransfer;
-use mysql_xdevapi\SqlStatementResult;
 use SprykerSdk\Zed\Integrator\Business\Composer\ComposerLockReader;
 use SprykerSdk\Zed\Integrator\IntegratorConfig;
 
