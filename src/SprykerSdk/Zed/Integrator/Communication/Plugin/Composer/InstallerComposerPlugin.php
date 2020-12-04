@@ -133,6 +133,11 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
      */
     public function runInstaller(Event $event): void
     {
+        //Disable installer on shop pre-install phase
+        if (!class_exists(ModuleTransfer::class)) {
+            return;
+        }
+
         $autoloadFile = $this->composer->getConfig()->get('vendor-dir') . '/autoload.php';
         include $autoloadFile;
 

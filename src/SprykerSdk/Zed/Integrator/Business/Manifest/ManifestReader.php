@@ -93,10 +93,7 @@ class ManifestReader
     protected function resolveManifestVersion(ModuleTransfer $moduleTransfer, string $moduleVersion)
     {
         $archiveDir = 'integrator-recipes-master/';
-        $moduleRecipiesDir = $this->config->getRecipiesDirectory(). $archiveDir . sprintf(
-                '%s/',
-                $moduleTransfer->getName()
-            );
+        $moduleRecipiesDir = sprintf('%s%s%s/', $this->config->getRecipiesDirectory(), $archiveDir, $moduleTransfer->getName());
 
         if (!is_dir($moduleRecipiesDir)) {
             return null;
@@ -111,28 +108,65 @@ class ManifestReader
             return $filePath;
         }
 
+        $nextSuitableVersion = $this->findNextSuitableVersion($moduleRecipiesDir, $moduleVersion);
+
+        if (!$nextSuitableVersion) {
+            return null;
+        }
+
+        return $moduleRecipiesDir . sprintf(
+                '%s/installer-manifest.json',
+                $nextSuitableVersion
+            );
+    }
+
+    /**
+     * @param string $moduleRecipesDir
+     * @param string $moduleVersion
+     *
+     * @return string|null
+     */
+    protected function findNextSuitableVersion(string $moduleRecipesDir, string $moduleVersion): ?string
+    {
         $versions = [];
-        foreach (scandir($moduleRecipiesDir) as $dir) {
-            if (!is_dir($dir)) {
-                continue;
-            }
-            $dirParts = explode('/', $dir);
 
-            $version = end($dirParts);
-
-            if (version_compare($moduleVersion, $version, 'gt')) {
+        foreach ($this->getValidModuleVersions($moduleRecipesDir) as $version) {
+            if (version_compare($version, $moduleVersion, 'gt')) {
                 continue;
             }
 
             $versions[] = $version;
         }
 
+        if (!$versions) {
+            return null;
+        }
+
         $versions = $this->sortArray($versions);
 
-        return $moduleRecipiesDir . sprintf(
-                '%s/installer-manifest.json',
-                end($moduleVersion)
-            );
+        return end($versions);
+    }
+
+    /**
+     * @param string $moduleRecipesDir
+     *
+     * @return string[]
+     */
+    protected function getValidModuleVersions(string $moduleRecipesDir): array
+    {
+        $validModuleVersions = [];
+        $moduleVersionDirectories = scandir($moduleRecipesDir);
+        $moduleVersionDirectories = array_diff($moduleVersionDirectories, ['.', '..']);
+
+        foreach ($moduleVersionDirectories as $moduleVersionDirectory) {
+            if (!is_dir($moduleRecipesDir . $moduleVersionDirectory)) {
+                continue;
+            }
+
+            $validModuleVersions[] = $moduleVersionDirectory;
+        }
+
+        return $validModuleVersions;
     }
 
     /**
