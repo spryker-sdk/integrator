@@ -4,6 +4,8 @@ on:
   pull_request:
   schedule:
     - cron: "0 0 * * *"
+    branches:
+      - 'master'
 
 env:
   APPLICATION_ENV: 'development'
@@ -16,7 +18,8 @@ jobs:
       fail-fast: false
       matrix:
         php-version: [
-            '7.4'
+            '7.4',
+            '7.3',
         ]
     steps:
       - name: Checkout
