@@ -1,0 +1,86 @@
+{
+    "configure-env": [
+        {
+            "target": "\\Spryker\\Shared\\Sales\\SalesConstants::PAYMENT_METHOD_STATEMACHINE_MAPPING",
+            "value": {
+                "payoneCreditCard": "PayoneCreditCardPartialOperations",
+                "payoneInstantOnlineTransfer": "PayoneOnlineTransferPartialOperations"
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Oms\\OmsConstants::ACTIVE_PROCESSES",
+            "value": [
+                "PayoneCreditCardPartialOperations",
+                "PayoneOnlineTransferPartialOperations"
+            ]
+        }
+    ],
+    "copy-module-file": [
+        {
+            "source": "config/Zed/Oms/PayoneCashOnDelivery.xml",
+            "target": "config/Zed/oms/PayoneCashOnDelivery.xml"
+        },
+        {
+            "source": "config/Zed/Oms/PayoneCreditCard.xml",
+            "target": "config/Zed/oms/PayoneCreditCard.xml"
+        },
+        {
+            "source": "config/Zed/Oms/PayoneCreditCardPartialOperations.xml",
+            "target": "config/Zed/oms/PayoneCreditCardPartialOperations.xml"
+        },
+        {
+            "source": "config/Zed/Oms/PayoneDirectDebit.xml",
+            "target": "config/Zed/oms/PayoneDirectDebit.xml"
+        },
+        {
+            "source": "config/Zed/Oms/PayoneEWallet.xml",
+            "target": "config/Zed/oms/PayoneEWallet.xml"
+        },
+        {
+            "source": "config/Zed/Oms/PayoneInvoice.xml",
+            "target": "config/Zed/oms/PayoneInvoice.xml"
+        },
+        {
+            "source": "config/Zed/Oms/PayoneOnlineTransfer.xml",
+            "target": "config/Zed/oms/PayoneOnlineTransfer.xml"
+        },
+        {
+            "source": "config/Zed/Oms/PayoneOnlineTransferPartialOperations.xml",
+            "target": "config/Zed/oms/PayoneOnlineTransferPartialOperations.xml"
+        },
+        {
+            "source": "config/Zed/Oms/PayonePaypalExpressCheckout.xml",
+            "target": "config/Zed/oms/PayonePaypalExpressCheckout.xml"
+        },
+        {
+            "source": "config/Zed/Oms/PayonePrePayment.xml",
+            "target": "config/Zed/oms/PayonePrePayment.xml"
+        },
+        {
+            "source": "config/Zed/Oms/PayonePrePaymentSecurityInvoice.xml",
+            "target": "config/Zed/oms/PayonePrePaymentSecurityInvoice.xml"
+        },
+        {
+            "source": "config/Zed/Oms/PayoneSecurityInvoice.xml",
+            "target": "config/Zed/oms/PayoneSecurityInvoice.xml"
+        }
+    ],
+    "wire-plugin": [
+        {
+            "target": "\\Spryker\\Yves\\Router\\RouterDependencyProvider::getRouteProvider",
+            "source": "\\SprykerEco\\Yves\\Payone\\Plugin\\Router\\PayoneRouteProviderPlugin"
+        },
+        {
+            "target": "\\Spryker\\Zed\\Checkout\\CheckoutDependencyProvider::getCheckoutPostHooks",
+            "source": "\\SprykerEco\\Zed\\Payone\\Communication\\Plugin\\Checkout\\PayoneCheckoutPostSaveHookPlugin"
+        },
+        {
+            "target": "\\Spryker\\Zed\\Payment\\PaymentDependencyProvider::getCheckoutPreCheckPlugins",
+            "source": "\\SprykerEco\\Zed\\Payone\\Communication\\Plugin\\Checkout\\PayonePreCheckPlugin"
+        },
+        {
+            "target": "\\Spryker\\Zed\\Payment\\PaymentDependencyProvider::getCheckoutSaveOrderPlugins",
+            "source": "\\SprykerEco\\Zed\\Payone\\Communication\\Plugin\\Checkout\\PayoneSaveOrderPlugin"
+        }
+    ]
+}
