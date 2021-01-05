@@ -58,6 +58,7 @@ class ClassInstanceClassModifier
      * @param string $classNameToAdd
      * @param string|null $before
      * @param string|null $after
+     * @param string|null $key
      *
      * @return \Generated\Shared\Transfer\ClassInformationTransfer
      */
@@ -66,7 +67,8 @@ class ClassInstanceClassModifier
         string $targetMethodName,
         string $classNameToAdd,
         string $before = '',
-        string $after = ''
+        string $after = '',
+        ?string $key = null
     ): ClassInformationTransfer {
         $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         if (!$methodNode) {
@@ -83,7 +85,8 @@ class ClassInstanceClassModifier
                     $targetMethodName,
                     $classNameToAdd,
                     $before,
-                    $after
+                    $after,
+                    $key
                 )
             );
 

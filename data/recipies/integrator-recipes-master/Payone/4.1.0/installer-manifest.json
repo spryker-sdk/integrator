@@ -76,10 +76,12 @@
         },
         {
             "target": "\\Spryker\\Zed\\Payment\\PaymentDependencyProvider::getCheckoutPreCheckPlugins",
+            "key": "Payone",
             "source": "\\SprykerEco\\Zed\\Payone\\Communication\\Plugin\\Checkout\\PayonePreCheckPlugin"
         },
         {
             "target": "\\Spryker\\Zed\\Payment\\PaymentDependencyProvider::getCheckoutSaveOrderPlugins",
+            "key": "Payone",
             "source": "\\SprykerEco\\Zed\\Payone\\Communication\\Plugin\\Checkout\\PayoneSaveOrderPlugin"
         }
     ]
