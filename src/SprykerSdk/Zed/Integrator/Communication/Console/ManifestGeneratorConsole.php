@@ -264,7 +264,7 @@ class ManifestGeneratorConsole extends Console
         foreach ($manifests as $manifestModuleKey => $moduleManifest) {
             foreach ($moduleManifest['plugins'] ?? [] as $pluginManifest) {
                 $target = $pluginManifest['target'];
-                foreach ($pluginManifest['value'] as $source) {
+                foreach ($pluginManifest['value'] as $key => $source) {
                     $organisationName = $classHelper->getOrganisationName($source);
                     if (in_array($organisationName, $projectOrgs, true)) {
                         continue;
@@ -275,10 +275,15 @@ class ManifestGeneratorConsole extends Console
                         continue;
                     }
 
-                    $existingManifests[$organisationName . '.' . $moduleName]['wire-plugin'][] = [
+                    $data = [
                         'target' => $target,
                         'source' => $source,
                     ];
+
+                    if (is_string($key)) {
+                        $data['key'] = $key;
+                    }
+                    $existingManifests[$organisationName . '.' . $moduleName]['wire-plugin'][] = $data;
                 }
             }
 
@@ -343,7 +348,6 @@ class ManifestGeneratorConsole extends Console
         }
 
         if (isset($unsupportable)) {
-
             $io->writeln(str_repeat('-', 15));
             $io->writeln('Unsupported code');
             foreach ($unsupportable as $line) {
@@ -461,11 +465,11 @@ class ManifestGeneratorConsole extends Console
         if ($expr instanceof \PhpParser\Node\Expr\Array_) {
             $array = [];
             foreach ($expr->items as $item) {
-                if ($item->key && $item->key instanceof \PhpParser\Node\Scalar\String_) {
-                    throw new RuntimeException('Associative plugin array is not supported');
-                }
-
                 if ($item->value instanceof New_) {
+                    if ($item->key) {
+                        $array[$this->exprToValue($item->key)] = '\\' . $item->value->class->toString();
+                        continue;
+                    }
                     $array[] = '\\' . $item->value->class->toString();
                 }
             }
@@ -554,6 +558,10 @@ class ManifestGeneratorConsole extends Console
         $data = [];
         foreach ($existingManifests as $existingManifest) {
             foreach ($existingManifest['wire-plugin'] ?? [] as $manifest) {
+                if (isset($manifest['key'])) {
+                    $data['wire-plugin'][$manifest['target']][$manifest['key']] = $manifest['source'];
+                    continue;
+                }
                 $data['wire-plugin'][$manifest['target']][] = $manifest['source'];
             }
             foreach ($existingManifest['unwire-plugin'] ?? [] as $manifest) {
