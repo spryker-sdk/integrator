@@ -1,0 +1,110 @@
+{
+    "wire-glue-relationship": [
+        {
+            "source": {
+                "\\Spryker\\Glue\\SalesReturnsRestApi\\SalesReturnsRestApiConfig::RESOURCE_RETURN_ITEMS": "\\Spryker\\Glue\\OrdersRestApi\\Plugin\\OrderItemByResourceIdResourceRelationshipPlugin"
+            }
+        }
+    ],
+    "unwire-glue-relationship": [
+        {
+            "source": {
+                "\\Spryker\\Glue\\SalesReturnsRestApi\\SalesReturnsRestApiConfig::RESOURCE_RETURN_ITEMS": "\\Spryker\\Glue\\OrdersRestApi\\Plugin\\OrderItemByResourceIdResourceRelationshipPlugin"
+            }
+        }
+    ],
+    "copy-module-file": [
+        {
+            "target": "data/import/common/common/import_test.csv",
+            "source": "data/import_test.csv"
+        }
+    ],
+    "wire-plugin": [
+        {
+            "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getItemCountPlugin",
+            "source": "\\Spryker\\Client\\ProductBundle\\Plugin\\Cart\\ProductBundleItemCountQuantityPlugin"
+        },
+        {
+            "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getQuoteStorageStrategyPlugins",
+            "source": "\\Spryker\\Client\\PersistentCart\\Plugin\\DatabaseQuoteStorageStrategy"
+        },
+        {
+            "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getQuoteItemFinderPlugin",
+            "source": "\\Spryker\\Client\\ProductBundle\\Plugin\\Cart\\BundleProductQuoteItemFinderPlugin"
+        },
+        {
+            "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getAddItemsRequestExpanderPlugins",
+            "source": "\\Spryker\\Client\\DiscountPromotion\\Plugin\\AddDiscountPromotionCartRequestExpandPlugin"
+        },
+        {
+            "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getAddItemsRequestExpanderPlugins",
+            "source": "\\Spryker\\Client\\ProductMeasurementUnit\\Plugin\\Cart\\SingleItemQuantitySalesUnitCartChangeRequestExpanderPlugin",
+            "position": {
+                "after": "\\Spryker\\Client\\DiscountPromotion\\Plugin\\AddDiscountPromotionCartRequestExpandPlugin"
+            }
+        },
+        {
+            "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getAddItemsRequestExpanderPlugins",
+            "source": "\\Spryker\\Client\\ProductPackagingUnit\\Plugin\\CartExtension\\ProductPackagingUnitAmountCartChangeRequestExpanderPlugin",
+            "position": {
+                "before": "\\Spryker\\Client\\DiscountPromotion\\Plugin\\AddDiscountPromotionCartRequestExpandPlugin"
+            }
+        },
+        {
+            "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getAddItemsRequestExpanderPlugins",
+            "source": "\\Spryker\\Client\\ProductConfigurationStorage\\Plugin\\Cart\\ProductConfigurationCartChangeRequestExpanderPlugin"
+        },
+        {
+            "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getRemoveItemsRequestExpanderPlugins",
+            "source": "\\Spryker\\Client\\ProductBundle\\Plugin\\Cart\\RemoveBundleChangeRequestExpanderPlugin"
+        }
+    ],
+    "wire-widget": [
+        {
+            "source": "\\SprykerShop\\Yves\\CartPage\\Widget\\ProductAbstractAddToCartButtonWidget"
+        }
+    ],
+    "unwire-widget": [
+        {
+            "source": "\\SprykerShop\\Yves\\CartPage\\Widget\\RemoveFromCartFormWidget"
+        }
+    ],
+    "configure-module": [
+        {
+            "target": "\\Spryker\\Client\\Catalog\\CatalogConfig::PAGINATION_VALID_ITEMS_PER_PAGE",
+            "value": [
+                10,
+                1000
+            ]
+        },
+        {
+            "target": "\\Spryker\\Client\\Catalog\\CatalogConfig::PAGINATION_CATALOG_SEARCH_DEFAULT_ITEMS_PER_PAGE",
+            "value": 12
+        },
+        {
+            "target": "\\Spryker\\Client\\MultiCart\\MultiCartConfig::getQuoteFieldsAllowedForQuoteDuplicate",
+            "value": "\\Generated\\Shared\\Transfer\\QuoteTransfer::BUNDLE_ITEMS"
+        },
+        {
+            "target": "\\Spryker\\Client\\MultiCart\\MultiCartConfig::getQuoteFieldsAllowedForQuoteDuplicate",
+            "value": "\\Generated\\Shared\\Transfer\\QuoteTransfer::CART_NOTE"
+        },
+        {
+            "target": "\\Spryker\\Zed\\ConfigurableBundleStorage\\ConfigurableBundleStorageConfig::getConfigurableBundleTemplateSynchronizationPoolName",
+            "defaultValue": "\\Pyz\\Zed\\Synchronization\\SynchronizationConfig::DEFAULT_SYNCHRONIZATION_POOL_NAME"
+        },
+        {
+            "target": "\\SprykerShop\\Yves\\CheckoutPage\\CheckoutPageConfig::getLocalizedTermsAndConditionsPageLinks",
+            "value": {
+                "en_US": "/en/gtc",
+                "de_DE": "/de/agb"
+            }
+        }
+    ],
+    "configure-env": [
+        {
+            "target": "\\Spryker\\Shared\\GlueApplication\\GlueApplicationConstants::GLUE_APPLICATION_DOMAIN",
+            "value": "test"
+        }
+    ]
+}
