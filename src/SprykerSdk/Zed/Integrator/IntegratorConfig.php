@@ -20,6 +20,7 @@ class IntegratorConfig extends AbstractBundleConfig
     public const MANIFEST_KEY_VALUE = 'value';
     public const MANIFEST_KEY_DEFAULT_VALUE = 'default';
     public const MANIFEST_KEY_CHOICES = 'choices';
+    public const MANIFEST_KEY_ARRAY_KEY = 'key';
     public const MANIFEST_KEY_POSITION = 'position';
     public const MANIFEST_KEY_POSITION_BEFORE = 'before';
     public const MANIFEST_KEY_POSITION_AFTER = 'after';

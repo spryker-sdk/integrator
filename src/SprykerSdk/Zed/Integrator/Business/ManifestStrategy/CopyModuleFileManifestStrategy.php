@@ -7,6 +7,7 @@
 
 namespace SprykerSdk\Zed\Integrator\Business\ManifestStrategy;
 
+use Spryker\Service\UtilText\UtilTextService;
 use SprykerSdk\Zed\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Zed\Integrator\IntegratorConfig;
 use Zend\Filter\Word\CamelCaseToSeparator;
@@ -89,6 +90,6 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
      */
     protected function camelCaseToDash(string $value): string
     {
-        return (new CamelCaseToSeparator('-'))->filter($value);
+        return (new UtilTextService())->camelCaseToDash($value);
     }
 }

@@ -74,6 +74,7 @@ class ClassBuilderFacade extends AbstractFacade
      * @param string $classNameToAdd
      * @param string|null $before
      * @param string|null $after
+     * @param string|null $key
      *
      * @return \Generated\Shared\Transfer\ClassInformationTransfer
      */
@@ -82,11 +83,12 @@ class ClassBuilderFacade extends AbstractFacade
         string $targetMethodName,
         string $classNameToAdd,
         string $before = '',
-        string $after = ''
+        string $after = '',
+        ?string $key = null
     ): ClassInformationTransfer {
         return $this->getFactory()
             ->createClassInstanceClassModifier()
-            ->wireClassInstance($classInformationTransfer, $targetMethodName, $classNameToAdd, $before, $after);
+            ->wireClassInstance($classInformationTransfer, $targetMethodName, $classNameToAdd, $before, $after, $key);
     }
 
     /**

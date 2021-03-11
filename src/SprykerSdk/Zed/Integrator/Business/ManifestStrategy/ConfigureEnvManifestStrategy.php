@@ -58,7 +58,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
             'Global config %s was added with to %s value %s',
             $target,
             $configFileName,
-            $value
+            var_export($value, true)
         ), InputOutputInterface::DEBUG);
 
         return true;

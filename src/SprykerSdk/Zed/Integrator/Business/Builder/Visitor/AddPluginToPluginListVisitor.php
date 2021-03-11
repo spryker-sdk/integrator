@@ -13,6 +13,7 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Zed\Integrator\Business\Helper\ClassHelper;
 
@@ -39,6 +40,11 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $after;
 
     /**
+     * @var string
+     */
+    protected $key;
+
+    /**
      * @var bool
      */
     protected $methodFound = false;
@@ -48,13 +54,15 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      * @param string $className
      * @param string|null $before
      * @param string|null $after
+     * @param string|null $key
      */
-    public function __construct(string $methodName, string $className, string $before = '', string $after = '')
+    public function __construct(string $methodName, string $className, string $before = '', string $after = '', ?string $key = null)
     {
         $this->methodName = $methodName;
         $this->className = ltrim($className, '\\');
         $this->before = ltrim($before, '\\');
         $this->after = ltrim($after, '\\');
+        $this->key = $key;
     }
 
     /**
@@ -150,7 +158,8 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         return new ArrayItem(
             (new BuilderFactory())->new(
                 (new ClassHelper())->getShortClassName($this->className)
-            )
+            ),
+            $this->key ? new String_($this->key) : null
         );
     }
 }
