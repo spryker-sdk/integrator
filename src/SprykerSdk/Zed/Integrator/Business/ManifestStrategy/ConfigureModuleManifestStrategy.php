@@ -65,7 +65,8 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
             }
 
             if ($isDry) {
-                $applied = $inputOutput->writeln($this->getClassBuilderFacade()->printDiff($classInformationTransfer));
+                $inputOutput->writeln($this->getClassBuilderFacade()->printDiff($classInformationTransfer));
+                $applied = true;
             } else {
                 $applied = $this->getClassBuilderFacade()->storeClass($classInformationTransfer);
             }
