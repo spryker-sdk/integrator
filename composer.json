@@ -13,21 +13,24 @@
         "spryker/util-text": "^1.1.0"
     },
     "require-dev": {
-        "spryker/code-sniffer": "*",
-        "spryker/testify": "*",
+        "squizlabs/php_codesniffer": "^3.6.0",
+        "slevomat/coding-standard": "^7.0.14",
+        "phpunit/phpunit": "^9.5.0",
         "phpstan/phpstan": "^0.12"
     },
     "autoload": {
         "psr-4": {
-            "SprykerSdk\\": "src/SprykerSdk/"
+            "SprykerSdk\\": "src/SprykerSdk/",
+            "SprykerSdkTest\\": "tests/SprykerSdkTest/"
         }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "cs-check": "phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/",
-        "cs-fix": "phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/",
-        "stan": "vendor/bin/phpstan.phar analyse -c phpstan.neon src/"
+        "cs-check": "vendor/bin/phpcs -p -s --standard=phpcs-ruleset.xml src/",
+        "cs-fix": "vendor/bin/phpcbf -p --standard=phpcs-ruleset.xml src/",
+        "stan": "vendor/bin/phpstan.phar analyse -c phpstan.neon src/",
+        "test": "vendor/bin/phpunit"
     },
     "extra": {
         "branch-alias": {
