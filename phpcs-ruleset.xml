@@ -3,7 +3,7 @@
     <description>
         Spryker Coding Standard.
 
-        All sniffs in ./Sniffs will be auto loaded
+        Source https://github.com/spryker/code-sniffer/blob/master/Spryker/ruleset.xml
     </description>
 
     <!-- Ignore all (PHP) test files. -->
