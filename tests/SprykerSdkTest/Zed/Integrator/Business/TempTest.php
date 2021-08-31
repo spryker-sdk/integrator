@@ -7,7 +7,7 @@ use SprykerSdkTest\Zed\Integrator\BaseTestCase;
 
 class TempTest extends BaseTestCase
 {
-    public function testSimple()
+    public function testForCheckIntegrationPhpUnit()
     {
         $this->assertEquals(true, true);
     }
