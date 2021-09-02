@@ -8,7 +8,6 @@
         "composer-plugin-api": "^1.0 || ^2.0",
         "nikic/php-parser": "^4.3.0",
         "sebastian/diff": "^3.0 || ^4.0.0",
-        "spryker/kernel": "^3.33.0",
         "spryker/module-finder": "^1.0.0",
         "spryker/util-text": "^1.1.0"
     },
@@ -33,7 +32,7 @@
         "branch-alias": {
             "dev-master": "1.0.x-dev"
         },
-        "class": "SprykerSdk\\Zed\\Integrator\\Communication\\Plugin\\Composer\\InstallerComposerPlugin"
+        "class": "SprykerSdk\\Integrator\\Communication\\Plugin\\Composer\\InstallerComposerPlugin"
     },
     "config": {
         "sort-packages": true
