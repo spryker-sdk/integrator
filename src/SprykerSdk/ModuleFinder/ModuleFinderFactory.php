@@ -5,9 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\ModuleFinder\Business;
+namespace SprykerSdk\ModuleFinder;
 
-use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use SprykerSdk\ModuleFinder\Business\Module\ModuleFinder\ModuleFinder;
 use SprykerSdk\ModuleFinder\Business\Module\ModuleFinder\ModuleFinderInterface;
 use SprykerSdk\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcher;
@@ -16,14 +15,18 @@ use SprykerSdk\ModuleFinder\Business\Module\ProjectModuleFinder\ProjectModuleFin
 use SprykerSdk\ModuleFinder\Business\Module\ProjectModuleFinder\ProjectModuleFinderInterface;
 use SprykerSdk\ModuleFinder\Business\Package\PackageFinder\PackageFinder;
 use SprykerSdk\ModuleFinder\Business\Package\PackageFinder\PackageFinderInterface;
+use SprykerSdk\ModuleFinder\ModuleFinderConfig;
 
-/**
- * @method \SprykerSdk\ModuleFinder\ModuleFinderConfig getConfig()
- * @method \SprykerSdk\ModuleFinder\Persistence\ModuleFinderEntityManagerInterface getEntityManager()
- * @method \SprykerSdk\ModuleFinder\Persistence\ModuleFinderRepositoryInterface getRepository()
- */
-class ModuleFinderBusinessFactory extends AbstractBusinessFactory
+class ModuleFinderFactory
 {
+    /**
+     * @return \SprykerSdk\ModuleFinder\ModuleFinderConfig
+     */
+    public function getConfig(): ModuleFinderConfig
+    {
+        return ModuleFinderConfig::getInstance();
+    }
+
     /**
      * @return \SprykerSdk\ModuleFinder\Business\Module\ModuleFinder\ModuleFinderInterface
      */
@@ -41,18 +44,18 @@ class ModuleFinderBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerSdk\ModuleFinder\Business\Module\ProjectModuleFinder\ProjectModuleFinderInterface
-     */
-    public function createProjectModuleFinder(): ProjectModuleFinderInterface
-    {
-        return new ProjectModuleFinder($this->getConfig(), $this->createModuleMatcher());
-    }
-
-    /**
      * @return \SprykerSdk\ModuleFinder\Business\Package\PackageFinder\PackageFinderInterface
      */
     public function createPackageFinder(): PackageFinderInterface
     {
         return new PackageFinder($this->getConfig());
+    }
+
+    /**
+     * @return \SprykerSdk\ModuleFinder\Business\Module\ProjectModuleFinder\ProjectModuleFinderInterface
+     */
+    public function createProjectModuleFinder(): ProjectModuleFinderInterface
+    {
+        return new ProjectModuleFinder($this->getConfig(), $this->createModuleMatcher());
     }
 }

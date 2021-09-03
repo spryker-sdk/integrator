@@ -7,24 +7,22 @@
 
 namespace SprykerSdk\ModuleFinder\Business;
 
-use Generated\Shared\Transfer\ModuleFilterTransfer;
-use Spryker\Zed\Kernel\Business\AbstractFacade;
+use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Shared\Common\AbstractFacade;
+use SprykerSdk\Shared\ModuleFinder\ModuleFinderFactoryAwareTrait;
 
-/**
- * @method \SprykerSdk\ModuleFinder\Business\ModuleFinderBusinessFactory getFactory()
- * @method \SprykerSdk\ModuleFinder\Persistence\ModuleFinderRepositoryInterface getRepository()
- * @method \SprykerSdk\ModuleFinder\Persistence\ModuleFinderEntityManagerInterface getEntityManager()
- */
 class ModuleFinderFacade extends AbstractFacade implements ModuleFinderFacadeInterface
 {
+    use ModuleFinderFactoryAwareTrait;
+
     /**
      * {@inheritDoc}
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
      */
     public function getProjectModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -36,9 +34,9 @@ class ModuleFinderFacade extends AbstractFacade implements ModuleFinderFacadeInt
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
      */
     public function getModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -52,7 +50,7 @@ class ModuleFinderFacade extends AbstractFacade implements ModuleFinderFacadeInt
      *
      * @internal
      *
-     * @return \Generated\Shared\Transfer\PackageTransfer[]
+     * @return \SprykerSdk\Shared\Transfer\PackageTransfer[]
      */
     public function getPackages(): array
     {

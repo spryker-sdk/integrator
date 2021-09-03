@@ -9,7 +9,7 @@ use SprykerSdk\Integrator\IntegratorFactory;
 trait IntegratorFactoryAwareTrait
 {
     /**
-     * @return IntegratorFactory
+     * @return \SprykerSdk\Integrator\IntegratorFactory
      */
     protected function getFactory(): IntegratorFactory
     {

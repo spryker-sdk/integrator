@@ -10,10 +10,13 @@ declare(strict_types = 1);
 namespace SprykerSdk\Integrator\Business;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
-use SprykerSdk\Shared\Integrator\AbstractFacade;
+use SprykerSdk\Shared\Common\AbstractFacade;
+use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
 
 class IntegratorFacade extends AbstractFacade implements IntegratorFacadeInterface
 {
+    use IntegratorFactoryAwareTrait;
+
     /**
      * {@inheritDoc}
      *

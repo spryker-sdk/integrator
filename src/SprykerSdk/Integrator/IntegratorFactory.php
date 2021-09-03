@@ -39,6 +39,8 @@ use SprykerSdk\Integrator\Business\ManifestStrategy\WireWidgetManifestStrategy;
 use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockReader;
 use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockWriter;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\ModuleFinder\Business\ModuleFinderFacade;
+use SprykerSdk\ModuleFinder\Business\ModuleFinderFacadeInterface;
 
 class IntegratorFactory
 {
@@ -364,12 +366,10 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Dependency\Facade\IntegratorToModuleFinderFacadeInterface
+     * @return \SprykerSdk\ModuleFinder\Business\ModuleFinderFacadeInterface
      */
-    public function getModuleFinderFacade(): IntegratorToModuleFinderFacadeInterface
+    public function getModuleFinderFacade(): ModuleFinderFacadeInterface
     {
-        return return new IntegratorToModuleFinderFacadeBridge(
-            $container->getLocator()->moduleFinder()->facade()
-        );
+        return new ModuleFinderFacade();
     }
 }

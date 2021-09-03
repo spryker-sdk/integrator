@@ -2,6 +2,6 @@
 
 namespace SprykerSdk\Shared\Transfer;
 
-class OrganizationTransfer {
-
+class OrganizationTransfer
+{
 }
