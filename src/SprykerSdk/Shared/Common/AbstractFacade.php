@@ -1,6 +1,6 @@
 <?php
 
-namespace SprykerSdk\Shared\Integrator;
+namespace SprykerSdk\Shared\Common;
 
 abstract class AbstractFacade
 {

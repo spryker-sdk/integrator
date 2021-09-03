@@ -9,7 +9,9 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator;
 
-class IntegratorConfig
+use SprykerSdk\Shared\Common\AbstractConfig;
+
+class IntegratorConfig extends AbstractConfig
 {
     public const MANIFEST_KEY_TARGET = 'target';
     public const MANIFEST_KEY_SOURCE = 'source';
@@ -29,34 +31,18 @@ class IntegratorConfig
     protected $config;
 
     /**
-     * @var self|null
-     */
-    private static $instance;
-
-    /**
-     * @return \SprykerSdk\Integrator\IntegratorConfig
-     */
-    public static function getInstance()
-    {
-        if (static::$instance === null) {
-            static::$instance = new static();
-            static::$instance->loadConfig();
-        }
-
-        return static::$instance;
-    }
-
-    /**
      * @return void
      */
-    protected function loadConfig(): void
+    public function loadConfig(): void
     {
-        $fileName = $this->getConfigPath();
-        if (file_exists($fileName)) {
-            include $fileName;
-        }
+        if ($this->config === null) {
+            $fileName = $this->getConfigPath();
+            if (file_exists($fileName)) {
+                include $fileName;
+            }
 
-        $this->config = $this->getConfigVariableName();
+            $this->config = $this->getConfigVariableName();
+        }
     }
 
     /**

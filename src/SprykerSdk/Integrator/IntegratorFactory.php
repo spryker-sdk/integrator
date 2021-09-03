@@ -47,7 +47,10 @@ class IntegratorFactory
      */
     protected function getConfig(): IntegratorConfig
     {
-        return IntegratorConfig::getInstance();
+        $config = IntegratorConfig::getInstance();
+        $config->loadConfig();
+
+        return $config;
     }
 
     /**
