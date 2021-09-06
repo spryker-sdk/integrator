@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassModifier;
 
-use Generated\Shared\Transfer\ClassInformationTransfer;
+use Shared\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -43,10 +43,10 @@ class CommonClassModifier
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      *
-     * @return \Generated\Shared\Transfer\ClassInformationTransfer
+     * @return \Shared\Transfer\ClassInformationTransfer
      */
     public function overrideMethodFromParent(ClassInformationTransfer $classInformationTransfer, string $targetMethodName): ClassInformationTransfer
     {
@@ -98,11 +98,11 @@ class CommonClassModifier
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      * @param \PhpParser\Node[] $methodAst
      *
-     * @return \Generated\Shared\Transfer\ClassInformationTransfer
+     * @return \Shared\Transfer\ClassInformationTransfer
      */
     public function replaceMethodBody(ClassInformationTransfer $classInformationTransfer, string $targetMethodName, array $methodAst): ClassInformationTransfer
     {
@@ -114,10 +114,10 @@ class CommonClassModifier
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $methodNameToRemove
      *
-     * @return \Generated\Shared\Transfer\ClassInformationTransfer
+     * @return \Shared\Transfer\ClassInformationTransfer
      */
     public function removeClassMethod(ClassInformationTransfer $classInformationTransfer, string $methodNameToRemove): ClassInformationTransfer
     {
@@ -129,11 +129,11 @@ class CommonClassModifier
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $methodName
      * @param bool|int|float|string|array|null $value
      *
-     * @return \Generated\Shared\Transfer\ClassInformationTransfer
+     * @return \Shared\Transfer\ClassInformationTransfer
      */
     public function setMethodReturnValue(ClassInformationTransfer $classInformationTransfer, string $methodName, $value): ClassInformationTransfer
     {

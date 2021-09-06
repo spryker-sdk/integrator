@@ -7,10 +7,10 @@
 
 namespace SprykerSdk\ModuleFinder\Business\Module\ProjectModuleFinder;
 
-use Generated\Shared\Transfer\ApplicationTransfer;
-use Generated\Shared\Transfer\ModuleFilterTransfer;
-use Generated\Shared\Transfer\ModuleTransfer;
-use Generated\Shared\Transfer\OrganizationTransfer;
+use Shared\Transfer\ApplicationTransfer;
+use Shared\Transfer\ModuleFilterTransfer;
+use Shared\Transfer\ModuleTransfer;
+use Shared\Transfer\OrganizationTransfer;
 use SprykerSdk\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface;
 use SprykerSdk\ModuleFinder\ModuleFinderConfig;
 use Symfony\Component\Finder\Finder;
@@ -39,9 +39,9 @@ class ProjectModuleFinder implements ProjectModuleFinderInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer[]
+     * @return \Shared\Transfer\ModuleTransfer[]
      */
     public function getProjectModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -117,7 +117,7 @@ class ProjectModuleFinder implements ProjectModuleFinderInterface
     /**
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer
+     * @return \Shared\Transfer\ModuleTransfer
      */
     protected function getModuleTransfer(SplFileInfo $directoryInfo): ModuleTransfer
     {
@@ -130,7 +130,7 @@ class ProjectModuleFinder implements ProjectModuleFinderInterface
     /**
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer
+     * @return \Shared\Transfer\ModuleTransfer
      */
     protected function buildModuleTransferFromDirectoryInformation(SplFileInfo $directoryInfo): ModuleTransfer
     {
@@ -146,7 +146,7 @@ class ProjectModuleFinder implements ProjectModuleFinderInterface
     /**
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \Generated\Shared\Transfer\OrganizationTransfer
+     * @return \Shared\Transfer\OrganizationTransfer
      */
     protected function buildOrganizationTransferFromDirectoryInformation(SplFileInfo $directoryInfo): OrganizationTransfer
     {
@@ -162,7 +162,7 @@ class ProjectModuleFinder implements ProjectModuleFinderInterface
     /**
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \Generated\Shared\Transfer\ApplicationTransfer
+     * @return \Shared\Transfer\ApplicationTransfer
      */
     protected function buildApplicationTransferFromDirectoryInformation(SplFileInfo $directoryInfo): ApplicationTransfer
     {
@@ -214,7 +214,7 @@ class ProjectModuleFinder implements ProjectModuleFinderInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
      *
      * @return string
      */

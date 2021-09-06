@@ -9,9 +9,9 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Communication\Console;
 
-use Generated\Shared\Transfer\ModuleFilterTransfer;
-use Generated\Shared\Transfer\ModuleTransfer;
-use Generated\Shared\Transfer\OrganizationTransfer;
+use Shared\Transfer\ModuleFilterTransfer;
+use Shared\Transfer\ModuleTransfer;
+use Shared\Transfer\OrganizationTransfer;
 use Spryker\Zed\Kernel\Communication\Console\Console;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use Symfony\Component\Console\Input\InputArgument;
@@ -64,7 +64,7 @@ class ModuleInstallerConsole extends Console
     /**
      * @param \Symfony\Component\Console\Input\InputInterface $input
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer[]
+     * @return \Shared\Transfer\ModuleTransfer[]
      */
     protected function getModuleList(InputInterface $input): array
     {
@@ -86,7 +86,7 @@ class ModuleInstallerConsole extends Console
     /**
      * @param string $moduleArgument
      *
-     * @return \Generated\Shared\Transfer\ModuleFilterTransfer|null
+     * @return \Shared\Transfer\ModuleFilterTransfer|null
      */
     protected function buildModuleFilterTransfer(string $moduleArgument): ?ModuleFilterTransfer
     {
@@ -111,9 +111,9 @@ class ModuleInstallerConsole extends Console
 
     /**
      * @param string $moduleArgument
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
      *
-     * @return \Generated\Shared\Transfer\ModuleFilterTransfer
+     * @return \Shared\Transfer\ModuleFilterTransfer
      */
     protected function addModuleFilterDetails(string $moduleArgument, ModuleFilterTransfer $moduleFilterTransfer): ModuleFilterTransfer
     {

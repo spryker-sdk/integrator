@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassModifier;
 
-use Generated\Shared\Transfer\ClassInformationTransfer;
+use Shared\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
@@ -53,12 +53,12 @@ class ClassListModifier
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      * @param string $classNameToAdd
      * @param string $constantName
      *
-     * @return \Generated\Shared\Transfer\ClassInformationTransfer
+     * @return \Shared\Transfer\ClassInformationTransfer
      */
     public function wireClassConstant(
         ClassInformationTransfer $classInformationTransfer,
@@ -102,11 +102,11 @@ class ClassListModifier
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $classNameToRemove
      * @param string $targetMethodName
      *
-     * @return \Generated\Shared\Transfer\ClassInformationTransfer|null
+     * @return \Shared\Transfer\ClassInformationTransfer|null
      */
     public function unwireClassConstant(
         ClassInformationTransfer $classInformationTransfer,

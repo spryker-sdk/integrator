@@ -19,11 +19,11 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
-use Generated\Shared\Transfer\ModuleTransfer;
-use Generated\Shared\Transfer\OrganizationTransfer;
-use Spryker\Service\UtilText\Model\Filter\SeparatorToCamelCase;
+use Shared\Transfer\ModuleTransfer;
+use Shared\Transfer\OrganizationTransfer;
 use Spryker\Zed\Console\Business\Model\Environment;
-use Spryker\Zed\ModuleFinder\Business\ModuleFinderFacade;
+use SprykerSdk\Common\UtilText\Filter\SeparatorToCamelCase;
+use SprykerSdk\ModuleFinder\Business\ModuleFinderFacade;
 use SprykerSdk\Integrator\Business\IntegratorFacade;
 use SprykerSdk\Integrator\Business\IntegratorFacadeInterface;
 use SprykerSdk\Integrator\Dependency\Console\ComposerInputOutputAdapter;
@@ -152,16 +152,16 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
     /**
      * @param string $moduleName
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer
+     * @return \Shared\Transfer\ModuleTransfer
      */
     protected function createModuleTransfer(string $moduleName): ModuleTransfer
     {
         $dashToCamelCaseFilter = new SeparatorToCamelCase();
-        [$moduleName, $organisation] = explode('/', $moduleName);
+        [$moduleName, $organization] = explode('/', $moduleName);
 
         $organisationTransfer = (new OrganizationTransfer())
-            ->setNameDashed($organisation)
-            ->setName($dashToCamelCaseFilter->filter($organisation));
+            ->setNameDashed($organization)
+            ->setName($dashToCamelCaseFilter->filter($organization));
 
         $moduleTransfer = (new ModuleTransfer())
             ->setNameDashed($moduleName)
@@ -180,7 +180,7 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
     }
 
     /**
-     * @return \Spryker\Zed\ModuleFinder\Business\ModuleFinderFacade
+     * @return \SprykerSdk\ModuleFinder\Business\ModuleFinderFacade
      */
     protected function createModuleFinderFacade(): ModuleFinderFacade
     {

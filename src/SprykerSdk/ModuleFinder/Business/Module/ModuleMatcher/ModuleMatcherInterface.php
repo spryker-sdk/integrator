@@ -7,14 +7,14 @@
 
 namespace SprykerSdk\ModuleFinder\Business\Module\ModuleMatcher;
 
-use Generated\Shared\Transfer\ModuleFilterTransfer;
-use Generated\Shared\Transfer\ModuleTransfer;
+use Shared\Transfer\ModuleFilterTransfer;
+use Shared\Transfer\ModuleTransfer;
 
 interface ModuleMatcherInterface
 {
     /**
-     * @param \Generated\Shared\Transfer\ModuleTransfer $moduleTransfer
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
      *
      * @return bool
      */

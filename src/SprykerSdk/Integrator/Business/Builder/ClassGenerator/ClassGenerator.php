@@ -9,10 +9,10 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassGenerator;
 
-use Generated\Shared\Transfer\ClassInformationTransfer;
+use Shared\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
-use Spryker\Service\UtilText\Model\Filter\CamelCaseToSeparator;
+use SprykerSdk\Common\UtilText\Filter\CamelCaseToSeparator;
 use SprykerSdk\Integrator\Business\Builder\ClassLoader\ClassLoader;
 use SprykerSdk\Integrator\Business\Helper\ClassHelper;
 use SprykerSdk\Integrator\IntegratorConfig;
@@ -43,7 +43,7 @@ class ClassGenerator
      * @param string $className
      * @param string|null $parentClass
      *
-     * @return \Generated\Shared\Transfer\ClassInformationTransfer|null
+     * @return \Shared\Transfer\ClassInformationTransfer|null
      */
     public function generateClass(string $className, ?string $parentClass = null): ?ClassInformationTransfer
     {

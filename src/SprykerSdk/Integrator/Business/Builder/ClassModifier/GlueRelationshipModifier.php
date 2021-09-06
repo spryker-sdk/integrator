@@ -7,7 +7,7 @@
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassModifier;
 
-use Generated\Shared\Transfer\ClassInformationTransfer;
+use Shared\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -58,12 +58,12 @@ class GlueRelationshipModifier
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      * @param string $key
      * @param string $classNameToAdd
      *
-     * @return \Generated\Shared\Transfer\ClassInformationTransfer
+     * @return \Shared\Transfer\ClassInformationTransfer
      */
     public function wireGlueRelationship(
         ClassInformationTransfer $classInformationTransfer,
@@ -116,14 +116,14 @@ class GlueRelationshipModifier
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      * @param string $key
      * @param string $classNameToRemove
      *
      * @throws \RuntimeException
      *
-     * @return \Generated\Shared\Transfer\ClassInformationTransfer
+     * @return \Shared\Transfer\ClassInformationTransfer
      */
     public function unwireGlueRelationship(
         ClassInformationTransfer $classInformationTransfer,

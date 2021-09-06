@@ -7,10 +7,10 @@
 
 namespace SprykerSdk\ModuleFinder\Business\Module\ModuleFinder;
 
-use Generated\Shared\Transfer\ApplicationTransfer;
-use Generated\Shared\Transfer\ModuleFilterTransfer;
-use Generated\Shared\Transfer\ModuleTransfer;
-use Generated\Shared\Transfer\OrganizationTransfer;
+use Shared\Transfer\ApplicationTransfer;
+use Shared\Transfer\ModuleFilterTransfer;
+use Shared\Transfer\ModuleTransfer;
+use Shared\Transfer\OrganizationTransfer;
 use Laminas\Filter\FilterChain;
 use Laminas\Filter\StringToLower;
 use Laminas\Filter\Word\CamelCaseToDash;
@@ -33,7 +33,7 @@ class ModuleFinder implements ModuleFinderInterface
     protected $moduleMatcher;
 
     /**
-     * @var \Generated\Shared\Transfer\ModuleTransfer[]
+     * @var \Shared\Transfer\ModuleTransfer[]
      */
     protected static $moduleTransferCollection;
 
@@ -48,9 +48,9 @@ class ModuleFinder implements ModuleFinderInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer[]
+     * @return \Shared\Transfer\ModuleTransfer[]
      */
     public function getModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -74,9 +74,9 @@ class ModuleFinder implements ModuleFinderInterface
 
     /**
      * @param array $moduleTransferCollection
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer[]
+     * @return \Shared\Transfer\ModuleTransfer[]
      */
     protected function addStandaloneModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -106,11 +106,11 @@ class ModuleFinder implements ModuleFinderInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ModuleTransfer $moduleTransfer
-     * @param \Generated\Shared\Transfer\ModuleTransfer[] $moduleTransferCollection
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \Shared\Transfer\ModuleTransfer[] $moduleTransferCollection
+     * @param \Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer[]
+     * @return \Shared\Transfer\ModuleTransfer[]
      */
     protected function addModuleToCollection(
         ModuleTransfer $moduleTransfer,
@@ -130,7 +130,7 @@ class ModuleFinder implements ModuleFinderInterface
      * Modules which are standalone, can also be normal modules. This can be detected by the composer.json description
      * which contains `module` at the end of the description.
      *
-     * @param \Generated\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
      *
      * @return bool
      */
@@ -149,9 +149,9 @@ class ModuleFinder implements ModuleFinderInterface
 
     /**
      * @param array $moduleTransferCollection
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer[]
+     * @return \Shared\Transfer\ModuleTransfer[]
      */
     protected function addModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -186,7 +186,7 @@ class ModuleFinder implements ModuleFinderInterface
     /**
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer
+     * @return \Shared\Transfer\ModuleTransfer
      */
     protected function getModuleTransfer(SplFileInfo $directoryInfo): ModuleTransfer
     {
@@ -198,7 +198,7 @@ class ModuleFinder implements ModuleFinderInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
      *
      * @return string
      */
@@ -222,7 +222,7 @@ class ModuleFinder implements ModuleFinderInterface
     /**
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer
+     * @return \Shared\Transfer\ModuleTransfer
      */
     protected function buildModuleTransferFromDirectoryInformation(SplFileInfo $directoryInfo): ModuleTransfer
     {
@@ -246,7 +246,7 @@ class ModuleFinder implements ModuleFinderInterface
     /**
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer
+     * @return \Shared\Transfer\ModuleTransfer
      */
     protected function buildModuleTransferFromComposerJsonInformation(SplFileInfo $directoryInfo): ModuleTransfer
     {
@@ -270,9 +270,9 @@ class ModuleFinder implements ModuleFinderInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer
+     * @return \Shared\Transfer\ModuleTransfer
      */
     protected function addApplications(ModuleTransfer $moduleTransfer): ModuleTransfer
     {
@@ -296,7 +296,7 @@ class ModuleFinder implements ModuleFinderInterface
      * @param string $organizationName
      * @param string $organizationNameDashed
      *
-     * @return \Generated\Shared\Transfer\OrganizationTransfer
+     * @return \Shared\Transfer\OrganizationTransfer
      */
     protected function buildOrganizationTransfer(string $organizationName, string $organizationNameDashed): OrganizationTransfer
     {
@@ -313,7 +313,7 @@ class ModuleFinder implements ModuleFinderInterface
      * @param string $moduleNameDashed
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer
+     * @return \Shared\Transfer\ModuleTransfer
      */
     protected function buildModuleTransfer(string $moduleName, string $moduleNameDashed, SplFileInfo $directoryInfo): ModuleTransfer
     {

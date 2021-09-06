@@ -7,7 +7,7 @@
 
 namespace SprykerSdk\Integrator\Business\Builder\Printer;
 
-use Generated\Shared\Transfer\ClassInformationTransfer;
+use Shared\Transfer\ClassInformationTransfer;
 use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
 
@@ -27,7 +27,7 @@ class ClassDiffPrinter
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      *
      * @return string|null
      */

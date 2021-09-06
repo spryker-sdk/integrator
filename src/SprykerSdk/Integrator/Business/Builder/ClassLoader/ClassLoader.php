@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassLoader;
 
-use Generated\Shared\Transfer\ClassInformationTransfer;
+use Shared\Transfer\ClassInformationTransfer;
 use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
@@ -42,7 +42,7 @@ class ClassLoader
     /**
      * @param string $className
      *
-     * @return \Generated\Shared\Transfer\ClassInformationTransfer|null
+     * @return \Shared\Transfer\ClassInformationTransfer|null
      */
     public function loadClass(string $className): ?ClassInformationTransfer
     {

@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Communication\Console;
 
-use Generated\Shared\Transfer\OrganizationTransfer;
+use Shared\Transfer\OrganizationTransfer;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Return_;
 use RuntimeException;
@@ -55,7 +55,7 @@ class ManifestGeneratorConsole extends Console
         $projectModuleList = [];
         foreach ($this->getFactory()->getConfig()->getProjectNamespaces() as $projectNamespace) {
             $projectModuleList = array_merge($projectModuleList, $this->getFactory()->getModuleFinderFacade()->getProjectModules(
-                (new \Generated\Shared\Transfer\ModuleFilterTransfer())
+                (new \Shared\Transfer\ModuleFilterTransfer())
                     ->setOrganization(
                         (new OrganizationTransfer())->setName($projectNamespace)->setNameDashed($projectNamespace)
                     )
@@ -391,9 +391,9 @@ class ManifestGeneratorConsole extends Console
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param \Shared\Transfer\ModuleTransfer[] $moduleTransfers
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer[]
+     * @return \Shared\Transfer\ModuleTransfer[]
      */
     protected function indexModulesByName(array $moduleTransfers): array
     {

@@ -7,15 +7,15 @@
 
 namespace SprykerSdk\ModuleFinder\Business\Module\ModuleMatcher;
 
-use Generated\Shared\Transfer\ModuleFilterTransfer;
-use Generated\Shared\Transfer\ModuleTransfer;
-use Generated\Shared\Transfer\OrganizationTransfer;
+use Shared\Transfer\ModuleFilterTransfer;
+use Shared\Transfer\ModuleTransfer;
+use Shared\Transfer\OrganizationTransfer;
 
 class ModuleMatcher implements ModuleMatcherInterface
 {
     /**
-     * @param \Generated\Shared\Transfer\ModuleTransfer $moduleTransfer
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
      *
      * @return bool
      */
@@ -37,8 +37,8 @@ class ModuleMatcher implements ModuleMatcherInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
-     * @param \Generated\Shared\Transfer\OrganizationTransfer $organizationTransfer
+     * @param \Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \Shared\Transfer\OrganizationTransfer $organizationTransfer
      *
      * @return bool
      */
@@ -55,8 +55,8 @@ class ModuleMatcher implements ModuleMatcherInterface
      * Modules can hold several applications. We return true of one of the applications in the current module
      * matches the requested one.
      *
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
-     * @param \Generated\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
      *
      * @return bool
      */
@@ -77,8 +77,8 @@ class ModuleMatcher implements ModuleMatcherInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
-     * @param \Generated\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
      *
      * @return bool
      */

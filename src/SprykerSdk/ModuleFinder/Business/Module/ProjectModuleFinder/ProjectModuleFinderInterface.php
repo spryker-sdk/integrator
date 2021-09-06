@@ -7,14 +7,14 @@
 
 namespace SprykerSdk\ModuleFinder\Business\Module\ProjectModuleFinder;
 
-use Generated\Shared\Transfer\ModuleFilterTransfer;
+use Shared\Transfer\ModuleFilterTransfer;
 
 interface ProjectModuleFinderInterface
 {
     /**
-     * @param \Generated\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \Generated\Shared\Transfer\ModuleTransfer[]
+     * @return \Shared\Transfer\ModuleTransfer[]
      */
     public function getProjectModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array;
 }

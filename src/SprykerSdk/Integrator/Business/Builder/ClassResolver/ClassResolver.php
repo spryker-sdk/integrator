@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassResolver;
 
-use Generated\Shared\Transfer\ClassInformationTransfer;
+use Shared\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Business\Builder\ClassGenerator\ClassGenerator;
 use SprykerSdk\Integrator\Business\Builder\ClassLoader\ClassLoader;
 
@@ -26,7 +26,7 @@ class ClassResolver
     protected $classGenerator;
 
     /**
-     * @var \Generated\Shared\Transfer\ClassInformationTransfer[]
+     * @var \Shared\Transfer\ClassInformationTransfer[]
      */
     protected static $generatedClassList = [];
 
@@ -46,7 +46,7 @@ class ClassResolver
      * @param string $targetClassName
      * @param string $customOrganisation
      *
-     * @return \Generated\Shared\Transfer\ClassInformationTransfer
+     * @return \Shared\Transfer\ClassInformationTransfer
      */
     public function resolveClass(string $targetClassName, string $customOrganisation = ''): ClassInformationTransfer
     {

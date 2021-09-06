@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassWriter;
 
-use Generated\Shared\Transfer\ClassInformationTransfer;
+use Shared\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Business\Builder\Printer\ClassPrinter;
 
 class ClassFileWriter
@@ -28,7 +28,7 @@ class ClassFileWriter
     }
 
     /**
-     * @param \Generated\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      *
      * @return bool
      */
