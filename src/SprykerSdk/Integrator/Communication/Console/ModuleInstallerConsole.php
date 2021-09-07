@@ -12,19 +12,20 @@ namespace SprykerSdk\Integrator\Communication\Console;
 use Shared\Transfer\ModuleFilterTransfer;
 use Shared\Transfer\ModuleTransfer;
 use Shared\Transfer\OrganizationTransfer;
-use Spryker\Zed\Kernel\Communication\Console\Console;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
+use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
+use SprykerSdk\Shared\Integrator\IntegratorFacadeAwareTrait;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-/**
- * @method \SprykerSdk\Integrator\Business\IntegratorFacade getFacade()
- * @method \SprykerSdk\Integrator\Communication\IntegratorCommunicationFactory getFactory()
- */
-class ModuleInstallerConsole extends Console
+class ModuleInstallerConsole extends Command
 {
+    use IntegratorFactoryAwareTrait;
+    use IntegratorFacadeAwareTrait;
+
     protected const ARGUMENT_MODULE_NAMES = 'module-names';
     protected const FLAG_DRY = 'dry';
 
