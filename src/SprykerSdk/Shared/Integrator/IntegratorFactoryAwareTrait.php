@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace SprykerSdk\Shared\Inregrator;
+namespace SprykerSdk\Shared\Integrator;
 
 use SprykerSdk\Integrator\IntegratorFactory;
 

@@ -11,7 +11,7 @@
     },
     "require-dev": {
         "spryker/code-sniffer": "*",
-        "spryker/testify": "*",
+        "phpunit/phpunit": "^9.5.0",
         "phpstan/phpstan": "^0.12"
     },
     "autoload": {
@@ -19,12 +19,19 @@
             "SprykerSdk\\": "src/SprykerSdk/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "SprykerSdkTest\\": "tests/SprykerSdkTest/",
+            "Generated\\": "../src/Generated/"
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "cs-check": "phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/",
-        "cs-fix": "phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/",
-        "stan": "vendor/bin/phpstan.phar analyse -c phpstan.neon src/"
+        "cs-check": "vendor/bin/phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/",
+        "cs-fix": "vendor/bin/phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/",
+        "stan": "vendor/bin/phpstan.phar analyse -c phpstan.neon src/",
+        "test": "vendor/bin/phpunit"
     },
     "extra": {
         "branch-alias": {

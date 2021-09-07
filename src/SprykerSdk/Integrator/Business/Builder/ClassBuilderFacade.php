@@ -10,15 +10,17 @@ declare(strict_types = 1);
 namespace SprykerSdk\Integrator\Business\Builder;
 
 use Shared\Transfer\ClassInformationTransfer;
-use SprykerSdk\Shared\Integrator\AbstractFacade;
+use SprykerSdk\Shared\Common\AbstractFacade;
+use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
 
 class ClassBuilderFacade extends AbstractFacade
 {
+    use IntegratorFactoryAwareTrait;
     /**
      * @param string $targetClassName
      * @param string $customOrganisation
      *
-     * @return \Shared\Transfer\ClassInformationTransfer
+     * @return \Shared\Transfer\ClassInforma    tionTransfer
      */
     public function resolveClass(string $targetClassName, string $customOrganisation = ''): ClassInformationTransfer
     {
