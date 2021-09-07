@@ -11,7 +11,7 @@ trait IntegratorFacadeAwareTrait
     /**
      * @return \SprykerSdk\Integrator\Business\IntegratorFacade
      */
-    protected function getFactory(): IntegratorFacade
+    protected function getFacade(): IntegratorFacade
     {
         return new IntegratorFacade();
     }

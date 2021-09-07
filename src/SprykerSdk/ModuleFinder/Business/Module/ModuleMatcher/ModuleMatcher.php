@@ -7,15 +7,15 @@
 
 namespace SprykerSdk\ModuleFinder\Business\Module\ModuleMatcher;
 
-use Shared\Transfer\ModuleFilterTransfer;
-use Shared\Transfer\ModuleTransfer;
-use Shared\Transfer\OrganizationTransfer;
+use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Shared\Transfer\ModuleTransfer;
+use SprykerSdk\Shared\Transfer\OrganizationTransfer;
 
 class ModuleMatcher implements ModuleMatcherInterface
 {
     /**
-     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
-     * @param \Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
      *
      * @return bool
      */
@@ -37,8 +37,8 @@ class ModuleMatcher implements ModuleMatcherInterface
     }
 
     /**
-     * @param \Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
-     * @param \Shared\Transfer\OrganizationTransfer $organizationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \SprykerSdk\Shared\Transfer\OrganizationTransfer $organizationTransfer
      *
      * @return bool
      */
@@ -55,8 +55,8 @@ class ModuleMatcher implements ModuleMatcherInterface
      * Modules can hold several applications. We return true of one of the applications in the current module
      * matches the requested one.
      *
-     * @param \Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
-     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
      *
      * @return bool
      */
@@ -77,8 +77,8 @@ class ModuleMatcher implements ModuleMatcherInterface
     }
 
     /**
-     * @param \Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
-     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
      *
      * @return bool
      */

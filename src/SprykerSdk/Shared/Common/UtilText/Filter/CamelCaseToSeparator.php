@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Common\UtilText\Filter;
+namespace SprykerSdk\Shared\Common\UtilText\Filter;
 
 class CamelCaseToSeparator
 {

@@ -43,7 +43,7 @@ class ClassInformationTransfer extends AbstractTransfer
     protected $filePath;
 
     /**
-     * @var \Shared\Transfer\ClassInformationTransfer|null
+     * @var \SprykerSdk\Shared\Transfer\ClassInformationTransfer|null
      */
     protected $parent;
 
@@ -352,7 +352,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @module Integrator|Product
      *
-     * @param \Shared\Transfer\ClassInformationTransfer|null $parent
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer|null $parent
      *
      * @return $this
      */
@@ -367,7 +367,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @module Integrator|Product
      *
-     * @return \Shared\Transfer\ClassInformationTransfer|null
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer|null
      */
     public function getParent()
     {
@@ -377,7 +377,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @module Integrator|Product
      *
-     * @return \Shared\Transfer\ClassInformationTransfer
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
     public function getParentOrFail()
     {
@@ -571,7 +571,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @param \ArrayObject|\Shared\Transfer\MethodInformationTransfer[] $methods
+     * @param \ArrayObject|\SprykerSdk\Shared\Transfer\MethodInformationTransfer[] $methods
      *
      * @return $this
      */
@@ -586,7 +586,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @return \ArrayObject|\Shared\Transfer\MethodInformationTransfer[]
+     * @return \ArrayObject|\SprykerSdk\Shared\Transfer\MethodInformationTransfer[]
      */
     public function getMethods()
     {
@@ -596,7 +596,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @param \Shared\Transfer\MethodInformationTransfer $method
+     * @param \SprykerSdk\Shared\Transfer\MethodInformationTransfer $method
      *
      * @return $this
      */

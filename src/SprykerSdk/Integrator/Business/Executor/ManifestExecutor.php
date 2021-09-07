@@ -57,7 +57,7 @@ class ManifestExecutor
     }
 
     /**
-     * @param \Shared\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer[] $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
@@ -140,7 +140,7 @@ class ManifestExecutor
     }
 
     /**
-     * @param \Shared\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer[] $moduleTransfers
      *
      * @return void
      */

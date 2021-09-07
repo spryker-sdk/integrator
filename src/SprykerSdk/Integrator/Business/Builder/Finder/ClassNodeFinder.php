@@ -7,7 +7,7 @@
 
 namespace SprykerSdk\Integrator\Business\Builder\Finder;
 
-use Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -17,7 +17,7 @@ use PhpParser\NodeFinder;
 class ClassNodeFinder
 {
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      *
      * @return \PhpParser\Node\Stmt\ClassMethod|null
@@ -34,7 +34,7 @@ class ClassNodeFinder
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetNodeName
      *
      * @return \PhpParser\Node\Stmt\ClassConst|null
@@ -60,7 +60,7 @@ class ClassNodeFinder
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      *
      * @return \PhpParser\Node\Stmt\Class_|null
      */

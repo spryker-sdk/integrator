@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Manifest;
 
-use Shared\Transfer\ModuleTransfer;
+use SprykerSdk\Shared\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Business\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\IntegratorConfig;
 
@@ -36,7 +36,7 @@ class ManifestReader
     }
 
     /**
-     * @param \Shared\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer[] $moduleTransfers
      *
      * @return string[][][]
      */
@@ -85,7 +85,7 @@ class ManifestReader
     }
 
     /**
-     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
      * @param string $moduleVersion
      *
      * @return string|string[]|null

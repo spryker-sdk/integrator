@@ -24,7 +24,7 @@ class ModuleFinderFactory
      */
     public function getConfig(): ModuleFinderConfig
     {
-        return ModuleFinderConfig::getInstance();
+        return new ModuleFinderConfig();
     }
 
     /**

@@ -19,10 +19,10 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
-use Shared\Transfer\ModuleTransfer;
-use Shared\Transfer\OrganizationTransfer;
+use SprykerSdk\Shared\Transfer\ModuleTransfer;
+use SprykerSdk\Shared\Transfer\OrganizationTransfer;
 use Spryker\Zed\Console\Business\Model\Environment;
-use SprykerSdk\Common\UtilText\Filter\SeparatorToCamelCase;
+use SprykerSdk\Shared\Common\UtilText\Filter\SeparatorToCamelCase;
 use SprykerSdk\ModuleFinder\Business\ModuleFinderFacade;
 use SprykerSdk\Integrator\Business\IntegratorFacade;
 use SprykerSdk\Integrator\Business\IntegratorFacadeInterface;
@@ -152,7 +152,7 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
     /**
      * @param string $moduleName
      *
-     * @return \Shared\Transfer\ModuleTransfer
+     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer
      */
     protected function createModuleTransfer(string $moduleName): ModuleTransfer
     {

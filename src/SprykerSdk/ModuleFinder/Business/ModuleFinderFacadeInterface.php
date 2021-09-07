@@ -7,7 +7,7 @@
 
 namespace SprykerSdk\ModuleFinder\Business;
 
-use Shared\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
 
 interface ModuleFinderFacadeInterface
 {
@@ -20,9 +20,9 @@ interface ModuleFinderFacadeInterface
      *
      * @api
      *
-     * @param \Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
      */
     public function getModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array;
 
@@ -32,9 +32,9 @@ interface ModuleFinderFacadeInterface
      *
      * @api
      *
-     * @param \Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
      */
     public function getProjectModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array;
 
@@ -47,7 +47,7 @@ interface ModuleFinderFacadeInterface
      *
      * @internal
      *
-     * @return \Shared\Transfer\PackageTransfer[]
+     * @return \SprykerSdk\Shared\Transfer\PackageTransfer[]
      */
     public function getPackages(): array;
 }

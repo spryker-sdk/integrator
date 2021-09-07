@@ -7,7 +7,7 @@
 
 namespace SprykerSdk\Integrator\Business\Manifest;
 
-use Shared\Transfer\ModuleTransfer;
+use SprykerSdk\Shared\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Business\Composer\ComposerLockReader;
 
 class ManifestWriter
@@ -26,7 +26,7 @@ class ManifestWriter
     }
 
     /**
-     * @param \Shared\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer[] $moduleTransfers
      * @param array $manifests
      *
      * @return bool
@@ -57,7 +57,7 @@ class ManifestWriter
 
 
     /**
-     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
      * @param string $moduleVersion
      *
      * @return string
