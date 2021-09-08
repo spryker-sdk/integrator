@@ -42,17 +42,17 @@ class ModuleTransfer extends AbstractTransfer
     protected $nameDashed;
 
     /**
-     * @var \Shared\Transfer\OrganizationTransfer|null
+     * @var \SprykerSdk\Shared\Transfer\OrganizationTransfer|null
      */
     protected $organization;
 
     /**
-     * @var \Shared\Transfer\ApplicationTransfer|null
+     * @var \SprykerSdk\Shared\Transfer\ApplicationTransfer|null
      */
     protected $application;
 
     /**
-     * @var \Shared\Transfer\LayerTransfer|null
+     * @var \SprykerSdk\Shared\Transfer\LayerTransfer|null
      */
     protected $layer;
 
@@ -62,17 +62,17 @@ class ModuleTransfer extends AbstractTransfer
     protected $path;
 
     /**
-     * @var \Shared\Transfer\OptionsTransfer|null
+     * @var \SprykerSdk\Shared\Transfer\OptionsTransfer|null
      */
     protected $options;
 
     /**
-     * @var \Shared\Transfer\ModuleTransfer|null
+     * @var \SprykerSdk\Shared\Transfer\ModuleTransfer|null
      */
     protected $dependentModule;
 
     /**
-     * @var \ArrayObject|\Shared\Transfer\ApplicationTransfer[]
+     * @var \ArrayObject|\SprykerSdk\Shared\Transfer\ApplicationTransfer[]
      */
     protected $applications;
 
@@ -341,7 +341,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module Integrator|SprykGui|Development|ModuleFinder
      *
-     * @param \Shared\Transfer\OrganizationTransfer|null $organization
+     * @param \SprykerSdk\Shared\Transfer\OrganizationTransfer|null $organization
      *
      * @return $this
      */
@@ -356,7 +356,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module Integrator|SprykGui|Development|ModuleFinder
      *
-     * @return \Shared\Transfer\OrganizationTransfer|null
+     * @return \SprykerSdk\Shared\Transfer\OrganizationTransfer|null
      */
     public function getOrganization()
     {
@@ -366,7 +366,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module Integrator|SprykGui|Development|ModuleFinder
      *
-     * @return \Shared\Transfer\OrganizationTransfer
+     * @return \SprykerSdk\Shared\Transfer\OrganizationTransfer
      */
     public function getOrganizationOrFail()
     {
@@ -392,7 +392,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui|Development|ModuleFinder
      *
-     * @param \Shared\Transfer\ApplicationTransfer|null $application
+     * @param \SprykerSdk\Shared\Transfer\ApplicationTransfer|null $application
      *
      * @return $this
      */
@@ -407,7 +407,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui|Development|ModuleFinder
      *
-     * @return \Shared\Transfer\ApplicationTransfer|null
+     * @return \SprykerSdk\Shared\Transfer\ApplicationTransfer|null
      */
     public function getApplication()
     {
@@ -417,7 +417,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui|Development|ModuleFinder
      *
-     * @return \Shared\Transfer\ApplicationTransfer
+     * @return \SprykerSdk\Shared\Transfer\ApplicationTransfer
      */
     public function getApplicationOrFail()
     {
@@ -443,7 +443,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @param \Shared\Transfer\LayerTransfer|null $layer
+     * @param \SprykerSdk\Shared\Transfer\LayerTransfer|null $layer
      *
      * @return $this
      */
@@ -458,7 +458,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @return \Shared\Transfer\LayerTransfer|null
+     * @return \SprykerSdk\Shared\Transfer\LayerTransfer|null
      */
     public function getLayer()
     {
@@ -468,7 +468,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @return \Shared\Transfer\LayerTransfer
+     * @return \SprykerSdk\Shared\Transfer\LayerTransfer
      */
     public function getLayerOrFail()
     {
@@ -545,7 +545,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @param \Shared\Transfer\OptionsTransfer|null $options
+     * @param \SprykerSdk\Shared\Transfer\OptionsTransfer|null $options
      *
      * @return $this
      */
@@ -560,7 +560,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @return \Shared\Transfer\OptionsTransfer|null
+     * @return \SprykerSdk\Shared\Transfer\OptionsTransfer|null
      */
     public function getOptions()
     {
@@ -570,7 +570,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @return \Shared\Transfer\OptionsTransfer
+     * @return \SprykerSdk\Shared\Transfer\OptionsTransfer
      */
     public function getOptionsOrFail()
     {
@@ -596,7 +596,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @param \Shared\Transfer\ModuleTransfer|null $dependentModule
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer|null $dependentModule
      *
      * @return $this
      */
@@ -611,7 +611,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @return \Shared\Transfer\ModuleTransfer|null
+     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer|null
      */
     public function getDependentModule()
     {
@@ -621,7 +621,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @return \Shared\Transfer\ModuleTransfer
+     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer
      */
     public function getDependentModuleOrFail()
     {
@@ -647,7 +647,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module Development|ModuleFinder
      *
-     * @param \ArrayObject|\Shared\Transfer\ApplicationTransfer[] $applications
+     * @param \ArrayObject|\SprykerSdk\Shared\Transfer\ApplicationTransfer[] $applications
      *
      * @return $this
      */
@@ -662,7 +662,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module Development|ModuleFinder
      *
-     * @return \ArrayObject|\Shared\Transfer\ApplicationTransfer[]
+     * @return \ArrayObject|\SprykerSdk\Shared\Transfer\ApplicationTransfer[]
      */
     public function getApplications()
     {
@@ -672,7 +672,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module Development|ModuleFinder
      *
-     * @param \Shared\Transfer\ApplicationTransfer $application
+     * @param \SprykerSdk\Shared\Transfer\ApplicationTransfer $application
      *
      * @return $this
      */

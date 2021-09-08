@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\ManifestStrategy;
 
-use Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 use ReflectionClassConstant;
 use ReflectionException;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
@@ -82,11 +82,11 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetPointName
      * @param mixed $value
      *
-     * @return \Shared\Transfer\ClassInformationTransfer
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
     protected function adjustMethod(ClassInformationTransfer $classInformationTransfer, string $targetPointName, $value): ClassInformationTransfer
     {
@@ -109,11 +109,11 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $constantName
      * @param mixed $value
      *
-     * @return \Shared\Transfer\ClassInformationTransfer
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
     protected function adjustConstant(ClassInformationTransfer $classInformationTransfer, string $constantName, $value): ClassInformationTransfer
     {

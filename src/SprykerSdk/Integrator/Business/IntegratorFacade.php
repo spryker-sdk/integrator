@@ -23,7 +23,7 @@ class IntegratorFacade extends AbstractFacade implements IntegratorFacadeInterfa
      *
      * @api
      *
-     * @param \Shared\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer[] $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
      * @param bool $isDry
      *

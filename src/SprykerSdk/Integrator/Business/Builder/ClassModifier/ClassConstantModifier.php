@@ -7,7 +7,7 @@
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassModifier;
 
-use Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 use PhpParser\NodeTraverser;
 use SprykerSdk\Integrator\Business\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Business\Builder\Visitor\AddConstantVisitor;
@@ -28,11 +28,11 @@ class ClassConstantModifier
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $constantName
      * @param $value
      *
-     * @return \Shared\Transfer\ClassInformationTransfer
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
     public function setConstant(ClassInformationTransfer $classInformationTransfer, string $constantName, $value): ClassInformationTransfer
     {

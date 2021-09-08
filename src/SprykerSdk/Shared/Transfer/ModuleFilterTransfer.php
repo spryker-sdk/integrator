@@ -17,17 +17,17 @@ class ModuleFilterTransfer extends AbstractTransfer
     public const MODULE = 'module';
 
     /**
-     * @var \Shared\Transfer\OrganizationTransfer|null
+     * @var \SprykerSdk\Shared\Transfer\OrganizationTransfer|null
      */
     protected $organization;
 
     /**
-     * @var \Shared\Transfer\ApplicationTransfer|null
+     * @var \SprykerSdk\Shared\Transfer\ApplicationTransfer|null
      */
     protected $application;
 
     /**
-     * @var \Shared\Transfer\ModuleTransfer|null
+     * @var \SprykerSdk\Shared\Transfer\ModuleTransfer|null
      */
     protected $module;
 
@@ -88,7 +88,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @module SprykGui|Development|ModuleFinder
      *
-     * @param \Shared\Transfer\OrganizationTransfer|null $organization
+     * @param \SprykerSdk\Shared\Transfer\OrganizationTransfer|null $organization
      *
      * @return $this
      */
@@ -103,7 +103,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @module SprykGui|Development|ModuleFinder
      *
-     * @return \Shared\Transfer\OrganizationTransfer|null
+     * @return \SprykerSdk\Shared\Transfer\OrganizationTransfer|null
      */
     public function getOrganization()
     {
@@ -113,7 +113,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @module SprykGui|Development|ModuleFinder
      *
-     * @return \Shared\Transfer\OrganizationTransfer
+     * @return \SprykerSdk\Shared\Transfer\OrganizationTransfer
      */
     public function getOrganizationOrFail()
     {
@@ -139,7 +139,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @module SprykGui|Development|ModuleFinder
      *
-     * @param \Shared\Transfer\ApplicationTransfer|null $application
+     * @param \SprykerSdk\Shared\Transfer\ApplicationTransfer|null $application
      *
      * @return $this
      */
@@ -154,7 +154,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @module SprykGui|Development|ModuleFinder
      *
-     * @return \Shared\Transfer\ApplicationTransfer|null
+     * @return \SprykerSdk\Shared\Transfer\ApplicationTransfer|null
      */
     public function getApplication()
     {
@@ -164,7 +164,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @module SprykGui|Development|ModuleFinder
      *
-     * @return \Shared\Transfer\ApplicationTransfer
+     * @return \SprykerSdk\Shared\Transfer\ApplicationTransfer
      */
     public function getApplicationOrFail()
     {
@@ -190,7 +190,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @module SprykGui|Development|ModuleFinder
      *
-     * @param \Shared\Transfer\ModuleTransfer|null $module
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer|null $module
      *
      * @return $this
      */
@@ -205,7 +205,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @module SprykGui|Development|ModuleFinder
      *
-     * @return \Shared\Transfer\ModuleTransfer|null
+     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer|null
      */
     public function getModule()
     {
@@ -215,7 +215,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @module SprykGui|Development|ModuleFinder
      *
-     * @return \Shared\Transfer\ModuleTransfer
+     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer
      */
     public function getModuleOrFail()
     {

@@ -139,6 +139,8 @@ class IntegratorConfig extends AbstractConfig
         if (!file_exists($configFile)) {
             return $this->getDefaultConfigPath();
         }
+
+        return $configFile;
     }
 
     /**
@@ -161,7 +163,7 @@ class IntegratorConfig extends AbstractConfig
     {
         return $this->getProjectRootDirectory()
             . DIRECTORY_SEPARATOR
-            . 'integrator_config.php';
+            . 'config_integrator.php';
     }
 
     /**

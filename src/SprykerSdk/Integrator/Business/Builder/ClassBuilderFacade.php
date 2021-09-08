@@ -9,9 +9,11 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder;
 
-use Shared\Transfer\ClassInformationTransfer;
-use SprykerSdk\Shared\Common\AbstractFacade;
+
 use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Shared\Integrator\AbstractFacade;
+
 
 class ClassBuilderFacade extends AbstractFacade
 {
@@ -42,7 +44,7 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      *
      * @return string|null
      */
@@ -54,11 +56,11 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $constantName
      * @param $value
      *
-     * @return \Shared\Transfer\ClassInformationTransfer
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
     public function setConstant(ClassInformationTransfer $classInformationTransfer, string $constantName, $value): ClassInformationTransfer
     {
@@ -68,13 +70,13 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      * @param string $classNameToAdd
      * @param string|null $before
      * @param string|null $after
      *
-     * @return \Shared\Transfer\ClassInformationTransfer
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
     public function wireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
@@ -89,11 +91,11 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $classNameToRemove
      * @param string $targetMethodName
      *
-     * @return \Shared\Transfer\ClassInformationTransfer|null
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer|null
      */
     public function unwireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
@@ -106,12 +108,12 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      * @param string $classNameToAdd
      * @param string $constantName
      *
-     * @return \Shared\Transfer\ClassInformationTransfer
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
     public function wireClassConstant(
         ClassInformationTransfer $classInformationTransfer,
@@ -125,11 +127,11 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $classNameToRemove
      * @param string $targetMethodName
      *
-     * @return \Shared\Transfer\ClassInformationTransfer|null
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer|null
      */
     public function unwireClassConstant(
         ClassInformationTransfer $classInformationTransfer,
@@ -142,11 +144,11 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $methodName
      * @param bool|int|float|string|array|null $value
      *
-     * @return \Shared\Transfer\ClassInformationTransfer
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
     public function setMethodReturnValue(ClassInformationTransfer $classInformationTransfer, string $methodName, $value): ClassInformationTransfer
     {
@@ -156,12 +158,12 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      * @param string $key
      * @param string $classNameToAdd
      *
-     * @return \Shared\Transfer\ClassInformationTransfer
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
     public function wireGlueRelationship(
         ClassInformationTransfer $classInformationTransfer,
@@ -175,12 +177,12 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      * @param string $key
      * @param string $classNameToAdd
      *
-     * @return \Shared\Transfer\ClassInformationTransfer
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
     public function unwireGlueRelationship(
         ClassInformationTransfer $classInformationTransfer,

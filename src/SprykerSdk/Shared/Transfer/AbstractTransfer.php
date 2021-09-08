@@ -157,7 +157,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      * @param array $data
      * @param bool $ignoreMissingProperty
      *
-     * @return \SprykerSdk\Shared\Transfer\AbstractTransfer
+     * @return \SprykerSdk\SprykerSdk\Shared\Transfer\AbstractTransfer
      */
     public function fromArray(array $data, $ignoreMissingProperty = false)
     {
@@ -287,7 +287,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      * @param mixed $value
      * @param bool $ignoreMissingProperty
      *
-     * @return \SprykerSdk\Shared\Transfer\AbstrastTransfer
+     * @return \SprykerSdk\SprykerSdk\Shared\Transfer\AbstrastTransfer
      */
     protected function initializeNestedTransferObject($property, $value, $ignoreMissingProperty = false)
     {

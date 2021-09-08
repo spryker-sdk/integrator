@@ -140,7 +140,7 @@ class ManifestExecutor
     }
 
     /**
-     * @param \Shared\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer[] $moduleTransfers
      *
      * @return void
      */
