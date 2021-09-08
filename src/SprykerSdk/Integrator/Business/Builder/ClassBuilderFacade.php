@@ -12,7 +12,7 @@ namespace SprykerSdk\Integrator\Business\Builder;
 
 use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
-use SprykerSdk\Shared\Integrator\AbstractFacade;
+use SprykerSdk\Shared\Common\AbstractFacade;
 
 
 class ClassBuilderFacade extends AbstractFacade

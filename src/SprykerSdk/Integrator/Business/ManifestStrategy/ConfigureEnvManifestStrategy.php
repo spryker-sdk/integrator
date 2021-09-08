@@ -72,7 +72,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
      */
     protected function getConfigAppendData(string $target, $value): string
     {
-        $data = PHP_EOL . $this->config->getConfigVariableName() . '[' . $target . '] = ';
+        $data = PHP_EOL .'$'.$this->config->getConfigVariableName() . '[' . $target . '] = ';
         $data .= var_export($value, true);
         $data .= ';' . PHP_EOL;
 

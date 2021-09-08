@@ -14,6 +14,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class SymfonyConsoleInputOutputAdapter implements InputOutputInterface
 {
     /**
+     * @var bool
+     */
+    protected $interactionMode = true;
+
+    /**
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     protected $symfonyStyle;
@@ -64,6 +69,10 @@ class SymfonyConsoleInputOutputAdapter implements InputOutputInterface
      */
     public function ask(string $question, ?string $default = null, ?callable $validator = null)
     {
+        if (!$this->interactionMode) {
+            return $default;
+        }
+
         return $this->symfonyStyle->ask($question, $default);
     }
 
@@ -77,6 +86,10 @@ class SymfonyConsoleInputOutputAdapter implements InputOutputInterface
      */
     public function confirm(string $question, bool $default = true): bool
     {
+        if (!$this->interactionMode) {
+            return $default;
+        }
+
         return $this->symfonyStyle->confirm($question, $default);
     }
 
@@ -91,6 +104,23 @@ class SymfonyConsoleInputOutputAdapter implements InputOutputInterface
      */
     public function choice(string $question, array $choices, $default = null)
     {
+        if (!$this->interactionMode) {
+            return $default;
+        }
+
         return $this->symfonyStyle->choice($question, $choices, $default);
+    }
+
+    /**
+     * @param bool $mode
+     */
+    public function setIterationMode(bool  $mode):void
+    {
+        $this->interactionMode = $mode;
+    }
+
+    public function setNoIteration(): void
+    {
+        $this->setIterationMode(false);
     }
 }

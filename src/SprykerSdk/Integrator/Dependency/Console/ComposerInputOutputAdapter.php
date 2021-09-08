@@ -17,6 +17,11 @@ class ComposerInputOutputAdapter implements InputOutputInterface
     protected $symfonyStyle;
 
     /**
+     * @var bool
+     */
+    protected $interactionMode = true;
+
+    /**
      * @param \Composer\IO\IOInterface $symfonyStyle
      */
     public function __construct($symfonyStyle)
@@ -62,6 +67,10 @@ class ComposerInputOutputAdapter implements InputOutputInterface
      */
     public function ask(string $question, ?string $default = null, ?callable $validator = null)
     {
+        if (!$this->interactionMode) {
+            return $default;
+        }
+
         return $this->symfonyStyle->ask($question, $default);
     }
 
@@ -75,6 +84,10 @@ class ComposerInputOutputAdapter implements InputOutputInterface
      */
     public function confirm(string $question, bool $default = true)
     {
+        if (!$this->interactionMode) {
+            return $default;
+        }
+
         return $this->symfonyStyle->askConfirmation($question, $default);
     }
 
@@ -89,6 +102,23 @@ class ComposerInputOutputAdapter implements InputOutputInterface
      */
     public function choice(string $question, array $choices, $default = null)
     {
+        if (!$this->interactionMode) {
+            return $default;
+        }
+
         return $this->symfonyStyle->select($question, $choices, $default);
+    }
+
+    /**
+     * @param bool $mode
+     */
+    public function setIterationMode(bool  $mode):void
+    {
+        $this->interactionMode = $mode;
+    }
+
+    public function setNoIteration(): void
+    {
+        $this->setIterationMode(false);
     }
 }

@@ -37,11 +37,13 @@ class IntegratorConfig extends AbstractConfig
     {
         if ($this->config === null) {
             $fileName = $this->getConfigPath();
-            if (file_exists($fileName)) {
-                include $fileName;
-            }
 
-            $this->config = $this->getConfigVariableName();
+            if (file_exists($fileName)) {
+
+                include $fileName;
+
+                $this->config = ${$this->getConfigVariableName()};
+            }
         }
     }
 
@@ -124,7 +126,7 @@ class IntegratorConfig extends AbstractConfig
      */
     public function getConfigVariableName(): string
     {
-        return '$config';
+        return 'config';
     }
 
     /**
@@ -204,7 +206,7 @@ class IntegratorConfig extends AbstractConfig
     public function getRecipesRepository(): string
     {
         if (defined('TEST_INTEGRATOR_MODE')) {
-            // return 'test/'
+            return 'tests/_data/recipes/archive.zip';
         }
 
         return 'https://github.com/spryker-sdk/integrator-recipes/archive/master.zip';

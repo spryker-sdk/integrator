@@ -58,4 +58,29 @@ class BaseTestCase extends PHPUnitTestCase {
     {
         return new Filesystem();
     }
+
+    /**
+     * @return string
+     */
+    public function getTempDirectoryPath(): string
+    {
+        return APPLICATION_ROOT_DIR;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDataDirectoryPath(): string
+    {
+        return ROOT_TESTS . DIRECTORY_SEPARATOR . DATA_DIRECTORY_NAME;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProjectMockPath(): string
+    {
+        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'project_mock';
+    }
+
 }

@@ -65,8 +65,7 @@ class ModuleFinder implements ModuleFinderInterface
 
         ksort($moduleTransferCollection);
 
-        // Geega
-        // var_dump($moduleTransferCollection);
+
 
         if ($moduleFilterTransfer === null) {
             static::$moduleTransferCollection = $moduleTransferCollection;
@@ -85,20 +84,17 @@ class ModuleFinder implements ModuleFinderInterface
     protected function addStandaloneModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
         foreach ($this->getStandaloneModuleFinder() as $directoryInfo) {
-            var_dump($directoryInfo);
-            var_dump($this->camelCase($directoryInfo->getFilename()));
-            echo '>>> '.PHP_EOL;
+
             if (in_array($this->camelCase($directoryInfo->getFilename()), $this->config->getInternalOrganizations(), true)) {
                 continue;
             }
-            // GEEGA
-            var_dump($directoryInfo);
+
 
             $moduleTransfer = $this->getModuleTransfer($directoryInfo);
             $moduleTransfer->setIsStandalone(true);
 
             if (!$this->isModule($moduleTransfer)) {
-                var_dump('Skip...');
+
                 continue;
             }
 

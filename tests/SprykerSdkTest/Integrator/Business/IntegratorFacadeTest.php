@@ -3,63 +3,84 @@
 namespace SprykerSdkTest\Integrator\Business;
 
 use SprykerSdk\Integrator\Business\IntegratorFacade;
+use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
 use SprykerSdkTest\Integrator\BaseTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class IntegratorFacadeTest extends BaseTestCase
 {
-    public static function setUpBeforeClass(): void
-    {
-        parent::setUpBeforeClass();
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        parent::tearDownAfterClass();
-    }
-
-    public function testRunInstallation()
+    public function testRunInstallation(): void
     {
         // before test
-        $this->removeTmpDirectory();
+        $this->prepareTestEnv();
 
-        $this->createTmpDirectory();
-        $this->copyProjectToTmpDirctory();
+        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
+        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
+        $ioAdapter->setNoIteration();
 
-
-
-        // $inputOption = new InputOption(static::INPUT_OPTION_MODULE);
-
-
-        $inputDefinition = new InputDefinition();
-//        $inputDefinition->addOption($inputOption);
-//        $inputDefinition->addOption($levelOption);
-//        $inputDefinition->addOption($dryOption);
-//        $inputDefinition->addOption($verboseOption);
-
-        $input = new ArrayInput([], $inputDefinition);
-
-        $output = new BufferedOutput();
-        $io = new SymfonyStyle($input, $output);
-
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList(), new SymfonyConsoleInputOutputAdapter($io),false);
+        $this->createIntegratorFacade()->runInstallation($this->getModuleList(), $ioAdapter,false);
 
         $this->assertEquals(true, true);
+
+        $this->test();
+
+        // $this->clearTestEnv();
     }
 
+    private function test()
+    {
+        $testFilePath = './tests/_tests_files/test_integrator_wire_plugin_dependency_provider.php';
+        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
 
-    private function getModuleList()
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+
+        $this->assertSame(trim(file_get_contents($classPath)), trim(file_get_contents($testFilePath)));
+    }
+
+    /**
+     * @return \Symfony\Component\Console\Input\InputInterface
+     */
+    private function buildInput(): InputInterface
+    {
+        $verboseOption = new InputOption(InputOutputInterface::DEBUG);
+        $inputDefinition = new InputDefinition();
+
+        $inputDefinition->addOption($verboseOption);
+
+        return new ArrayInput([], $inputDefinition);
+    }
+
+    /**
+     * @return \Symfony\Component\Console\Output\OutputInterface
+     */
+    private function buildOutput(): OutputInterface
+    {
+        return new BufferedOutput(OutputInterface::VERBOSITY_DEBUG);
+    }
+
+    /**
+     * @return array
+     */
+    private function getModuleList(): array
     {
         // TODO remove builder
         return $this->getFactory()->getModuleFinderFacade()->getModules($this->buildModuleFilterTransfer());
     }
 
-    private function buildModuleFilterTransfer()
+    /**
+     * @return \SprykerSdk\Shared\Transfer\ModuleFilterTransfer
+     */
+    private function buildModuleFilterTransfer(): ModuleFilterTransfer
     {
         return new ModuleFilterTransfer();
     }
@@ -74,29 +95,44 @@ class IntegratorFacadeTest extends BaseTestCase
 
     private function createTmpDirectory(): void
     {
-        if (!$this->createFilesystem()->exists('tests/tmp')) {
-             $this->createFilesystem()->mkdir('tests/tmp', 0700);
+        $fileSystem = $this->createFilesystem();
+        $tmpPath = $this->getTempDirectoryPath();
+
+        if (!$fileSystem->exists($tmpPath)) {
+            $fileSystem->mkdir($tmpPath, 0700);
         }
     }
 
-    private function removeTmpDirectory(): bool
+    private function removeTmpDirectory(): void
     {
         $fileSystem = $this->createFilesystem();
+        $tmpPath = $this->getTempDirectoryPath();
 
-        if ($fileSystem->exists('tests/tmp')) {
-            $fileSystem->remove('tests/tmp');
+        if ($fileSystem->exists($tmpPath)) {
+            $fileSystem->remove($tmpPath);
         }
-
-        return false;
     }
 
     private function copyProjectToTmpDirctory(): void
     {
         $fileSystem = $this->createFilesystem();
+        $tmpPath = $this->getTempDirectoryPath();
+        $projectMockPath  = $this->getProjectMockPath();
 
-        if ($fileSystem->exists('tests/tmp')) {
-            $fileSystem->mirror('tests/project/', 'tests/tmp/');
+        if ($fileSystem->exists($this->getTempDirectoryPath())) {
+            $fileSystem->mirror($projectMockPath, $tmpPath);
         }
     }
 
+    private function prepareTestEnv(): void
+    {
+        $this->removeTmpDirectory();
+        $this->createTmpDirectory();
+        $this->copyProjectToTmpDirctory();
+    }
+
+    private function clearTestEnv(): void
+    {
+        $this->removeTmpDirectory();
+    }
 }

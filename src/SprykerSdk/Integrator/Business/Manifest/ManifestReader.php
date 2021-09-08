@@ -47,9 +47,12 @@ class ManifestReader
         $moduleComposerData = $this->composerLockReader->getModuleVersions();
         foreach ($moduleTransfers as $moduleTransfer) {
             $moduleFullName = $moduleTransfer->getOrganization()->getName() . '.' . $moduleTransfer->getName();
+
             if (!isset($moduleComposerData[$moduleFullName])) {
                 continue;
             }
+
+
 
             $filePath = $this->resolveManifestVersion($moduleTransfer, $moduleComposerData[$moduleFullName]);
 
@@ -72,6 +75,8 @@ class ManifestReader
      */
     protected function updateRepositoryFolder(): void
     {
+        return;
+
         $recipesArchive = $this->config->getRecipesDirectory() . 'archive.zip';
         if (!is_dir($this->config->getRecipesDirectory())) {
             mkdir($this->config->getRecipesDirectory(), 0700, true);
