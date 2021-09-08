@@ -120,6 +120,9 @@ class ClassHelperTest extends BaseTestCase
         $this->assertEquals('', $layerName);
     }
 
+    /**
+     * @return \SprykerSdk\Integrator\Business\Helper\ClassHelper
+     */
     public function createClassHelper(): ClassHelper
     {
         return new ClassHelper();
