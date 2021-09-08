@@ -35,6 +35,8 @@
     "scripts": {
         "cs-check": "vendor/bin/phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/",
         "cs-fix": "vendor/bin/phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/",
+        "cs-check-tests": "vendor/bin/phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml tests/",
+        "cs-fix-tests": "vendor/bin/phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml tests/",
         "stan": "vendor/bin/phpstan.phar analyse -c phpstan.neon src/",
         "test": "vendor/bin/phpunit"
     },

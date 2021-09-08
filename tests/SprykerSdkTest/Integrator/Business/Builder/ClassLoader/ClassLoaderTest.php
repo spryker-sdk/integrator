@@ -15,13 +15,15 @@ use SprykerSdkTest\Integrator\BaseTestCase;
 
 class ClassLoaderTest extends BaseTestCase
 {
+    /**
+     * @return void
+     */
     public function testLoadClass(): void
     {
         $transfer = $this->createClassLoader()->loadClass(ClassHelper::class);
 
         $this->assertEquals(ClassHelper::class, $transfer->getClassName());
         $this->assertNull($transfer->getParent());
-
     }
 
     /**

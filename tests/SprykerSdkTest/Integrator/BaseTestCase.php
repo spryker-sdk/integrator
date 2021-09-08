@@ -9,17 +9,16 @@ namespace SprykerSdkTest\Integrator;
 
 use PhpParser\Lexer;
 use PhpParser\Lexer\Emulative;
-use PhpParser\Parser\Php7;
 use PhpParser\Parser;
+use PhpParser\Parser\Php7;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
 use Symfony\Component\Filesystem\Filesystem;
 
-class BaseTestCase extends PHPUnitTestCase {
-
+class BaseTestCase extends PHPUnitTestCase
+{
     use IntegratorFactoryAwareTrait;
-
 
     /**
      * @return \SprykerSdk\Integrator\IntegratorConfig
@@ -52,7 +51,7 @@ class BaseTestCase extends PHPUnitTestCase {
     }
 
     /**
-     * @return Filesystem
+     * @return \Symfony\Component\Filesystem\Filesystem
      */
     public function createFilesystem(): Filesystem
     {
@@ -82,5 +81,4 @@ class BaseTestCase extends PHPUnitTestCase {
     {
         return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'project_mock';
     }
-
 }

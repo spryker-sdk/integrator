@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace SprykerSdkTest\Integrator\Business;
 
 use SprykerSdk\Integrator\Business\IntegratorFacade;
@@ -17,6 +22,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class IntegratorFacadeTest extends BaseTestCase
 {
+    /**
+     * @return void
+     */
     public function testRunInstallation(): void
     {
         // before test
@@ -26,7 +34,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
         $ioAdapter->setNoIteration();
 
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList(), $ioAdapter,false);
+        $this->createIntegratorFacade()->runInstallation($this->getModuleList(), $ioAdapter, false);
 
         $this->assertEquals(true, true);
 
@@ -35,11 +43,13 @@ class IntegratorFacadeTest extends BaseTestCase
         // $this->clearTestEnv();
     }
 
+    /**
+     * @return void
+     */
     private function test()
     {
         $testFilePath = './tests/_tests_files/test_integrator_wire_plugin_dependency_provider.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
-
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -93,6 +103,9 @@ class IntegratorFacadeTest extends BaseTestCase
         return new IntegratorFacade();
     }
 
+    /**
+     * @return void
+     */
     private function createTmpDirectory(): void
     {
         $fileSystem = $this->createFilesystem();
@@ -103,6 +116,9 @@ class IntegratorFacadeTest extends BaseTestCase
         }
     }
 
+    /**
+     * @return void
+     */
     private function removeTmpDirectory(): void
     {
         $fileSystem = $this->createFilesystem();
@@ -113,17 +129,23 @@ class IntegratorFacadeTest extends BaseTestCase
         }
     }
 
+    /**
+     * @return void
+     */
     private function copyProjectToTmpDirctory(): void
     {
         $fileSystem = $this->createFilesystem();
         $tmpPath = $this->getTempDirectoryPath();
-        $projectMockPath  = $this->getProjectMockPath();
+        $projectMockPath = $this->getProjectMockPath();
 
         if ($fileSystem->exists($this->getTempDirectoryPath())) {
             $fileSystem->mirror($projectMockPath, $tmpPath);
         }
     }
 
+    /**
+     * @return void
+     */
     private function prepareTestEnv(): void
     {
         $this->removeTmpDirectory();
@@ -131,6 +153,9 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->copyProjectToTmpDirctory();
     }
 
+    /**
+     * @return void
+     */
     private function clearTestEnv(): void
     {
         $this->removeTmpDirectory();

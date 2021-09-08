@@ -1,7 +1,7 @@
 <?php
 
 $config['PROJECT_NAMESPACES'] = [
-    'Pyz'
+    'Pyz',
 ];
 $config['CORE_NAMESPACES'] = [
     'SprykerShop',
