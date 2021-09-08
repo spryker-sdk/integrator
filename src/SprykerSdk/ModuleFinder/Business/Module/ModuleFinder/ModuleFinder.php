@@ -7,10 +7,10 @@
 
 namespace SprykerSdk\ModuleFinder\Business\Module\ModuleFinder;
 
-use Shared\Transfer\ApplicationTransfer;
-use Shared\Transfer\ModuleFilterTransfer;
-use Shared\Transfer\ModuleTransfer;
-use Shared\Transfer\OrganizationTransfer;
+use SprykerSdk\Shared\Transfer\ApplicationTransfer;
+use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Shared\Transfer\ModuleTransfer;
+use SprykerSdk\Shared\Transfer\OrganizationTransfer;
 use Laminas\Filter\FilterChain;
 use Laminas\Filter\StringToLower;
 use Laminas\Filter\Word\CamelCaseToDash;
@@ -48,9 +48,9 @@ class ModuleFinder implements ModuleFinderInterface
     }
 
     /**
-     * @param \Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
      */
     public function getModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -65,9 +65,13 @@ class ModuleFinder implements ModuleFinderInterface
 
         ksort($moduleTransferCollection);
 
+        // Geega
+        // var_dump($moduleTransferCollection);
+
         if ($moduleFilterTransfer === null) {
             static::$moduleTransferCollection = $moduleTransferCollection;
         }
+
 
         return $moduleTransferCollection;
     }
@@ -81,13 +85,20 @@ class ModuleFinder implements ModuleFinderInterface
     protected function addStandaloneModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
         foreach ($this->getStandaloneModuleFinder() as $directoryInfo) {
+            var_dump($directoryInfo);
+            var_dump($this->camelCase($directoryInfo->getFilename()));
+            echo '>>> '.PHP_EOL;
             if (in_array($this->camelCase($directoryInfo->getFilename()), $this->config->getInternalOrganizations(), true)) {
                 continue;
             }
+            // GEEGA
+            var_dump($directoryInfo);
+
             $moduleTransfer = $this->getModuleTransfer($directoryInfo);
             $moduleTransfer->setIsStandalone(true);
 
             if (!$this->isModule($moduleTransfer)) {
+                var_dump('Skip...');
                 continue;
             }
 
@@ -156,6 +167,8 @@ class ModuleFinder implements ModuleFinderInterface
     protected function addModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
         foreach ($this->getModuleFinder() as $directoryInfo) {
+            /// var_dump($directoryInfo);
+
             $moduleTransfer = $this->getModuleTransfer($directoryInfo);
 
             if (!$this->isModule($moduleTransfer)) {
@@ -163,6 +176,7 @@ class ModuleFinder implements ModuleFinderInterface
             }
             $moduleTransferCollection = $this->addModuleToCollection($moduleTransfer, $moduleTransferCollection, $moduleFilterTransfer);
         }
+
 
         return $moduleTransferCollection;
     }

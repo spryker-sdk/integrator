@@ -20,7 +20,7 @@ class ClassBuilderFacade extends AbstractFacade
      * @param string $targetClassName
      * @param string $customOrganisation
      *
-     * @return \Shared\Transfer\ClassInforma    tionTransfer
+     * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
     public function resolveClass(string $targetClassName, string $customOrganisation = ''): ClassInformationTransfer
     {
@@ -30,7 +30,7 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
-     * @param \Shared\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Shared\Transfer\ClassInformationTransfer $classInformationTransfer
      *
      * @return bool
      */

@@ -57,7 +57,7 @@ class ManifestExecutor
     }
 
     /**
-     * @param \Shared\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer[] $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
@@ -144,7 +144,7 @@ class ManifestExecutor
      *
      * @return void
      */
-    protected function assertModuleData(array $moduleTransfers): void
+    protected function  assertModuleData(array $moduleTransfers): void
     {
         foreach ($moduleTransfers as $moduleTransfer) {
             $moduleTransfer->requireName()

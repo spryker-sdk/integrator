@@ -7,7 +7,7 @@ abstract class AbstractConfig
     /**
      * @var self|null
      */
-    private static $instance;
+    protected static $instance;
 
     /**
      * @return \SprykerSdk\Shared\Common\AbstractConfig

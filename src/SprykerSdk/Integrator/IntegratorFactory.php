@@ -38,7 +38,6 @@ use SprykerSdk\Integrator\Business\ManifestStrategy\WirePluginManifestStrategy;
 use SprykerSdk\Integrator\Business\ManifestStrategy\WireWidgetManifestStrategy;
 use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockReader;
 use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockWriter;
-use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\ModuleFinder\Business\ModuleFinderFacade;
 use SprykerSdk\ModuleFinder\Business\ModuleFinderFacadeInterface;
 

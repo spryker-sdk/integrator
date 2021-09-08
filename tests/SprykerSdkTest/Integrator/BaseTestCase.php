@@ -13,8 +13,13 @@ use PhpParser\Parser\Php7;
 use PhpParser\Parser;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
+use Symfony\Component\Filesystem\Filesystem;
 
 class BaseTestCase extends PHPUnitTestCase {
+
+    use IntegratorFactoryAwareTrait;
+
 
     /**
      * @return \SprykerSdk\Integrator\IntegratorConfig
@@ -44,5 +49,13 @@ class BaseTestCase extends PHPUnitTestCase {
     public function createPhpParser(): Parser
     {
         return new Php7($this->createLexer());
+    }
+
+    /**
+     * @return Filesystem
+     */
+    public function createFilesystem(): Filesystem
+    {
+        return new Filesystem();
     }
 }

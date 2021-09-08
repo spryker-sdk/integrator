@@ -7,15 +7,15 @@
 
 namespace SprykerSdk\ModuleFinder\Business\Module\ModuleMatcher;
 
-use Shared\Transfer\ModuleFilterTransfer;
-use Shared\Transfer\ModuleTransfer;
-use Shared\Transfer\OrganizationTransfer;
+use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Shared\Transfer\ModuleTransfer;
+use SprykerSdk\Shared\Transfer\OrganizationTransfer;
 
 class ModuleMatcher implements ModuleMatcherInterface
 {
     /**
-     * @param \Shared\Transfer\ModuleTransfer $moduleTransfer
-     * @param \Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
      *
      * @return bool
      */
