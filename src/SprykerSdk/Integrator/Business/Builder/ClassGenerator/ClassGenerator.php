@@ -9,13 +9,13 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassGenerator;
 
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
-use SprykerSdk\Shared\Common\UtilText\Filter\CamelCaseToSeparator;
 use SprykerSdk\Integrator\Business\Builder\ClassLoader\ClassLoader;
 use SprykerSdk\Integrator\Business\Helper\ClassHelper;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Shared\Common\UtilText\Filter\CamelCaseToSeparator;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassGenerator
 {

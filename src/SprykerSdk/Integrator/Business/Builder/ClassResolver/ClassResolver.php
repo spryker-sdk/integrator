@@ -9,9 +9,9 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassResolver;
 
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Business\Builder\ClassGenerator\ClassGenerator;
 use SprykerSdk\Integrator\Business\Builder\ClassLoader\ClassLoader;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassResolver
 {

@@ -38,7 +38,6 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
 
         $classHelper = new ClassHelper();
         if (!class_exists($targetClassName)) {
-
             $inputOutput->writeln(sprintf(
                 'Target module %s/%s does not exists in your system.',
                 $classHelper->getOrganisationName($targetClassName),
@@ -47,7 +46,6 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
 
             return false;
         }
-
 
         $targetClassInfo = (new ReflectionClass($targetClassName));
 

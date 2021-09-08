@@ -9,15 +9,14 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder;
 
-
+use SprykerSdk\Shared\Common\AbstractFacade;
 use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
-use SprykerSdk\Shared\Common\AbstractFacade;
-
 
 class ClassBuilderFacade extends AbstractFacade
 {
     use IntegratorFactoryAwareTrait;
+
     /**
      * @param string $targetClassName
      * @param string $customOrganisation

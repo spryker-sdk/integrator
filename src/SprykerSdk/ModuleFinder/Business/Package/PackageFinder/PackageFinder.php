@@ -7,10 +7,10 @@
 
 namespace SprykerSdk\ModuleFinder\Business\Package\PackageFinder;
 
-use SprykerSdk\Shared\Transfer\PackageTransfer;
 use Laminas\Filter\FilterChain;
 use Laminas\Filter\Word\DashToCamelCase;
 use SprykerSdk\ModuleFinder\ModuleFinderConfig;
+use SprykerSdk\Shared\Transfer\PackageTransfer;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 

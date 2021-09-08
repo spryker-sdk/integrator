@@ -113,12 +113,17 @@ class SymfonyConsoleInputOutputAdapter implements InputOutputInterface
 
     /**
      * @param bool $mode
+     *
+     * @return void
      */
-    public function setIterationMode(bool  $mode):void
+    public function setIterationMode(bool $mode): void
     {
         $this->interactionMode = $mode;
     }
 
+    /**
+     * @return void
+     */
     public function setNoIteration(): void
     {
         $this->setIterationMode(false);

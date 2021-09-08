@@ -9,8 +9,8 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassWriter;
 
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Business\Builder\Printer\ClassPrinter;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassFileWriter
 {

@@ -7,10 +7,10 @@
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassModifier;
 
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 use PhpParser\NodeTraverser;
 use SprykerSdk\Integrator\Business\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Business\Builder\Visitor\AddConstantVisitor;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassConstantModifier
 {

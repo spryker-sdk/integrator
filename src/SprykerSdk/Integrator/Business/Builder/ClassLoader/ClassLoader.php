@@ -9,13 +9,13 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassLoader;
 
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use ReflectionClass;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassLoader
 {
@@ -48,13 +48,11 @@ class ClassLoader
     {
         $className = ltrim($className, '\\');
 
-
         $classInformationTransfer = (new ClassInformationTransfer())
             ->setClassName($className)
             ->setFullyQualifiedClassName('\\' . $className);
 
         $reflectionClass = (new ReflectionClass($className));
-
 
         $originalAst = $this->parser->parse(file_get_contents($reflectionClass->getFileName()));
 

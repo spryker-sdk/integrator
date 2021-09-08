@@ -1,7 +1,8 @@
 <?php
 
 /**
- * (c) Spryker Systems GmbH copyright protected
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 namespace SprykerSdk\Shared\Transfer;
@@ -345,7 +346,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setOrganization(OrganizationTransfer $organization = null)
+    public function setOrganization(?OrganizationTransfer $organization = null)
     {
         $this->organization = $organization;
         $this->modifiedProperties[self::ORGANIZATION] = true;
@@ -396,7 +397,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setApplication(ApplicationTransfer $application = null)
+    public function setApplication(?ApplicationTransfer $application = null)
     {
         $this->application = $application;
         $this->modifiedProperties[self::APPLICATION] = true;
@@ -447,7 +448,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setLayer(LayerTransfer $layer = null)
+    public function setLayer(?LayerTransfer $layer = null)
     {
         $this->layer = $layer;
         $this->modifiedProperties[self::LAYER] = true;
@@ -549,7 +550,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setOptions(OptionsTransfer $options = null)
+    public function setOptions(?OptionsTransfer $options = null)
     {
         $this->options = $options;
         $this->modifiedProperties[self::OPTIONS] = true;
@@ -600,7 +601,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setDependentModule(ModuleTransfer $dependentModule = null)
+    public function setDependentModule(?ModuleTransfer $dependentModule = null)
     {
         $this->dependentModule = $dependentModule;
         $this->modifiedProperties[self::DEPENDENT_MODULE] = true;
@@ -750,7 +751,10 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @param array $data
      * @param bool $ignoreMissingProperty
-     * @return ModuleTransfer
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return $this
      */
     public function fromArray(array $data, $ignoreMissingProperty = false)
     {
@@ -764,6 +768,7 @@ class ModuleTransfer extends AbstractTransfer
                 case 'isStandalone':
                     $this->$normalizedPropertyName = $value;
                     $this->modifiedProperties[$normalizedPropertyName] = true;
+
                     break;
                 case 'organization':
                 case 'application':
@@ -786,6 +791,7 @@ class ModuleTransfer extends AbstractTransfer
                     $elementType = $this->transferMetadata[$normalizedPropertyName]['type'];
                     $this->$normalizedPropertyName = $this->processArrayObject($elementType, $value, $ignoreMissingProperty);
                     $this->modifiedProperties[$normalizedPropertyName] = true;
+
                     break;
                 default:
                     if (!$ignoreMissingProperty) {
@@ -798,10 +804,11 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-    * @param bool $isRecursive
-    * @param bool $camelCasedKeys
-    * @return array
-    */
+     * @param bool $isRecursive
+     * @param bool $camelCasedKeys
+     *
+     * @return array
+     */
     public function modifiedToArray($isRecursive = true, $camelCasedKeys = false)
     {
         if ($isRecursive && !$camelCasedKeys) {
@@ -819,10 +826,11 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-    * @param bool $isRecursive
-    * @param bool $camelCasedKeys
-    * @return array
-    */
+     * @param bool $isRecursive
+     * @param bool $camelCasedKeys
+     *
+     * @return array
+     */
     public function toArray($isRecursive = true, $camelCasedKeys = false)
     {
         if ($isRecursive && !$camelCasedKeys) {
@@ -840,17 +848,19 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-    * @param mixed $value
-    * @param bool $isRecursive
-    * @param bool $camelCasedKeys
-    * @return array
-    */
+     * @param mixed $value
+     * @param bool $isRecursive
+     * @param bool $camelCasedKeys
+     *
+     * @return array
+     */
     protected function addValuesToCollectionModified($value, $isRecursive, $camelCasedKeys)
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
             if ($arrayElement instanceof AbstractTransfer) {
                 $result[$elementKey] = $arrayElement->modifiedToArray($isRecursive, $camelCasedKeys);
+
                 continue;
             }
             $result[$elementKey] = $arrayElement;
@@ -860,17 +870,19 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-    * @param mixed $value
-    * @param bool $isRecursive
-    * @param bool $camelCasedKeys
-    * @return array
-    */
+     * @param mixed $value
+     * @param bool $isRecursive
+     * @param bool $camelCasedKeys
+     *
+     * @return array
+     */
     protected function addValuesToCollection($value, $isRecursive, $camelCasedKeys)
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
             if ($arrayElement instanceof AbstractTransfer) {
                 $result[$elementKey] = $arrayElement->toArray($isRecursive, $camelCasedKeys);
+
                 continue;
             }
             $result[$elementKey] = $arrayElement;
@@ -880,8 +892,8 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function modifiedToArrayRecursiveCamelCased()
     {
         $values = [];
@@ -892,6 +904,7 @@ class ModuleTransfer extends AbstractTransfer
 
             if ($value instanceof AbstractTransfer) {
                 $values[$arrayKey] = $value->modifiedToArray(true, true);
+
                 continue;
             }
             switch ($property) {
@@ -900,6 +913,7 @@ class ModuleTransfer extends AbstractTransfer
                 case 'path':
                 case 'isStandalone':
                     $values[$arrayKey] = $value;
+
                     break;
                 case 'organization':
                 case 'application':
@@ -907,9 +921,11 @@ class ModuleTransfer extends AbstractTransfer
                 case 'options':
                 case 'dependentModule':
                     $values[$arrayKey] = $value instanceof AbstractTransfer ? $value->modifiedToArray(true, true) : $value;
+
                     break;
                 case 'applications':
                     $values[$arrayKey] = $value ? $this->addValuesToCollectionModified($value, true, true) : $value;
+
                     break;
             }
         }
@@ -918,8 +934,8 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function modifiedToArrayRecursiveNotCamelCased()
     {
         $values = [];
@@ -930,6 +946,7 @@ class ModuleTransfer extends AbstractTransfer
 
             if ($value instanceof AbstractTransfer) {
                 $values[$arrayKey] = $value->modifiedToArray(true, false);
+
                 continue;
             }
             switch ($property) {
@@ -938,6 +955,7 @@ class ModuleTransfer extends AbstractTransfer
                 case 'path':
                 case 'isStandalone':
                     $values[$arrayKey] = $value;
+
                     break;
                 case 'organization':
                 case 'application':
@@ -945,9 +963,11 @@ class ModuleTransfer extends AbstractTransfer
                 case 'options':
                 case 'dependentModule':
                     $values[$arrayKey] = $value instanceof AbstractTransfer ? $value->modifiedToArray(true, false) : $value;
+
                     break;
                 case 'applications':
                     $values[$arrayKey] = $value ? $this->addValuesToCollectionModified($value, true, false) : $value;
+
                     break;
             }
         }
@@ -956,8 +976,8 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function modifiedToArrayNotRecursiveNotCamelCased()
     {
         $values = [];
@@ -973,8 +993,8 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function modifiedToArrayNotRecursiveCamelCased()
     {
         $values = [];
@@ -990,16 +1010,16 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     protected function initCollectionProperties()
     {
         $this->applications = $this->applications ?: new ArrayObject();
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function toArrayNotRecursiveCamelCased()
     {
         return [
@@ -1017,8 +1037,8 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function toArrayNotRecursiveNotCamelCased()
     {
         return [
@@ -1036,8 +1056,8 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function toArrayRecursiveNotCamelCased()
     {
         return [
@@ -1055,8 +1075,8 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function toArrayRecursiveCamelCased()
     {
         return [

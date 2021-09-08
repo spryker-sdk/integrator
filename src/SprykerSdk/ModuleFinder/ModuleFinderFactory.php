@@ -15,7 +15,6 @@ use SprykerSdk\ModuleFinder\Business\Module\ProjectModuleFinder\ProjectModuleFin
 use SprykerSdk\ModuleFinder\Business\Module\ProjectModuleFinder\ProjectModuleFinderInterface;
 use SprykerSdk\ModuleFinder\Business\Package\PackageFinder\PackageFinder;
 use SprykerSdk\ModuleFinder\Business\Package\PackageFinder\PackageFinderInterface;
-use SprykerSdk\ModuleFinder\ModuleFinderConfig;
 
 class ModuleFinderFactory
 {

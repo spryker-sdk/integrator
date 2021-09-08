@@ -9,7 +9,6 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassModifier;
 
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
@@ -19,6 +18,7 @@ use SprykerSdk\Integrator\Business\Builder\Visitor\AddPluginToPluginListVisitor;
 use SprykerSdk\Integrator\Business\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Business\Builder\Visitor\RemovePluginFromPluginListVisitor;
 use SprykerSdk\Integrator\Business\Helper\ClassHelper;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassInstanceClassModifier
 {

@@ -9,7 +9,6 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassModifier;
 
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -26,6 +25,7 @@ use SprykerSdk\Integrator\Business\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Business\Builder\Visitor\CloneNodeWithClearPositionVisitor;
 use SprykerSdk\Integrator\Business\Builder\Visitor\RemoveMethodVisitor;
 use SprykerSdk\Integrator\Business\Builder\Visitor\ReplaceNodeStmtByNameVisitor;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class CommonClassModifier
 {

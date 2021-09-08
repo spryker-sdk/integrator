@@ -7,7 +7,6 @@
 
 namespace SprykerSdk\Integrator\Business\Builder\ClassModifier;
 
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -24,6 +23,7 @@ use SprykerSdk\Integrator\Business\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Business\Builder\Visitor\MethodBodyExtendVisitor;
 use SprykerSdk\Integrator\Business\Builder\Visitor\RemoveGlueRelationshipFromClassListVisitor;
 use SprykerSdk\Integrator\Business\Helper\ClassHelper;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class GlueRelationshipModifier
 {
@@ -62,6 +62,8 @@ class GlueRelationshipModifier
      * @param string $targetMethodName
      * @param string $key
      * @param string $classNameToAdd
+     *
+     * @throws \RuntimeException
      *
      * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
@@ -171,7 +173,8 @@ class GlueRelationshipModifier
                 if (!($node instanceof MethodCall) || count($node->args) !== 2) {
                     return false;
                 }
-                if (!($node->args[0]->value instanceof ClassConstFetch)
+                if (
+                    !($node->args[0]->value instanceof ClassConstFetch)
                     || $node->args[0]->value->class->toString() . '::' . $node->args[0]->value->name !== $key
                 ) {
                     return false;

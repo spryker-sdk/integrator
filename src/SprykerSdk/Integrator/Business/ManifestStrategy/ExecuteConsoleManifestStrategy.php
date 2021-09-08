@@ -42,8 +42,6 @@ class ExecuteConsoleManifestStrategy extends AbstractManifestStrategy
         return !$statusCode;
     }
 
-
-
     /**
      * @param array $command
      *

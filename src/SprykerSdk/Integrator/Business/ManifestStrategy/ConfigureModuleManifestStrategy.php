@@ -9,11 +9,11 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\ManifestStrategy;
 
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 use ReflectionClassConstant;
 use ReflectionException;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
 {
@@ -49,7 +49,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
 
             if (!$value) {
                 $value = $this->askValue(
-                    "Provide value for " . $classInformationTransfer->getClassName() . "::$targetPointName() configuration.",
+                    'Provide value for ' . $classInformationTransfer->getClassName() . "::$targetPointName() configuration.",
                     $choices,
                     $inputOutput,
                     $defaultValue

@@ -73,7 +73,6 @@ class ManifestExecutor
 
         $unappliedManifests = $this->findUnappliedManifests($manifests, $sprykerLock);
 
-
         if (!$unappliedManifests) {
             return 0;
         }
@@ -82,7 +81,7 @@ class ManifestExecutor
             return 0;
         }
 
-        $GLOBALS["IO"] = $inputOutput;
+        $GLOBALS['IO'] = $inputOutput;
         foreach ($unappliedManifests as $moduleName => $moduleManifests) {
             foreach ($moduleManifests as $manifestType => $unappliedManifestByType) {
                 $manifestExecutor = $this->resolveExecutor($manifestType);
@@ -129,6 +128,8 @@ class ManifestExecutor
     /**
      * @param string $manifestType
      *
+     * @throws \RuntimeException
+     *
      * @return \SprykerSdk\Integrator\Business\ManifestStrategy\ManifestStrategyInterface
      */
     protected function resolveExecutor(string $manifestType): ManifestStrategyInterface
@@ -147,7 +148,7 @@ class ManifestExecutor
      *
      * @return void
      */
-    protected function  assertModuleData(array $moduleTransfers): void
+    protected function assertModuleData(array $moduleTransfers): void
     {
         foreach ($moduleTransfers as $moduleTransfer) {
             $moduleTransfer->requireName()

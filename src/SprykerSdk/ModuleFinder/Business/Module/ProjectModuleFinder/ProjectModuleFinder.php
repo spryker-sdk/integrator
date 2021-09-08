@@ -7,12 +7,12 @@
 
 namespace SprykerSdk\ModuleFinder\Business\Module\ProjectModuleFinder;
 
+use SprykerSdk\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface;
+use SprykerSdk\ModuleFinder\ModuleFinderConfig;
 use SprykerSdk\Shared\Transfer\ApplicationTransfer;
 use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Shared\Transfer\ModuleTransfer;
 use SprykerSdk\Shared\Transfer\OrganizationTransfer;
-use SprykerSdk\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface;
-use SprykerSdk\ModuleFinder\ModuleFinderConfig;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 

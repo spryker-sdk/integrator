@@ -7,8 +7,8 @@
 
 namespace SprykerSdk\Integrator\Business\Composer;
 
-use SprykerSdk\Shared\Common\UtilText\Filter\SeparatorToCamelCase;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Shared\Common\UtilText\Filter\SeparatorToCamelCase;
 
 class ComposerLockReader
 {
@@ -39,7 +39,7 @@ class ComposerLockReader
 
         $dashToCamelCaseFilter = new SeparatorToCamelCase();
         foreach ($composerLockData['packages'] as $packageData) {
-            if ($packageData['version'] === "dev-master") {
+            if ($packageData['version'] === 'dev-master') {
                 continue;
             }
             [$org, $module] = explode('/', $packageData['name']);

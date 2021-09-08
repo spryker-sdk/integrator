@@ -9,9 +9,10 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Business\Manifest;
 
-use SprykerSdk\Shared\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Business\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Shared\Transfer\ModuleTransfer;
+use ZipArchive;
 
 class ManifestReader
 {
@@ -52,8 +53,6 @@ class ManifestReader
                 continue;
             }
 
-
-
             $filePath = $this->resolveManifestVersion($moduleTransfer, $moduleComposerData[$moduleFullName]);
 
             if (!$filePath) {
@@ -83,7 +82,7 @@ class ManifestReader
         }
         file_put_contents($recipesArchive, fopen($this->config->getRecipesRepository(), 'r'));
 
-        $zip = new \ZipArchive;
+        $zip = new ZipArchive();
         $zip->open($recipesArchive);
         $zip->extractTo($this->config->getRecipesDirectory());
         $zip->close();
@@ -105,9 +104,9 @@ class ManifestReader
         }
 
         $filePath = $moduleRecipiesDir . sprintf(
-                '%s/installer-manifest.json',
-                $moduleVersion
-            );
+            '%s/installer-manifest.json',
+            $moduleVersion
+        );
 
         if (file_exists($filePath)) {
             return $filePath;
@@ -120,9 +119,9 @@ class ManifestReader
         }
 
         return $moduleRecipiesDir . sprintf(
-                '%s/installer-manifest.json',
-                $nextSuitableVersion
-            );
+            '%s/installer-manifest.json',
+            $nextSuitableVersion
+        );
     }
 
     /**

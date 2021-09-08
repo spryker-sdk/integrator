@@ -9,12 +9,12 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator\Communication\Console;
 
+use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
+use SprykerSdk\Shared\Integrator\IntegratorFacadeAwareTrait;
+use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Shared\Transfer\ModuleTransfer;
 use SprykerSdk\Shared\Transfer\OrganizationTransfer;
-use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
-use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
-use SprykerSdk\Shared\Integrator\IntegratorFacadeAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

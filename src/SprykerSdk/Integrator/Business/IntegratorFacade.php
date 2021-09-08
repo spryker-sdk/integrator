@@ -13,7 +13,6 @@ use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Shared\Common\AbstractFacade;
 use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
 
-
 class IntegratorFacade extends AbstractFacade implements IntegratorFacadeInterface
 {
     use IntegratorFactoryAwareTrait;

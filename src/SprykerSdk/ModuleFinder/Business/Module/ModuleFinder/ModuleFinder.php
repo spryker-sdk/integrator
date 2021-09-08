@@ -7,16 +7,16 @@
 
 namespace SprykerSdk\ModuleFinder\Business\Module\ModuleFinder;
 
-use SprykerSdk\Shared\Transfer\ApplicationTransfer;
-use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
-use SprykerSdk\Shared\Transfer\ModuleTransfer;
-use SprykerSdk\Shared\Transfer\OrganizationTransfer;
 use Laminas\Filter\FilterChain;
 use Laminas\Filter\StringToLower;
 use Laminas\Filter\Word\CamelCaseToDash;
 use Laminas\Filter\Word\DashToCamelCase;
 use SprykerSdk\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface;
 use SprykerSdk\ModuleFinder\ModuleFinderConfig;
+use SprykerSdk\Shared\Transfer\ApplicationTransfer;
+use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Shared\Transfer\ModuleTransfer;
+use SprykerSdk\Shared\Transfer\OrganizationTransfer;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -65,12 +65,9 @@ class ModuleFinder implements ModuleFinderInterface
 
         ksort($moduleTransferCollection);
 
-
-
         if ($moduleFilterTransfer === null) {
             static::$moduleTransferCollection = $moduleTransferCollection;
         }
-
 
         return $moduleTransferCollection;
     }
@@ -84,17 +81,14 @@ class ModuleFinder implements ModuleFinderInterface
     protected function addStandaloneModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
         foreach ($this->getStandaloneModuleFinder() as $directoryInfo) {
-
             if (in_array($this->camelCase($directoryInfo->getFilename()), $this->config->getInternalOrganizations(), true)) {
                 continue;
             }
-
 
             $moduleTransfer = $this->getModuleTransfer($directoryInfo);
             $moduleTransfer->setIsStandalone(true);
 
             if (!$this->isModule($moduleTransfer)) {
-
                 continue;
             }
 
@@ -163,8 +157,6 @@ class ModuleFinder implements ModuleFinderInterface
     protected function addModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
         foreach ($this->getModuleFinder() as $directoryInfo) {
-            /// var_dump($directoryInfo);
-
             $moduleTransfer = $this->getModuleTransfer($directoryInfo);
 
             if (!$this->isModule($moduleTransfer)) {
@@ -172,7 +164,6 @@ class ModuleFinder implements ModuleFinderInterface
             }
             $moduleTransferCollection = $this->addModuleToCollection($moduleTransfer, $moduleTransferCollection, $moduleFilterTransfer);
         }
-
 
         return $moduleTransferCollection;
     }

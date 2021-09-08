@@ -39,7 +39,6 @@ class IntegratorConfig extends AbstractConfig
             $fileName = $this->getConfigPath();
 
             if (file_exists($fileName)) {
-
                 include $fileName;
 
                 $this->config = ${$this->getConfigVariableName()};

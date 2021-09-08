@@ -2,6 +2,11 @@
 
 declare(strict_types = 1);
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace SprykerSdk\Integrator;
 
 use PhpParser\Lexer;
@@ -10,7 +15,6 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\Parser\Php7;
-use SprykerSdk\Integrator\Business\Builder\ClassWriter\ClassFileWriter;
 use SprykerSdk\Integrator\Business\Builder\ClassGenerator\ClassGenerator;
 use SprykerSdk\Integrator\Business\Builder\ClassLoader\ClassLoader;
 use SprykerSdk\Integrator\Business\Builder\ClassModifier\ClassConstantModifier;
@@ -19,6 +23,7 @@ use SprykerSdk\Integrator\Business\Builder\ClassModifier\ClassListModifier;
 use SprykerSdk\Integrator\Business\Builder\ClassModifier\CommonClassModifier;
 use SprykerSdk\Integrator\Business\Builder\ClassModifier\GlueRelationshipModifier;
 use SprykerSdk\Integrator\Business\Builder\ClassResolver\ClassResolver;
+use SprykerSdk\Integrator\Business\Builder\ClassWriter\ClassFileWriter;
 use SprykerSdk\Integrator\Business\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Business\Builder\Printer\ClassDiffPrinter;
 use SprykerSdk\Integrator\Business\Builder\Printer\ClassPrinter;

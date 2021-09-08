@@ -7,8 +7,8 @@
 
 namespace SprykerSdk\Integrator\Business\Manifest;
 
-use SprykerSdk\Shared\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Business\Composer\ComposerLockReader;
+use SprykerSdk\Shared\Transfer\ModuleTransfer;
 
 class ManifestWriter
 {
@@ -55,7 +55,6 @@ class ManifestWriter
         return $success;
     }
 
-
     /**
      * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
      * @param string $moduleVersion
@@ -65,9 +64,9 @@ class ManifestWriter
     protected function getManifestFilePath(ModuleTransfer $moduleTransfer, string $moduleVersion): string
     {
         return APPLICATION_ROOT_DIR . sprintf(
-                '/vendor/spryker-sdk/integrator/data/recipies/integrator-recipes-master/%s/%s/',
-                $moduleTransfer->getName(),
-                $moduleVersion
-            );
+            '/vendor/spryker-sdk/integrator/data/recipies/integrator-recipes-master/%s/%s/',
+            $moduleTransfer->getName(),
+            $moduleVersion
+        );
     }
 }

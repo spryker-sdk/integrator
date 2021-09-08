@@ -190,7 +190,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      * @param string $property
      * @param mixed $value
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return void
      */
@@ -247,7 +247,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     /**
      * @param string $property
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return void
      */
@@ -265,7 +265,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     /**
      * @param string $property
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return void
      */
@@ -317,7 +317,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      * @param string $property
      * @param bool $ignoreMissingProperty
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return bool
      */
@@ -371,7 +371,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     /**
      * @param string $serialized
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return void
      */
@@ -427,7 +427,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     /**
      * @param mixed $offset
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return void
      */
@@ -439,7 +439,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     /**
      * @param string $propertyName
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return void
      */
