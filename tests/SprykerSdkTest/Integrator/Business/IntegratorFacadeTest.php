@@ -36,9 +36,7 @@ class IntegratorFacadeTest extends BaseTestCase
 
         $this->createIntegratorFacade()->runInstallation($this->getModuleList(), $ioAdapter, false);
 
-        $this->assertEquals(true, true);
-
-        $this->test();
+        $this->compareWirePluginFiles();
 
         // $this->clearTestEnv();
     }
@@ -46,7 +44,7 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
-    private function test()
+    private function compareWirePluginFiles(): void
     {
         $testFilePath = './tests/_tests_files/test_integrator_wire_plugin_dependency_provider.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
