@@ -8,6 +8,7 @@
 namespace SprykerSdkTest\Integrator\Business\Composer;
 
 use SprykerSdk\Integrator\Business\Composer\ComposerLockReader;
+use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdkTest\Integrator\BaseTestCase;
 
 class ComposerLockReaderTest extends BaseTestCase
@@ -30,6 +31,9 @@ class ComposerLockReaderTest extends BaseTestCase
      */
     private function createComposerLockReadr(): ComposerLockReader
     {
-        return new ComposerLockReader($this->getIntegratorConfig());
+        $integratorConfigMock = $this->createMock(IntegratorConfig::class);
+        $integratorConfigMock->method('getComposerLockFilePath')->willReturn('./composer.lock');
+
+        return new ComposerLockReader($integratorConfigMock);
     }
 }

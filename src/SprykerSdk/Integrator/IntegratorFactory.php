@@ -248,9 +248,11 @@ class IntegratorFactory
      */
     public function createClassLoader(): ClassLoader
     {
+        $lexer = $this->createPhpParserLexer();
+
         return new ClassLoader(
-            $this->getPhpParserParser(),
-            $this->getPhpParserLexer()
+            $this->createPhpParserParser($lexer),
+            $lexer
         );
     }
 
@@ -340,9 +342,11 @@ class IntegratorFactory
     /**
      * @return \PhpParser\Parser
      */
-    public function getPhpParserParser(): Parser
+    public function createPhpParserParser(Lexer $lexer = null): Parser
     {
-        $lexer = $this->getPhpParserLexer();
+        if (!$lexer) {
+            $lexer = $this->createPhpParserLexer();
+        }
 
         return new Php7($lexer);
     }
@@ -358,7 +362,7 @@ class IntegratorFactory
     /**
      * @return \PhpParser\Lexer
      */
-    public function getPhpParserLexer(): Lexer
+    public function createPhpParserLexer(): Lexer
     {
         return new Emulative([
             'usedAttributes' => [

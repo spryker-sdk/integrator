@@ -73,6 +73,7 @@ class ManifestExecutor
 
         $unappliedManifests = $this->findUnappliedManifests($manifests, $sprykerLock);
 
+
         if (!$unappliedManifests) {
             return 0;
         }
@@ -82,6 +83,7 @@ class ManifestExecutor
         }
 
         $GLOBALS['IO'] = $inputOutput;
+
         foreach ($unappliedManifests as $moduleName => $moduleManifests) {
             foreach ($moduleManifests as $manifestType => $unappliedManifestByType) {
                 $manifestExecutor = $this->resolveExecutor($manifestType);

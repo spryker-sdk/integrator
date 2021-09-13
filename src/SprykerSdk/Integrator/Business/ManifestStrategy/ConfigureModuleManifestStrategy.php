@@ -36,16 +36,22 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
         [$targetClassName, $targetPointName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
+
         $value = $manifest[IntegratorConfig::MANIFEST_KEY_VALUE] ?? null;
         $choices = $manifest[IntegratorConfig::MANIFEST_KEY_CHOICES] ?? [];
         $defaultValue = $manifest[IntegratorConfig::MANIFEST_KEY_DEFAULT_VALUE] ?? null;
 
+
+
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
             $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass($targetClassName, $namespace);
+
+
             if (!$classInformationTransfer) {
                 continue;
             }
+
 
             if (!$value) {
                 $value = $this->askValue(
@@ -57,6 +63,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
             }
 
             if (method_exists($targetClassName, $targetPointName)) {
+
                 $classInformationTransfer = $this->adjustMethod($classInformationTransfer, $targetPointName, $value);
             } elseif ($this->constantExists($manifest[IntegratorConfig::MANIFEST_KEY_TARGET])) {
                 $classInformationTransfer = $this->getClassBuilderFacade()->setConstant($classInformationTransfer, $targetPointName, $value);
@@ -88,11 +95,12 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
      *
      * @return \SprykerSdk\Shared\Transfer\ClassInformationTransfer
      */
-    protected function adjustMethod(ClassInformationTransfer $classInformationTransfer, string $targetPointName, $value): ClassInformationTransfer
+    protected function  adjustMethod(ClassInformationTransfer $classInformationTransfer, string $targetPointName, $value): ClassInformationTransfer
     {
         if (is_string($value) && strpos($value, '::')) {
             [$className, $constantName] = explode('::', $value);
 
+            echo 'wireClassConstant >>> '.PHP_EOL;
             return $this->getClassBuilderFacade()->wireClassConstant(
                 $classInformationTransfer,
                 $targetPointName,

@@ -29,28 +29,6 @@ class BaseTestCase extends PHPUnitTestCase
     }
 
     /**
-     * @return \PhpParser\Lexer
-     */
-    protected function createLexer(): Lexer
-    {
-        return new Emulative([
-            'usedAttributes' => [
-                'comments',
-                'startLine', 'endLine',
-                'startTokenPos', 'endTokenPos',
-            ],
-        ]);
-    }
-
-    /**
-     * @return \PhpParser\Parser
-     */
-    public function createPhpParser(): Parser
-    {
-        return new Php7($this->createLexer());
-    }
-
-    /**
      * @return \Symfony\Component\Filesystem\Filesystem
      */
     public function createFilesystem(): Filesystem
@@ -80,5 +58,37 @@ class BaseTestCase extends PHPUnitTestCase
     public function getProjectMockPath(): string
     {
         return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'project_mock';
+    }
+
+    /**
+     * @param string $dirPath
+     * @param string $zipPath
+     *
+     * @return void
+     */
+    public static function zipDir(string  $dirPath, string $zipPath): void
+    {
+        $zip = new \ZipArchive();
+        $zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+        /** @var SplFileInfo[] $files */
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dirPath),
+            \RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach ($files as $name => $file)
+        {
+            // Skip directories (they would be added automatically)
+            if (!$file->isDir())
+            {
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($dirPath) + 1);
+
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+
+        $zip->close();
     }
 }

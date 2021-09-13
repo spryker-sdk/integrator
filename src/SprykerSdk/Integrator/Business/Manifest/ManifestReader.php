@@ -46,6 +46,7 @@ class ManifestReader
         $this->updateRepositoryFolder();
         $manifests = [];
         $moduleComposerData = $this->composerLockReader->getModuleVersions();
+
         foreach ($moduleTransfers as $moduleTransfer) {
             $moduleFullName = $moduleTransfer->getOrganization()->getName() . '.' . $moduleTransfer->getName();
 
@@ -54,6 +55,7 @@ class ManifestReader
             }
 
             $filePath = $this->resolveManifestVersion($moduleTransfer, $moduleComposerData[$moduleFullName]);
+
 
             if (!$filePath) {
                 continue;
@@ -74,13 +76,18 @@ class ManifestReader
      */
     protected function updateRepositoryFolder(): void
     {
-        return;
-
         $recipesArchive = $this->config->getRecipesDirectory() . 'archive.zip';
+
         if (!is_dir($this->config->getRecipesDirectory())) {
             mkdir($this->config->getRecipesDirectory(), 0700, true);
         }
-        file_put_contents($recipesArchive, fopen($this->config->getRecipesRepository(), 'r'));
+
+        var_dump($recipesArchive);
+        var_dump($this->config->getRecipesRepository());
+
+
+        $r = file_put_contents($recipesArchive, fopen($this->config->getRecipesRepository(), 'r'));
+
 
         $zip = new ZipArchive();
         $zip->open($recipesArchive);

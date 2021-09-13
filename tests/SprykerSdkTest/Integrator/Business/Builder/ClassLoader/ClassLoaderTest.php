@@ -31,9 +31,6 @@ class ClassLoaderTest extends BaseTestCase
      */
     private function createClassLoader(): ClassLoader
     {
-        return new ClassLoader(
-            $this->createPhpParser(),
-            $this->createLexer()
-        );
+        return $this->getFactory()->createClassLoader();
     }
 }

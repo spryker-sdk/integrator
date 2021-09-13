@@ -3,7 +3,17 @@
     "description": "Spryker Shop Suite",
     "license": "MIT",
     "require": {
-        "php": ">=7.3",
-        "spryker/test-integrator-wire-plugin": "^1.0"
+        "php": ">=8.0",
+        "spryker/test-integrator-wire-plugin": "^1.0",
+        "spryker/test-integrator-unwire-plugin": "^1.0",
+        "spryker/test-integrator-configure-module": "^1.0",
+        "spryker/test-integrator-copy-module-file": "^1.0",
+        "spryker/test-integrator-wire-widget": "^1.0",
+        "spryker/test-integrator-unwire-widget": "^1.0",
+        "spryker/test-integrator-configure-env": "^1.0.4",
+        "spryker/test-integrator-wire-glue-relationship": "^1.0.1",
+        "spryker/test-integrator-unwire-glue-relationship": "^1.0.1",
+        "spryker-shop/shop-application": "*",
+        "spryker/test-integrator-default": "^1.0"
     }
 }

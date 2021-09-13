@@ -1,0 +1,7 @@
+{
+    "unwire-widget": [
+        {
+            "source": "\\Spryker\\Yves\\TestIntegratorUnwireWidget\\Widget\\TestUnwireWidget"
+        }
+    ]
+}

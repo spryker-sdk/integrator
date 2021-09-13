@@ -54,6 +54,7 @@ class ClassLoader
 
         $reflectionClass = (new ReflectionClass($className));
 
+
         $originalAst = $this->parser->parse(file_get_contents($reflectionClass->getFileName()));
 
         $nodeTraverser = new NodeTraverser();
@@ -63,7 +64,7 @@ class ClassLoader
 
         $classInformationTransfer->setClassTokenTree($ast)
             ->setOriginalClassTokenTree($originalAst)
-            //->setTokens($this->lexer->getTokens()) // TODO fix error (TypeError: Return value of PhpParser\Lexer::getTokens() must be of the type array, null returned)
+            ->setTokens($this->lexer->getTokens()) // TODO fix error (TypeError: Return value of PhpParser\Lexer::getTokens() must be of the type array, null returned)
             ->setFilePath($reflectionClass->getFileName());
 
         if ($reflectionClass->getParentClass()) {

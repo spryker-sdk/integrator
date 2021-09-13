@@ -1,0 +1,8 @@
+{
+    "configure-module": [
+        {
+            "target": "\\Spryker\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getTestConfiguration",
+            "value": "\\Spryker\\Zed\\TestIntegratorConfigureModule\\TestIntegratorConfigureModuleConfig::TEST_CONFIG_MODULE"
+        }
+    ]
+}

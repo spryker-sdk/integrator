@@ -35,6 +35,7 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         $sourcePath = $this->getSourcePath($source, $moduleName);
         $targetPath = $this->getTargetPath($manifest);
 
+
         if (!file_exists($sourcePath) || file_exists($targetPath)) {
             return false;
         }
@@ -63,9 +64,9 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         [$organisation, $moduleName] = explode('.', $moduleName);
 
         return $this->config->getCoreRootDirectory()
-            . $this->camelCaseToDash($organisation)
+            . strtolower($this->camelCaseToDash($organisation))
             . DIRECTORY_SEPARATOR
-            . $this->camelCaseToDash($moduleName)
+            . strtolower($this->camelCaseToDash($moduleName))
             . DIRECTORY_SEPARATOR
             . $source;
     }

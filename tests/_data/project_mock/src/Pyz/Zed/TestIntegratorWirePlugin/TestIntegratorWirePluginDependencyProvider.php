@@ -9,8 +9,6 @@ class TestIntegratorWirePluginDependencyProvider extends SprykerTestIntegratorWi
 {
     public function getTestPlugins() : array
     {
-        return [
-            new TestIntegratorWirePlugin(),
-        ];
+        return [];
     }
 }

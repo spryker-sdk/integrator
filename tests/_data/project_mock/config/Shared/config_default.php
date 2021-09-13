@@ -9,3 +9,6 @@ $config['CORE_NAMESPACES'] = [
     'Spryker',
     'SprykerSdk',
 ];
+
+
+$config[\Spryker\Shared\TestIntegratorConfigureEnv\TestIntegratorConfigureEnvConstants::TEST_VALUE] = 'Value 1';
