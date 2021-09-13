@@ -342,7 +342,7 @@ class IntegratorFactory
     /**
      * @return \PhpParser\Parser
      */
-    public function createPhpParserParser(Lexer $lexer = null): Parser
+    public function createPhpParserParser(?Lexer $lexer = null): Parser
     {
         if (!$lexer) {
             $lexer = $this->createPhpParserLexer();

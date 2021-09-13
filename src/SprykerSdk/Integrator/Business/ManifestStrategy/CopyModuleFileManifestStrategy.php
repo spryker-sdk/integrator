@@ -35,7 +35,6 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         $sourcePath = $this->getSourcePath($source, $moduleName);
         $targetPath = $this->getTargetPath($manifest);
 
-
         if (!file_exists($sourcePath) || file_exists($targetPath)) {
             return false;
         }

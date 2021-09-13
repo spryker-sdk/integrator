@@ -54,7 +54,6 @@ class ClassLoader
 
         $reflectionClass = (new ReflectionClass($className));
 
-
         $originalAst = $this->parser->parse(file_get_contents($reflectionClass->getFileName()));
 
         $nodeTraverser = new NodeTraverser();

@@ -73,7 +73,6 @@ class ManifestExecutor
 
         $unappliedManifests = $this->findUnappliedManifests($manifests, $sprykerLock);
 
-
         if (!$unappliedManifests) {
             return 0;
         }

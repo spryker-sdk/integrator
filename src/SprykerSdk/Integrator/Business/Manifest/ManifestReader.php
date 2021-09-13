@@ -56,7 +56,6 @@ class ManifestReader
 
             $filePath = $this->resolveManifestVersion($moduleTransfer, $moduleComposerData[$moduleFullName]);
 
-
             if (!$filePath) {
                 continue;
             }
@@ -85,9 +84,7 @@ class ManifestReader
         var_dump($recipesArchive);
         var_dump($this->config->getRecipesRepository());
 
-
         $r = file_put_contents($recipesArchive, fopen($this->config->getRecipesRepository(), 'r'));
-
 
         $zip = new ZipArchive();
         $zip->open($recipesArchive);

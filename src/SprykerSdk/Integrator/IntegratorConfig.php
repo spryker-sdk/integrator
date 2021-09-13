@@ -205,7 +205,7 @@ class IntegratorConfig extends AbstractConfig
     public function getRecipesRepository(): string
     {
         if (defined('TEST_INTEGRATOR_MODE')) {
-            return  'tests/_data/recipes/archive.zip';
+            return 'tests/_data/recipes/archive.zip';
         }
 
         return 'https://github.com/spryker-sdk/integrator-recipes/archive/master.zip';

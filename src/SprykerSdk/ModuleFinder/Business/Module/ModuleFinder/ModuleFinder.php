@@ -80,14 +80,10 @@ class ModuleFinder implements ModuleFinderInterface
      */
     protected function addStandaloneModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
-
         foreach ($this->getStandaloneModuleFinder() as $directoryInfo) {
-
             if (in_array($this->camelCase($directoryInfo->getFilename()), $this->config->getInternalOrganizations(), true)) {
                 continue;
             }
-
-
 
             $moduleTransfer = $this->getModuleTransfer($directoryInfo);
             $moduleTransfer->setIsStandalone(true);
@@ -141,7 +137,6 @@ class ModuleFinder implements ModuleFinderInterface
      */
     protected function isModule(ModuleTransfer $moduleTransfer): bool
     {
-
         $composerJsonAsArray = $this->getComposerJsonAsArray($moduleTransfer->getPath());
 
         if (!isset($composerJsonAsArray['description'])) {
