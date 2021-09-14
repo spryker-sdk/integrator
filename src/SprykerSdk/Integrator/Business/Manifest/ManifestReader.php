@@ -81,15 +81,14 @@ class ManifestReader
             mkdir($this->config->getRecipesDirectory(), 0700, true);
         }
 
-        var_dump($recipesArchive);
-        var_dump($this->config->getRecipesRepository());
+        file_put_contents($recipesArchive, fopen($this->config->getRecipesRepository(), 'r'));
 
-        $r = file_put_contents($recipesArchive, fopen($this->config->getRecipesRepository(), 'r'));
 
         $zip = new ZipArchive();
         $zip->open($recipesArchive);
         $zip->extractTo($this->config->getRecipesDirectory());
         $zip->close();
+
     }
 
     /**

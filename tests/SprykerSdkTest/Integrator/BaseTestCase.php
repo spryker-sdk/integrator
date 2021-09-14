@@ -7,10 +7,6 @@
 
 namespace SprykerSdkTest\Integrator;
 
-use PhpParser\Lexer;
-use PhpParser\Lexer\Emulative;
-use PhpParser\Parser;
-use PhpParser\Parser\Php7;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;

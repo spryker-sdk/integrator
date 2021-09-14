@@ -59,9 +59,7 @@ class IntegratorFacadeTest extends BaseTestCase
     public function testRunInstallationWirePlugin(): void
     {
         // Arrange
-        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
-        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
-        $ioAdapter->setNoIteration();
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWirePlugin'), $ioAdapter, false);
@@ -80,11 +78,8 @@ class IntegratorFacadeTest extends BaseTestCase
      */
     public function testRunInstallationUnwirePlugin(): void
     {
-        $this->markTestSkipped('Skip');
         // Arrange
-        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
-        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
-        $ioAdapter->setNoIteration();
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwirePlugin'), $ioAdapter, false);
@@ -101,19 +96,15 @@ class IntegratorFacadeTest extends BaseTestCase
 
     public function testRunInstallationConfigureModule(): void
     {
-        $this->markTestSkipped('Skip');
-
         // Arrange
-        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
-        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
-        $ioAdapter->setNoIteration();
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorConfigureModule'), $ioAdapter, false);
 
         // Assert
         $testFilePath = './tests/_tests_files/test_integrator_configure_module.php';
-        $classPath = './tests/_data/project_mock/src/Pyz/Zed/TestIntegratorDefault/TestIntegratorDefaultConfig.php';
+        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorDefault/TestIntegratorDefaultConfig.php';
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -121,102 +112,139 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
     }
 
+    /**
+     * @return void
+     */
     public function testRunInstallationCopyModuleFile(): void
     {
-        $this->markTestSkipped('Skip');
-
         // Arrange
-        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
-        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
-        $ioAdapter->setNoIteration();
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorCopyModuleFile'), $ioAdapter, false);
 
-
         // Assert
-        // TODO
-
+        $filePath = './tests/tmp/data/import_test.csv';
+        $this->assertFileExists($filePath);
     }
 
+    /**
+     * @return void
+     */
     public function testRunInstallationWireWidget(): void
     {
-        $this->markTestSkipped('Skip');
-
         // Arrange
-        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
-        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
-        $ioAdapter->setNoIteration();
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWireWidget'), $ioAdapter, false);
 
         // Assert
-        // TODO
+        $testFilePath = './tests/_tests_files/test_integrator_wire_widget.php';
+        $classPath = './tests/tmp/src/Pyz/Yves/ShopApplication/ShopApplicationDependencyProvider.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+
     }
 
+    /**
+     * @return void
+     */
     public function testRunInstallationUnwireWidget(): void
     {
-        $this->markTestSkipped('Skip');
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
-        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
-        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
-        $ioAdapter->setNoIteration();
-
+        // Act
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwireWidget'), $ioAdapter, false);
 
         // Assert
-        // TODO
+        $testFilePath = './tests/_tests_files/test_integrator_unwire_widget.php';
+        $classPath = './tests/tmp/src/Pyz/Yves/ShopApplication/ShopApplicationDependencyProvider.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
     }
 
+    /**
+     * @return void
+     */
     public function testRunInstallationConfigureEnv(): void
     {
-        $this->markTestSkipped('Skip');
         // Arrange
-        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
-        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
-        $ioAdapter->setNoIteration();
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorConfigureEnv'), $ioAdapter, false);
 
 
         // Assert
-        // TODO
+        $testFilePath = './tests/_tests_files/test_integrator_configure_env.php';
+        $classPath = './tests/tmp/config/Shared/config_default.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
     }
 
+    /**
+     * @return void
+     */
     public function testRunInstallationWireGlueRelaitonship(): void
     {
-        $this->markTestSkipped('Skip');
-
         // Arrange
-        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
-        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
-        $ioAdapter->setNoIteration();
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWireGlueRelationship'), $ioAdapter, false);
 
-
         // Assert
-        // TODO
+        $testFilePath = './tests/_tests_files/test_integrator_wire_glue_relationship.php';
+        $classPath = './tests/tmp/src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
     }
 
+    /**
+     * @return void
+     */
     public function testRunInstallationUnwireGlueRelaitonship(): void
     {
-        $this->markTestSkipped('Skip');
-
         // Arrange
-        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
-        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
-        $ioAdapter->setNoIteration();
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwireGlueRelationship'), $ioAdapter, false);
 
-
         // Assert
-        // TODO
+        $testFilePath = './tests/_tests_files/test_integrator_unwire_glue_relationship.php';
+        $classPath = './tests/tmp/src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter
+     */
+    private function buildSymfonyConsoleInputOutputAdapter(): SymfonyConsoleInputOutputAdapter
+    {
+        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
+        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
+        $ioAdapter->setNoIteration();
+
+        return $ioAdapter;
     }
 
     /**
@@ -242,6 +270,7 @@ class IntegratorFacadeTest extends BaseTestCase
 
     /**
      * @param string|null $moduleName
+     *
      * @return array
      */
     private function getModuleList(string $moduleName = null): array

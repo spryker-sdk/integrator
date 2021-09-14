@@ -95,8 +95,6 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
         if (is_string($value) && strpos($value, '::')) {
             [$className, $constantName] = explode('::', $value);
 
-            echo 'wireClassConstant >>> ' . PHP_EOL;
-
             return $this->getClassBuilderFacade()->wireClassConstant(
                 $classInformationTransfer,
                 $targetPointName,
