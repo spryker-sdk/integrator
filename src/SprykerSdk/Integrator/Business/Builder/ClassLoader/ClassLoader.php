@@ -63,7 +63,7 @@ class ClassLoader
 
         $classInformationTransfer->setClassTokenTree($ast)
             ->setOriginalClassTokenTree($originalAst)
-            ->setTokens($this->lexer->getTokens()) // TODO fix error (TypeError: Return value of PhpParser\Lexer::getTokens() must be of the type array, null returned)
+            ->setTokens($this->lexer->getTokens())
             ->setFilePath($reflectionClass->getFileName());
 
         if ($reflectionClass->getParentClass()) {

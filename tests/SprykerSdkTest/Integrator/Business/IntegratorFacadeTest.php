@@ -27,6 +27,9 @@ class IntegratorFacadeTest extends BaseTestCase
     protected const RECIPES_DIR_PATH = '_data/recipes/src';
     protected const ZIP_PATH = '_data/recipes/archive.zip';
 
+    /**
+     * @return void
+     */
     public static function setUpBeforeClass(): void
     {
         $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
@@ -35,7 +38,9 @@ class IntegratorFacadeTest extends BaseTestCase
         parent::zipDir($dirPath, $zipPath);
     }
 
-
+    /**
+     * @return void
+     */
     public static function tearDownAfterClass(): void
     {
         $fs = new Filesystem();
@@ -43,11 +48,17 @@ class IntegratorFacadeTest extends BaseTestCase
         $fs->remove($zipPath);
     }
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->prepareTestEnv();
     }
 
+    /**
+     * @return void
+     */
     protected function tearDown(): void
     {
         $this->clearTestEnv();
@@ -83,7 +94,6 @@ class IntegratorFacadeTest extends BaseTestCase
 
         // Act
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwirePlugin'), $ioAdapter, false);
-
 
         // Assert
         $testFilePath = './tests/_tests_files/test_integrator_unwire_plugin_dependency_provider.php';
@@ -181,7 +191,6 @@ class IntegratorFacadeTest extends BaseTestCase
 
         // Act
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorConfigureEnv'), $ioAdapter, false);
-
 
         // Assert
         $testFilePath = './tests/_tests_files/test_integrator_configure_env.php';
