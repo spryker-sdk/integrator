@@ -9,7 +9,7 @@ declare(strict_types = 1);
 
 namespace SprykerSdk\Integrator;
 
-use SprykerSdk\Shared\Common\AbstractConfig;
+use SprykerSdk\Integrator\Common\AbstractConfig;
 
 class IntegratorConfig extends AbstractConfig
 {
@@ -41,7 +41,7 @@ class IntegratorConfig extends AbstractConfig
                 include $fileName;
             }
 
-            $this->config = $this->getConfigVariableName();
+            $this->config = ${$this->getConfigVariableName()};
         }
     }
 
@@ -124,7 +124,7 @@ class IntegratorConfig extends AbstractConfig
      */
     public function getConfigVariableName(): string
     {
-        return '$config';
+        return 'config';
     }
 
     /**

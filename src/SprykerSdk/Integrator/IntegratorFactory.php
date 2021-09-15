@@ -37,10 +37,12 @@ use SprykerSdk\Integrator\Business\ManifestStrategy\WireGlueRelationshipManifest
 use SprykerSdk\Integrator\Business\ManifestStrategy\WirePluginManifestStrategy;
 use SprykerSdk\Integrator\Business\ManifestStrategy\WireWidgetManifestStrategy;
 use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockReader;
+use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockReaderInterface;
 use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockWriter;
+use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockWriterInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\ModuleFinder\Business\ModuleFinderFacade;
-use SprykerSdk\ModuleFinder\Business\ModuleFinderFacadeInterface;
+use SprykerSdk\Integrator\ModuleFinder\Business\ModuleFinderFacade;
+use SprykerSdk\Integrator\ModuleFinder\Business\ModuleFinderFacadeInterface;
 
 class IntegratorFactory
 {
@@ -80,17 +82,17 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\SprykerLock\SprykerLockReader
+     * @return \SprykerSdk\Integrator\Business\SprykerLock\SprykerLockReaderInterface
      */
-    public function createSprykerLockReader(): SprykerLockReader
+    public function createSprykerLockReader(): SprykerLockReaderInterface
     {
         return new SprykerLockReader($this->getConfig());
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\SprykerLock\SprykerLockWriter
+     * @return \SprykerSdk\Integrator\Business\SprykerLock\SprykerLockWriterInterface
      */
-    public function createSprykerLockWriter(): SprykerLockWriter
+    public function createSprykerLockWriter(): SprykerLockWriterInterface
     {
         return new SprykerLockWriter($this->getConfig());
     }
@@ -366,7 +368,7 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\ModuleFinder\Business\ModuleFinderFacadeInterface
+     * @return \SprykerSdk\Integrator\ModuleFinder\Business\ModuleFinderFacadeInterface
      */
     public function getModuleFinderFacade(): ModuleFinderFacadeInterface
     {
