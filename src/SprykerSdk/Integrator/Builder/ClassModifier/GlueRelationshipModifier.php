@@ -24,6 +24,7 @@ use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\MethodBodyExtendVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveGlueRelationshipFromClassListVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class GlueRelationshipModifier
 {
@@ -62,6 +63,8 @@ class GlueRelationshipModifier
      * @param string $targetMethodName
      * @param string $key
      * @param string $classNameToAdd
+     *
+     * @throws \RuntimeException
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -171,7 +174,8 @@ class GlueRelationshipModifier
                 if (!($node instanceof MethodCall) || count($node->args) !== 2) {
                     return false;
                 }
-                if (!($node->args[0]->value instanceof ClassConstFetch)
+                if (
+                    !($node->args[0]->value instanceof ClassConstFetch)
                     || $node->args[0]->value->class->toString() . '::' . $node->args[0]->value->name !== $key
                 ) {
                     return false;

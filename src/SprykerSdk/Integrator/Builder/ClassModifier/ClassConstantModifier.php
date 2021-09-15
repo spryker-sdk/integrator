@@ -11,6 +11,7 @@ use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use PhpParser\NodeTraverser;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Visitor\AddConstantVisitor;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassConstantModifier
 {

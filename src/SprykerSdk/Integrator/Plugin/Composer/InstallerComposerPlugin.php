@@ -10,8 +10,6 @@ declare(strict_types = 1);
 namespace SprykerSdk\Integrator\Plugin\Composer;
 
 use Composer\Composer;
-use Composer\DependencyResolver\Operation\UninstallOperation;
-use Composer\DependencyResolver\Operation\UpdateOperation;
 use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
@@ -27,6 +25,10 @@ use SprykerSdk\Integrator\ModuleFinder\Business\ModuleFinderFacade;
 use SprykerSdk\Integrator\Business\IntegratorFacade;
 use SprykerSdk\Integrator\Business\IntegratorFacadeInterface;
 use SprykerSdk\Integrator\Dependency\Console\ComposerInputOutputAdapter;
+use SprykerSdk\ModuleFinder\Business\ModuleFinderFacade;
+use SprykerSdk\Shared\Common\UtilText\Filter\SeparatorToCamelCase;
+use SprykerSdk\Shared\Transfer\ModuleTransfer;
+use SprykerSdk\Shared\Transfer\OrganizationTransfer;
 
 class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterface
 {

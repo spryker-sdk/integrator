@@ -19,6 +19,7 @@ use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemovePluginFromPluginListVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassInstanceClassModifier
 {

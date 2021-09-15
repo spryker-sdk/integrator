@@ -16,6 +16,7 @@ use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use ReflectionClass;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassLoader
 {

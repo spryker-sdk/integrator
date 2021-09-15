@@ -16,6 +16,8 @@ use SprykerSdk\Integrator\Common\UtilText\Filter\CamelCaseToSeparator;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Shared\Common\UtilText\Filter\CamelCaseToSeparator;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassGenerator
 {

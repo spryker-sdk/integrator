@@ -68,6 +68,7 @@ class ManifestExecutor
         $this->assertModuleData($moduleTransfers);
 
         $manifests = $this->manifestReader->readManifests($moduleTransfers);
+
         $sprykerLock = $this->sprykerLockReader->getLockFileData();
 
         $unappliedManifests = $this->findUnappliedManifests($manifests, $sprykerLock);
@@ -80,10 +81,12 @@ class ManifestExecutor
             return 0;
         }
 
-        $GLOBALS["IO"] = $inputOutput;
+        $GLOBALS['IO'] = $inputOutput;
+
         foreach ($unappliedManifests as $moduleName => $moduleManifests) {
             foreach ($moduleManifests as $manifestType => $unappliedManifestByType) {
                 $manifestExecutor = $this->resolveExecutor($manifestType);
+
                 foreach ($unappliedManifestByType as $manifestHash => $unappliedManifest) {
                     if ($manifestExecutor->apply($unappliedManifest, $moduleName, $inputOutput, $isDry)) {
                         $sprykerLock[$moduleName][$manifestType][$manifestHash] = $unappliedManifest;
@@ -125,6 +128,8 @@ class ManifestExecutor
 
     /**
      * @param string $manifestType
+     *
+     * @throws \RuntimeException
      *
      * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */

@@ -7,6 +7,8 @@
 
 namespace SprykerSdk\Integrator\ModuleFinder\Business\Module\ProjectModuleFinder;
 
+use SprykerSdk\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface;
+use SprykerSdk\ModuleFinder\ModuleFinderConfig;
 use SprykerSdk\Shared\Transfer\ApplicationTransfer;
 use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Shared\Transfer\ModuleTransfer;

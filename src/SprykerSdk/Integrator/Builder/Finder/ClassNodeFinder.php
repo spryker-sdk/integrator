@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassNodeFinder
 {

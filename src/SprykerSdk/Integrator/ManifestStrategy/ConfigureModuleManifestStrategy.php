@@ -14,6 +14,7 @@ use ReflectionClassConstant;
 use ReflectionException;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
 {
@@ -36,6 +37,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
         [$targetClassName, $targetPointName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
+
         $value = $manifest[IntegratorConfig::MANIFEST_KEY_VALUE] ?? null;
         $choices = $manifest[IntegratorConfig::MANIFEST_KEY_CHOICES] ?? [];
         $defaultValue = $manifest[IntegratorConfig::MANIFEST_KEY_DEFAULT_VALUE] ?? null;
@@ -43,13 +45,14 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
             $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass($targetClassName, $namespace);
+
             if (!$classInformationTransfer) {
                 continue;
             }
 
             if (!$value) {
                 $value = $this->askValue(
-                    "Provide value for " . $classInformationTransfer->getClassName() . "::$targetPointName() configuration.",
+                    'Provide value for ' . $classInformationTransfer->getClassName() . "::$targetPointName() configuration.",
                     $choices,
                     $inputOutput,
                     $defaultValue

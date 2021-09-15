@@ -10,6 +10,7 @@ namespace SprykerSdk\Integrator\Builder\Printer;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassDiffPrinter
 {
@@ -40,7 +41,7 @@ class ClassDiffPrinter
                 $classInformationTransfer->getOriginalClassTokenTree(),
                 $classInformationTransfer->getTokens()
             );
-            $originalCode  = $this->classPrinter->printFormatPreserving(
+            $originalCode = $this->classPrinter->printFormatPreserving(
                 $classInformationTransfer->getOriginalClassTokenTree(),
                 $classInformationTransfer->getOriginalClassTokenTree(),
                 $classInformationTransfer->getTokens()

@@ -26,6 +26,7 @@ use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\CloneNodeWithClearPositionVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodeStmtByNameVisitor;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class CommonClassModifier
 {

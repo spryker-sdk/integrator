@@ -63,9 +63,9 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         [$organisation, $moduleName] = explode('.', $moduleName);
 
         return $this->config->getCoreRootDirectory()
-            . $this->camelCaseToDash($organisation)
+            . strtolower($this->camelCaseToDash($organisation))
             . DIRECTORY_SEPARATOR
-            . $this->camelCaseToDash($moduleName)
+            . strtolower($this->camelCaseToDash($moduleName))
             . DIRECTORY_SEPARATOR
             . $source;
     }

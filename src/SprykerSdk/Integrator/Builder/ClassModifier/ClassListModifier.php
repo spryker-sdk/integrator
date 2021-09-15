@@ -19,6 +19,7 @@ use SprykerSdk\Integrator\Builder\Visitor\AddClassToClassListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveClassFromClassListVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
+use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
 
 class ClassListModifier
 {

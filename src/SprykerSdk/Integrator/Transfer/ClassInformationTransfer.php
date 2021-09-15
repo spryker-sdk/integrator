@@ -1,7 +1,8 @@
 <?php
 
 /**
- * (c) Spryker Systems GmbH copyright protected
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
 namespace SprykerSdk\Integrator\Transfer;
@@ -356,7 +357,7 @@ class ClassInformationTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setParent(ClassInformationTransfer $parent = null)
+    public function setParent(?ClassInformationTransfer $parent = null)
     {
         $this->parent = $parent;
         $this->modifiedProperties[self::PARENT] = true;
@@ -407,7 +408,7 @@ class ClassInformationTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setClassTokenTree(array $classTokenTree = null)
+    public function setClassTokenTree(?array $classTokenTree = null)
     {
         if ($classTokenTree === null) {
             $classTokenTree = [];
@@ -463,7 +464,7 @@ class ClassInformationTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setOriginalClassTokenTree(array $originalClassTokenTree = null)
+    public function setOriginalClassTokenTree(?array $originalClassTokenTree = null)
     {
         if ($originalClassTokenTree === null) {
             $originalClassTokenTree = [];
@@ -519,7 +520,7 @@ class ClassInformationTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setTokens(array $tokens = null)
+    public function setTokens(?array $tokens = null)
     {
         if ($tokens === null) {
             $tokens = [];
@@ -623,7 +624,10 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @param array $data
      * @param bool $ignoreMissingProperty
-     * @return ClassInformationTransfer
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @return $this
      */
     public function fromArray(array $data, $ignoreMissingProperty = false)
     {
@@ -639,6 +643,7 @@ class ClassInformationTransfer extends AbstractTransfer
                 case 'tokens':
                     $this->$normalizedPropertyName = $value;
                     $this->modifiedProperties[$normalizedPropertyName] = true;
+
                     break;
                 case 'parent':
                     if (is_array($value)) {
@@ -657,6 +662,7 @@ class ClassInformationTransfer extends AbstractTransfer
                     $elementType = $this->transferMetadata[$normalizedPropertyName]['type'];
                     $this->$normalizedPropertyName = $this->processArrayObject($elementType, $value, $ignoreMissingProperty);
                     $this->modifiedProperties[$normalizedPropertyName] = true;
+
                     break;
                 default:
                     if (!$ignoreMissingProperty) {
@@ -669,10 +675,11 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-    * @param bool $isRecursive
-    * @param bool $camelCasedKeys
-    * @return array
-    */
+     * @param bool $isRecursive
+     * @param bool $camelCasedKeys
+     *
+     * @return array
+     */
     public function modifiedToArray($isRecursive = true, $camelCasedKeys = false)
     {
         if ($isRecursive && !$camelCasedKeys) {
@@ -690,10 +697,11 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-    * @param bool $isRecursive
-    * @param bool $camelCasedKeys
-    * @return array
-    */
+     * @param bool $isRecursive
+     * @param bool $camelCasedKeys
+     *
+     * @return array
+     */
     public function toArray($isRecursive = true, $camelCasedKeys = false)
     {
         if ($isRecursive && !$camelCasedKeys) {
@@ -711,17 +719,19 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-    * @param mixed $value
-    * @param bool $isRecursive
-    * @param bool $camelCasedKeys
-    * @return array
-    */
+     * @param mixed $value
+     * @param bool $isRecursive
+     * @param bool $camelCasedKeys
+     *
+     * @return array
+     */
     protected function addValuesToCollectionModified($value, $isRecursive, $camelCasedKeys)
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
             if ($arrayElement instanceof AbstractTransfer) {
                 $result[$elementKey] = $arrayElement->modifiedToArray($isRecursive, $camelCasedKeys);
+
                 continue;
             }
             $result[$elementKey] = $arrayElement;
@@ -731,17 +741,19 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-    * @param mixed $value
-    * @param bool $isRecursive
-    * @param bool $camelCasedKeys
-    * @return array
-    */
+     * @param mixed $value
+     * @param bool $isRecursive
+     * @param bool $camelCasedKeys
+     *
+     * @return array
+     */
     protected function addValuesToCollection($value, $isRecursive, $camelCasedKeys)
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
             if ($arrayElement instanceof AbstractTransfer) {
                 $result[$elementKey] = $arrayElement->toArray($isRecursive, $camelCasedKeys);
+
                 continue;
             }
             $result[$elementKey] = $arrayElement;
@@ -751,8 +763,8 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function modifiedToArrayRecursiveCamelCased()
     {
         $values = [];
@@ -763,6 +775,7 @@ class ClassInformationTransfer extends AbstractTransfer
 
             if ($value instanceof AbstractTransfer) {
                 $values[$arrayKey] = $value->modifiedToArray(true, true);
+
                 continue;
             }
             switch ($property) {
@@ -773,12 +786,15 @@ class ClassInformationTransfer extends AbstractTransfer
                 case 'originalClassTokenTree':
                 case 'tokens':
                     $values[$arrayKey] = $value;
+
                     break;
                 case 'parent':
                     $values[$arrayKey] = $value instanceof AbstractTransfer ? $value->modifiedToArray(true, true) : $value;
+
                     break;
                 case 'methods':
                     $values[$arrayKey] = $value ? $this->addValuesToCollectionModified($value, true, true) : $value;
+
                     break;
             }
         }
@@ -787,8 +803,8 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function modifiedToArrayRecursiveNotCamelCased()
     {
         $values = [];
@@ -799,6 +815,7 @@ class ClassInformationTransfer extends AbstractTransfer
 
             if ($value instanceof AbstractTransfer) {
                 $values[$arrayKey] = $value->modifiedToArray(true, false);
+
                 continue;
             }
             switch ($property) {
@@ -809,12 +826,15 @@ class ClassInformationTransfer extends AbstractTransfer
                 case 'originalClassTokenTree':
                 case 'tokens':
                     $values[$arrayKey] = $value;
+
                     break;
                 case 'parent':
                     $values[$arrayKey] = $value instanceof AbstractTransfer ? $value->modifiedToArray(true, false) : $value;
+
                     break;
                 case 'methods':
                     $values[$arrayKey] = $value ? $this->addValuesToCollectionModified($value, true, false) : $value;
+
                     break;
             }
         }
@@ -823,8 +843,8 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function modifiedToArrayNotRecursiveNotCamelCased()
     {
         $values = [];
@@ -840,8 +860,8 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function modifiedToArrayNotRecursiveCamelCased()
     {
         $values = [];
@@ -857,16 +877,16 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     protected function initCollectionProperties()
     {
         $this->methods = $this->methods ?: new ArrayObject();
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function toArrayNotRecursiveCamelCased()
     {
         return [
@@ -882,8 +902,8 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function toArrayNotRecursiveNotCamelCased()
     {
         return [
@@ -899,8 +919,8 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function toArrayRecursiveNotCamelCased()
     {
         return [
@@ -916,8 +936,8 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function toArrayRecursiveCamelCased()
     {
         return [

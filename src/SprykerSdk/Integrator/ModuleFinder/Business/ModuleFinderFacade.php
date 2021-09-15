@@ -7,9 +7,9 @@
 
 namespace SprykerSdk\Integrator\ModuleFinder\Business;
 
-use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Shared\Common\AbstractFacade;
 use SprykerSdk\Shared\ModuleFinder\ModuleFinderFactoryAwareTrait;
+use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
 
 class ModuleFinderFacade extends AbstractFacade implements ModuleFinderFacadeInterface
 {
