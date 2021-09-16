@@ -5,52 +5,52 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleFinder;
+namespace SprykerSdk\Integrator\ModuleFinder\Module\ModuleFinder;
 
 use Laminas\Filter\FilterChain;
 use Laminas\Filter\StringToLower;
 use Laminas\Filter\Word\CamelCaseToDash;
 use Laminas\Filter\Word\DashToCamelCase;
-use SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface;
-use SprykerSdk\Integrator\ModuleFinder\ModuleFinderConfig;
-use SprykerSdk\Shared\Transfer\ApplicationTransfer;
-use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
-use SprykerSdk\Shared\Transfer\ModuleTransfer;
-use SprykerSdk\Shared\Transfer\OrganizationTransfer;
+use SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface;
+use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Integrator\Transfer\ApplicationTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
+use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 class ModuleFinder implements ModuleFinderInterface
 {
     /**
-     * @var \SprykerSdk\Integrator\ModuleFinder\ModuleFinderConfig
+     * @var \SprykerSdk\Integrator\IntegratorConfig
      */
     protected $config;
 
     /**
-     * @var \SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface
+     * @var \SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface
      */
     protected $moduleMatcher;
 
     /**
-     * @var \SprykerSdk\Shared\Transfer\ModuleTransfer[]
+     * @var \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
      */
     protected static $moduleTransferCollection;
 
     /**
-     * @param \SprykerSdk\Integrator\ModuleFinder\ModuleFinderConfig $config
-     * @param \SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface $moduleMatcher
+     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @param \SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface $moduleMatcher
      */
-    public function __construct(ModuleFinderConfig $config, ModuleMatcherInterface $moduleMatcher)
+    public function __construct(IntegratorConfig $config, ModuleMatcherInterface $moduleMatcher)
     {
         $this->config = $config;
         $this->moduleMatcher = $moduleMatcher;
     }
 
     /**
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
      */
     public function getModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -107,11 +107,11 @@ class ModuleFinder implements ModuleFinderInterface
     }
 
     /**
-     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
-     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer[] $moduleTransferCollection
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer[] $moduleTransferCollection
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
      */
     protected function addModuleToCollection(
         ModuleTransfer $moduleTransfer,
@@ -131,7 +131,7 @@ class ModuleFinder implements ModuleFinderInterface
      * Modules which are standalone, can also be normal modules. This can be detected by the composer.json description
      * which contains `module` at the end of the description.
      *
-     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
      *
      * @return bool
      */
@@ -150,9 +150,9 @@ class ModuleFinder implements ModuleFinderInterface
 
     /**
      * @param array $moduleTransferCollection
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
      */
     protected function addModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -187,7 +187,7 @@ class ModuleFinder implements ModuleFinderInterface
     /**
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer
      */
     protected function getModuleTransfer(SplFileInfo $directoryInfo): ModuleTransfer
     {
@@ -199,7 +199,7 @@ class ModuleFinder implements ModuleFinderInterface
     }
 
     /**
-     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
      *
      * @return string
      */
@@ -223,7 +223,7 @@ class ModuleFinder implements ModuleFinderInterface
     /**
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer
      */
     protected function buildModuleTransferFromDirectoryInformation(SplFileInfo $directoryInfo): ModuleTransfer
     {
@@ -247,7 +247,7 @@ class ModuleFinder implements ModuleFinderInterface
     /**
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer
      */
     protected function buildModuleTransferFromComposerJsonInformation(SplFileInfo $directoryInfo): ModuleTransfer
     {
@@ -271,9 +271,9 @@ class ModuleFinder implements ModuleFinderInterface
     }
 
     /**
-     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer
      */
     protected function addApplications(ModuleTransfer $moduleTransfer): ModuleTransfer
     {
@@ -297,7 +297,7 @@ class ModuleFinder implements ModuleFinderInterface
      * @param string $organizationName
      * @param string $organizationNameDashed
      *
-     * @return \SprykerSdk\Shared\Transfer\OrganizationTransfer
+     * @return \SprykerSdk\Integrator\Transfer\OrganizationTransfer
      */
     protected function buildOrganizationTransfer(string $organizationName, string $organizationNameDashed): OrganizationTransfer
     {
@@ -314,7 +314,7 @@ class ModuleFinder implements ModuleFinderInterface
      * @param string $moduleNameDashed
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer
      */
     protected function buildModuleTransfer(string $moduleName, string $moduleNameDashed, SplFileInfo $directoryInfo): ModuleTransfer
     {

@@ -5,9 +5,9 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdkTest\Integrator\Business\Helper;
+namespace SprykerSdkTest\Integrator\Helper;
 
-use SprykerSdk\Integrator\Business\Helper\ClassHelper;
+use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdkTest\Integrator\BaseTestCase;
 
 class ClassHelperTest extends BaseTestCase
@@ -45,7 +45,7 @@ class ClassHelperTest extends BaseTestCase
     public function testGetClassNamespace(): void
     {
         $clsssNamespace = $this->createClassHelper()->getClassNamespace(ClassHelper::class);
-        $this->assertEquals('SprykerSdk\Integrator\Business\Helper', $clsssNamespace);
+        $this->assertEquals('SprykerSdk\Integrator\Helper', $clsssNamespace);
     }
 
     /**
@@ -81,7 +81,7 @@ class ClassHelperTest extends BaseTestCase
     public function testGetModuleName(): void
     {
         $moduleName = $this->createClassHelper()->getModuleName(ClassHelper::class);
-        $this->assertEquals('Business', $moduleName);
+        $this->assertEquals('Helper', $moduleName);
     }
 
     /**
@@ -121,7 +121,7 @@ class ClassHelperTest extends BaseTestCase
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Helper\ClassHelper
+     * @return \SprykerSdk\Integrator\Helper\ClassHelper
      */
     public function createClassHelper(): ClassHelper
     {

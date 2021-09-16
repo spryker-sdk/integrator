@@ -1,16 +1,16 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Shared\Integrator;
+namespace SprykerSdk\Integrator\Integrator;
 
-use SprykerSdk\Integrator\Business\IntegratorFacade;
-use SprykerSdk\Integrator\Business\IntegratorFacadeInterface;
+use SprykerSdk\Integrator\IntegratorFacade;
+use SprykerSdk\Integrator\IntegratorFacadeInterface;
 
 trait IntegratorFacadeAwareTrait
 {

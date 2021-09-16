@@ -9,7 +9,6 @@ namespace SprykerSdk\Integrator\Composer;
 
 use SprykerSdk\Integrator\Common\UtilText\Filter\SeparatorToCamelCase;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Shared\Common\UtilText\Filter\SeparatorToCamelCase;
 
 class ComposerLockReader
 {

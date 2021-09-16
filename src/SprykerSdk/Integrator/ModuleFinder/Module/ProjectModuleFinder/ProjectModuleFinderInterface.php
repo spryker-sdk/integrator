@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\ModuleFinder\Business\Module\ProjectModuleFinder;
+namespace SprykerSdk\Integrator\ModuleFinder\Module\ProjectModuleFinder;
 
 use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
 

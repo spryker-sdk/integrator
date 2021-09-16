@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator;
 
@@ -31,24 +31,62 @@ class IntegratorConfig extends AbstractConfig
     protected $config;
 
     /**
+     * @var string[]
+     */
+    protected $organizationPathFragments = [
+        'spryker',
+        'spryker-shop',
+        'spryker-eco',
+        'spryker-sdk',
+        'spryker-merchant-portal',
+    ];
+
+    /**
      * @return void
      */
     public function loadConfig(): void
     {
-        if ($this->config === null) {
-            $fileName = $this->getConfigPath();
-
-            if (file_exists($fileName)) {
-                include $fileName;
-
-                $this->config = ${$this->getConfigVariableName()};
-            }
+        if ($this->config !== null) {
+            return;
         }
+
+        $this->config = array_merge($this->loadSharedConfig(), $this->loadIntegratorConfig());
     }
 
     /**
-     * @api
-     *
+     * @return array
+     */
+    protected function loadSharedConfig(): array
+    {
+        $fileName = $this->getSharedConfigPath();
+
+        if (!file_exists($fileName)) {
+            return [];
+        }
+
+        include $fileName;
+
+        return ${$this->getConfigVariableName()};
+
+    }
+
+    /**
+     * @return array
+     */
+    protected function loadIntegratorConfig(): array
+    {
+        $fileName = $this->getDefaultConfigPath();
+
+        if (!file_exists($fileName)) {
+            return [];
+        }
+
+        include $fileName;
+
+        return ${$this->getConfigVariableName()};
+    }
+
+    /**
      * @return string[]
      */
     public function getProjectNamespaces(): array
@@ -57,8 +95,6 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @api
-     *
      * @return string[]
      */
     public function getCoreNamespaces(): array
@@ -67,10 +103,6 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @api
-     *
-     * @internal
-     *
      * @return string[]
      */
     public function getCoreNonSplitOrganisations(): array
@@ -82,8 +114,6 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @api
-     *
      * @return string
      */
     public function getProjectRootDirectory(): string
@@ -92,8 +122,6 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @api
-     *
      * @return string
      */
     public function getCoreRootDirectory(): string
@@ -102,10 +130,6 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @api
-     *
-     * @internal
-     *
      * @return string
      */
     public function getNonSplitRepositoryPathPattern(): string
@@ -119,8 +143,6 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @api
-     *
      * @return string
      */
     public function getConfigVariableName(): string
@@ -129,19 +151,11 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @api
-     *
      * @return string
      */
     public function getConfigPath(): string
     {
-        $configFile = $this->getSharedConfigPath();
-
-        if (!file_exists($configFile)) {
-            return $this->getDefaultConfigPath();
-        }
-
-        return $configFile;
+        return $this->getSharedConfigPath();
     }
 
     /**
@@ -162,15 +176,13 @@ class IntegratorConfig extends AbstractConfig
      */
     protected function getDefaultConfigPath(): string
     {
-        return $this->getProjectRootDirectory()
-            . DIRECTORY_SEPARATOR
-            . 'config_integrator.php';
+        return $this->getProjectRootDirectory() . 'config_integrator.php';
     }
 
     /**
+     * @return string
      * @api
      *
-     * @return string
      */
     public function getIntegratorLockFilePath(): string
     {
@@ -178,8 +190,6 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @api
-     *
      * @return string
      */
     public function getComposerLockFilePath(): string
@@ -188,8 +198,6 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @api
-     *
      * @return string
      */
     public function getRecipesDirectory(): string
@@ -198,8 +206,6 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @api
-     *
      * @return string
      */
     public function getRecipesRepository(): string
@@ -209,5 +215,75 @@ class IntegratorConfig extends AbstractConfig
         }
 
         return 'https://github.com/spryker-sdk/integrator-recipes/archive/master.zip';
+    }
+
+    /**
+     * @return string[]
+     * @api
+     *
+     */
+    public function getInternalOrganizations(): array
+    {
+        return [
+            'Spryker',
+            'SprykerShop',
+            'SprykerMerchantPortal',
+        ];
+    }
+
+    /**
+     * @return array
+     * @api
+     *
+     */
+    public function getApplications()
+    {
+        return [
+            'Client',
+            'Service',
+            'Shared',
+            'Yves',
+            'Zed',
+            'Glue',
+        ];
+    }
+
+    /**
+     * @return string[]
+     * @api
+     *
+     */
+    public function getInternalPackagePathFragments(): array
+    {
+        return [
+            'spryker',
+            'spryker-shop',
+            'spryker-merchant-portal',
+        ];
+    }
+
+    /**
+     * @return string[]
+     * @api
+     *
+     */
+    public function getPathsToInternalOrganizations(): array
+    {
+        $organizationPaths = [];
+        foreach ($this->organizationPathFragments as $organizationPathFragment) {
+            $nonsplitDirectory = sprintf('%s/vendor/spryker/%s/Bundles/', APPLICATION_ROOT_DIR, $organizationPathFragment);
+            if (is_dir($nonsplitDirectory)) {
+                $organizationPaths[] = $nonsplitDirectory;
+
+                continue;
+            }
+
+            $splitDirectory = sprintf('%s/vendor/%s/', APPLICATION_ROOT_DIR, $organizationPathFragment);
+            if (is_dir($splitDirectory)) {
+                $organizationPaths[] = $splitDirectory;
+            }
+        }
+
+        return $organizationPaths;
     }
 }

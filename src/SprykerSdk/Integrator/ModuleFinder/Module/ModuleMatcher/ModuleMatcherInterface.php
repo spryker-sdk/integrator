@@ -5,16 +5,16 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleMatcher;
+namespace SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher;
 
-use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
-use SprykerSdk\Shared\Transfer\ModuleTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 
 interface ModuleMatcherInterface
 {
     /**
-     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer $moduleFilterTransfer
      *
      * @return bool
      */

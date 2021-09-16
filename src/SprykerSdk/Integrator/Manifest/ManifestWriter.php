@@ -7,8 +7,8 @@
 
 namespace SprykerSdk\Integrator\Manifest;
 
-use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Composer\ComposerLockReader;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 
 class ManifestWriter
 {

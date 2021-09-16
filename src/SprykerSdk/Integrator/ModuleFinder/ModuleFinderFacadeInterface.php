@@ -5,9 +5,9 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\ModuleFinder\Business;
+namespace SprykerSdk\Integrator\ModuleFinder;
 
-use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 
 interface ModuleFinderFacadeInterface
 {
@@ -20,9 +20,9 @@ interface ModuleFinderFacadeInterface
      *
      * @api
      *
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
      */
     public function getModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array;
 
@@ -32,9 +32,9 @@ interface ModuleFinderFacadeInterface
      *
      * @api
      *
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
      */
     public function getProjectModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array;
 
@@ -47,7 +47,7 @@ interface ModuleFinderFacadeInterface
      *
      * @internal
      *
-     * @return \SprykerSdk\Shared\Transfer\PackageTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\PackageTransfer[]
      */
     public function getPackages(): array;
 }

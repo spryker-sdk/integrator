@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 /**
  * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
@@ -15,39 +15,38 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\Parser\Php7;
-use SprykerSdk\Integrator\Business\Builder\ClassGenerator\ClassGenerator;
-use SprykerSdk\Integrator\Business\Builder\ClassLoader\ClassLoader;
-use SprykerSdk\Integrator\Business\Builder\ClassModifier\ClassConstantModifier;
-use SprykerSdk\Integrator\Business\Builder\ClassModifier\ClassInstanceClassModifier;
-use SprykerSdk\Integrator\Business\Builder\ClassModifier\ClassListModifier;
-use SprykerSdk\Integrator\Business\Builder\ClassModifier\CommonClassModifier;
-use SprykerSdk\Integrator\Business\Builder\ClassModifier\GlueRelationshipModifier;
-use SprykerSdk\Integrator\Business\Builder\ClassResolver\ClassResolver;
-use SprykerSdk\Integrator\Business\Builder\ClassWriter\ClassFileWriter;
-use SprykerSdk\Integrator\Business\Builder\Finder\ClassNodeFinder;
-use SprykerSdk\Integrator\Business\Builder\Printer\ClassDiffPrinter;
-use SprykerSdk\Integrator\Business\Builder\Printer\ClassPrinter;
-use SprykerSdk\Integrator\Business\Composer\ComposerLockReader;
-use SprykerSdk\Integrator\Business\Executor\ManifestExecutor;
-use SprykerSdk\Integrator\Business\Manifest\ManifestReader;
-use SprykerSdk\Integrator\Business\ManifestStrategy\ConfigureEnvManifestStrategy;
-use SprykerSdk\Integrator\Business\ManifestStrategy\ConfigureModuleManifestStrategy;
-use SprykerSdk\Integrator\Business\ManifestStrategy\CopyModuleFileManifestStrategy;
-use SprykerSdk\Integrator\Business\ManifestStrategy\ExecuteConsoleManifestStrategy;
-use SprykerSdk\Integrator\Business\ManifestStrategy\ManifestStrategyInterface;
-use SprykerSdk\Integrator\Business\ManifestStrategy\UnwireGlueRelationshipManifestStrategy;
-use SprykerSdk\Integrator\Business\ManifestStrategy\UnwirePluginManifestStrategy;
-use SprykerSdk\Integrator\Business\ManifestStrategy\UnwireWidgetManifestStrategy;
-use SprykerSdk\Integrator\Business\ManifestStrategy\WireGlueRelationshipManifestStrategy;
-use SprykerSdk\Integrator\Business\ManifestStrategy\WirePluginManifestStrategy;
-use SprykerSdk\Integrator\Business\ManifestStrategy\WireWidgetManifestStrategy;
-use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockReader;
-use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockReaderInterface;
-use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockWriter;
-use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockWriterInterface;
-use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Integrator\ModuleFinder\Business\ModuleFinderFacade;
-use SprykerSdk\Integrator\ModuleFinder\Business\ModuleFinderFacadeInterface;
+use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGenerator;
+use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassConstantModifier;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceClassModifier;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassListModifier;
+use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifier;
+use SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationshipModifier;
+use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
+use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriter;
+use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
+use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
+use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
+use SprykerSdk\Integrator\Composer\ComposerLockReader;
+use SprykerSdk\Integrator\Executor\ManifestExecutor;
+use SprykerSdk\Integrator\Manifest\ManifestReader;
+use SprykerSdk\Integrator\ManifestStrategy\ConfigureEnvManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\ConfigureModuleManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\CopyModuleFileManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\ExecuteConsoleManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface;
+use SprykerSdk\Integrator\ManifestStrategy\UnwireGlueRelationshipManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\UnwirePluginManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\UnwireWidgetManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\WireGlueRelationshipManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\WirePluginManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\WireWidgetManifestStrategy;
+use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacade;
+use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacadeInterface;
+use SprykerSdk\Integrator\SprykerLock\SprykerLockReader;
+use SprykerSdk\Integrator\SprykerLock\SprykerLockReaderInterface;
+use SprykerSdk\Integrator\SprykerLock\SprykerLockWriter;
+use SprykerSdk\Integrator\SprykerLock\SprykerLockWriterInterface;
 
 class IntegratorFactory
 {
@@ -56,10 +55,7 @@ class IntegratorFactory
      */
     protected function getConfig(): IntegratorConfig
     {
-        $config = IntegratorConfig::getInstance();
-        $config->loadConfig();
-
-        return $config;
+        return IntegratorConfig::getInstance();
     }
 
     /**
@@ -87,7 +83,7 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\SprykerLock\SprykerLockReaderInterface
+     * @return \SprykerSdk\Integrator\SprykerLock\SprykerLockReaderInterface
      */
     public function createSprykerLockReader(): SprykerLockReaderInterface
     {
@@ -95,7 +91,7 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\SprykerLock\SprykerLockWriterInterface
+     * @return \SprykerSdk\Integrator\SprykerLock\SprykerLockWriterInterface
      */
     public function createSprykerLockWriter(): SprykerLockWriterInterface
     {
@@ -377,7 +373,7 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\ModuleFinder\Business\ModuleFinderFacadeInterface
+     * @return \SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacadeInterface
      */
     public function getModuleFinderFacade(): ModuleFinderFacadeInterface
     {

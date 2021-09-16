@@ -5,22 +5,16 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Console;
 
+use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
+use SprykerSdk\Integrator\IntegratorFacadeAwareTrait;
+use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
-use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
-use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
-use SprykerSdk\Shared\Integrator\IntegratorFacadeAwareTrait;
-use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
-use SprykerSdk\Shared\Integrator\IntegratorFacadeAwareTrait;
-use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
-use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
-use SprykerSdk\Shared\Transfer\ModuleTransfer;
-use SprykerSdk\Shared\Transfer\OrganizationTransfer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

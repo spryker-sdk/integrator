@@ -5,13 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassResolver;
 
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGenerator;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassResolver
 {

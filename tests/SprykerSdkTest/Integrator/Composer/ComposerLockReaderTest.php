@@ -5,9 +5,9 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdkTest\Integrator\Business\Composer;
+namespace SprykerSdkTest\Integrator\Composer;
 
-use SprykerSdk\Integrator\Business\Composer\ComposerLockReader;
+use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdkTest\Integrator\BaseTestCase;
 
@@ -27,7 +27,7 @@ class ComposerLockReaderTest extends BaseTestCase
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Composer\ComposerLockReader
+     * @return \SprykerSdk\Integrator\Composer\ComposerLockReader
      */
     private function createComposerLockReadr(): ComposerLockReader
     {

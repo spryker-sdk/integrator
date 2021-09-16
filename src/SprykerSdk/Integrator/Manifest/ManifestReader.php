@@ -5,14 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Manifest;
 
-use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Shared\Transfer\ModuleTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use ZipArchive;
 
 class ManifestReader
@@ -84,12 +83,10 @@ class ManifestReader
 
         file_put_contents($recipesArchive, fopen($this->config->getRecipesRepository(), 'r'));
 
-
         $zip = new ZipArchive();
         $zip->open($recipesArchive);
         $zip->extractTo($this->config->getRecipesDirectory());
         $zip->close();
-
     }
 
     /**

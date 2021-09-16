@@ -5,13 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder;
 
 use SprykerSdk\Integrator\Common\AbstractFacade;
-use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassBuilderFacade extends AbstractFacade
 {

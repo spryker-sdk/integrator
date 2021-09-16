@@ -1,32 +1,39 @@
 <?php
 
-namespace SprykerSdkTest\Integrator\Business\SprykerLock;
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
 
-use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockReader;
-use SprykerSdk\Integrator\Business\SprykerLock\SprykerLockWriter;
+namespace SprykerSdkTest\Integrator\SprykerLock;
+
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Integrator\SprykerLock\SprykerLockReader;
+use SprykerSdk\Integrator\SprykerLock\SprykerLockWriter;
 use SprykerSdkTest\Integrator\BaseTestCase;
 
 class SprykerLockTest extends BaseTestCase
 {
+    /**
+     * @return void
+     */
     public function testWriteFileLock(): void
     {
         $compareFilePath = './tests/_tests_files/spryker_lock_test_write_lock.json';
         $lockData = [
-            "Spryker.Test" => [
-                "wire-plugin" => [
-                    "111111aaaaaabb" => [
-                        "target" => "\Spryker\Zed\Test\TestDependencyProvider::getTestPlugins",
-                        "source" => "\Spryker\Zed\Test\Communication\Plugin\TestPlugin"
-                    ]
-                ]
-            ]
+            'Spryker.Test' => [
+                'wire-plugin' => [
+                    '111111aaaaaabb' => [
+                        'target' => "\Spryker\Zed\Test\TestDependencyProvider::getTestPlugins",
+                        'source' => "\Spryker\Zed\Test\Communication\Plugin\TestPlugin",
+                    ],
+                ],
+            ],
         ];
         $tmpIntegratorLockFilePath = tempnam(sys_get_temp_dir(), 'integrator.lock.');
 
         $sprykerLockWriter = $this->createSprykerLockWriter($tmpIntegratorLockFilePath);
         $sprykerLockWriter->storeLock($lockData);
-
 
         $this->assertFileExists($tmpIntegratorLockFilePath);
         $this->assertFileExists($compareFilePath);
@@ -36,6 +43,9 @@ class SprykerLockTest extends BaseTestCase
         $this->removeFile($tmpIntegratorLockFilePath);
     }
 
+    /**
+     * @return void
+     */
     public function testReadFileLock(): void
     {
         $tmpIntegratorLockFilePath = tempnam(sys_get_temp_dir(), 'integrator.lock.');
@@ -52,7 +62,11 @@ class SprykerLockTest extends BaseTestCase
         $this->removeFile($tmpIntegratorLockFilePath);
     }
 
-
+    /**
+     * @param string $tmpIntegratorLockFilePath
+     *
+     * @return \SprykerSdk\Integrator\SprykerLock\SprykerLockWriter
+     */
     private function createSprykerLockWriter(string $tmpIntegratorLockFilePath): SprykerLockWriter
     {
         $integrotorConfigMock = $this->createMock(IntegratorConfig::class);
@@ -66,7 +80,7 @@ class SprykerLockTest extends BaseTestCase
     /**
      * @param string $tmpIntegratorLockFilePath
      *
-     * @return \SprykerSdk\Integrator\Business\SprykerLock\SprykerLockReader
+     * @return \SprykerSdk\Integrator\SprykerLock\SprykerLockReader
      */
     private function createSprykerLockReader(string $tmpIntegratorLockFilePath): SprykerLockReader
     {
@@ -78,6 +92,9 @@ class SprykerLockTest extends BaseTestCase
         return new SprykerLockReader($integrotorConfigMock);
     }
 
+    /**
+     * @return void
+     */
     private function removeFile(string $path): void
     {
         $this->createFilesystem()->remove($path);

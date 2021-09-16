@@ -5,11 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\ModuleFinder\Business;
+namespace SprykerSdk\Integrator\ModuleFinder;
 
-use SprykerSdk\Shared\Common\AbstractFacade;
-use SprykerSdk\Shared\ModuleFinder\ModuleFinderFactoryAwareTrait;
-use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Integrator\Common\AbstractFacade;
+use SprykerSdk\Integrator\ModuleFinderFactoryAwareTrait;
+use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 
 class ModuleFinderFacade extends AbstractFacade implements ModuleFinderFacadeInterface
 {
@@ -18,9 +18,9 @@ class ModuleFinderFacade extends AbstractFacade implements ModuleFinderFacadeInt
     /**
      * {@inheritDoc}
      *
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
      */
     public function getProjectModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -30,9 +30,9 @@ class ModuleFinderFacade extends AbstractFacade implements ModuleFinderFacadeInt
     /**
      * {@inheritDoc}
      *
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
      */
     public function getModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -42,7 +42,7 @@ class ModuleFinderFacade extends AbstractFacade implements ModuleFinderFacadeInt
     /**
      * {@inheritDoc}
      *
-     * @return \SprykerSdk\Shared\Transfer\PackageTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\PackageTransfer[]
      */
     public function getPackages(): array
     {

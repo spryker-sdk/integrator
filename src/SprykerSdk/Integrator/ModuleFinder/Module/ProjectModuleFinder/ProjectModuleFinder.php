@@ -5,36 +5,34 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\ModuleFinder\Business\Module\ProjectModuleFinder;
+namespace SprykerSdk\Integrator\ModuleFinder\Module\ProjectModuleFinder;
 
-use SprykerSdk\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface;
-use SprykerSdk\ModuleFinder\ModuleFinderConfig;
+use SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface;
+use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Shared\Transfer\ApplicationTransfer;
 use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Shared\Transfer\ModuleTransfer;
 use SprykerSdk\Shared\Transfer\OrganizationTransfer;
-use SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface;
-use SprykerSdk\Integrator\ModuleFinder\ModuleFinderConfig;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 class ProjectModuleFinder implements ProjectModuleFinderInterface
 {
     /**
-     * @var \SprykerSdk\Integrator\ModuleFinder\ModuleFinderConfig
+     * @var \SprykerSdk\Integrator\IntegratorConfig
      */
     protected $config;
 
     /**
-     * @var \SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface
+     * @var \SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface
      */
     protected $moduleMatcher;
 
     /**
-     * @param \SprykerSdk\Integrator\ModuleFinder\ModuleFinderConfig $config
-     * @param \SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface $moduleMatcher
+     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @param \SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface $moduleMatcher
      */
-    public function __construct(ModuleFinderConfig $config, ModuleMatcherInterface $moduleMatcher)
+    public function __construct(IntegratorConfig $config, ModuleMatcherInterface $moduleMatcher)
     {
         $this->config = $config;
         $this->moduleMatcher = $moduleMatcher;

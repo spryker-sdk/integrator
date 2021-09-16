@@ -5,17 +5,17 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleMatcher;
+namespace SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher;
 
-use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
-use SprykerSdk\Shared\Transfer\ModuleTransfer;
-use SprykerSdk\Shared\Transfer\OrganizationTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
+use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
 
 class ModuleMatcher implements ModuleMatcherInterface
 {
     /**
-     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer $moduleFilterTransfer
      *
      * @return bool
      */
@@ -37,8 +37,8 @@ class ModuleMatcher implements ModuleMatcherInterface
     }
 
     /**
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
-     * @param \SprykerSdk\Shared\Transfer\OrganizationTransfer $organizationTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\OrganizationTransfer $organizationTransfer
      *
      * @return bool
      */
@@ -55,8 +55,8 @@ class ModuleMatcher implements ModuleMatcherInterface
      * Modules can hold several applications. We return true of one of the applications in the current module
      * matches the requested one.
      *
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
-     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
      *
      * @return bool
      */
@@ -77,8 +77,8 @@ class ModuleMatcher implements ModuleMatcherInterface
     }
 
     /**
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer $moduleFilterTransfer
-     * @param \SprykerSdk\Shared\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
      *
      * @return bool
      */

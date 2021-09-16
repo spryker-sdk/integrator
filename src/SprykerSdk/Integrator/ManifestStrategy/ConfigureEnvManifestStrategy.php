@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
@@ -46,7 +46,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
             );
         }
 
-        $configFileName = $this->config->   getConfigPath();
+        $configFileName = $this->config->getConfigPath();
         if (!file_exists($configFileName)) {
             return false;
         }
@@ -72,7 +72,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
      */
     protected function getConfigAppendData(string $target, $value): string
     {
-        $data = PHP_EOL . '$' .  $this->config->getConfigVariableName() . '[' . $target . '] = ';
+        $data = PHP_EOL . '$' . $this->config->getConfigVariableName() . '[' . $target . '] = ';
         $data .= var_export($value, true);
         $data .= ';' . PHP_EOL;
 

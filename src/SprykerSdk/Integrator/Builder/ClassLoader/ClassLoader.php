@@ -5,18 +5,17 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassLoader;
 
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
 use ReflectionClass;
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassLoader
 {

@@ -5,13 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use ReflectionClass;
-use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 class WirePluginManifestStrategy extends AbstractManifestStrategy

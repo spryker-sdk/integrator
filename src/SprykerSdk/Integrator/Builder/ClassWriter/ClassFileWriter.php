@@ -5,12 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassWriter;
 
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassFileWriter
 {

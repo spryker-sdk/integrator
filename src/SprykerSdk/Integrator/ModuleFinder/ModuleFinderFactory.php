@@ -7,28 +7,28 @@
 
 namespace SprykerSdk\Integrator\ModuleFinder;
 
-use SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleFinder\ModuleFinder;
-use SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleFinder\ModuleFinderInterface;
-use SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcher;
-use SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface;
-use SprykerSdk\Integrator\ModuleFinder\Business\Module\ProjectModuleFinder\ProjectModuleFinder;
-use SprykerSdk\Integrator\ModuleFinder\Business\Module\ProjectModuleFinder\ProjectModuleFinderInterface;
-use SprykerSdk\Integrator\ModuleFinder\Business\Package\PackageFinder\PackageFinder;
-use SprykerSdk\Integrator\ModuleFinder\Business\Package\PackageFinder\PackageFinderInterface;
-use SprykerSdk\Integrator\ModuleFinder\ModuleFinderConfig;
+use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Integrator\ModuleFinder\Module\ModuleFinder\ModuleFinder;
+use SprykerSdk\Integrator\ModuleFinder\Module\ModuleFinder\ModuleFinderInterface;
+use SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcher;
+use SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface;
+use SprykerSdk\Integrator\ModuleFinder\Module\ProjectModuleFinder\ProjectModuleFinder;
+use SprykerSdk\Integrator\ModuleFinder\Module\ProjectModuleFinder\ProjectModuleFinderInterface;
+use SprykerSdk\Integrator\ModuleFinder\Package\PackageFinder\PackageFinder;
+use SprykerSdk\Integrator\ModuleFinder\Package\PackageFinder\PackageFinderInterface;
 
 class ModuleFinderFactory
 {
     /**
-     * @return \SprykerSdk\Integrator\ModuleFinder\ModuleFinderConfig
+     * @return \SprykerSdk\Integrator\IntegratorConfig
      */
-    public function getConfig(): ModuleFinderConfig
+    public function getConfig(): IntegratorConfig
     {
-        return new ModuleFinderConfig();
+        return IntegratorConfig::getInstance();
     }
 
     /**
-     * @return \SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleFinder\ModuleFinderInterface
+     * @return \SprykerSdk\Integrator\ModuleFinder\Module\ModuleFinder\ModuleFinderInterface
      */
     public function createModuleFinder(): ModuleFinderInterface
     {
@@ -36,7 +36,7 @@ class ModuleFinderFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\ModuleFinder\Business\Module\ModuleMatcher\ModuleMatcherInterface
+     * @return \SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface
      */
     public function createModuleMatcher(): ModuleMatcherInterface
     {
@@ -44,7 +44,7 @@ class ModuleFinderFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\ModuleFinder\Business\Package\PackageFinder\PackageFinderInterface
+     * @return \SprykerSdk\Integrator\ModuleFinder\Package\PackageFinder\PackageFinderInterface
      */
     public function createPackageFinder(): PackageFinderInterface
     {
@@ -52,7 +52,7 @@ class ModuleFinderFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\ModuleFinder\Business\Module\ProjectModuleFinder\ProjectModuleFinderInterface
+     * @return \SprykerSdk\Integrator\ModuleFinder\Module\ProjectModuleFinder\ProjectModuleFinderInterface
      */
     public function createProjectModuleFinder(): ProjectModuleFinderInterface
     {

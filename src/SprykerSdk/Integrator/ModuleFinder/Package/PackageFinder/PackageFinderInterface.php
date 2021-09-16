@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\ModuleFinder\Business\Package\PackageFinder;
+namespace SprykerSdk\Integrator\ModuleFinder\Package\PackageFinder;
 
 interface PackageFinderInterface
 {

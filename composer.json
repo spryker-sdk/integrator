@@ -6,11 +6,12 @@
     "require": {
         "php": ">=7.3",
         "composer-plugin-api": "^1.0 || ^2.0",
+        "composer/composer": "^2.1",
+        "laminas/laminas-filter": "^2.11",
         "nikic/php-parser": "^4.3.0",
         "sebastian/diff": "^3.0 || ^4.0.0",
         "symfony/console": "^5.3",
-        "symfony/finder": "^5.3",
-        "laminas/laminas-filter": "^2.11"
+        "symfony/finder": "^5.3"
     },
     "require-dev": {
         "spryker/code-sniffer": "*",
@@ -45,8 +46,8 @@
     "scripts": {
         "cs-check": "vendor/bin/phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/",
         "cs-fix": "vendor/bin/phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/",
-        "cs-check-tests": "vendor/bin/phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml tests/",
-        "cs-fix-tests": "vendor/bin/phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml tests/",
+        "cs-check-tests": "vendor/bin/phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml tests/SprykerSdkTest/",
+        "cs-fix-tests": "vendor/bin/phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml tests/SprykerSdkTest/",
         "stan": "vendor/bin/phpstan.phar analyse -c phpstan.neon src/",
         "test": "vendor/bin/phpunit"
     },

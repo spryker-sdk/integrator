@@ -8,9 +8,12 @@
 namespace SprykerSdkTest\Integrator;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
+use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
 use Symfony\Component\Filesystem\Filesystem;
+use ZipArchive;
 
 class BaseTestCase extends PHPUnitTestCase
 {
@@ -62,22 +65,20 @@ class BaseTestCase extends PHPUnitTestCase
      *
      * @return void
      */
-    public static function zipDir(string  $dirPath, string $zipPath): void
+    public static function zipDir(string $dirPath, string $zipPath): void
     {
-        $zip = new \ZipArchive();
-        $zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        $zip = new ZipArchive();
+        $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
-        /** @var SplFileInfo[] $files */
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dirPath),
-            \RecursiveIteratorIterator::LEAVES_ONLY
+        /** @var \SplFileInfo[] $files */
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dirPath),
+            RecursiveIteratorIterator::LEAVES_ONLY
         );
 
-        foreach ($files as $name => $file)
-        {
+        foreach ($files as $name => $file) {
             // Skip directories (they would be added automatically)
-            if (!$file->isDir())
-            {
+            if (!$file->isDir()) {
                 $filePath = $file->getRealPath();
                 $relativePath = substr($filePath, strlen($dirPath) + 1);
 

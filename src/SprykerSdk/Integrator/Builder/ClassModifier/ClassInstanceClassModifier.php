@@ -5,11 +5,10 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
@@ -19,7 +18,7 @@ use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemovePluginFromPluginListVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassInstanceClassModifier
 {

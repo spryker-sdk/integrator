@@ -7,10 +7,10 @@
 
 declare(strict_types = 1);
 
-namespace SprykerSdkTest\Zed\Integrator\Business\Builder\ClassLoader;
+namespace SprykerSdkTest\Zed\Integrator\Builder\ClassLoader;
 
-use SprykerSdk\Integrator\Business\Builder\ClassLoader\ClassLoader;
-use SprykerSdk\Integrator\Business\Helper\ClassHelper;
+use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
+use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdkTest\Integrator\BaseTestCase;
 
 class ClassLoaderTest extends BaseTestCase
@@ -27,7 +27,7 @@ class ClassLoaderTest extends BaseTestCase
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\ClassLoader\ClassLoader
+     * @return \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader
      */
     private function createClassLoader(): ClassLoader
     {

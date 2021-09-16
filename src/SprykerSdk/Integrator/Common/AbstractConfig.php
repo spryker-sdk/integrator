@@ -15,15 +15,13 @@ abstract class AbstractConfig
     protected static $instance;
 
     /**
-     * @api
-     *
      * @return \SprykerSdk\Integrator\Common\AbstractConfig
      */
     public static function getInstance()
     {
         if (static::$instance === null) {
-            static::$instance = (new static())->loadConfig();
-
+            static::$instance = new static();
+            static::$instance->loadConfig();
         }
 
         return static::$instance;

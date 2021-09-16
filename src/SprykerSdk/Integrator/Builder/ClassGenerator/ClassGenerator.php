@@ -5,19 +5,17 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassGenerator;
 
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
-use SprykerSdk\Integrator\Common\UtilText\Filter\CamelCaseToSeparator;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
+use SprykerSdk\Integrator\Common\UtilText\Filter\CamelCaseToSeparator;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Shared\Common\UtilText\Filter\CamelCaseToSeparator;
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassGenerator
 {

@@ -7,11 +7,11 @@
 
 namespace SprykerSdkTest\Integrator\Business;
 
-use SprykerSdk\Integrator\Business\IntegratorFacade;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
-use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
-use SprykerSdk\Shared\Transfer\ModuleTransfer;
+use SprykerSdk\Integrator\IntegratorFacade;
+use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use SprykerSdkTest\Integrator\BaseTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -104,6 +104,9 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->assertSame(trim(file_get_contents($classPath)), trim(file_get_contents($testFilePath)));
     }
 
+    /**
+     * @return void
+     */
     public function testRunInstallationConfigureModule(): void
     {
         // Arrange
@@ -157,7 +160,6 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->assertFileExists($testFilePath);
 
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
-
     }
 
     /**
@@ -282,15 +284,15 @@ class IntegratorFacadeTest extends BaseTestCase
      *
      * @return array
      */
-    private function getModuleList(string $moduleName = null): array
+    private function getModuleList(?string $moduleName = null): array
     {
         return $this->getFactory()->getModuleFinderFacade()->getModules($this->buildModuleFilterTransfer($moduleName));
     }
 
     /**
-     * @return \SprykerSdk\Shared\Transfer\ModuleFilterTransfer
+     * @return \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer
      */
-    private function buildModuleFilterTransfer(string $moduleName = null): ModuleFilterTransfer
+    private function buildModuleFilterTransfer(?string $moduleName = null): ModuleFilterTransfer
     {
         $moduleFilterTransfer = new ModuleFilterTransfer();
 

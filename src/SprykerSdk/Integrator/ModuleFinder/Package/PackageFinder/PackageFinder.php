@@ -5,11 +5,11 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\ModuleFinder\Business\Package\PackageFinder;
+namespace SprykerSdk\Integrator\ModuleFinder\Package\PackageFinder;
 
 use Laminas\Filter\FilterChain;
 use Laminas\Filter\Word\DashToCamelCase;
-use SprykerSdk\Integrator\ModuleFinder\ModuleFinderConfig;
+use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Shared\Transfer\PackageTransfer;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -17,14 +17,14 @@ use Symfony\Component\Finder\SplFileInfo;
 class PackageFinder implements PackageFinderInterface
 {
     /**
-     * @var \SprykerSdk\Integrator\ModuleFinder\ModuleFinderConfig
+     * @var \SprykerSdk\Integrator\IntegratorConfig
      */
     protected $config;
 
     /**
-     * @param \SprykerSdk\Integrator\ModuleFinder\ModuleFinderConfig $config
+     * @param \SprykerSdk\Integrator\IntegratorConfig $config
      */
-    public function __construct(ModuleFinderConfig $config)
+    public function __construct(IntegratorConfig $config)
     {
         $this->config = $config;
     }

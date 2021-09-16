@@ -7,13 +7,12 @@
 
 namespace SprykerSdk\Integrator\Builder\Finder;
 
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassNodeFinder
 {

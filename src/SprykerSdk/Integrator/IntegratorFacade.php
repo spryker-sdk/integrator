@@ -5,13 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator;
 
-use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Common\AbstractFacade;
-use SprykerSdk\Shared\Integrator\IntegratorFactoryAwareTrait;
+use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 
 class IntegratorFacade extends AbstractFacade implements IntegratorFacadeInterface
 {
@@ -19,8 +18,6 @@ class IntegratorFacade extends AbstractFacade implements IntegratorFacadeInterfa
 
     /**
      * {@inheritDoc}
-     *
-     * @api
      *
      * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer[] $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input

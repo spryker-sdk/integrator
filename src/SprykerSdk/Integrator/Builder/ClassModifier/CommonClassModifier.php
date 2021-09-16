@@ -5,11 +5,10 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -26,7 +25,7 @@ use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\CloneNodeWithClearPositionVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodeStmtByNameVisitor;
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class CommonClassModifier
 {

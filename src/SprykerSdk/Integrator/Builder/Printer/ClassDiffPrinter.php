@@ -7,10 +7,9 @@
 
 namespace SprykerSdk\Integrator\Builder\Printer;
 
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassDiffPrinter
 {

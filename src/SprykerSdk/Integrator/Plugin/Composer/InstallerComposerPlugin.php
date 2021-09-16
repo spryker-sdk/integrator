@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Plugin\Composer;
 
@@ -17,18 +17,14 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
-use SprykerSdk\Integrator\Transfer\ModuleTransfer;
-use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
 use Spryker\Zed\Console\Business\Model\Environment;
-use SprykerSdk\Integrator\Common\UtilText\Filter\SeparatorToCamelCase;
-use SprykerSdk\Integrator\ModuleFinder\Business\ModuleFinderFacade;
 use SprykerSdk\Integrator\Business\IntegratorFacade;
 use SprykerSdk\Integrator\Business\IntegratorFacadeInterface;
+use SprykerSdk\Integrator\Common\UtilText\Filter\SeparatorToCamelCase;
 use SprykerSdk\Integrator\Dependency\Console\ComposerInputOutputAdapter;
-use SprykerSdk\ModuleFinder\Business\ModuleFinderFacade;
-use SprykerSdk\Shared\Common\UtilText\Filter\SeparatorToCamelCase;
-use SprykerSdk\Shared\Transfer\ModuleTransfer;
-use SprykerSdk\Shared\Transfer\OrganizationTransfer;
+use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacade;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
+use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
 
 class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterface
 {
@@ -113,8 +109,6 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
     /**
      * {@inheritDoc}
      *
-     * @api
-     *
      * @param \Composer\Installer\PackageEvent $event
      *
      * @return void
@@ -126,8 +120,6 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
 
     /**
      * {@inheritDoc}
-     *
-     * @api
      *
      * @param \Composer\Script\Event $event
      *
@@ -182,7 +174,7 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
     }
 
     /**
-     * @return \SprykerSdk\Integrator\ModuleFinder\Business\ModuleFinderFacade
+     * @return \SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacade
      */
     protected function createModuleFinderFacade(): ModuleFinderFacade
     {

@@ -5,16 +5,16 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Executor;
 
 use RuntimeException;
+use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Manifest\ManifestReader;
 use SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface;
 use SprykerSdk\Integrator\SprykerLock\SprykerLockReader;
 use SprykerSdk\Integrator\SprykerLock\SprykerLockWriter;
-use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 
 class ManifestExecutor
 {

@@ -7,7 +7,6 @@
 
 namespace SprykerSdk\Integrator\SprykerLock;
 
-
 interface SprykerLockWriterInterface
 {
     /**

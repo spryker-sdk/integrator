@@ -7,7 +7,6 @@
 
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -24,7 +23,7 @@ use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\MethodBodyExtendVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveGlueRelationshipFromClassListVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class GlueRelationshipModifier
 {

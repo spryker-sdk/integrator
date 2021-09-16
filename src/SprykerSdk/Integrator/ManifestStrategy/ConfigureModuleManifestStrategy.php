@@ -5,16 +5,15 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use ReflectionClassConstant;
 use ReflectionException;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Shared\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
 {
