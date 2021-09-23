@@ -12,10 +12,19 @@ namespace SprykerSdk\Integrator;
 trait IntegratorFactoryAwareTrait
 {
     /**
+     * @var \SprykerSdk\Integrator\IntegratorFactory
+     */
+    protected $factory;
+
+    /**
      * @return \SprykerSdk\Integrator\IntegratorFactory
      */
     protected function getFactory(): IntegratorFactory
     {
-        return new IntegratorFactory();
+        if ($this->factory === null) {
+            $this->factory = new IntegratorFactory();
+        }
+
+        return $this->factory;
     }
 }

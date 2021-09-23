@@ -17,9 +17,7 @@ class IntegratorFacade extends AbstractFacade implements IntegratorFacadeInterfa
     use IntegratorFactoryAwareTrait;
 
     /**
-     * {@inheritDoc}
-     *
-     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
      * @param bool $isDry
      *

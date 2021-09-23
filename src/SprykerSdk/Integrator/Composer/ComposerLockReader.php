@@ -10,7 +10,7 @@ namespace SprykerSdk\Integrator\Composer;
 use SprykerSdk\Integrator\Common\UtilText\Filter\SeparatorToCamelCase;
 use SprykerSdk\Integrator\IntegratorConfig;
 
-class ComposerLockReader
+class ComposerLockReader implements ComposerLockReaderInterface
 {
     /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
@@ -26,7 +26,7 @@ class ComposerLockReader
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getModuleVersions(): array
     {
@@ -51,7 +51,7 @@ class ComposerLockReader
     }
 
     /**
-     * @return string[][][]
+     * @return array<array<array<string>>>
      */
     protected function getProjectComposerLockData(): array
     {

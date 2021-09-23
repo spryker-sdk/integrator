@@ -15,10 +15,19 @@ use SprykerSdk\Integrator\IntegratorFacadeInterface;
 trait IntegratorFacadeAwareTrait
 {
     /**
+     * @var \SprykerSdk\Integrator\Business\IntegratorFacade
+     */
+    protected $facade;
+
+    /**
      * @return \SprykerSdk\Integrator\Business\IntegratorFacade
      */
     protected function getFacade(): IntegratorFacadeInterface
     {
-        return new IntegratorFacade();
+        if ($this->facade === null) {
+            $this->facade = new IntegratorFacade();
+        }
+
+        return $this->facade;
     }
 }

@@ -14,7 +14,7 @@ use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use ZipArchive;
 
-class ManifestReader
+class ManifestReader implements ManifestReaderInterface
 {
     /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
@@ -37,9 +37,9 @@ class ManifestReader
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      *
-     * @return string[][][]
+     * @return array<string, array<string, array<string>>>
      */
     public function readManifests(array $moduleTransfers): array
     {
@@ -93,7 +93,7 @@ class ManifestReader
      * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
      * @param string $moduleVersion
      *
-     * @return string|string[]|null
+     * @return string|null
      */
     protected function resolveManifestVersion(ModuleTransfer $moduleTransfer, string $moduleVersion)
     {
@@ -155,7 +155,7 @@ class ManifestReader
     /**
      * @param string $moduleRecipesDir
      *
-     * @return string[]
+     * @return array<string>
      */
     protected function getValidModuleVersions(string $moduleRecipesDir): array
     {
@@ -175,9 +175,9 @@ class ManifestReader
     }
 
     /**
-     * @param string[] $versions
+     * @param array<string> $versions
      *
-     * @return string[]
+     * @return array<string>
      */
     protected function sortArray(array $versions): array
     {

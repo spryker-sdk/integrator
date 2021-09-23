@@ -14,9 +14,6 @@ use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 interface IntegratorFacadeInterface
 {
     /**
-     * Specification:
-     * -
-     *
      * @param \SprykerSdk\Transfer\ModuleTransfer[] $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
      * @param bool $isDry

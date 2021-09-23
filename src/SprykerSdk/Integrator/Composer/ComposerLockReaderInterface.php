@@ -5,12 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\SprykerLock;
+namespace SprykerSdk\Integrator\Composer;
 
-interface SprykerLockReaderInterface
+interface ComposerLockReaderInterface
 {
     /**
-     * @return array<string, array<string>>
+     * @return array<string>
      */
-    public function getLockFileData(): array;
+    public function getModuleVersions(): array;
 }

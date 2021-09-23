@@ -14,10 +14,11 @@ use PhpParser\Node\Name;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
 use SprykerSdk\Integrator\Common\UtilText\Filter\CamelCaseToSeparator;
 use SprykerSdk\Integrator\Helper\ClassHelper;
+use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassGenerator
+class ClassGenerator implements ClassGeneratorInterface
 {
     /**
      * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader
@@ -25,17 +26,45 @@ class ClassGenerator
     protected $classLoader;
 
     /**
+     * @var \SprykerSdk\Integrator\Helper\ClassHelperInterface
+     */
+    protected $classHelper;
+
+    /**
+     * @var \PhpParser\BuilderFactory
+     */
+    protected $builderFactory;
+
+    /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
     protected $config;
 
     /**
+     * @var \PhpParser\Builder\Class_
+     */
+    protected $classBuilder;
+
+    /**
+     * @var \PhpParser\Builder\Namespace_
+     */
+    protected $classNamespaceBuilder;
+
+    /**
      * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader $classLoader
+     * @param \SprykerSdk\Integrator\Helper\ClassHelperInterface $classHelper
+     * @param \PhpParser\BuilderFactory $builderFactory
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
      */
-    public function __construct(ClassLoader $classLoader, IntegratorConfig $config)
-    {
+    public function __construct(
+        ClassLoader $classLoader,
+        ClassHelperInterface $classHelper,
+        BuilderFactory $builderFactory,
+        IntegratorConfig $config
+    ) {
         $this->classLoader = $classLoader;
+        $this->builderFactory = $builderFactory;
+        $this->classHelper = $classHelper;
         $this->config = $config;
     }
 
@@ -50,35 +79,25 @@ class ClassGenerator
         $classInformationTransfer = (new ClassInformationTransfer())
             ->setClassName($className);
 
-        $factory = new BuilderFactory();
-        $classHelper = new ClassHelper();
-
         $moduleDir = $this->resolveModuleDir(
-            $classHelper->getOrganisationName($className),
-            $classHelper->getModuleName($className)
+            $this->classHelper->getOrganisationName($className),
+            $this->classHelper->getModuleName($className)
         );
-        $classBuilder = $factory->class($classHelper->getShortClassName($className));
-        $classNamespaceBuilder = $factory->namespace(ltrim($classHelper->getClassNamespace($className), '\\'))
+
+        $this->classBuilder = $this->builderFactory->class($this->classHelper->getShortClassName($className));
+        $this->classNamespaceBuilder = $this->builderFactory
+            ->namespace(ltrim($this->classHelper->getClassNamespace($className), '\\'))
             ->setDocComment($this->findLicenseBlock($moduleDir));
 
         if ($parentClass) {
-            $parentClassAlias = $classHelper->getShortClassName($parentClass);
-            if ($parentClassAlias === $classHelper->getShortClassName($className)) {
-                $parentClassAlias = $classHelper->getOrganisationName($parentClass) . $classHelper->getShortClassName($parentClass);
-            }
-            $use = $factory->use(ltrim($parentClass, '\\'));
-            if ($parentClassAlias) {
-                $use = $use->as($parentClassAlias);
-            }
-            $classNamespaceBuilder = $classNamespaceBuilder->addStmt($use);
-            $classBuilder = $classBuilder->extend(new Name($parentClassAlias, []));
+            $this->extendWithParentClass($className, $parentClass);
         }
 
-        $classNamespaceBuilder->addStmt($classBuilder);
+        $this->classNamespaceBuilder->addStmt($this->classBuilder);
 
-        $ast = [$classNamespaceBuilder->getNode()];
+        $syntaxTree = [$this->classNamespaceBuilder->getNode()];
 
-        $classInformationTransfer->setClassTokenTree($ast)
+        $classInformationTransfer->setClassTokenTree($syntaxTree)
             ->setFilePath(
                 $moduleDir
                 . '/src'
@@ -93,6 +112,28 @@ class ClassGenerator
         }
 
         return $classInformationTransfer;
+    }
+
+    /**
+     * @param string $className
+     * @param string $parentClass
+     *
+     * @return void
+     */
+    protected function extendWithParentClass(string $className, string $parentClass): void
+    {
+        $parentClassAlias = $this->classHelper->getShortClassName($parentClass);
+        if ($parentClassAlias === $this->classHelper->getShortClassName($className)) {
+            $parentClassAlias = $this->classHelper->getOrganisationName($parentClass) . $this->classHelper->getShortClassName($parentClass);
+        }
+
+        $use = $this->builderFactory->use(ltrim($parentClass, '\\'));
+        if ($parentClassAlias) {
+            $use = $use->as($parentClassAlias);
+        }
+
+        $this->classNamespaceBuilder = $this->classNamespaceBuilder->addStmt($use);
+        $this->classBuilder = $this->classBuilder->extend(new Name($parentClassAlias, []));
     }
 
     /**
@@ -138,7 +179,7 @@ class ClassGenerator
     /**
      * @param string $className
      *
-     * @return string|string[]
+     * @return string|array<string>
      */
     protected function convertClassNameToPath(string $className)
     {

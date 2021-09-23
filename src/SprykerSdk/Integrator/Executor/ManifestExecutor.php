@@ -16,7 +16,7 @@ use SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface;
 use SprykerSdk\Integrator\SprykerLock\SprykerLockReader;
 use SprykerSdk\Integrator\SprykerLock\SprykerLockWriter;
 
-class ManifestExecutor
+class ManifestExecutor implements ManifestExecutorInterface
 {
     /**
      * @var \SprykerSdk\Integrator\SprykerLock\SprykerLockReader
@@ -29,7 +29,7 @@ class ManifestExecutor
     protected $manifestReader;
 
     /**
-     * @var \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface[]
+     * @var array<\SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface>
      */
     protected $manifestExecutors;
 
@@ -57,7 +57,7 @@ class ManifestExecutor
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
@@ -102,10 +102,10 @@ class ManifestExecutor
     }
 
     /**
-     * @param string[][][] $manifests
-     * @param string[][] $sprykerLock
+     * @param array<string, array<string, array<string>>> $manifests
+     * @param array<string, array<string, array<string>>> $sprykerLock
      *
-     * @return string[][][][]
+     * @return array<string, array<string, array<string, array<string>>>>
      */
     protected function findUnappliedManifests(array $manifests, array $sprykerLock): array
     {
@@ -145,7 +145,7 @@ class ManifestExecutor
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      *
      * @return void
      */

@@ -11,7 +11,7 @@ use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassDiffPrinter
+class ClassDiffPrinter implements ClassDiffPrinterInterface
 {
     /**
      * @var \SprykerSdk\Integrator\Builder\Printer\ClassPrinter

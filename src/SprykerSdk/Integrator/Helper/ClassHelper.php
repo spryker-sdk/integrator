@@ -7,7 +7,7 @@
 
 namespace SprykerSdk\Integrator\Helper;
 
-class ClassHelper
+class ClassHelper implements ClassHelperInterface
 {
     /**
      * @param string $className

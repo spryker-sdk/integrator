@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 
-class ClassMethodChecker
+class ClassMethodChecker implements ClassMethodCheckerInterface
 {
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod $node

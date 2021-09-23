@@ -31,7 +31,7 @@ class IntegratorConfig extends AbstractConfig
     protected $config;
 
     /**
-     * @var string[]
+     * @var array<string>
      */
     protected $organizationPathFragments = [
         'spryker',
@@ -87,7 +87,7 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getProjectNamespaces(): array
     {
@@ -95,7 +95,7 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getCoreNamespaces(): array
     {
@@ -103,7 +103,7 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getCoreNonSplitOrganisations(): array
     {
@@ -218,7 +218,7 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      * @api
      *
      */
@@ -249,7 +249,7 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      * @api
      *
      */
@@ -263,7 +263,7 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      * @api
      *
      */

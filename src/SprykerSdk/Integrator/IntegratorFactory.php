@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator;
 
+use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeFinder;
@@ -29,6 +30,8 @@ use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
 use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
+use SprykerSdk\Integrator\Helper\ClassHelper;
+use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\Manifest\ManifestReader;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureEnvManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureModuleManifestStrategy;
@@ -59,7 +62,7 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Executor\ManifestExecutor
+     * @return \SprykerSdk\Integrator\Executor\ManifestExecutor
      */
     public function creatManifestExecutor(): ManifestExecutor
     {
@@ -67,18 +70,7 @@ class IntegratorFactory
             $this->createSprykerLockReader(),
             $this->createManifestReader(),
             $this->createSprykerLockWriter(),
-            [
-                $this->createWirePluginManifestExecutor(),
-                $this->createUnwirePluginManifestExecutor(),
-                $this->createWireWidgetManifestExecutor(),
-                $this->createUnwireWidgetManifestExecutor(),
-                $this->createConfigureModuleManifestExecutor(),
-                $this->createCopyFileManifestExecutor(),
-                $this->createConfigureEnvManifestExecutor(),
-                $this->createWireGlueRelationshipManifestStrategy(),
-                $this->createUnwireGlueRelationshipManifestStrategy(),
-                $this->createExecuteConsoleManifestStrategy(),
-            ]
+            $this->getManifestExecutors()
         );
     }
 
@@ -262,6 +254,8 @@ class IntegratorFactory
     {
         return new ClassGenerator(
             $this->createClassLoader(),
+            $this->createClassHelper(),
+            $this->createClassBuilderFactory(),
             $this->getConfig()
         );
     }
@@ -339,6 +333,22 @@ class IntegratorFactory
     }
 
     /**
+     * @return \PhpParser\BuilderFactory
+     */
+    public function createClassBuilderFactory(): BuilderFactory
+    {
+        return new BuilderFactory();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Helper\ClassHelperInterface;
+     */
+    public function createClassHelper(): ClassHelperInterface
+    {
+        return new ClassHelper();
+    }
+
+    /**
      * @return \PhpParser\Parser
      */
     public function createPhpParserParser(?Lexer $lexer = null): Parser
@@ -378,5 +388,24 @@ class IntegratorFactory
     public function getModuleFinderFacade(): ModuleFinderFacadeInterface
     {
         return new ModuleFinderFacade();
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    public function getManifestExecutors(): array
+    {
+        return [
+            $this->createWirePluginManifestExecutor(),
+            $this->createUnwirePluginManifestExecutor(),
+            $this->createWireWidgetManifestExecutor(),
+            $this->createUnwireWidgetManifestExecutor(),
+            $this->createConfigureModuleManifestExecutor(),
+            $this->createCopyFileManifestExecutor(),
+            $this->createConfigureEnvManifestExecutor(),
+            $this->createWireGlueRelationshipManifestStrategy(),
+            $this->createUnwireGlueRelationshipManifestStrategy(),
+            $this->createExecuteConsoleManifestStrategy(),
+        ];
     }
 }

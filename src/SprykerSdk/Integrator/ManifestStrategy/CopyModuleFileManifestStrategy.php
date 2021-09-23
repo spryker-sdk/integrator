@@ -22,7 +22,7 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
     }
 
     /**
-     * @param string[] $manifest
+     * @param array<string> $manifest
      * @param string $moduleName
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry

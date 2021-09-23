@@ -5,26 +5,18 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types=1);
-
-namespace SprykerSdk\Integrator\ManifestStrategy;
+namespace SprykerSdk\Integrator\Executor;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 
-interface ManifestStrategyInterface
+interface ManifestExecutorInterface
 {
     /**
-     * @return string
-     */
-    public function getType(): string;
-
-    /**
-     * @param array<string> $manifest
-     * @param string $moduleName
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
-     * @return bool
+     * @return int
      */
-    public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool;
+    public function runModuleManifestExecution(array $moduleTransfers, InputOutputInterface $inputOutput, bool $isDry): int;
 }

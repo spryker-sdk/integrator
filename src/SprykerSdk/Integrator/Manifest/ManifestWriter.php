@@ -10,7 +10,7 @@ namespace SprykerSdk\Integrator\Manifest;
 use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 
-class ManifestWriter
+class ManifestWriter implements ManifestWriterInterface
 {
     /**
      * @var \SprykerSdk\Integrator\Composer\ComposerLockReader
@@ -26,7 +26,7 @@ class ManifestWriter
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer[] $moduleTransfers
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param array $manifests
      *
      * @return bool

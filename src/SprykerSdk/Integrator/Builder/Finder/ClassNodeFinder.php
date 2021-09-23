@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassNodeFinder
+class ClassNodeFinder implements ClassNodeFinderInterface
 {
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer

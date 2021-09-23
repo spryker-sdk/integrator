@@ -13,7 +13,7 @@ use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGenerator;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassResolver
+class ClassResolver implements ClassResolverInterface
 {
     /**
      * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader
