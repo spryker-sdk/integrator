@@ -69,9 +69,9 @@ class ManifestExecutor implements ManifestExecutorInterface
 
         $manifests = $this->manifestReader->readManifests($moduleTransfers);
 
-        $sprykerLock = $this->sprykerLockReader->getLockFileData();
+        $lockedModules = $this->sprykerLockReader->getLockFileData();
 
-        $unappliedManifests = $this->findUnappliedManifests($manifests, $sprykerLock);
+        $unappliedManifests = $this->findUnappliedManifests($manifests, $lockedModules);
 
         if (!$unappliedManifests) {
             return 0;
@@ -81,15 +81,13 @@ class ManifestExecutor implements ManifestExecutorInterface
             return 0;
         }
 
-        $GLOBALS['IO'] = $inputOutput;
-
         foreach ($unappliedManifests as $moduleName => $moduleManifests) {
             foreach ($moduleManifests as $manifestType => $unappliedManifestByType) {
                 $manifestExecutor = $this->resolveExecutor($manifestType);
 
                 foreach ($unappliedManifestByType as $manifestHash => $unappliedManifest) {
                     if ($manifestExecutor->apply($unappliedManifest, $moduleName, $inputOutput, $isDry)) {
-                        $sprykerLock[$moduleName][$manifestType][$manifestHash] = $unappliedManifest;
+                        $lockedModules[$moduleName][$manifestType][$manifestHash] = $unappliedManifest;
                     }
                 }
             }
@@ -98,23 +96,23 @@ class ManifestExecutor implements ManifestExecutorInterface
             return 0;
         }
 
-        return $this->sprykerLockWriter->storeLock($sprykerLock);
+        return $this->sprykerLockWriter->storeLock($lockedModules);
     }
 
     /**
      * @param array<string, array<string, array<string>>> $manifests
-     * @param array<string, array<string, array<string>>> $sprykerLock
+     * @param array<string, array<string, array<string>>> $lockedModules
      *
      * @return array<string, array<string, array<string, array<string>>>>
      */
-    protected function findUnappliedManifests(array $manifests, array $sprykerLock): array
+    protected function findUnappliedManifests(array $manifests, array $lockedModules): array
     {
         $unappliedManifests = [];
         foreach ($manifests as $moduleName => $manifestList) {
             foreach ($manifestList as $manifestType => $moduleManifests) {
                 foreach ($moduleManifests as $moduleManifest) {
                     $manifestHash = sha1(json_encode($moduleManifest) . $manifestType . $moduleName);
-                    if (isset($sprykerLock[$moduleName][$manifestType][$manifestHash])) {
+                    if (isset($lockedModules[$moduleName][$manifestType][$manifestHash])) {
                         continue;
                     }
 

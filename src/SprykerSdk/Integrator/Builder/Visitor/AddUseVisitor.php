@@ -19,6 +19,16 @@ class AddUseVisitor extends NodeVisitorAbstract
     /**
      * @var string
      */
+    protected const STATEMENT_NAMESPACE = 'Stmt_Namespace';
+
+    /**
+     * @var string
+     */
+    protected const STATEMENT_USE = 'Stmt_Use';
+
+    /**
+     * @var string
+     */
     protected $className;
 
     /**
@@ -43,7 +53,7 @@ class AddUseVisitor extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($node->getType() !== 'Stmt_Namespace') {
+        if ($node->getType() !== static::STATEMENT_NAMESPACE) {
             return $node;
         }
 
@@ -54,7 +64,7 @@ class AddUseVisitor extends NodeVisitorAbstract
         $uses = [];
         $other = [];
         foreach ($node->stmts as $stmt) {
-            if ($stmt->getType() === 'Stmt_Use') {
+            if ($stmt->getType() === static::STATEMENT_USE) {
                 $uses[] = $stmt;
 
                 continue;
@@ -83,7 +93,7 @@ class AddUseVisitor extends NodeVisitorAbstract
     {
         foreach ($stmts as $stmt) {
             /** @var \PhpParser\Node\Stmt\Use_ $stmt */
-            if ($stmt->getType() !== 'Stmt_Use') {
+            if ($stmt->getType() !== static::STATEMENT_USE) {
                 continue;
             }
             foreach ($stmt->uses as $use) {

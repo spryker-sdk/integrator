@@ -13,6 +13,7 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
+use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Visitor\AddClassToClassListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
@@ -22,6 +23,8 @@ use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassListModifier
 {
+    use AddVisitorsTrait;
+
     /**
      * @var \PhpParser\NodeTraverser
      */
@@ -38,18 +41,26 @@ class ClassListModifier
     protected $classNodeFinder;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface
+     */
+    protected $classMethodChecker;
+
+    /**
      * @param \PhpParser\NodeTraverser $nodeTraverser
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifier $commonClassModifier
      * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder $classNodeFinder
+     * @param \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface $classMethodChecker
      */
     public function __construct(
         NodeTraverser $nodeTraverser,
         CommonClassModifier $commonClassModifier,
-        ClassNodeFinder $classNodeFinder
+        ClassNodeFinder $classNodeFinder,
+        ClassMethodCheckerInterface $classMethodChecker
     ) {
         $this->nodeTraverser = $nodeTraverser;
         $this->commonClassModifier = $commonClassModifier;
         $this->classNodeFinder = $classNodeFinder;
+        $this->classMethodChecker = $classMethodChecker;
     }
 
     /**
@@ -71,27 +82,24 @@ class ClassListModifier
             $classInformationTransfer = $this->commonClassModifier->overrideMethodFromParent($classInformationTransfer, $targetMethodName);
             $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         }
-
-        $classMethodChecker = new ClassMethodChecker();
-        if ($classMethodChecker->isMethodReturnArray($methodNode)) {
-            $nodeTraverser = new NodeTraverser();
-            $nodeTraverser->addVisitor(new AddUseVisitor($classNameToAdd));
-            $nodeTraverser->addVisitor(
+        ≈
+        if ($this->classMethodChecker->isMethodReturnArray($methodNode)) {
+            $visitors = [
+                new AddUseVisitor($classNameToAdd),
                 new AddClassToClassListVisitor(
                     $targetMethodName,
                     $classNameToAdd,
                     $constantName
                 )
-            );
+            ];
 
-            $classInformationTransfer->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
-
-            return $classInformationTransfer;
+            return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
         }
 
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new AddUseVisitor($classNameToAdd));
-        $classInformationTransfer->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+        $visitors = [
+            new AddUseVisitor($classNameToAdd)
+        ];
+        $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
 
         $classHelper = new ClassHelper();
         $methodBody = [new Return_((new BuilderFactory())->classConstFetch($classHelper->getShortClassName($classNameToAdd), $constantName))];
@@ -118,20 +126,14 @@ class ClassListModifier
             return null;
         }
 
-        if (!(new ClassMethodChecker())->isMethodReturnArray($methodNode)) {
+        if (!$this->classMethodChecker->isMethodReturnArray($methodNode)) {
             return $this->commonClassModifier->removeClassMethod($classInformationTransfer, $targetMethodName);
         }
 
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(
-            new RemoveClassFromClassListVisitor(
-                $targetMethodName,
-                $classNameToRemove
-            )
-        );
+        $visitors = [
+            new RemoveClassFromClassListVisitor($targetMethodName, $classNameToRemove)
+        ];
 
-        $classInformationTransfer->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
-
-        return $classInformationTransfer;
+        return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
     }
 }

@@ -14,6 +14,8 @@ use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassConstantModifier
 {
+    use AddVisitorsTrait;
+
     /**
      * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder
      */
@@ -46,17 +48,10 @@ class ClassConstantModifier
             }
         }
 
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(
-            new AddConstantVisitor(
-                $constantName,
-                $value,
-                $modifier
-            )
-        );
+        $visitors = [
+            new AddConstantVisitor($constantName, $value, $modifier)
+        ];
 
-        $classInformationTransfer->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
-
-        return $classInformationTransfer;
+        return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
     }
 }

@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\ClassLoader;
 
 use PhpParser\Lexer;
+use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
@@ -52,17 +54,13 @@ class ClassLoader implements ClassLoaderInterface
             ->setClassName($className)
             ->setFullyQualifiedClassName('\\' . $className);
 
-        $reflectionClass = (new ReflectionClass($className));
+        $reflectionClass = new ReflectionClass($className);
 
-        $originalAst = $this->parser->parse(file_get_contents($reflectionClass->getFileName()));
+        $originalSyntaxTree = $this->parser->parse(file_get_contents($reflectionClass->getFileName()));
+        $syntaxTree = $this->traverseOriginalSyntaxTree($originalSyntaxTree);
 
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new CloningVisitor());
-        $nodeTraverser->addVisitor(new NameResolver());
-        $ast = $nodeTraverser->traverse($originalAst);
-
-        $classInformationTransfer->setClassTokenTree($ast)
-            ->setOriginalClassTokenTree($originalAst)
+        $classInformationTransfer->setClassTokenTree($syntaxTree)
+            ->setOriginalClassTokenTree($originalSyntaxTree)
             ->setTokens($this->lexer->getTokens())
             ->setFilePath($reflectionClass->getFileName());
 
@@ -73,5 +71,19 @@ class ClassLoader implements ClassLoaderInterface
         }
 
         return $classInformationTransfer;
+    }
+
+    /**
+     * @param \PhpParser\Stmt|null $originalSyntaxTree
+     *
+     * @return \PhpParser\Node
+     */
+    protected function traverseOriginalSyntaxTree(?Stmt $originalSyntaxTree): Node
+    {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new CloningVisitor());
+        $nodeTraverser->addVisitor(new NameResolver());
+
+        return $nodeTraverser->traverse($originalSyntaxTree);
     }
 }

@@ -19,7 +19,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
-use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
+use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\CloneNodeWithClearPositionVisitor;
@@ -35,11 +35,20 @@ class CommonClassModifier
     protected $classNodeFinder;
 
     /**
-     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder $classNodeFinder
+     * @var \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface
      */
-    public function __construct(ClassNodeFinder $classNodeFinder)
-    {
+    protected $classMethodChecker;
+
+    /**
+     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder $classNodeFinder
+     * @param \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface $classMethodChecker
+     */
+    public function __construct(
+        ClassNodeFinder $classNodeFinder,
+        ClassMethodCheckerInterface $classMethodChecker
+    ) {
         $this->classNodeFinder = $classNodeFinder;
+        $this->classMethodChecker = $classMethodChecker;
     }
 
     /**
@@ -56,22 +65,23 @@ class CommonClassModifier
             return $classInformationTransfer;
         }
 
-        $methodAst = $this->classNodeFinder->findMethodNode($parentClassType, $targetMethodName);
+        $methodSyntaxTree = $this->classNodeFinder->findMethodNode($parentClassType, $targetMethodName);
 
-        if (!$methodAst) {
+        if (!$methodSyntaxTree) {
             return $classInformationTransfer;
         }
 
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new CloneNodeWithClearPositionVisitor());
-        /** @var \PhpParser\Node\Stmt\ClassMethod $methodAst */
-        $methodAst = $nodeTraverser->traverse([$methodAst])[0];
+
+        /** @var \PhpParser\Node\Stmt\ClassMethod $methodSyntaxTree */
+        $methodSyntaxTree = $nodeTraverser->traverse([$methodSyntaxTree])[0];
 
         $methodBody = [];
-        if ((new ClassMethodChecker())->isMethodReturnArray($methodAst)) {
+        if ($this->classMethodChecker->isMethodReturnArray($methodSyntaxTree)) {
             $builder = new BuilderFactory();
             $methodBody = [new Return_(new Array_())];
-            if (!$this->isMethodReturnArrayEmpty($methodAst)) {
+            if (!$this->isMethodReturnArrayEmpty($methodSyntaxTree)) {
                 $methodBody = [new Return_(
                     $builder->funcCall('array_merge', [
                                        new Arg(new StaticCall(
@@ -82,16 +92,16 @@ class CommonClassModifier
                     ])
                 )];
             }
-        } elseif (count($methodAst->params) === 1) {
-            $methodBody = [new Return_($methodAst->params[]->var)];
+        } elseif (count($methodSyntaxTree->params) === 1) {
+            $methodBody = [new Return_($methodSyntaxTree->params[]->var)];
         }
 
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new ReplaceNodeStmtByNameVisitor($targetMethodName, $methodBody));
-        $methodAst = $nodeTraverser->traverse([$methodAst])[0];
+        $methodSyntaxTree = $nodeTraverser->traverse([$methodSyntaxTree])[0];
 
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new AddMethodVisitor($methodAst));
+        $nodeTraverser->addVisitor(new AddMethodVisitor($methodSyntaxTree));
         $classInformationTransfer->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
 
         return $classInformationTransfer;

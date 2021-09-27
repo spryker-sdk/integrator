@@ -20,6 +20,16 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
     /**
      * @var string
      */
+    protected const STATEMENT_ARRAY = 'Expr_Array';
+
+    /**
+     * @var string
+     */
+    protected const STATEMENT_CLASS_METHOD = 'Stmt_ClassMethod';
+
+    /**
+     * @var string
+     */
     protected $methodName;
 
     /**
@@ -56,13 +66,13 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($node->getType() === 'Stmt_ClassMethod' && $node->name->toString() === $this->methodName) {
+        if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() === $this->methodName) {
             $this->methodFound = true;
 
             return $node;
         }
 
-        if ($this->methodFound && $node->getType() === 'Expr_Array') {
+        if ($this->methodFound && $node->getType() === static::STATEMENT_ARRAY) {
             $this->addClass($node);
             $this->methodFound = false;
         }

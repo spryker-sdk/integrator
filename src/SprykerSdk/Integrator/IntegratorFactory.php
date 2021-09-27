@@ -25,6 +25,8 @@ use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifier;
 use SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationshipModifier;
 use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriter;
+use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
+use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
@@ -266,9 +268,9 @@ class IntegratorFactory
     public function createClassInstanceClassModifier(): ClassInstanceClassModifier
     {
         return new ClassInstanceClassModifier(
-            $this->getPhpParserNodeTraverser(),
             $this->createCommonClassModifier(),
-            $this->createClassNodeFinder()
+            $this->createClassNodeFinder(),
+            $this->createClassMethodChecker()
         );
     }
 
@@ -278,7 +280,8 @@ class IntegratorFactory
     public function createCommonClassModifier(): CommonClassModifier
     {
         return new CommonClassModifier(
-            $this->createClassNodeFinder()
+            $this->createClassNodeFinder(),
+            $this->createClassMethodChecker()
         );
     }
 
@@ -330,6 +333,14 @@ class IntegratorFactory
     public function createClassNodeFinder(): ClassNodeFinder
     {
         return new ClassNodeFinder();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface
+     */
+    public function createClassMethodChecker(): ClassMethodCheckerInterface
+    {
+        return new ClassMethodChecker();
     }
 
     /**

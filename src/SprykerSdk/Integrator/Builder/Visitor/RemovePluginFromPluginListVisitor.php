@@ -17,6 +17,16 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
     /**
      * @var string
      */
+    protected const STATEMENT_ARRAY = 'Expr_Array';
+
+    /**
+     * @var string
+     */
+    protected const STATEMENT_CLASS_METHOD = 'Stmt_ClassMethod';
+
+    /**
+     * @var string
+     */
     protected $targetMethodName;
 
     /**
@@ -46,13 +56,13 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($node->getType() === 'Stmt_ClassMethod' && $node->name->toString() === $this->targetMethodName) {
+        if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() === $this->targetMethodName) {
             $this->methodFound = true;
 
             return $node;
         }
 
-        if ($this->methodFound && $node->getType() === 'Expr_Array') {
+        if ($this->methodFound && $node->getType() === static::STATEMENT_ARRAY) {
             $node = $this->removePlugin($node);
             $this->methodFound = false;
         }

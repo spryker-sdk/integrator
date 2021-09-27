@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Composer\IO\IOInterface;
+
 namespace SprykerSdk\Integrator\Dependency\Console;
 
 class ComposerIOAdapter implements IOInterface
@@ -19,7 +21,7 @@ class ComposerIOAdapter implements IOInterface
     /**
      * @param \Composer\IO\IOInterface $IO
      */
-    public function __construct($IO)
+    public function __construct(IOInterface $IO)
     {
         $this->IO = $IO;
     }
@@ -27,7 +29,7 @@ class ComposerIOAdapter implements IOInterface
     /**
      * Writes a message to the output.
      *
-     * @param string|iterable $messages The message as an iterable of strings or a single string
+     * @param string|array<string> $messages The message as an iterable of strings or a single string
      * @param bool $newline Whether to add a newline
      * @param int $options A bitmask of options (one of the OUTPUT or VERBOSITY constants), 0 is considered the same as self::OUTPUT_NORMAL | self::VERBOSITY_NORMAL
      *
@@ -41,7 +43,7 @@ class ComposerIOAdapter implements IOInterface
     /**
      * Writes a message to the output and adds a newline at the end.
      *
-     * @param string|iterable $messages The message as an iterable of strings or a single string
+     * @param string|array<string> $messages The message as an iterable of strings or a single string
      * @param int $options A bitmask of options (one of the OUTPUT or VERBOSITY constants), 0 is considered the same as self::OUTPUT_NORMAL | self::VERBOSITY_NORMAL
      *
      * @return void

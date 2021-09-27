@@ -22,6 +22,11 @@ class RemoveGlueRelationshipFromClassListVisitor extends NodeVisitorAbstract
     /**
      * @var string
      */
+    protected const STATEMENT_CLASS_METHOD = 'Stmt_ClassMethod';
+
+    /**
+     * @var string
+     */
     protected $targetMethodName;
 
     /**
@@ -65,13 +70,13 @@ class RemoveGlueRelationshipFromClassListVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($node->getType() === 'Stmt_ClassMethod' && $node->name->toString() === $this->targetMethodName) {
+        if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() === $this->targetMethodName) {
             $this->methodFound = true;
 
             return $node;
         }
 
-        if ($node->getType() === 'Stmt_ClassMethod' && $node->name->toString() !== $this->targetMethodName) {
+        if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() !== $this->targetMethodName) {
             $this->methodFound = false;
 
             return $node;
