@@ -15,6 +15,12 @@ use SprykerSdk\Integrator\IntegratorConfig;
 class UnwireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
 {
     /**
+     * @var string
+     */
+    protected const TARGET_CLASS_NAME = '\Spryker\Glue\GlueApplication\GlueApplicationDependencyProvider';
+    protected const TARGET_METHOD_NAME = 'getResourceRelationshipPlugins';
+
+    /**
      * @return string
      */
     public function getType(): string
@@ -32,12 +38,9 @@ class UnwireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
-        $targetClassName = '\Spryker\Glue\GlueApplication\GlueApplicationDependencyProvider';
-        $targetMethodName = 'getResourceRelationshipPlugins';
-
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
-            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass($targetClassName, $namespace);
+            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass(self::TARGET_CLASS_NAME, $namespace);
             if (!$classInformationTransfer) {
                 continue;
             }
@@ -58,7 +61,7 @@ class UnwireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
 
             $classInformationTransfer = $this->getClassBuilderFacade()->unwireGlueRelationship(
                 $classInformationTransfer,
-                $targetMethodName,
+                self::TARGET_METHOD_NAME,
                 $targetClassKey,
                 $targetClass
             );
@@ -73,7 +76,7 @@ class UnwireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
                 'GLUE relationship %s was removed from %s::%s',
                 $targetClassKey,
                 $classInformationTransfer->getClassName(),
-                $targetMethodName
+                self::TARGET_METHOD_NAME
             ), InputOutputInterface::DEBUG);
         }
 

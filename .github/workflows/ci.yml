@@ -7,19 +7,15 @@ on:
             - master
     workflow_dispatch:
 
-env:
-    APPLICATION_ENV: 'development'
-    APPLICATION_STORE: 'DE'
-
 jobs:
     validation:
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         strategy:
             fail-fast: false
             matrix:
                 php-version: [
-                        '7.3',
                         '7.4',
+                        '8.0',
                 ]
         steps:
             - name: Checkout
@@ -53,12 +49,13 @@ jobs:
               run: find ./src -path src -prune -o -type f -name '*.php' -print0 | xargs -0 -n1 -P4 php -l -n | (! grep -v "No syntax errors detected" )
 
     prefer-lowest:
-        runs-on: ubuntu-18.04
+        runs-on: ubuntu-20.04
         strategy:
             fail-fast: false
             matrix:
                 php-version: [
-                        '7.3'
+                        '7.4',
+                        '8.0'
                 ]
 
         steps:

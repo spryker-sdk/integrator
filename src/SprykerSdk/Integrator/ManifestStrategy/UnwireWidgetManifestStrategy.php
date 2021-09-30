@@ -15,6 +15,12 @@ use SprykerSdk\Integrator\IntegratorConfig;
 class UnwireWidgetManifestStrategy extends AbstractManifestStrategy
 {
     /**
+     * @var string
+     */
+    protected const TARGET_CLASS_NAME = '\SprykerShop\Yves\ShopApplication\ShopApplicationDependencyProvider';
+    protected const TARGET_METHOD_NAME = 'getGlobalWidgets';
+
+    /**
      * @return string
      */
     public function getType(): string
@@ -32,12 +38,9 @@ class UnwireWidgetManifestStrategy extends AbstractManifestStrategy
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
-        $targetClassName = '\SprykerShop\Yves\ShopApplication\ShopApplicationDependencyProvider';
-        $targetMethodName = 'getGlobalWidgets';
-
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
-            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass($targetClassName, $namespace);
+            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass(self::TARGET_CLASS_NAME, $namespace);
             if (!$classInformationTransfer) {
                 continue;
             }
@@ -45,7 +48,7 @@ class UnwireWidgetManifestStrategy extends AbstractManifestStrategy
             $classInformationTransfer = $this->getClassBuilderFacade()->unwireClassConstant(
                 $classInformationTransfer,
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
-                $targetMethodName
+                self::TARGET_METHOD_NAME
             );
 
             if ($isDry) {
@@ -58,7 +61,7 @@ class UnwireWidgetManifestStrategy extends AbstractManifestStrategy
                 'Widget %s was added to %s::%s',
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $classInformationTransfer->getClassName(),
-                $targetMethodName
+                self::TARGET_METHOD_NAME
             ), InputOutputInterface::DEBUG);
         }
 

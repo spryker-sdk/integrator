@@ -15,6 +15,12 @@ use SprykerSdk\Integrator\IntegratorConfig;
 class WireWidgetManifestStrategy extends AbstractManifestStrategy
 {
     /**
+     * @var string
+     */
+    protected const TARGET_CLASS_NAME = '\SprykerShop\Yves\ShopApplication\ShopApplicationDependencyProvider';
+    protected const TARGET_METHOD_NAME = 'getGlobalWidgets';
+
+    /**
      * @return string
      */
     public function getType(): string
@@ -32,18 +38,15 @@ class WireWidgetManifestStrategy extends AbstractManifestStrategy
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
-        $targetClassName = '\SprykerShop\Yves\ShopApplication\ShopApplicationDependencyProvider';
-        $targetMethodName = 'getGlobalWidgets';
-
         foreach ($this->config->getProjectNamespaces() as $namespace) {
-            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass($targetClassName, $namespace);
+            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass(self::TARGET_CLASS_NAME, $namespace);
             if (!$classInformationTransfer) {
                 continue;
             }
 
             $classInformationTransfer = $this->getClassBuilderFacade()->wireClassConstant(
                 $classInformationTransfer,
-                $targetMethodName,
+                self::TARGET_METHOD_NAME,
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 'class'
             );
@@ -57,7 +60,7 @@ class WireWidgetManifestStrategy extends AbstractManifestStrategy
                 'Plugin %s was added to %s::%s',
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $classInformationTransfer->getClassName(),
-                $targetMethodName
+                self::TARGET_METHOD_NAME
             ), InputOutputInterface::DEBUG);
         }
 
