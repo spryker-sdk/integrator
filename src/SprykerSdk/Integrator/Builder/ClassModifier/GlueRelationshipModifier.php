@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
 use PhpParser\BuilderFactory;
@@ -25,7 +27,7 @@ use SprykerSdk\Integrator\Builder\Visitor\RemoveGlueRelationshipFromClassListVis
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class GlueRelationshipModifier
+class GlueRelationshipModifier implements GlueRelationshipModifierInterface
 {
     /**
      * @var \PhpParser\NodeTraverser
@@ -43,18 +45,34 @@ class GlueRelationshipModifier
     protected $classNodeFinder;
 
     /**
+     * @var \SprykerSdk\Integrator\Helper\ClassHelperInterface
+     */
+    protected $classHelper;
+
+    /**
+     * @var \PhpParser\BuilderFactory
+     */
+    protected $builderFactory;
+
+    /**
      * @param \PhpParser\NodeTraverser $nodeTraverser
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifier $commonClassModifier
      * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder $classNodeFinder
+     * @param \SprykerSdk\Integrator\Helper\ClassHelperInterface $classHelper
+     * @param \PhpParser\BuilderFactory $builderFactory
      */
     public function __construct(
         NodeTraverser $nodeTraverser,
         CommonClassModifier $commonClassModifier,
-        ClassNodeFinder $classNodeFinder
+        ClassNodeFinder $classNodeFinder,
+        ClassHelperInterface $classHelper,
+        BuilderFactory $builderFactory
     ) {
         $this->nodeTraverser = $nodeTraverser;
         $this->commonClassModifier = $commonClassModifier;
         $this->classNodeFinder = $classNodeFinder;
+        $this->builderFactory = $builderFactory;
+        $this->classHelper = $classHelper;
     }
 
     /**
@@ -87,34 +105,43 @@ class GlueRelationshipModifier
             return $classInformationTransfer;
         }
 
-        $classHelper = new ClassHelper();
-
         [$keyClass, $keyConst] = explode('::', $key);
 
         $this->nodeTraverser->addVisitor(new AddUseVisitor($classNameToAdd));
         $this->nodeTraverser->addVisitor(new AddUseVisitor($keyClass));
 
-        $builderFactory = new BuilderFactory();
-
-        $methodBody = [
-            new Expression(
-                $builderFactory->methodCall(
-                    $methodNode->params[0]->var,
-                    'addRelationship',
-                    $builderFactory->args(
-                        [
-                            new Arg($builderFactory->classConstFetch($classHelper->getShortClassName($keyClass), $keyConst)),
-                            new Arg($builderFactory->new($classHelper->getShortClassName($classNameToAdd))),
-                        ]
-                    )
-                )
-            ),
-        ];
+        $methodBody = $this->getMethodBody($methodNode, $classNameToAdd, $keyClass, $keyConst);
 
         $this->nodeTraverser->addVisitor(new MethodBodyExtendVisitor($targetMethodName, $methodBody));
         $classInformationTransfer->setClassTokenTree($this->nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
 
         return $classInformationTransfer;
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $methodNode
+     * @param string $classNameToAdd
+     * @param string $keyClass
+     * @param string $keyConst
+     *
+     * @return array<\PhpParser\Node\Stmt\Expression>
+     */
+    protected function getMethodBody(ClassMethod $methodNode, string $classNameToAdd, string $keyClass, string $keyConst): array
+    {
+        $arguments = [
+            new Arg($this->builderFactory->classConstFetch($this->classHelper->getShortClassName($keyClass), $keyConst)),
+            new Arg($this->builderFactory->new($this->classHelper->getShortClassName($classNameToAdd))),
+        ];
+
+        return [
+            new Expression(
+                $this->builderFactory->methodCall(
+                    $methodNode->params[0]->var,
+                    'addRelationship',
+                    $this->builderFactory->args($arguments)
+                )
+            ),
+        ];
     }
 
     /**

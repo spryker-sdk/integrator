@@ -91,6 +91,10 @@ class ClassGenerator implements ClassGeneratorInterface
 
         if ($parentClass) {
             $this->extendWithParentClass($className, $parentClass);
+
+            $classInformationTransfer->setParent(
+                $this->classLoader->loadClass($parentClass)
+            );
         }
 
         $this->classNamespaceBuilder->addStmt($this->classBuilder);
@@ -104,12 +108,6 @@ class ClassGenerator implements ClassGeneratorInterface
                 . $this->convertClassNameToPath($className)
                 . '.php'
             );
-
-        if ($parentClass) {
-            $classInformationTransfer->setParent(
-                $this->classLoader->loadClass($parentClass)
-            );
-        }
 
         return $classInformationTransfer;
     }

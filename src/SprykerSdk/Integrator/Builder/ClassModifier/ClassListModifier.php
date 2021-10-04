@@ -21,7 +21,7 @@ use SprykerSdk\Integrator\Builder\Visitor\RemoveClassFromClassListVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassListModifier
+class ClassListModifier implements ClassListModifierInterface
 {
     use AddVisitorsTrait;
 

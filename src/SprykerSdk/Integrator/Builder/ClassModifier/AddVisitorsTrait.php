@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
-
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
+
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 trait AddVisitorsTrait
 {
@@ -19,7 +19,7 @@ trait AddVisitorsTrait
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    protected function addVisitorsClassInformationTransfer(ClassInformationTransfer $classInformationTransfer, array $visitors ): ClassInformationTransfer
+    protected function addVisitorsClassInformationTransfer(ClassInformationTransfer $classInformationTransfer, array $visitors): ClassInformationTransfer
     {
         $nodeTraverser = new NodeTraverser();
         foreach ($visitors as $visitor) {

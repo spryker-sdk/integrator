@@ -7,16 +7,18 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\Builder\ClassWriter;
+namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-interface ClassWriterInterface
+interface ClassConstantModifierInterface
 {
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param string $constantName
+     * @param $value
      *
-     * @return bool
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function storeClass(ClassInformationTransfer $classInformationTransfer): bool;
+    public function setConstant(ClassInformationTransfer $classInformationTransfer, string $constantName, $value): ClassInformationTransfer;
 }

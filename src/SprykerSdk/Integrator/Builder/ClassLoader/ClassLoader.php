@@ -44,9 +44,9 @@ class ClassLoader implements ClassLoaderInterface
     /**
      * @param string $className
      *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function loadClass(string $className): ?ClassInformationTransfer
+    public function loadClass(string $className): ClassInformationTransfer
     {
         $className = ltrim($className, '\\');
 

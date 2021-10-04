@@ -7,6 +7,8 @@ declare(strict_types=1);
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace SprykerSdk\Integrator;
 
 use PhpParser\BuilderFactory;
@@ -315,7 +317,9 @@ class IntegratorFactory
         return new GlueRelationshipModifier(
             $this->getPhpParserNodeTraverser(),
             $this->createCommonClassModifier(),
-            $this->createClassNodeFinder()
+            $this->createClassNodeFinder(),
+            $this->createClassHelper(),
+            $this->createClassBuilderFactory()
         );
     }
 

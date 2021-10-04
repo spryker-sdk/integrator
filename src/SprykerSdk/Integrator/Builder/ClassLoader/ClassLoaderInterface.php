@@ -5,14 +5,18 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace SprykerSdk\Integrator\Builder\ClassLoader;
+
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 interface ClassLoaderInterface
 {
     /**
      * @param string $className
      *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function loadClass(string $className);
+    public function loadClass(string $className): ClassInformationTransfer;
 }

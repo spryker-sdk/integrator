@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
 use PhpParser\NodeTraverser;
@@ -12,7 +14,7 @@ use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Visitor\AddConstantVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassConstantModifier
+class ClassConstantModifier implements ClassConstantModifierInterface
 {
     use AddVisitorsTrait;
 

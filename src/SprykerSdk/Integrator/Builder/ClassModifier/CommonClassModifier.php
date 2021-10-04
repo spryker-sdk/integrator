@@ -27,7 +27,7 @@ use SprykerSdk\Integrator\Builder\Visitor\RemoveMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodeStmtByNameVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class CommonClassModifier
+class CommonClassModifier implements CommonClassModifierInterface
 {
     /**
      * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder
@@ -79,19 +79,7 @@ class CommonClassModifier
 
         $methodBody = [];
         if ($this->classMethodChecker->isMethodReturnArray($methodSyntaxTree)) {
-            $builder = new BuilderFactory();
-            $methodBody = [new Return_(new Array_())];
-            if (!$this->isMethodReturnArrayEmpty($methodSyntaxTree)) {
-                $methodBody = [new Return_(
-                    $builder->funcCall('array_merge', [
-                                       new Arg(new StaticCall(
-                                           new Name('parent'),
-                                           $targetMethodName
-                                       )),
-                                       new Arg(new Array_()),
-                    ])
-                )];
-            }
+            $methodBody = $this->buildMethodBodyToReturnArray($targetMethodName, $methodSyntaxTree);
         } elseif (count($methodSyntaxTree->params) === 1) {
             $methodBody = [new Return_($methodSyntaxTree->params[]->var)];
         }
@@ -105,6 +93,33 @@ class CommonClassModifier
         $classInformationTransfer->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
 
         return $classInformationTransfer;
+    }
+
+    /**
+     * @param string $methodName
+     * @param \PhpParser\Node\Stmt\ClassMethod $methodSyntaxTree
+     *
+     * @return array<\PhpParser\Node\Stmt\Return_>
+     */
+    protected function buildMethodBodyToReturnArray(string $methodName, ClassMethod $methodSyntaxTree): array
+    {
+        $builder = new BuilderFactory();
+        $methodBody = [new Return_(new Array_())];
+        if ($this->isMethodReturnArrayEmpty($methodSyntaxTree)) {
+            return $methodBody;
+        }
+
+        $methodBody = [new Return_(
+            $builder->funcCall('array_merge', [
+                new Arg(new StaticCall(
+                    new Name('parent'),
+                    $targetMethodName
+                )),
+                new Arg(new Array_()),
+            ])
+        )];
+
+        return $methodBody;
     }
 
     /**

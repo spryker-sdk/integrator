@@ -21,7 +21,7 @@ use SprykerSdk\Integrator\Builder\Visitor\RemovePluginFromPluginListVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassInstanceClassModifier
+class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
 {
     use AddVisitorsTrait;
 
@@ -85,14 +85,14 @@ class ClassInstanceClassModifier
                     $classNameToAdd,
                     $before,
                     $after
-                )
+                ),
             ];
 
             return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
         }
 
         $visitors = [
-            new AddUseVisitor($classNameToAdd)
+            new AddUseVisitor($classNameToAdd),
         ];
         $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
 
@@ -125,7 +125,7 @@ class ClassInstanceClassModifier
         }
 
         $visitors = [
-            new RemovePluginFromPluginListVisitor($targetMethodName, $classNameToRemove)
+            new RemovePluginFromPluginListVisitor($targetMethodName, $classNameToRemove),
         ];
 
         return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);

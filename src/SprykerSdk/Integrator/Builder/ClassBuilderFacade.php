@@ -13,11 +13,13 @@ use SprykerSdk\Integrator\Common\AbstractFacade;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassBuilderFacade extends AbstractFacade
+class ClassBuilderFacade extends AbstractFacade implements ClassBuilderFacadeInterface
 {
     use IntegratorFactoryAwareTrait;
 
     /**
+     * {@inheritDoc}
+     *
      * @param string $targetClassName
      * @param string $customOrganisation
      *
@@ -31,6 +33,8 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      *
      * @return bool
@@ -43,6 +47,8 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      *
      * @return string|null
@@ -55,6 +61,8 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $constantName
      * @param $value
@@ -69,6 +77,8 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      * @param string $classNameToAdd
@@ -90,6 +100,8 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $classNameToRemove
      * @param string $targetMethodName
@@ -107,6 +119,8 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      * @param string $classNameToAdd
@@ -126,6 +140,8 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $classNameToRemove
      * @param string $targetMethodName
@@ -143,6 +159,8 @@ class ClassBuilderFacade extends AbstractFacade
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $methodName
      * @param bool|int|float|string|array|null $value
