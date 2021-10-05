@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassGenerator;
 
+use PhpParser\Builder\Class_;
+use PhpParser\Builder\Namespace_;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
@@ -39,16 +41,6 @@ class ClassGenerator implements ClassGeneratorInterface
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
     protected $config;
-
-    /**
-     * @var \PhpParser\Builder\Class_
-     */
-    protected $classBuilder;
-
-    /**
-     * @var \PhpParser\Builder\Namespace_
-     */
-    protected $classNamespaceBuilder;
 
     /**
      * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader $classLoader
@@ -84,22 +76,23 @@ class ClassGenerator implements ClassGeneratorInterface
             $this->classHelper->getModuleName($className)
         );
 
-        $this->classBuilder = $this->builderFactory->class($this->classHelper->getShortClassName($className));
-        $this->classNamespaceBuilder = $this->builderFactory
+        $classBuilder = $this->builderFactory->class($this->classHelper->getShortClassName($className));
+        $classNamespaceBuilder = $this->builderFactory
             ->namespace(ltrim($this->classHelper->getClassNamespace($className), '\\'))
             ->setDocComment($this->findLicenseBlock($moduleDir));
 
         if ($parentClass) {
-            $this->extendWithParentClass($className, $parentClass);
+            $classBuilder = $this->extendClassBuilderWithParentClass($classBuilder, $className, $parentClass);
+            $classNamespaceBuilder = $this->extendNamespaceBuilderWithParentClass($classNamespaceBuilder, $className, $parentClass);
 
             $classInformationTransfer->setParent(
                 $this->classLoader->loadClass($parentClass)
             );
         }
 
-        $this->classNamespaceBuilder->addStmt($this->classBuilder);
+        $classNamespaceBuilder->addStmt($classBuilder);
 
-        $syntaxTree = [$this->classNamespaceBuilder->getNode()];
+        $syntaxTree = [$classNamespaceBuilder->getNode()];
 
         $classInformationTransfer->setClassTokenTree($syntaxTree)
             ->setFilePath(
@@ -113,25 +106,52 @@ class ClassGenerator implements ClassGeneratorInterface
     }
 
     /**
+     * @param \PhpParser\Builder\Class_ $classBuilder
      * @param string $className
      * @param string $parentClass
      *
-     * @return void
+     * @return \PhpParser\Builder\Class_
      */
-    protected function extendWithParentClass(string $className, string $parentClass): void
+    protected function extendClassBuilderWithParentClass(Class_ $classBuilder, string $className, string $parentClass): Class_
     {
-        $parentClassAlias = $this->classHelper->getShortClassName($parentClass);
-        if ($parentClassAlias === $this->classHelper->getShortClassName($className)) {
-            $parentClassAlias = $this->classHelper->getOrganisationName($parentClass) . $this->classHelper->getShortClassName($parentClass);
-        }
+        $parentClassAlias = $this->getParentClassAlias($className, $parentClass);
+
+        return $classBuilder->extend(new Name($parentClassAlias, []));
+    }
+
+    /**
+     * @param \PhpParser\Builder\Namespace_ $classNamespaceBuilder
+     * @param string $className
+     * @param string $parentClass
+     *
+     * @return \PhpParser\Builder\Namespace_
+     */
+    protected function extendNamespaceBuilderWithParentClass(Namespace_ $classNamespaceBuilder, string $className, string $parentClass): Namespace_
+    {
+        $parentClassAlias = $this->getParentClassAlias($className, $parentClass);
 
         $use = $this->builderFactory->use(ltrim($parentClass, '\\'));
         if ($parentClassAlias) {
             $use = $use->as($parentClassAlias);
         }
 
-        $this->classNamespaceBuilder = $this->classNamespaceBuilder->addStmt($use);
-        $this->classBuilder = $this->classBuilder->extend(new Name($parentClassAlias, []));
+        return $classNamespaceBuilder->addStmt($use);
+    }
+
+    /**
+     * @param string $className
+     * @param string $parentClass
+     *
+     * @return string
+     */
+    protected function getParentClassAlias(string $className, string $parentClass): string
+    {
+        $parentClassAlias = $this->classHelper->getShortClassName($parentClass);
+        if ($parentClassAlias === $this->classHelper->getShortClassName($className)) {
+            $parentClassAlias = $this->classHelper->getOrganisationName($parentClass) . $this->classHelper->getShortClassName($parentClass);
+        }
+
+        return $parentClassAlias;
     }
 
     /**
