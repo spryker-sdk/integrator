@@ -110,6 +110,7 @@ class IntegratorConfig extends AbstractConfig
         return [
             'Spryker',
             'SprykerShop',
+            'SprykerMerchantPortal',
         ];
     }
 
@@ -181,8 +182,6 @@ class IntegratorConfig extends AbstractConfig
 
     /**
      * @return string
-     * @api
-     *
      */
     public function getIntegratorLockFilePath(): string
     {
@@ -218,23 +217,7 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
-     * @return array<string>
-     * @api
-     *
-     */
-    public function getInternalOrganizations(): array
-    {
-        return [
-            'Spryker',
-            'SprykerShop',
-            'SprykerMerchantPortal',
-        ];
-    }
-
-    /**
      * @return array
-     * @api
-     *
      */
     public function getApplications()
     {
@@ -250,8 +233,6 @@ class IntegratorConfig extends AbstractConfig
 
     /**
      * @return array<string>
-     * @api
-     *
      */
     public function getInternalPackagePathFragments(): array
     {
@@ -264,8 +245,6 @@ class IntegratorConfig extends AbstractConfig
 
     /**
      * @return array<string>
-     * @api
-     *
      */
     public function getPathsToInternalOrganizations(): array
     {

@@ -83,7 +83,7 @@ class ModuleFinder implements ModuleFinderInterface
     protected function addStandaloneModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
         foreach ($this->getStandaloneModuleFinder() as $directoryInfo) {
-            if (in_array($this->camelCase($directoryInfo->getFilename()), $this->config->getInternalOrganizations(), true)) {
+            if (in_array($this->camelCase($directoryInfo->getFilename()), $this->config->getCoreNonSplitOrganisations(), true)) {
                 continue;
             }
 

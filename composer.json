@@ -1,5 +1,6 @@
 {
     "name": "spryker-sdk/integrator",
+    "bin": ["bin/integrator"],
     "type": "composer-plugin",
     "description": "Integrator module",
     "license": "proprietary",

@@ -18,6 +18,7 @@
 *.pdf binary
 *.xsd binary
 *.exe binary
+*.php diff=php
 
 # Remove files for archives generated using `git archive`
 codeception.yml export-ignore
