@@ -9,11 +9,10 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder;
 
-use SprykerSdk\Integrator\Common\AbstractFacade;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassBuilderFacade extends AbstractFacade implements ClassBuilderFacadeInterface
+class ClassBuilderFacade implements ClassBuilderFacadeInterface
 {
     use IntegratorFactoryAwareTrait;
 

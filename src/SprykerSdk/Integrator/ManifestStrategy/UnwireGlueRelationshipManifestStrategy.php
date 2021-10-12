@@ -40,7 +40,7 @@ class UnwireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
     {
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
-            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass(self::TARGET_CLASS_NAME, $namespace);
+            $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass(static::TARGET_CLASS_NAME, $namespace);
             if (!$classInformationTransfer) {
                 continue;
             }
@@ -59,24 +59,24 @@ class UnwireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
                 continue;
             }
 
-            $classInformationTransfer = $this->getClassBuilderFacade()->unwireGlueRelationship(
+            $classInformationTransfer = $this->createClassBuilderFacade()->unwireGlueRelationship(
                 $classInformationTransfer,
-                self::TARGET_METHOD_NAME,
+                static::TARGET_METHOD_NAME,
                 $targetClassKey,
                 $targetClass
             );
 
             if ($isDry) {
-                $applied = $inputOutput->writeln($this->getClassBuilderFacade()->printDiff($classInformationTransfer));
+                $applied = $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
             } else {
-                $applied = $this->getClassBuilderFacade()->storeClass($classInformationTransfer);
+                $applied = $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }
 
             $inputOutput->writeln(sprintf(
                 'GLUE relationship %s was removed from %s::%s',
                 $targetClassKey,
                 $classInformationTransfer->getClassName(),
-                self::TARGET_METHOD_NAME
+                static::TARGET_METHOD_NAME
             ), InputOutputInterface::DEBUG);
         }
 

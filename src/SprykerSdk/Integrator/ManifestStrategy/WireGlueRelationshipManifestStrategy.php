@@ -40,7 +40,7 @@ class WireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
     {
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
-            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass(static::TARGET_CLASS_NAME, $namespace);
+            $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass(static::TARGET_CLASS_NAME, $namespace);
             if (!$classInformationTransfer) {
                 continue;
             }
@@ -59,7 +59,7 @@ class WireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
                 continue;
             }
 
-            $classInformationTransfer = $this->getClassBuilderFacade()->wireGlueRelationship(
+            $classInformationTransfer = $this->createClassBuilderFacade()->wireGlueRelationship(
                 $classInformationTransfer,
                 static::TAGRET_METHOD_NAME,
                 $targetClassKey,
@@ -67,9 +67,9 @@ class WireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
             );
 
             if ($isDry) {
-                $applied = $inputOutput->writeln($this->getClassBuilderFacade()->printDiff($classInformationTransfer));
+                $applied = $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
             } else {
-                $applied = $this->getClassBuilderFacade()->storeClass($classInformationTransfer);
+                $applied = $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }
 
             $inputOutput->writeln(sprintf(

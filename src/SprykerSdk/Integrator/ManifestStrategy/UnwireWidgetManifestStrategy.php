@@ -40,28 +40,28 @@ class UnwireWidgetManifestStrategy extends AbstractManifestStrategy
     {
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
-            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass(self::TARGET_CLASS_NAME, $namespace);
+            $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass(static::TARGET_CLASS_NAME, $namespace);
             if (!$classInformationTransfer) {
                 continue;
             }
 
-            $classInformationTransfer = $this->getClassBuilderFacade()->unwireClassConstant(
+            $classInformationTransfer = $this->createClassBuilderFacade()->unwireClassConstant(
                 $classInformationTransfer,
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
-                self::TARGET_METHOD_NAME
+                static::TARGET_METHOD_NAME
             );
 
             if ($isDry) {
-                $applied = $inputOutput->writeln($this->getClassBuilderFacade()->printDiff($classInformationTransfer));
+                $applied = $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
             } else {
-                $applied = $this->getClassBuilderFacade()->storeClass($classInformationTransfer);
+                $applied = $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }
 
             $inputOutput->writeln(sprintf(
                 'Widget %s was added to %s::%s',
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $classInformationTransfer->getClassName(),
-                self::TARGET_METHOD_NAME
+                static::TARGET_METHOD_NAME
             ), InputOutputInterface::DEBUG);
         }
 

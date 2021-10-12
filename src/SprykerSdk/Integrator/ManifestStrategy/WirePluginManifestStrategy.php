@@ -60,12 +60,12 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
         }
 
         foreach ($this->config->getProjectNamespaces() as $namespace) {
-            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass($targetClassName, $namespace);
+            $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass($targetClassName, $namespace);
             if (!$classInformationTransfer) {
                 continue;
             }
 
-            $classInformationTransfer = $this->getClassBuilderFacade()->wireClassInstance(
+            $classInformationTransfer = $this->createClassBuilderFacade()->wireClassInstance(
                 $classInformationTransfer,
                 $targetMethodName,
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
@@ -74,9 +74,9 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
             );
 
             if ($isDry) {
-                $inputOutput->writeln($this->getClassBuilderFacade()->printDiff($classInformationTransfer));
+                $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
             } else {
-                $this->getClassBuilderFacade()->storeClass($classInformationTransfer);
+                $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }
 
             $inputOutput->writeln(sprintf(

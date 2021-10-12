@@ -43,7 +43,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
 
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
-            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass($targetClassName, $namespace);
+            $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass($targetClassName, $namespace);
 
             if (!$classInformationTransfer) {
                 continue;
@@ -61,16 +61,16 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
             if (method_exists($targetClassName, $targetPointName)) {
                 $classInformationTransfer = $this->adjustMethod($classInformationTransfer, $targetPointName, $value);
             } elseif ($this->constantExists($manifest[IntegratorConfig::MANIFEST_KEY_TARGET])) {
-                $classInformationTransfer = $this->getClassBuilderFacade()->setConstant($classInformationTransfer, $targetPointName, $value);
+                $classInformationTransfer = $this->createClassBuilderFacade()->setConstant($classInformationTransfer, $targetPointName, $value);
             } else {
                 continue;
             }
 
             if ($isDry) {
-                $inputOutput->writeln($this->getClassBuilderFacade()->printDiff($classInformationTransfer));
+                $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
                 $applied = true;
             } else {
-                $applied = $this->getClassBuilderFacade()->storeClass($classInformationTransfer);
+                $applied = $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }
 
             $inputOutput->writeln(sprintf(
@@ -95,7 +95,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
         if (is_string($value) && strpos($value, '::')) {
             [$className, $constantName] = explode('::', $value);
 
-            return $this->getClassBuilderFacade()->wireClassConstant(
+            return $this->createClassBuilderFacade()->wireClassConstant(
                 $classInformationTransfer,
                 $targetPointName,
                 $className,
@@ -103,7 +103,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
             );
         }
 
-        return $this->getClassBuilderFacade()->setMethodReturnValue(
+        return $this->createClassBuilderFacade()->setMethodReturnValue(
             $classInformationTransfer,
             $targetPointName,
             $value
@@ -119,7 +119,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
      */
     protected function adjustConstant(ClassInformationTransfer $classInformationTransfer, string $constantName, $value): ClassInformationTransfer
     {
-        return $this->getClassBuilderFacade()->setConstant($classInformationTransfer, $constantName, $value);
+        return $this->createClassBuilderFacade()->setConstant($classInformationTransfer, $constantName, $value);
     }
 
     /**

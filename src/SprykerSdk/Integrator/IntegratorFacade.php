@@ -9,10 +9,9 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator;
 
-use SprykerSdk\Integrator\Common\AbstractFacade;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 
-class IntegratorFacade extends AbstractFacade implements IntegratorFacadeInterface
+class IntegratorFacade implements IntegratorFacadeInterface
 {
     use IntegratorFactoryAwareTrait;
 

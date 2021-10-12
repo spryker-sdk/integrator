@@ -31,7 +31,7 @@ abstract class AbstractManifestStrategy implements ManifestStrategyInterface
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassBuilderFacade
      */
-    protected function getClassBuilderFacade(): ClassBuilderFacade
+    protected function createClassBuilderFacade(): ClassBuilderFacade
     {
         return new ClassBuilderFacade();
     }

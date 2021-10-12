@@ -9,11 +9,10 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ModuleFinder;
 
-use SprykerSdk\Integrator\Common\AbstractFacade;
 use SprykerSdk\Integrator\ModuleFinderFactoryAwareTrait;
 use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 
-class ModuleFinderFacade extends AbstractFacade implements ModuleFinderFacadeInterface
+class ModuleFinderFacade implements ModuleFinderFacadeInterface
 {
     use ModuleFinderFactoryAwareTrait;
 

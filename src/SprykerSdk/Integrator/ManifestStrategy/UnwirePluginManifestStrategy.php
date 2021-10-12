@@ -36,17 +36,17 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
 
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
-            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass($targetClassName, $namespace);
+            $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass($targetClassName, $namespace);
             if (!$classInformationTransfer) {
                 continue;
             }
 
-            $classInformationTransfer = $this->getClassBuilderFacade()->unwireClassInstance($classInformationTransfer, $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE], $targetMethodName);
+            $classInformationTransfer = $this->createClassBuilderFacade()->unwireClassInstance($classInformationTransfer, $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE], $targetMethodName);
             if ($classInformationTransfer) {
                 if ($isDry) {
-                    $applied = $inputOutput->writeln($this->getClassBuilderFacade()->printDiff($classInformationTransfer));
+                    $applied = $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
                 } else {
-                    $applied = $this->getClassBuilderFacade()->storeClass($classInformationTransfer);
+                    $applied = $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
                 }
                 $inputOutput->writeln(sprintf(
                     'Plugin %s was removed from %s::%s',

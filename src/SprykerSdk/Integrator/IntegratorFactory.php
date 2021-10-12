@@ -19,24 +19,38 @@ use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\Parser\Php7;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGenerator;
+use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
+use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassConstantModifier;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassConstantModifierInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceClassModifier;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceClassModifierInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassListModifier;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassListModifierInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifier;
+use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationshipModifier;
+use SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationshipModifierInterface;
 use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
+use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolverInterface;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriter;
+use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriterInterface;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
+use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
+use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinterInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
 use SprykerSdk\Integrator\Composer\ComposerLockReader;
+use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
+use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\Manifest\ManifestReader;
+use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureEnvManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureModuleManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\CopyModuleFileManifestStrategy;
@@ -66,15 +80,15 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Executor\ManifestExecutor
+     * @return \SprykerSdk\Integrator\Executor\ManifestExecutorInterface
      */
-    public function creatManifestExecutor(): ManifestExecutor
+    public function creatManifestExecutor(): ManifestExecutorInterface
     {
         return new ManifestExecutor(
             $this->createSprykerLockReader(),
             $this->createManifestReader(),
             $this->createSprykerLockWriter(),
-            $this->getManifestExecutors()
+            $this->getManifestExecutorStrategies()
         );
     }
 
@@ -95,25 +109,25 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Composer\ComposerLockReader
+     * @return \SprykerSdk\Integrator\Composer\ComposerLockReaderInterface
      */
-    public function createComposerLockReader(): ComposerLockReader
+    public function createComposerLockReader(): ComposerLockReaderInterface
     {
         return new ComposerLockReader($this->getConfig());
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Manifest\ManifestReader
+     * @return \SprykerSdk\Integrator\Manifest\ManifestReaderInterface
      */
-    public function createManifestReader(): ManifestReader
+    public function createManifestReader(): ManifestReaderInterface
     {
         return new ManifestReader($this->createComposerLockReader(), $this->getConfig());
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\ManifestStrategy\ManifestStrategyInterface
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createWirePluginManifestExecutor(): ManifestStrategyInterface
+    public function createWirePluginManifestStrategy(): ManifestStrategyInterface
     {
         return new WirePluginManifestStrategy(
             $this->getConfig()
@@ -121,9 +135,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\ManifestStrategy\ManifestStrategyInterface
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createUnwirePluginManifestExecutor(): ManifestStrategyInterface
+    public function createUnwirePluginManifestStrategy(): ManifestStrategyInterface
     {
         return new UnwirePluginManifestStrategy(
             $this->getConfig()
@@ -131,9 +145,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\ManifestStrategy\ManifestStrategyInterface
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createWireWidgetManifestExecutor(): ManifestStrategyInterface
+    public function createWireWidgetManifestStrategy(): ManifestStrategyInterface
     {
         return new WireWidgetManifestStrategy(
             $this->getConfig()
@@ -141,9 +155,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\ManifestStrategy\UnwireWidgetManifestStrategy
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createUnwireWidgetManifestExecutor(): UnwireWidgetManifestStrategy
+    public function createUnwireWidgetManifestStrategy(): ManifestStrategyInterface
     {
         return new UnwireWidgetManifestStrategy(
             $this->getConfig()
@@ -151,9 +165,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\ManifestStrategy\ConfigureModuleManifestStrategy
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createConfigureModuleManifestExecutor(): ConfigureModuleManifestStrategy
+    public function createConfigureModuleManifestStrategy(): ManifestStrategyInterface
     {
         return new ConfigureModuleManifestStrategy(
             $this->getConfig()
@@ -161,9 +175,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\ManifestStrategy\CopyModuleFileManifestStrategy
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createCopyFileManifestExecutor(): CopyModuleFileManifestStrategy
+    public function createCopyFileManifestStrategy(): ManifestStrategyInterface
     {
         return new CopyModuleFileManifestStrategy(
             $this->getConfig()
@@ -171,9 +185,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\ManifestStrategy\ConfigureEnvManifestStrategy
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createConfigureEnvManifestExecutor(): ConfigureEnvManifestStrategy
+    public function createConfigureEnvManifestStrategy(): ManifestStrategyInterface
     {
         return new ConfigureEnvManifestStrategy(
             $this->getConfig()
@@ -181,25 +195,25 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\ManifestStrategy\WireGlueRelationshipManifestStrategy
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createWireGlueRelationshipManifestStrategy(): WireGlueRelationshipManifestStrategy
+    public function createWireGlueRelationshipManifestStrategy(): ManifestStrategyInterface
     {
         return new WireGlueRelationshipManifestStrategy($this->getConfig());
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\ManifestStrategy\UnwireGlueRelationshipManifestStrategy
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createUnwireGlueRelationshipManifestStrategy(): UnwireGlueRelationshipManifestStrategy
+    public function createUnwireGlueRelationshipManifestStrategy(): ManifestStrategyInterface
     {
         return new UnwireGlueRelationshipManifestStrategy($this->getConfig());
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\ManifestStrategy\ExecuteConsoleManifestStrategy
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createExecuteConsoleManifestStrategy(): ExecuteConsoleManifestStrategy
+    public function createExecuteConsoleManifestStrategy(): ManifestStrategyInterface
     {
         return new ExecuteConsoleManifestStrategy(
             $this->getConfig()
@@ -207,23 +221,23 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\ClassWriter\ClassFileWriter
+     * @return \SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriterInterface
      */
-    public function createClassFileWriter(): ClassFileWriter
+    public function createClassFileWriter(): ClassFileWriterInterface
     {
         return new ClassFileWriter($this->createClassPrinter());
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\Printer\ClassDiffPrinter
+     * @return \SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinterInterface
      */
-    public function createClassDiffPrinter(): ClassDiffPrinter
+    public function createClassDiffPrinter(): ClassDiffPrinterInterface
     {
         return new ClassDiffPrinter($this->createClassPrinter());
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\Printer\ClassPrinter
+     * @return \SprykerSdk\Integrator\Builder\Printer\ClassPrinter
      */
     public function createClassPrinter(): ClassPrinter
     {
@@ -231,17 +245,17 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\ClassResolver\ClassResolver
+     * @return \SprykerSdk\Integrator\Builder\ClassResolver\ClassResolverInterface
      */
-    public function createClassResolver(): ClassResolver
+    public function createClassResolver(): ClassResolverInterface
     {
         return new ClassResolver($this->createClassLoader(), $this->createClassGenerator());
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\ClassLoader\ClassLoader
+     * @return \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
      */
-    public function createClassLoader(): ClassLoader
+    public function createClassLoader(): ClassLoaderInterface
     {
         $lexer = $this->createPhpParserLexer();
 
@@ -252,9 +266,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\ClassGenerator\ClassGenerator
+     * @return \SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface
      */
-    public function createClassGenerator(): ClassGenerator
+    public function createClassGenerator(): ClassGeneratorInterface
     {
         return new ClassGenerator(
             $this->createClassLoader(),
@@ -265,9 +279,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\ClassModifier\ClassInstanceClassModifier
+     * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceClassModifierInterface
      */
-    public function createClassInstanceClassModifier(): ClassInstanceClassModifier
+    public function createClassInstanceClassModifier(): ClassInstanceClassModifierInterface
     {
         return new ClassInstanceClassModifier(
             $this->createCommonClassModifier(),
@@ -277,9 +291,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\ClassModifier\CommonClassModifier
+     * @return \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface
      */
-    public function createCommonClassModifier(): CommonClassModifier
+    public function createCommonClassModifier(): CommonClassModifierInterface
     {
         return new CommonClassModifier(
             $this->createClassNodeFinder(),
@@ -288,9 +302,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\ClassModifier\ClassListModifier
+     * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassListModifierInterface
      */
-    public function createClassListModifier(): ClassListModifier
+    public function createClassListModifier(): ClassListModifierInterface
     {
         return new ClassListModifier(
             $this->getPhpParserNodeTraverser(),
@@ -300,9 +314,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\ClassModifier\ClassConstantModifier
+     * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassConstantModifierInterface
      */
-    public function createClassConstantModifier(): ClassConstantModifier
+    public function createClassConstantModifier(): ClassConstantModifierInterface
     {
         return new ClassConstantModifier(
             $this->createClassNodeFinder()
@@ -310,9 +324,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\ClassModifier\GlueRelationshipModifier
+     * @return \SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationshipModifierInterface
      */
-    public function createGlueRelationshipModifier(): GlueRelationshipModifier
+    public function createGlueRelationshipModifier(): GlueRelationshipModifierInterface
     {
         return new GlueRelationshipModifier(
             $this->getPhpParserNodeTraverser(),
@@ -332,9 +346,9 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\Builder\Finder\ClassNodeFinder
+     * @return \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
      */
-    public function createClassNodeFinder(): ClassNodeFinder
+    public function createClassNodeFinder(): ClassNodeFinderInterface
     {
         return new ClassNodeFinder();
     }
@@ -400,24 +414,24 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacadeInterface
      */
-    public function getModuleFinderFacade(): ModuleFinderFacadeInterface
+    public function getModuleFinderFacadeBusiness(): ModuleFinderFacadeInterface
     {
         return new ModuleFinderFacade();
     }
 
     /**
-     * @return array<mixed>
+     * @return array<\SprykerSdk\Integrator\\ManifestStrategy\ManifestStrategyInterface>
      */
-    public function getManifestExecutors(): array
+    public function getManifestExecutorStrategies(): array
     {
         return [
-            $this->createWirePluginManifestExecutor(),
-            $this->createUnwirePluginManifestExecutor(),
-            $this->createWireWidgetManifestExecutor(),
-            $this->createUnwireWidgetManifestExecutor(),
-            $this->createConfigureModuleManifestExecutor(),
-            $this->createCopyFileManifestExecutor(),
-            $this->createConfigureEnvManifestExecutor(),
+            $this->createWirePluginManifestStrategy(),
+            $this->createUnwirePluginManifestStrategy(),
+            $this->createWireWidgetManifestStrategy(),
+            $this->createUnwireWidgetManifestStrategy(),
+            $this->createConfigureModuleManifestStrategy(),
+            $this->createCopyFileManifestStrategy(),
+            $this->createConfigureEnvManifestStrategy(),
             $this->createWireGlueRelationshipManifestStrategy(),
             $this->createUnwireGlueRelationshipManifestStrategy(),
             $this->createExecuteConsoleManifestStrategy(),

@@ -39,28 +39,28 @@ class WireWidgetManifestStrategy extends AbstractManifestStrategy
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
         foreach ($this->config->getProjectNamespaces() as $namespace) {
-            $classInformationTransfer = $this->getClassBuilderFacade()->resolveClass(self::TARGET_CLASS_NAME, $namespace);
+            $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass(static::TARGET_CLASS_NAME, $namespace);
             if (!$classInformationTransfer) {
                 continue;
             }
 
-            $classInformationTransfer = $this->getClassBuilderFacade()->wireClassConstant(
+            $classInformationTransfer = $this->createClassBuilderFacade()->wireClassConstant(
                 $classInformationTransfer,
-                self::TARGET_METHOD_NAME,
+                static::TARGET_METHOD_NAME,
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 'class'
             );
 
             if ($isDry) {
-                $inputOutput->writeln($this->getClassBuilderFacade()->printDiff($classInformationTransfer));
+                $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
             } else {
-                $this->getClassBuilderFacade()->storeClass($classInformationTransfer);
+                $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }
             $inputOutput->writeln(sprintf(
                 'Plugin %s was added to %s::%s',
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $classInformationTransfer->getClassName(),
-                self::TARGET_METHOD_NAME
+                static::TARGET_METHOD_NAME
             ), InputOutputInterface::DEBUG);
         }
 
