@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\Integrator;
+namespace SprykerSdk\Integrator;
 
 use SprykerSdk\Integrator\IntegratorFacade;
 use SprykerSdk\Integrator\IntegratorFacadeInterface;
@@ -15,12 +15,12 @@ use SprykerSdk\Integrator\IntegratorFacadeInterface;
 trait IntegratorFacadeAwareTrait
 {
     /**
-     * @var \SprykerSdk\Integrator\Business\IntegratorFacade
+     * @var \SprykerSdk\Integrator\IntegratorFacadeInterface
      */
     protected $facade;
 
     /**
-     * @return \SprykerSdk\Integrator\Business\IntegratorFacade
+     * @return \SprykerSdk\Integrator\IntegratorFacadeInterface
      */
     protected function getFacade(): IntegratorFacadeInterface
     {
