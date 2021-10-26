@@ -7,9 +7,9 @@
 
 declare(strict_types=1);
 
-use Composer\IO\IOInterface;
-
 namespace SprykerSdk\Integrator\Dependency\Console;
+
+use Composer\IO\IOInterface;
 
 class ComposerIOAdapter implements IOInterface
 {
