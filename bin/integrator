@@ -1,6 +1,14 @@
 #!/usr/bin/env php
 <?php
 
+defined('APPLICATION_ROOT_DIR') || define('APPLICATION_ROOT_DIR', __DIR__ );
+
+defined('APPLICATION_SOURCE_DIR')
+|| define('APPLICATION_SOURCE_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'src');
+
+defined('APPLICATION_VENDOR_DIR')
+||  define('APPLICATION_VENDOR_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor');
+
 $autoloads = [
     __DIR__ . '/vendor/autoload.php',
     __DIR__ . '/../../autoload.php',
