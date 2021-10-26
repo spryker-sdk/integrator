@@ -59,6 +59,9 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
 
         defined('APPLICATION_ROOT_DIR')
         || define('APPLICATION_ROOT_DIR', realpath($composer->getConfig()->get('vendor-dir') . '/..'));
+
+        defined('APPLICATION_SOURCE_DIR')
+        || define('APPLICATION_SOURCE_DIR', realpath($composer->getConfig()->get('vendor-dir') . '/../src'));
     }
 
     /**
