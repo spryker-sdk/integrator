@@ -82,7 +82,7 @@ class ClassListModifier implements ClassListModifierInterface
             $classInformationTransfer = $this->commonClassModifier->overrideMethodFromParent($classInformationTransfer, $targetMethodName);
             $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         }
-        ≈
+
         if ($this->classMethodChecker->isMethodReturnArray($methodNode)) {
             $visitors = [
                 new AddUseVisitor($classNameToAdd),
