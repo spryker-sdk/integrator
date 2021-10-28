@@ -25,6 +25,9 @@ class IntegratorConfig extends AbstractConfig
     public const CORE_NAMESPACES = 'CORE_NAMESPACES';
     public const PROJECT_NAMESPACES = 'PROJECT_NAMESPACES';
 
+    protected const RECIPES_DIRECTORY = 'vendor/spryker-sdk/integrator/data/recipes/';
+    protected const RECIPES_URL = 'https://github.com/spryker-sdk/integrator-recipes/archive/master.zip';
+
     /**
      * @var array|null
      */
@@ -201,7 +204,7 @@ class IntegratorConfig extends AbstractConfig
      */
     public function getRecipesDirectory(): string
     {
-        return $this->getProjectRootDirectory() . 'vendor/spryker-sdk/integrator/data/recipies/';
+        return $this->getProjectRootDirectory() . static::RECIPES_DIRECTORY;
     }
 
     /**
@@ -213,7 +216,7 @@ class IntegratorConfig extends AbstractConfig
             return 'tests/_data/recipes/archive.zip';
         }
 
-        return 'https://github.com/spryker-sdk/integrator-recipes/archive/master.zip';
+        return static::RECIPES_URL;
     }
 
     /**
