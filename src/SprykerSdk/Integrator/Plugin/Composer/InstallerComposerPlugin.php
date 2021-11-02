@@ -17,9 +17,8 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
-use Spryker\Zed\Console\Business\Model\Environment;
-use SprykerSdk\Integrator\Business\IntegratorFacade;
-use SprykerSdk\Integrator\Business\IntegratorFacadeInterface;
+use SprykerSdk\Integrator\IntegratorFacade;
+use SprykerSdk\Integrator\IntegratorFacadeInterface;
 use SprykerSdk\Integrator\Common\UtilText\Filter\SeparatorToCamelCase;
 use SprykerSdk\Integrator\Dependency\Console\ComposerInputOutputAdapter;
 use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacade;
@@ -60,6 +59,12 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
 
         defined('APPLICATION_ROOT_DIR')
         || define('APPLICATION_ROOT_DIR', realpath($composer->getConfig()->get('vendor-dir') . '/..'));
+
+        defined('APPLICATION_SOURCE_DIR')
+        || define('APPLICATION_SOURCE_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'src');
+
+        defined('APPLICATION_VENDOR_DIR')
+        ||  define('APPLICATION_VENDOR_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor');
     }
 
     /**
@@ -135,8 +140,6 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
         $autoloadFile = $this->composer->getConfig()->get('vendor-dir') . '/autoload.php';
         include $autoloadFile;
 
-        Environment::initialize();
-
         $updatedModules = $this->createModuleFinderFacade()->getModules();
 
         $this->getIntegratorFacade()->runInstallation($updatedModules, new ComposerInputOutputAdapter($this->io));
@@ -166,7 +169,7 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\IntegratorFacadeInterface
+     * @return \SprykerSdk\Integrator\IntegratorFacadeInterface
      */
     protected function getIntegratorFacade(): IntegratorFacadeInterface
     {

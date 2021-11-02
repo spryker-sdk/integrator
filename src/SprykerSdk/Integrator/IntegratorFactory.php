@@ -7,8 +7,6 @@ declare(strict_types=1);
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types=1);
-
 namespace SprykerSdk\Integrator;
 
 use PhpParser\BuilderFactory;
@@ -414,7 +412,7 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacadeInterface
      */
-    public function getModuleFinderFacadeBusiness(): ModuleFinderFacadeInterface
+    public function getModuleFinderFacade(): ModuleFinderFacadeInterface
     {
         return new ModuleFinderFacade();
     }

@@ -5,7 +5,7 @@
     "description": "Integrator module",
     "license": "proprietary",
     "require": {
-        "php": ">=7.3",
+        "php": "^7.4 || ^8.0",
         "composer-plugin-api": "^1.0 || ^2.0",
         "composer/composer": "^2.1",
         "laminas/laminas-filter": "^2.11",
@@ -56,7 +56,7 @@
         "branch-alias": {
             "dev-master": "1.0.x-dev"
         },
-        "class": "SprykerSdk\\Integrator\\Communication\\Plugin\\Composer\\InstallerComposerPlugin"
+        "class": "SprykerSdk\\Integrator\\Plugin\\Composer\\InstallerComposerPlugin"
     },
     "config": {
         "sort-packages": true
