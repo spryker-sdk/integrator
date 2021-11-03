@@ -61,6 +61,7 @@ class IntegratorConfig extends AbstractConfig
      */
     protected function loadSharedConfig(): array
     {
+        defined('APPLICATION_STORE') ||  define('APPLICATION_STORE', 'DE');
         $fileName = $this->getSharedConfigPath();
 
         if (!file_exists($fileName)) {

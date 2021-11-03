@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Builder\ClassBuilderFacade;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 abstract class AbstractManifestStrategy implements ManifestStrategyInterface
@@ -21,11 +22,17 @@ abstract class AbstractManifestStrategy implements ManifestStrategyInterface
     protected $config;
 
     /**
+     * @var \SprykerSdk\Integrator\Helper\ClassHelperInterface
+     */
+    protected $classHelper;
+
+    /**
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
      */
-    public function __construct(IntegratorConfig $config)
+    public function __construct(IntegratorConfig $config, ClassHelperInterface $classHelper)
     {
         $this->config = $config;
+        $this->classHelper = $classHelper;
     }
 
     /**

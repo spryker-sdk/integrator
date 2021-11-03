@@ -128,7 +128,8 @@ class IntegratorFactory
     public function createWirePluginManifestStrategy(): ManifestStrategyInterface
     {
         return new WirePluginManifestStrategy(
-            $this->getConfig()
+            $this->getConfig(),
+            $this->createClassHelper()
         );
     }
 
@@ -138,7 +139,8 @@ class IntegratorFactory
     public function createUnwirePluginManifestStrategy(): ManifestStrategyInterface
     {
         return new UnwirePluginManifestStrategy(
-            $this->getConfig()
+            $this->getConfig(),
+            $this->createClassHelper()
         );
     }
 
@@ -148,7 +150,8 @@ class IntegratorFactory
     public function createWireWidgetManifestStrategy(): ManifestStrategyInterface
     {
         return new WireWidgetManifestStrategy(
-            $this->getConfig()
+            $this->getConfig(),
+            $this->createClassHelper()
         );
     }
 
@@ -158,7 +161,8 @@ class IntegratorFactory
     public function createUnwireWidgetManifestStrategy(): ManifestStrategyInterface
     {
         return new UnwireWidgetManifestStrategy(
-            $this->getConfig()
+            $this->getConfig(),
+            $this->createClassHelper()
         );
     }
 
@@ -168,7 +172,8 @@ class IntegratorFactory
     public function createConfigureModuleManifestStrategy(): ManifestStrategyInterface
     {
         return new ConfigureModuleManifestStrategy(
-            $this->getConfig()
+            $this->getConfig(),
+            $this->createClassHelper()
         );
     }
 
@@ -178,7 +183,8 @@ class IntegratorFactory
     public function createCopyFileManifestStrategy(): ManifestStrategyInterface
     {
         return new CopyModuleFileManifestStrategy(
-            $this->getConfig()
+            $this->getConfig(),
+            $this->createClassHelper()
         );
     }
 
@@ -188,7 +194,8 @@ class IntegratorFactory
     public function createConfigureEnvManifestStrategy(): ManifestStrategyInterface
     {
         return new ConfigureEnvManifestStrategy(
-            $this->getConfig()
+            $this->getConfig(),
+            $this->createClassHelper()
         );
     }
 
@@ -197,7 +204,10 @@ class IntegratorFactory
      */
     public function createWireGlueRelationshipManifestStrategy(): ManifestStrategyInterface
     {
-        return new WireGlueRelationshipManifestStrategy($this->getConfig());
+        return new WireGlueRelationshipManifestStrategy(
+            $this->getConfig(),
+            $this->createClassHelper()
+        );
     }
 
     /**
@@ -205,7 +215,10 @@ class IntegratorFactory
      */
     public function createUnwireGlueRelationshipManifestStrategy(): ManifestStrategyInterface
     {
-        return new UnwireGlueRelationshipManifestStrategy($this->getConfig());
+        return new UnwireGlueRelationshipManifestStrategy(
+            $this->getConfig(),
+            $this->createClassHelper()
+        );
     }
 
     /**
@@ -214,7 +227,8 @@ class IntegratorFactory
     public function createExecuteConsoleManifestStrategy(): ManifestStrategyInterface
     {
         return new ExecuteConsoleManifestStrategy(
-            $this->getConfig()
+            $this->getConfig(),
+            $this->createClassHelper()
         );
     }
 

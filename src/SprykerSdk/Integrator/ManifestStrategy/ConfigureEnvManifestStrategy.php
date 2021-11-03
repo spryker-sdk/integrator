@@ -48,6 +48,11 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
 
         $configFileName = $this->config->getConfigPath();
         if (!file_exists($configFileName)) {
+            $inputOutput->writeln(sprintf(
+                'File %s does not exist. Please check filepath.',
+                $configFileName
+            ), InputOutputInterface::DEBUG);
+
             return false;
         }
         if (!$isDry) {
