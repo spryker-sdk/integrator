@@ -50,7 +50,7 @@ interface ClassBuilderFacadeInterface
      *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $constantName
-     * @param $value
+     * @param mixed $value
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */

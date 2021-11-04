@@ -12,7 +12,7 @@ namespace SprykerSdk\Integrator\Builder\ClassWriter;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassFileWriter implements ClassWriterInterface
+class ClassFileWriter implements ClassFileWriterInterface
 {
     /**
      * @var \SprykerSdk\Integrator\Builder\Printer\ClassPrinter

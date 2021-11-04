@@ -56,8 +56,8 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     /**
      * @param string $methodName
      * @param string $className
-     * @param string|null $before
-     * @param string|null $after
+     * @param string $before
+     * @param string $after
      */
     public function __construct(string $methodName, string $className, string $before = '', string $after = '')
     {
@@ -70,9 +70,9 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return \PhpParser\Node|int|null
+     * @return \PhpParser\Node
      */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): Node
     {
         if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() === $this->methodName) {
             $this->methodFound = true;
@@ -101,7 +101,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
         $items = [];
         $itemAdded = false;
-        /** @var \PhpParser\Node\Expr\Array_ $node */
         foreach ($node->items as $item) {
             $nodeClassName = $item->value->class->toString();
             if ($nodeClassName === $this->before) {
@@ -138,7 +137,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      */
     protected function isPluginAdded(Node $node): bool
     {
-        /** @var \PhpParser\Node\Expr\Array_ $node */
         foreach ($node->items as $item) {
             if (!($item->value instanceof New_)) {
                 continue;

@@ -354,7 +354,7 @@ class OrganizationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false)
+    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayRecursiveNotCamelCased();
@@ -368,6 +368,8 @@ class OrganizationTransfer extends AbstractTransfer
         if (!$isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayNotRecursiveNotCamelCased();
         }
+
+        return [];
     }
 
     /**
@@ -376,7 +378,7 @@ class OrganizationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function toArray($isRecursive = true, $camelCasedKeys = false)
+    public function toArray($isRecursive = true, $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->toArrayRecursiveNotCamelCased();
@@ -390,6 +392,8 @@ class OrganizationTransfer extends AbstractTransfer
         if (!$isRecursive && $camelCasedKeys) {
             return $this->toArrayNotRecursiveCamelCased();
         }
+
+        return [];
     }
 
     /**

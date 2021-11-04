@@ -113,7 +113,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
             $arrayKey = $this->getArrayKey($property, $camelCasedKeys);
 
             if (is_object($value) && $isRecursive) {
-                if ($value instanceof TransferInterface) {
+                if ($value instanceof AbstractTransfer) {
                     $values[$arrayKey] = $value->$childConvertMethodName($isRecursive, $camelCasedKeys);
 
                     continue;
@@ -159,7 +159,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      * @param array $data
      * @param bool $ignoreMissingProperty
      *
-     * @return \SprykerSdk\SprykerSdk\Integrator\Transfer\AbstractTransfer
+     * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer
      */
     public function fromArray(array $data, $ignoreMissingProperty = false)
     {
@@ -198,7 +198,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      */
     protected function assertInstanceOfTransfer(string $property, $value): void
     {
-        if (!($value instanceof TransferInterface)) {
+        if (!($value instanceof AbstractTransfer)) {
             throw new Exception(sprintf(
                 'The value for the property "%s::$%s" must be an instance of AbstractTransfer.',
                 static::class,
@@ -224,7 +224,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      * @param array|\ArrayObject $arrayObject
      * @param bool $ignoreMissingProperty
      *
-     * @return \ArrayObject|\SprykerSdk\Integrator\Transfer[]
+     * @return \ArrayObject
      */
     protected function processArrayObject($elementType, $arrayObject, $ignoreMissingProperty = false): ArrayObject
     {
@@ -289,7 +289,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      * @param mixed $value
      * @param bool $ignoreMissingProperty
      *
-     * @return \SprykerSdk\SprykerSdk\Integrator\Transfer\AbstrastTransfer
+     * @return \SprykerSdk\Integrator\Transfer\AbstrastTransfer
      */
     protected function initializeNestedTransferObject($property, $value, $ignoreMissingProperty = false)
     {

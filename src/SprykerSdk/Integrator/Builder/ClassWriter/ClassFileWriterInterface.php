@@ -11,7 +11,7 @@ namespace SprykerSdk\Integrator\Builder\ClassWriter;
 
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-interface ClassWriterInterface
+interface ClassFileWriterInterface
 {
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer

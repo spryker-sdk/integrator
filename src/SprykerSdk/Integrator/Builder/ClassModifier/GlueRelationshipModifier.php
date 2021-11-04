@@ -24,7 +24,7 @@ use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\MethodBodyExtendVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveGlueRelationshipFromClassListVisitor;
-use SprykerSdk\Integrator\Helper\ClassHelper;
+use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class GlueRelationshipModifier implements GlueRelationshipModifierInterface

@@ -811,7 +811,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false)
+    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayRecursiveNotCamelCased();
@@ -825,6 +825,8 @@ class ModuleTransfer extends AbstractTransfer
         if (!$isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayNotRecursiveNotCamelCased();
         }
+
+        return [];
     }
 
     /**

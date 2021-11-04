@@ -16,6 +16,8 @@ abstract class AbstractConfig
      */
     protected static $instance;
 
+    final private function __construct(){}
+
     /**
      * @return \SprykerSdk\Integrator\Common\AbstractConfig
      */
@@ -28,4 +30,9 @@ abstract class AbstractConfig
 
         return static::$instance;
     }
+
+    /**
+     * @return void
+     */
+    abstract function loadConfig(): void;
 }
