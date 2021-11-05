@@ -21,7 +21,7 @@ class ModuleFinderFacade implements ModuleFinderFacadeInterface
      *
      * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
+     * @return array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
      */
     public function getProjectModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -33,7 +33,7 @@ class ModuleFinderFacade implements ModuleFinderFacadeInterface
      *
      * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
+     * @return array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
      */
     public function getModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -43,7 +43,7 @@ class ModuleFinderFacade implements ModuleFinderFacadeInterface
     /**
      * {@inheritDoc}
      *
-     * @return \SprykerSdk\Integrator\Transfer\PackageTransfer[]
+     * @return array<\SprykerSdk\Integrator\Transfer\PackageTransfer>
      */
     public function getPackages(): array
     {

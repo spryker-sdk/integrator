@@ -12,7 +12,7 @@ namespace SprykerSdk\Integrator\ModuleFinder\Package\PackageFinder;
 interface PackageFinderInterface
 {
     /**
-     * @return \SprykerSdk\Shared\Transfer\PackageTransfer[]
+     * @return array<\SprykerSdk\Integrator\Transfer\PackageTransfer>
      */
     public function getPackages(): array;
 }

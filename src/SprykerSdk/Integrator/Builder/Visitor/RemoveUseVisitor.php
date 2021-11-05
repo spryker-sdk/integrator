@@ -56,7 +56,7 @@ class RemoveUseVisitor extends NodeVisitorAbstract
         }
 
         if (!$this->useRemoved($node->stmts)) {
-            $node = $this->removeUse($node);
+            $node->stmts = $this->removeUse($node->stmts);
         }
 
         return $node;
@@ -85,27 +85,26 @@ class RemoveUseVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param \PhpParser\Node $node
+     * @param array<\PhpParser\Node\Stmt> $stmts
      *
-     * @return \PhpParser\Node
+     * @return array
      */
-    protected function removeUse(Node $node): Node
+    protected function removeUse(array $stmts): array
     {
-        $uses = [];
-        foreach ($node->stmts as $stmt) {
+        $result = [];
+        foreach ($stmts as $stmt) {
             /** @var \PhpParser\Node\Stmt\Use_ $stmt */
             if ($stmt->getType() !== static::STATEMENT_USE) {
+                $result[] = $stmt;
                 continue;
             }
             foreach ($stmt->uses as $use) {
                 if ($use->name->toString() !== $this->className) {
-                    $uses[] = $stmt;
+                    $result[] = $stmt;
                 }
             }
         }
 
-        $node->stmts = $uses;
-
-        return $node;
+        return $result;
     }
 }

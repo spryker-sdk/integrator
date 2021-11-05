@@ -12,7 +12,7 @@ namespace SprykerSdk\Integrator\ModuleFinder\Package\PackageFinder;
 use Laminas\Filter\FilterChain;
 use Laminas\Filter\Word\DashToCamelCase;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Shared\Transfer\PackageTransfer;
+use SprykerSdk\Integrator\Transfer\PackageTransfer;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -32,7 +32,7 @@ class PackageFinder implements PackageFinderInterface
     }
 
     /**
-     * @return \SprykerSdk\Shared\Transfer\PackageTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\PackageTransfer[]
      */
     public function getPackages(): array
     {
@@ -66,7 +66,7 @@ class PackageFinder implements PackageFinderInterface
     /**
      * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
      *
-     * @return \SprykerSdk\Shared\Transfer\PackageTransfer
+     * @return \SprykerSdk\Integrator\Transfer\PackageTransfer
      */
     protected function getPackageTransfer(SplFileInfo $directoryInfo): PackageTransfer
     {
@@ -120,7 +120,7 @@ class PackageFinder implements PackageFinderInterface
      * Packages which are standalone, can also be normal modules. This can be detected by the composer.json description
      * which contains `module` at the end of the description.
      *
-     * @param \SprykerSdk\Shared\Transfer\PackageTransfer $packageTransfer
+     * @param \SprykerSdk\Integrator\Transfer\PackageTransfer $packageTransfer
      *
      * @return bool
      */
