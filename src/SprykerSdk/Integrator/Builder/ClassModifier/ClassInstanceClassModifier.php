@@ -16,6 +16,7 @@ use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemovePluginFromPluginListVisitor;
+use SprykerSdk\Integrator\Builder\Visitor\RemoveUseVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -123,6 +124,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
         }
 
         $visitors = [
+            new RemoveUseVisitor($classNameToRemove),
             new RemovePluginFromPluginListVisitor($targetMethodName, $classNameToRemove),
         ];
 

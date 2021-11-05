@@ -41,10 +41,15 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
                 continue;
             }
 
-            $classInformationTransfer = $this->createClassBuilderFacade()->unwireClassInstance($classInformationTransfer, $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE], $targetMethodName);
+            $classInformationTransfer = $this->createClassBuilderFacade()->unwireClassInstance(
+                $classInformationTransfer,
+                $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
+                $targetMethodName
+            );
+
             if ($classInformationTransfer) {
                 if ($isDry) {
-                    $applied = $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
+                    $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
                 } else {
                     $applied = $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
                 }

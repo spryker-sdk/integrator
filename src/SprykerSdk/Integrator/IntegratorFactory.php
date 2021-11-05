@@ -321,7 +321,8 @@ class IntegratorFactory
         return new ClassListModifier(
             $this->getPhpParserNodeTraverser(),
             $this->createCommonClassModifier(),
-            $this->createClassNodeFinder()
+            $this->createClassNodeFinder(),
+            $this->createClassMethodChecker()
         );
     }
 
@@ -432,7 +433,7 @@ class IntegratorFactory
     }
 
     /**
-     * @return array<\SprykerSdk\Integrator\\ManifestStrategy\ManifestStrategyInterface>
+     * @return array<\SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface>
      */
     public function getManifestExecutorStrategies(): array
     {

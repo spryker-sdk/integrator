@@ -52,7 +52,7 @@ class UnwireWidgetManifestStrategy extends AbstractManifestStrategy
             );
 
             if ($isDry) {
-                $applied = $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
+                $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
             } else {
                 $applied = $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }

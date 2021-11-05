@@ -17,6 +17,7 @@ use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Visitor\AddClassToClassListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveClassFromClassListVisitor;
+use SprykerSdk\Integrator\Builder\Visitor\RemoveUseVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -130,6 +131,7 @@ class ClassListModifier implements ClassListModifierInterface
         }
 
         $visitors = [
+            new RemoveUseVisitor($classNameToRemove),
             new RemoveClassFromClassListVisitor($targetMethodName, $classNameToRemove)
         ];
 

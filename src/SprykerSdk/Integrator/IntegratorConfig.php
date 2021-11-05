@@ -71,7 +71,6 @@ class IntegratorConfig extends AbstractConfig
         include $fileName;
 
         return ${$this->getConfigVariableName()};
-
     }
 
     /**
