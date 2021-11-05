@@ -58,7 +58,7 @@ class UnwireWidgetManifestStrategy extends AbstractManifestStrategy
             }
 
             $inputOutput->writeln(sprintf(
-                'Widget %s was added to %s::%s',
+                'Widget %s was removed from %s::%s',
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $classInformationTransfer->getClassName(),
                 static::TARGET_METHOD_NAME

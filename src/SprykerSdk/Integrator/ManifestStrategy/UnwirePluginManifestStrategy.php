@@ -55,8 +55,8 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
                 }
                 $inputOutput->writeln(sprintf(
                     'Plugin %s was removed from %s::%s',
+                    $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                     $targetClassName,
-                    $classInformationTransfer->getClassName(),
                     $targetMethodName
                 ), InputOutputInterface::DEBUG);
             }
