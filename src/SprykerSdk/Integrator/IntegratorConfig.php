@@ -57,13 +57,21 @@ class IntegratorConfig extends AbstractConfig
     }
 
     /**
+     * @return void
+     */
+    protected function prepareSharedConfigDependencies(): void
+    {
+        defined('APPLICATION_STORE') ||  define('APPLICATION_STORE', 'DE');
+    }
+
+    /**
      * @return array
      */
     protected function loadSharedConfig(): array
     {
-        defined('APPLICATION_STORE') ||  define('APPLICATION_STORE', 'DE');
-        $fileName = $this->getSharedConfigPath();
+        $this->prepareSharedConfigDependencies();
 
+        $fileName = $this->getSharedConfigPath();
         if (!file_exists($fileName)) {
             return [];
         }
