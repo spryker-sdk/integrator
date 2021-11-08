@@ -12,12 +12,12 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
-use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Visitor\AddClassToClassListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveClassFromClassListVisitor;
+use SprykerSdk\Integrator\Builder\Visitor\RemoveUseVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -131,6 +131,7 @@ class ClassListModifier implements ClassListModifierInterface
         }
 
         $visitors = [
+            new RemoveUseVisitor($classNameToRemove),
             new RemoveClassFromClassListVisitor($targetMethodName, $classNameToRemove)
         ];
 

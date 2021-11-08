@@ -96,12 +96,12 @@ class CommonClassModifier implements CommonClassModifierInterface
     }
 
     /**
-     * @param string $methodName
+     * @param string $targetMethodName
      * @param \PhpParser\Node\Stmt\ClassMethod $methodSyntaxTree
      *
      * @return array<\PhpParser\Node\Stmt\Return_>
      */
-    protected function buildMethodBodyToReturnArray(string $methodName, ClassMethod $methodSyntaxTree): array
+    protected function buildMethodBodyToReturnArray(string $targetMethodName, ClassMethod $methodSyntaxTree): array
     {
         $builder = new BuilderFactory();
         $methodBody = [new Return_(new Array_())];
@@ -109,7 +109,7 @@ class CommonClassModifier implements CommonClassModifierInterface
             return $methodBody;
         }
 
-        $methodBody = [new Return_(
+        return [new Return_(
             $builder->funcCall('array_merge', [
                 new Arg(new StaticCall(
                     new Name('parent'),
@@ -118,14 +118,12 @@ class CommonClassModifier implements CommonClassModifierInterface
                 new Arg(new Array_()),
             ])
         )];
-
-        return $methodBody;
     }
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
-     * @param \PhpParser\Node[] $methodAst
+     * @param array<\PhpParser\Node> $methodAst
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */

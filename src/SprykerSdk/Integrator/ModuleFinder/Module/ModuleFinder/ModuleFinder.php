@@ -76,9 +76,9 @@ class ModuleFinder implements ModuleFinderInterface
 
     /**
      * @param array $moduleTransferCollection
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
      */
     protected function addStandaloneModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {

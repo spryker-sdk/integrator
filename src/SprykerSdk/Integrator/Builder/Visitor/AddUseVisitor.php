@@ -49,7 +49,7 @@ class AddUseVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return int|\PhpParser\Node|\PhpParser\Node[]|null
+     * @return int|\PhpParser\Node|array<\PhpParser\Node>|null
      */
     public function leaveNode(Node $node)
     {
@@ -85,7 +85,7 @@ class AddUseVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param \PhpParser\Node\Stmt[] $stmts
+     * @param array<\PhpParser\Node\Stmt> $stmts
      *
      * @return bool
      */

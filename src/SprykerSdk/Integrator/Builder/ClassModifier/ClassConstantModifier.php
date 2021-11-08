@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
-use PhpParser\NodeTraverser;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Visitor\AddConstantVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
@@ -34,7 +33,7 @@ class ClassConstantModifier implements ClassConstantModifierInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $constantName
-     * @param $value
+     * @param mixed $value
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */

@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\Printer;
 
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
+
 interface ClassDiffPrinterInterface
 {
     /**

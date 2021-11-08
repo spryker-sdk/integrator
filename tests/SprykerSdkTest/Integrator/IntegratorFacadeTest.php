@@ -329,6 +329,19 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
+    private function createTmpStandaloneModulesDirectory(): void
+    {
+        $fileSystem = $this->createFilesystem();
+        $path = $this->getTempStandaloneModulesDirectoryPath();
+
+        if (!$fileSystem->exists($path)) {
+            $fileSystem->mkdir($path, 0700);
+        }
+    }
+
+    /**
+     * @return void
+     */
     private function removeTmpDirectory(): void
     {
         $fileSystem = $this->createFilesystem();
@@ -358,8 +371,8 @@ class IntegratorFacadeTest extends BaseTestCase
      */
     private function prepareTestEnv(): void
     {
-        $this->removeTmpDirectory();
         $this->createTmpDirectory();
+        $this->createTmpStandaloneModulesDirectory();
         $this->copyProjectMockToTmpDirectory();
     }
 

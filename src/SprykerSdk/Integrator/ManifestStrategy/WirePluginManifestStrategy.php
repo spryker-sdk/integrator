@@ -11,7 +11,6 @@ namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use ReflectionClass;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
-use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 class WirePluginManifestStrategy extends AbstractManifestStrategy
@@ -36,12 +35,11 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
     {
         [$targetClassName, $targetMethodName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
 
-        $classHelper = new ClassHelper();
         if (!class_exists($targetClassName)) {
             $inputOutput->writeln(sprintf(
                 'Target module %s/%s does not exists in your system.',
-                $classHelper->getOrganisationName($targetClassName),
-                $classHelper->getModuleName($targetClassName)
+                $this->classHelper->getOrganisationName($targetClassName),
+                $this->classHelper->getModuleName($targetClassName)
             ), InputOutputInterface::DEBUG);
 
             return false;
@@ -52,8 +50,8 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
         if (!$targetClassInfo->hasMethod($targetMethodName)) {
             $inputOutput->writeln(sprintf(
                 'Your version of module %s/%s does not support needed plugin stack. Please, update it to use full functionality.',
-                $classHelper->getOrganisationName($targetClassName),
-                $classHelper->getModuleName($targetClassName)
+                $this->classHelper->getOrganisationName($targetClassName),
+                $this->classHelper->getModuleName($targetClassName)
             ), InputOutputInterface::DEBUG);
 
             return false;

@@ -24,7 +24,8 @@ use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\MethodBodyExtendVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveGlueRelationshipFromClassListVisitor;
-use SprykerSdk\Integrator\Helper\ClassHelper;
+use SprykerSdk\Integrator\Builder\Visitor\RemoveUseVisitor;
+use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class GlueRelationshipModifier implements GlueRelationshipModifierInterface
@@ -176,6 +177,7 @@ class GlueRelationshipModifier implements GlueRelationshipModifierInterface
 
         [$keyClass, $keyConst] = explode('::', $key);
 
+        $this->nodeTraverser->addVisitor(new RemoveUseVisitor($classNameToRemove));
         $this->nodeTraverser->addVisitor(new RemoveGlueRelationshipFromClassListVisitor($targetMethodName, $keyClass, $keyConst, $classNameToRemove));
         $classInformationTransfer->setClassTokenTree($this->nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
 

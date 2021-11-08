@@ -682,7 +682,7 @@ class ClassInformationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false)
+    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayRecursiveNotCamelCased();
@@ -696,6 +696,8 @@ class ClassInformationTransfer extends AbstractTransfer
         if (!$isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayNotRecursiveNotCamelCased();
         }
+
+        return [];
     }
 
     /**
@@ -704,7 +706,7 @@ class ClassInformationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function toArray($isRecursive = true, $camelCasedKeys = false)
+    public function toArray($isRecursive = true, $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->toArrayRecursiveNotCamelCased();
@@ -718,6 +720,8 @@ class ClassInformationTransfer extends AbstractTransfer
         if (!$isRecursive && $camelCasedKeys) {
             return $this->toArrayNotRecursiveCamelCased();
         }
+
+        return [];
     }
 
     /**

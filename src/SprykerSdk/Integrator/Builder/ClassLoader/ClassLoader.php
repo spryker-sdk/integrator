@@ -74,11 +74,11 @@ class ClassLoader implements ClassLoaderInterface
     }
 
     /**
-     * @param \PhpParser\Stmt|null $originalSyntaxTree
+     * @param array<\PhpParser\Node\Stmt>|null $originalSyntaxTree
      *
-     * @return \PhpParser\Node
+     * @return array<\PhpParser\Node>
      */
-    protected function traverseOriginalSyntaxTree(?Stmt $originalSyntaxTree): Node
+    protected function traverseOriginalSyntaxTree(?array $originalSyntaxTree): array
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new CloningVisitor());

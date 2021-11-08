@@ -24,7 +24,7 @@ class BaseTestCase extends PHPUnitTestCase
      */
     public function getIntegratorConfig(): IntegratorConfig
     {
-        return new IntegratorConfig();
+        return IntegratorConfig::getInstance();
     }
 
     /**
@@ -41,6 +41,14 @@ class BaseTestCase extends PHPUnitTestCase
     public function getTempDirectoryPath(): string
     {
         return APPLICATION_ROOT_DIR;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTempStandaloneModulesDirectoryPath(): string
+    {
+        return APPLICATION_STANDALONE_MODULES_DIR;
     }
 
     /**

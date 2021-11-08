@@ -9,14 +9,14 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ModuleFinder\Module\ProjectModuleFinder;
 
-use SprykerSdk\Shared\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 
 interface ProjectModuleFinderInterface
 {
     /**
-     * @param \SprykerSdk\Shared\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Shared\Transfer\ModuleTransfer[]
+     * @return array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
      */
     public function getProjectModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array;
 }

@@ -64,7 +64,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
      *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $constantName
-     * @param $value
+     * @param mixed $value
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -81,8 +81,8 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
      * @param string $classNameToAdd
-     * @param string|null $before
-     * @param string|null $after
+     * @param string $before
+     * @param string $after
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */

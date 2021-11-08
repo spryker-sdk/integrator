@@ -52,13 +52,13 @@ class UnwireWidgetManifestStrategy extends AbstractManifestStrategy
             );
 
             if ($isDry) {
-                $applied = $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
+                $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
             } else {
                 $applied = $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }
 
             $inputOutput->writeln(sprintf(
-                'Widget %s was added to %s::%s',
+                'Widget %s was removed from %s::%s',
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $classInformationTransfer->getClassName(),
                 static::TARGET_METHOD_NAME

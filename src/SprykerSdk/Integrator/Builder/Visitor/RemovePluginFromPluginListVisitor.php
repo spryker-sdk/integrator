@@ -52,9 +52,9 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return \PhpParser\Node|int|null
+     * @return \PhpParser\Node
      */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): Node
     {
         if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() === $this->targetMethodName) {
             $this->methodFound = true;
@@ -78,7 +78,6 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
     protected function removePlugin(Node $node): Node
     {
         $items = [];
-        /** @var \PhpParser\Node\Expr\Array_ $node */
         foreach ($node->items as $item) {
             $nodeClassName = $item->value->class->toString();
             if ($nodeClassName !== $this->classNameToRemove) {

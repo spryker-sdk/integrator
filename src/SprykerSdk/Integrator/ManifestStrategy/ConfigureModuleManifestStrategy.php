@@ -12,6 +12,7 @@ namespace SprykerSdk\Integrator\ManifestStrategy;
 use ReflectionClassConstant;
 use ReflectionException;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -63,6 +64,13 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
             } elseif ($this->constantExists($manifest[IntegratorConfig::MANIFEST_KEY_TARGET])) {
                 $classInformationTransfer = $this->createClassBuilderFacade()->setConstant($classInformationTransfer, $targetPointName, $value);
             } else {
+                $inputOutput->writeln(sprintf(
+                    'Your version of module %s/%s does not have target method or constant %s. Please, update it to use full functionality.',
+                    $this->classHelper->getOrganisationName($targetClassName),
+                    $this->classHelper->getModuleName($targetClassName),
+                    $targetPointName
+                ), InputOutputInterface::DEBUG);
+
                 continue;
             }
 

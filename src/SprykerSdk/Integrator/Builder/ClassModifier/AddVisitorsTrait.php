@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
+use PhpParser\NodeTraverser;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 trait AddVisitorsTrait

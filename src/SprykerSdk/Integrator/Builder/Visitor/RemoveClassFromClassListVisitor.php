@@ -53,9 +53,9 @@ class RemoveClassFromClassListVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return \PhpParser\Node|int|null
+     * @return \PhpParser\Node
      */
-    public function enterNode(Node $node)
+    public function enterNode(Node $node): Node
     {
         if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() === $this->targetMethodName) {
             $this->methodFound = true;
@@ -79,7 +79,6 @@ class RemoveClassFromClassListVisitor extends NodeVisitorAbstract
     protected function removeClass(Node $node): Node
     {
         $items = [];
-        /** @var \PhpParser\Node\Expr\Array_ $node */
         foreach ($node->items as $item) {
             if ($item->value instanceof ClassConstFetch && $item->value->class->toString() !== $this->classNameToRemove) {
                 $items[] = $item;
