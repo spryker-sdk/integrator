@@ -1,0 +1,7 @@
+{
+    "wire-widget": [
+        {
+            "source": "\\Spryker\\Yves\\TestIntegratorWireWidget\\Widget\\TestWidget"
+        }
+    ]
+}
