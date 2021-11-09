@@ -48,6 +48,12 @@ jobs:
             - name: Check PHP for syntax errors
               run: find ./src -path src -prune -o -type f -name '*.php' -print0 | xargs -0 -n1 -P4 php -l -n | (! grep -v "No syntax errors detected" )
 
+            - name: PHPStan checks
+              run: composer stan
+
+            - name: CodeStyle checks
+              run: composer cs-check
+
     prefer-lowest:
         runs-on: ubuntu-20.04
         strategy:
