@@ -16,6 +16,8 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\Parser\Php7;
+use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
+use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGenerator;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
@@ -34,8 +36,6 @@ use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
 use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolverInterface;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriter;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriterInterface;
-use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
-use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
@@ -86,7 +86,7 @@ class IntegratorFactory
             $this->createSprykerLockReader(),
             $this->createManifestReader(),
             $this->createSprykerLockWriter(),
-            $this->getManifestExecutorStrategies()
+            $this->getManifestExecutorStrategies(),
         );
     }
 
@@ -129,7 +129,7 @@ class IntegratorFactory
     {
         return new WirePluginManifestStrategy(
             $this->getConfig(),
-            $this->createClassHelper()
+            $this->createClassHelper(),
         );
     }
 
@@ -140,7 +140,7 @@ class IntegratorFactory
     {
         return new UnwirePluginManifestStrategy(
             $this->getConfig(),
-            $this->createClassHelper()
+            $this->createClassHelper(),
         );
     }
 
@@ -151,7 +151,7 @@ class IntegratorFactory
     {
         return new WireWidgetManifestStrategy(
             $this->getConfig(),
-            $this->createClassHelper()
+            $this->createClassHelper(),
         );
     }
 
@@ -162,7 +162,7 @@ class IntegratorFactory
     {
         return new UnwireWidgetManifestStrategy(
             $this->getConfig(),
-            $this->createClassHelper()
+            $this->createClassHelper(),
         );
     }
 
@@ -173,7 +173,7 @@ class IntegratorFactory
     {
         return new ConfigureModuleManifestStrategy(
             $this->getConfig(),
-            $this->createClassHelper()
+            $this->createClassHelper(),
         );
     }
 
@@ -184,7 +184,7 @@ class IntegratorFactory
     {
         return new CopyModuleFileManifestStrategy(
             $this->getConfig(),
-            $this->createClassHelper()
+            $this->createClassHelper(),
         );
     }
 
@@ -195,7 +195,7 @@ class IntegratorFactory
     {
         return new ConfigureEnvManifestStrategy(
             $this->getConfig(),
-            $this->createClassHelper()
+            $this->createClassHelper(),
         );
     }
 
@@ -206,7 +206,7 @@ class IntegratorFactory
     {
         return new WireGlueRelationshipManifestStrategy(
             $this->getConfig(),
-            $this->createClassHelper()
+            $this->createClassHelper(),
         );
     }
 
@@ -217,7 +217,7 @@ class IntegratorFactory
     {
         return new UnwireGlueRelationshipManifestStrategy(
             $this->getConfig(),
-            $this->createClassHelper()
+            $this->createClassHelper(),
         );
     }
 
@@ -228,7 +228,7 @@ class IntegratorFactory
     {
         return new ExecuteConsoleManifestStrategy(
             $this->getConfig(),
-            $this->createClassHelper()
+            $this->createClassHelper(),
         );
     }
 
@@ -273,7 +273,7 @@ class IntegratorFactory
 
         return new ClassLoader(
             $this->createPhpParserParser($lexer),
-            $lexer
+            $lexer,
         );
     }
 
@@ -286,7 +286,7 @@ class IntegratorFactory
             $this->createClassLoader(),
             $this->createClassHelper(),
             $this->createClassBuilderFactory(),
-            $this->getConfig()
+            $this->getConfig(),
         );
     }
 
@@ -298,7 +298,7 @@ class IntegratorFactory
         return new ClassInstanceClassModifier(
             $this->createCommonClassModifier(),
             $this->createClassNodeFinder(),
-            $this->createClassMethodChecker()
+            $this->createClassMethodChecker(),
         );
     }
 
@@ -309,7 +309,7 @@ class IntegratorFactory
     {
         return new CommonClassModifier(
             $this->createClassNodeFinder(),
-            $this->createClassMethodChecker()
+            $this->createClassMethodChecker(),
         );
     }
 
@@ -322,7 +322,7 @@ class IntegratorFactory
             $this->getPhpParserNodeTraverser(),
             $this->createCommonClassModifier(),
             $this->createClassNodeFinder(),
-            $this->createClassMethodChecker()
+            $this->createClassMethodChecker(),
         );
     }
 
@@ -332,7 +332,7 @@ class IntegratorFactory
     public function createClassConstantModifier(): ClassConstantModifierInterface
     {
         return new ClassConstantModifier(
-            $this->createClassNodeFinder()
+            $this->createClassNodeFinder(),
         );
     }
 
@@ -346,7 +346,7 @@ class IntegratorFactory
             $this->createCommonClassModifier(),
             $this->createClassNodeFinder(),
             $this->createClassHelper(),
-            $this->createClassBuilderFactory()
+            $this->createClassBuilderFactory(),
         );
     }
 

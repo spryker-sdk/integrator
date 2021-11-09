@@ -24,7 +24,14 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class IntegratorFacadeTest extends BaseTestCase
 {
+    /**
+     * @var string
+     */
     protected const RECIPES_DIR_PATH = '_data/recipes/src';
+
+    /**
+     * @var string
+     */
     protected const ZIP_PATH = '_data/recipes/archive.zip';
 
     /**

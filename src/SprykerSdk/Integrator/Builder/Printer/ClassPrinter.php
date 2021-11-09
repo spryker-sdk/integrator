@@ -30,7 +30,7 @@ class ClassPrinter extends Standard
     /**
      * Pretty prints an array of nodes (statements) and indents them optionally.
      *
-     * @param \PhpParser\Node[] $nodes Array of nodes
+     * @param array<\PhpParser\Node> $nodes Array of nodes
      * @param bool $indent Whether to indent the printed nodes
      *
      * @return string Pretty printed statements

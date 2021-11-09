@@ -13,6 +13,9 @@ use InvalidArgumentException;
 
 class ApplicationTransfer extends AbstractTransfer
 {
+    /**
+     * @var string
+     */
     public const NAME = 'name';
 
     /**
@@ -56,7 +59,7 @@ class ApplicationTransfer extends AbstractTransfer
     public function setName($name)
     {
         $this->name = $name;
-        $this->modifiedProperties[self::NAME] = true;
+        $this->modifiedProperties[static::NAME] = true;
 
         return $this;
     }
@@ -92,7 +95,7 @@ class ApplicationTransfer extends AbstractTransfer
      */
     public function requireName()
     {
-        $this->assertPropertyIsSet(self::NAME);
+        $this->assertPropertyIsSet(static::NAME);
 
         return $this;
     }

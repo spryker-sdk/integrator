@@ -32,7 +32,7 @@ class AddMethodVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return array|int|\PhpParser\Node|null
+     * @return \PhpParser\Node|array|int|null
      */
     public function enterNode(Node $node)
     {

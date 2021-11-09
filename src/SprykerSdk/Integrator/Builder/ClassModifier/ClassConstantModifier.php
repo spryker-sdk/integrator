@@ -50,7 +50,7 @@ class ClassConstantModifier implements ClassConstantModifierInterface
         }
 
         $visitors = [
-            new AddConstantVisitor($constantName, $value, $modifier)
+            new AddConstantVisitor($constantName, $value, $modifier),
         ];
 
         return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);

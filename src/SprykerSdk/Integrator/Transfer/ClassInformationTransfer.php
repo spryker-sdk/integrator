@@ -14,20 +14,44 @@ use InvalidArgumentException;
 
 class ClassInformationTransfer extends AbstractTransfer
 {
+    /**
+     * @var string
+     */
     public const FULLY_QUALIFIED_CLASS_NAME = 'fullyQualifiedClassName';
 
+    /**
+     * @var string
+     */
     public const CLASS_NAME = 'className';
 
+    /**
+     * @var string
+     */
     public const FILE_PATH = 'filePath';
 
+    /**
+     * @var string
+     */
     public const PARENT = 'parent';
 
+    /**
+     * @var string
+     */
     public const CLASS_TOKEN_TREE = 'classTokenTree';
 
+    /**
+     * @var string
+     */
     public const ORIGINAL_CLASS_TOKEN_TREE = 'originalClassTokenTree';
 
+    /**
+     * @var string
+     */
     public const TOKENS = 'tokens';
 
+    /**
+     * @var string
+     */
     public const METHODS = 'methods';
 
     /**
@@ -209,7 +233,7 @@ class ClassInformationTransfer extends AbstractTransfer
     public function setFullyQualifiedClassName($fullyQualifiedClassName)
     {
         $this->fullyQualifiedClassName = $fullyQualifiedClassName;
-        $this->modifiedProperties[self::FULLY_QUALIFIED_CLASS_NAME] = true;
+        $this->modifiedProperties[static::FULLY_QUALIFIED_CLASS_NAME] = true;
 
         return $this;
     }
@@ -245,7 +269,7 @@ class ClassInformationTransfer extends AbstractTransfer
      */
     public function requireFullyQualifiedClassName()
     {
-        $this->assertPropertyIsSet(self::FULLY_QUALIFIED_CLASS_NAME);
+        $this->assertPropertyIsSet(static::FULLY_QUALIFIED_CLASS_NAME);
 
         return $this;
     }
@@ -260,7 +284,7 @@ class ClassInformationTransfer extends AbstractTransfer
     public function setClassName($className)
     {
         $this->className = $className;
-        $this->modifiedProperties[self::CLASS_NAME] = true;
+        $this->modifiedProperties[static::CLASS_NAME] = true;
 
         return $this;
     }
@@ -296,7 +320,7 @@ class ClassInformationTransfer extends AbstractTransfer
      */
     public function requireClassName()
     {
-        $this->assertPropertyIsSet(self::CLASS_NAME);
+        $this->assertPropertyIsSet(static::CLASS_NAME);
 
         return $this;
     }
@@ -311,7 +335,7 @@ class ClassInformationTransfer extends AbstractTransfer
     public function setFilePath($filePath)
     {
         $this->filePath = $filePath;
-        $this->modifiedProperties[self::FILE_PATH] = true;
+        $this->modifiedProperties[static::FILE_PATH] = true;
 
         return $this;
     }
@@ -347,7 +371,7 @@ class ClassInformationTransfer extends AbstractTransfer
      */
     public function requireFilePath()
     {
-        $this->assertPropertyIsSet(self::FILE_PATH);
+        $this->assertPropertyIsSet(static::FILE_PATH);
 
         return $this;
     }
@@ -362,7 +386,7 @@ class ClassInformationTransfer extends AbstractTransfer
     public function setParent(?ClassInformationTransfer $parent = null)
     {
         $this->parent = $parent;
-        $this->modifiedProperties[self::PARENT] = true;
+        $this->modifiedProperties[static::PARENT] = true;
 
         return $this;
     }
@@ -398,7 +422,7 @@ class ClassInformationTransfer extends AbstractTransfer
      */
     public function requireParent()
     {
-        $this->assertPropertyIsSet(self::PARENT);
+        $this->assertPropertyIsSet(static::PARENT);
 
         return $this;
     }
@@ -417,7 +441,7 @@ class ClassInformationTransfer extends AbstractTransfer
         }
 
         $this->classTokenTree = $classTokenTree;
-        $this->modifiedProperties[self::CLASS_TOKEN_TREE] = true;
+        $this->modifiedProperties[static::CLASS_TOKEN_TREE] = true;
 
         return $this;
     }
@@ -442,7 +466,7 @@ class ClassInformationTransfer extends AbstractTransfer
     public function addAstData($astData)
     {
         $this->classTokenTree[] = $astData;
-        $this->modifiedProperties[self::CLASS_TOKEN_TREE] = true;
+        $this->modifiedProperties[static::CLASS_TOKEN_TREE] = true;
 
         return $this;
     }
@@ -454,7 +478,7 @@ class ClassInformationTransfer extends AbstractTransfer
      */
     public function requireClassTokenTree()
     {
-        $this->assertPropertyIsSet(self::CLASS_TOKEN_TREE);
+        $this->assertPropertyIsSet(static::CLASS_TOKEN_TREE);
 
         return $this;
     }
@@ -473,7 +497,7 @@ class ClassInformationTransfer extends AbstractTransfer
         }
 
         $this->originalClassTokenTree = $originalClassTokenTree;
-        $this->modifiedProperties[self::ORIGINAL_CLASS_TOKEN_TREE] = true;
+        $this->modifiedProperties[static::ORIGINAL_CLASS_TOKEN_TREE] = true;
 
         return $this;
     }
@@ -498,7 +522,7 @@ class ClassInformationTransfer extends AbstractTransfer
     public function addOriginalAstData($originalAstData)
     {
         $this->originalClassTokenTree[] = $originalAstData;
-        $this->modifiedProperties[self::ORIGINAL_CLASS_TOKEN_TREE] = true;
+        $this->modifiedProperties[static::ORIGINAL_CLASS_TOKEN_TREE] = true;
 
         return $this;
     }
@@ -510,7 +534,7 @@ class ClassInformationTransfer extends AbstractTransfer
      */
     public function requireOriginalClassTokenTree()
     {
-        $this->assertPropertyIsSet(self::ORIGINAL_CLASS_TOKEN_TREE);
+        $this->assertPropertyIsSet(static::ORIGINAL_CLASS_TOKEN_TREE);
 
         return $this;
     }
@@ -529,7 +553,7 @@ class ClassInformationTransfer extends AbstractTransfer
         }
 
         $this->tokens = $tokens;
-        $this->modifiedProperties[self::TOKENS] = true;
+        $this->modifiedProperties[static::TOKENS] = true;
 
         return $this;
     }
@@ -554,7 +578,7 @@ class ClassInformationTransfer extends AbstractTransfer
     public function addToken($token)
     {
         $this->tokens[] = $token;
-        $this->modifiedProperties[self::TOKENS] = true;
+        $this->modifiedProperties[static::TOKENS] = true;
 
         return $this;
     }
@@ -566,7 +590,7 @@ class ClassInformationTransfer extends AbstractTransfer
      */
     public function requireTokens()
     {
-        $this->assertPropertyIsSet(self::TOKENS);
+        $this->assertPropertyIsSet(static::TOKENS);
 
         return $this;
     }
@@ -574,14 +598,14 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @param \ArrayObject|\SprykerSdk\Integrator\Transfer\MethodInformationTransfer[] $methods
+     * @param \SprykerSdk\Integrator\Transfer\MethodInformationTransfer[]|\ArrayObject $methods
      *
      * @return $this
      */
     public function setMethods(ArrayObject $methods)
     {
         $this->methods = $methods;
-        $this->modifiedProperties[self::METHODS] = true;
+        $this->modifiedProperties[static::METHODS] = true;
 
         return $this;
     }
@@ -589,7 +613,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @return \ArrayObject|\SprykerSdk\Integrator\Transfer\MethodInformationTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\MethodInformationTransfer[]|\ArrayObject
      */
     public function getMethods()
     {
@@ -606,7 +630,7 @@ class ClassInformationTransfer extends AbstractTransfer
     public function addMethod(MethodInformationTransfer $method)
     {
         $this->methods[] = $method;
-        $this->modifiedProperties[self::METHODS] = true;
+        $this->modifiedProperties[static::METHODS] = true;
 
         return $this;
     }
@@ -618,7 +642,7 @@ class ClassInformationTransfer extends AbstractTransfer
      */
     public function requireMethods()
     {
-        $this->assertCollectionPropertyIsSet(self::METHODS);
+        $this->assertCollectionPropertyIsSet(static::METHODS);
 
         return $this;
     }

@@ -18,6 +18,10 @@ class WireWidgetManifestStrategy extends AbstractManifestStrategy
      * @var string
      */
     protected const TARGET_CLASS_NAME = '\SprykerShop\Yves\ShopApplication\ShopApplicationDependencyProvider';
+
+    /**
+     * @var string
+     */
     protected const TARGET_METHOD_NAME = 'getGlobalWidgets';
 
     /**
@@ -48,7 +52,7 @@ class WireWidgetManifestStrategy extends AbstractManifestStrategy
                 $classInformationTransfer,
                 static::TARGET_METHOD_NAME,
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
-                'class'
+                'class',
             );
 
             if ($isDry) {
@@ -60,7 +64,7 @@ class WireWidgetManifestStrategy extends AbstractManifestStrategy
                 'Plugin %s was added to %s::%s',
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $classInformationTransfer->getClassName(),
-                static::TARGET_METHOD_NAME
+                static::TARGET_METHOD_NAME,
             ), InputOutputInterface::DEBUG);
         }
 

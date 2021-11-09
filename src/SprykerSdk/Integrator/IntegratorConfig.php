@@ -13,19 +13,64 @@ use SprykerSdk\Integrator\Common\AbstractConfig;
 
 class IntegratorConfig extends AbstractConfig
 {
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_TARGET = 'target';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_SOURCE = 'source';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_VALUE = 'value';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_DEFAULT_VALUE = 'default';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_CHOICES = 'choices';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_POSITION = 'position';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_POSITION_BEFORE = 'before';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_POSITION_AFTER = 'after';
 
+    /**
+     * @var string
+     */
     public const CORE_NAMESPACES = 'CORE_NAMESPACES';
+
+    /**
+     * @var string
+     */
     public const PROJECT_NAMESPACES = 'PROJECT_NAMESPACES';
 
+    /**
+     * @var string
+     */
     protected const RECIPES_DIRECTORY = 'vendor/spryker-sdk/integrator/data/recipes/';
+
+    /**
+     * @var string
+     */
     protected const RECIPES_URL = 'https://github.com/spryker-sdk/integrator-recipes/archive/master.zip';
 
     /**
@@ -61,7 +106,7 @@ class IntegratorConfig extends AbstractConfig
      */
     protected function prepareSharedConfigDependencies(): void
     {
-        defined('APPLICATION_STORE') ||  define('APPLICATION_STORE', 'DE');
+        defined('APPLICATION_STORE') || define('APPLICATION_STORE', 'DE');
     }
 
     /**

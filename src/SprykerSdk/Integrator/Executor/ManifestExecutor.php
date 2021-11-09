@@ -42,7 +42,7 @@ class ManifestExecutor implements ManifestExecutorInterface
      * @param \SprykerSdk\Integrator\SprykerLock\SprykerLockReader $sprykerLockReader
      * @param \SprykerSdk\Integrator\Manifest\ManifestReader $manifestReader
      * @param \SprykerSdk\Integrator\SprykerLock\SprykerLockWriter $sprykerLockWriter
-     * @param \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface[] $manifestExecutors
+     * @param array<\SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface> $manifestExecutors
      */
     public function __construct(
         SprykerLockReader $sprykerLockReader,

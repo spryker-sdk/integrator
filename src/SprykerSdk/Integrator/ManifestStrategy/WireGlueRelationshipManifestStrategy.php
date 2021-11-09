@@ -18,6 +18,10 @@ class WireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
      * @var string
      */
     protected const TARGET_CLASS_NAME = '\Spryker\Glue\GlueApplication\GlueApplicationDependencyProvider';
+
+    /**
+     * @var string
+     */
     protected const TARGET_METHOD_NAME = 'getResourceRelationshipPlugins';
 
     /**
@@ -63,7 +67,7 @@ class WireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
                 $classInformationTransfer,
                 static::TARGET_METHOD_NAME,
                 $targetClassKey,
-                $targetClass
+                $targetClass,
             );
 
             if ($isDry) {
@@ -76,7 +80,7 @@ class WireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
                 'GLUE relationship %s was added to %s::%s',
                 $targetClassKey,
                 $classInformationTransfer->getClassName(),
-                static::TARGET_METHOD_NAME
+                static::TARGET_METHOD_NAME,
             ), InputOutputInterface::DEBUG);
         }
 

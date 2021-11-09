@@ -9,9 +9,6 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator;
 
-use SprykerSdk\Integrator\IntegratorFacade;
-use SprykerSdk\Integrator\IntegratorFacadeInterface;
-
 trait IntegratorFacadeAwareTrait
 {
     /**

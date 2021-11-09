@@ -49,7 +49,7 @@ class AddConstantVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return int|\PhpParser\Node|null
+     * @return \PhpParser\Node|int|null
      */
     public function enterNode(Node $node)
     {

@@ -83,7 +83,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
                     $targetMethodName,
                     $classNameToAdd,
                     $before,
-                    $after
+                    $after,
                 ),
             ];
 

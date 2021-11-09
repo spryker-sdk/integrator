@@ -121,8 +121,8 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
         return new ArrayItem(
             (new BuilderFactory())->classConstFetch(
                 (new ClassHelper())->getShortClassName($this->className),
-                $this->constantName
-            )
+                $this->constantName,
+            ),
         );
     }
 }

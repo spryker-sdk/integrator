@@ -48,7 +48,7 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         $inputOutput->writeln(sprintf(
             'File %s was copied to %s',
             $source,
-            $targetPath
+            $targetPath,
         ), InputOutputInterface::DEBUG);
 
         return true;

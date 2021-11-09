@@ -17,10 +17,10 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
-use SprykerSdk\Integrator\IntegratorFacade;
-use SprykerSdk\Integrator\IntegratorFacadeInterface;
 use SprykerSdk\Integrator\Common\UtilText\Filter\SeparatorToCamelCase;
 use SprykerSdk\Integrator\Dependency\Console\ComposerInputOutputAdapter;
+use SprykerSdk\Integrator\IntegratorFacade;
+use SprykerSdk\Integrator\IntegratorFacadeInterface;
 use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacade;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
@@ -38,7 +38,7 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
     protected $io;
 
     /**
-     * @var \Composer\DependencyResolver\Operation\OperationInterface[]
+     * @var array<\Composer\DependencyResolver\Operation\OperationInterface>
      */
     protected $operations = [];
 
@@ -64,7 +64,7 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
         || define('APPLICATION_SOURCE_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'src');
 
         defined('APPLICATION_VENDOR_DIR')
-        ||  define('APPLICATION_VENDOR_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor');
+        || define('APPLICATION_VENDOR_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor');
     }
 
     /**

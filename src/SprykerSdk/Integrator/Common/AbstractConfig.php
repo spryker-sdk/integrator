@@ -16,9 +16,13 @@ abstract class AbstractConfig
      */
     protected static $instance;
 
-    final private function __construct(){}
+    final private function __construct()
+    {
+    }
 
     /**
+     * @api
+     *
      * @return \SprykerSdk\Integrator\Common\AbstractConfig
      */
     public static function getInstance()

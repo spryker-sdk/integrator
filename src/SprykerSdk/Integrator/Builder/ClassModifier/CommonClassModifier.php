@@ -113,10 +113,10 @@ class CommonClassModifier implements CommonClassModifierInterface
             $builder->funcCall('array_merge', [
                 new Arg(new StaticCall(
                     new Name('parent'),
-                    $targetMethodName
+                    $targetMethodName,
                 )),
                 new Arg(new Array_()),
-            ])
+            ]),
         )];
     }
 
@@ -154,7 +154,7 @@ class CommonClassModifier implements CommonClassModifierInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $methodName
-     * @param bool|int|float|string|array|null $value
+     * @param array|string|float|int|bool|null $value
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */

@@ -13,16 +13,34 @@ use InvalidArgumentException;
 
 class PackageTransfer extends AbstractTransfer
 {
+    /**
+     * @var string
+     */
     public const COMPOSER_NAME = 'composerName';
 
+    /**
+     * @var string
+     */
     public const ORGANIZATION_NAME = 'organizationName';
 
+    /**
+     * @var string
+     */
     public const ORGANIZATION_NAME_DASHED = 'organizationNameDashed';
 
+    /**
+     * @var string
+     */
     public const PACKAGE_NAME = 'packageName';
 
+    /**
+     * @var string
+     */
     public const PACKAGE_NAME_DASHED = 'packageNameDashed';
 
+    /**
+     * @var string
+     */
     public const PATH = 'path';
 
     /**
@@ -166,7 +184,7 @@ class PackageTransfer extends AbstractTransfer
     public function setComposerName($composerName)
     {
         $this->composerName = $composerName;
-        $this->modifiedProperties[self::COMPOSER_NAME] = true;
+        $this->modifiedProperties[static::COMPOSER_NAME] = true;
 
         return $this;
     }
@@ -202,7 +220,7 @@ class PackageTransfer extends AbstractTransfer
      */
     public function requireComposerName()
     {
-        $this->assertPropertyIsSet(self::COMPOSER_NAME);
+        $this->assertPropertyIsSet(static::COMPOSER_NAME);
 
         return $this;
     }
@@ -217,7 +235,7 @@ class PackageTransfer extends AbstractTransfer
     public function setOrganizationName($organizationName)
     {
         $this->organizationName = $organizationName;
-        $this->modifiedProperties[self::ORGANIZATION_NAME] = true;
+        $this->modifiedProperties[static::ORGANIZATION_NAME] = true;
 
         return $this;
     }
@@ -253,7 +271,7 @@ class PackageTransfer extends AbstractTransfer
      */
     public function requireOrganizationName()
     {
-        $this->assertPropertyIsSet(self::ORGANIZATION_NAME);
+        $this->assertPropertyIsSet(static::ORGANIZATION_NAME);
 
         return $this;
     }
@@ -268,7 +286,7 @@ class PackageTransfer extends AbstractTransfer
     public function setOrganizationNameDashed($organizationNameDashed)
     {
         $this->organizationNameDashed = $organizationNameDashed;
-        $this->modifiedProperties[self::ORGANIZATION_NAME_DASHED] = true;
+        $this->modifiedProperties[static::ORGANIZATION_NAME_DASHED] = true;
 
         return $this;
     }
@@ -304,7 +322,7 @@ class PackageTransfer extends AbstractTransfer
      */
     public function requireOrganizationNameDashed()
     {
-        $this->assertPropertyIsSet(self::ORGANIZATION_NAME_DASHED);
+        $this->assertPropertyIsSet(static::ORGANIZATION_NAME_DASHED);
 
         return $this;
     }
@@ -319,7 +337,7 @@ class PackageTransfer extends AbstractTransfer
     public function setPackageName($packageName)
     {
         $this->packageName = $packageName;
-        $this->modifiedProperties[self::PACKAGE_NAME] = true;
+        $this->modifiedProperties[static::PACKAGE_NAME] = true;
 
         return $this;
     }
@@ -355,7 +373,7 @@ class PackageTransfer extends AbstractTransfer
      */
     public function requirePackageName()
     {
-        $this->assertPropertyIsSet(self::PACKAGE_NAME);
+        $this->assertPropertyIsSet(static::PACKAGE_NAME);
 
         return $this;
     }
@@ -370,7 +388,7 @@ class PackageTransfer extends AbstractTransfer
     public function setPackageNameDashed($packageNameDashed)
     {
         $this->packageNameDashed = $packageNameDashed;
-        $this->modifiedProperties[self::PACKAGE_NAME_DASHED] = true;
+        $this->modifiedProperties[static::PACKAGE_NAME_DASHED] = true;
 
         return $this;
     }
@@ -406,7 +424,7 @@ class PackageTransfer extends AbstractTransfer
      */
     public function requirePackageNameDashed()
     {
-        $this->assertPropertyIsSet(self::PACKAGE_NAME_DASHED);
+        $this->assertPropertyIsSet(static::PACKAGE_NAME_DASHED);
 
         return $this;
     }
@@ -421,7 +439,7 @@ class PackageTransfer extends AbstractTransfer
     public function setPath($path)
     {
         $this->path = $path;
-        $this->modifiedProperties[self::PATH] = true;
+        $this->modifiedProperties[static::PATH] = true;
 
         return $this;
     }
@@ -457,7 +475,7 @@ class PackageTransfer extends AbstractTransfer
      */
     public function requirePath()
     {
-        $this->assertPropertyIsSet(self::PATH);
+        $this->assertPropertyIsSet(static::PATH);
 
         return $this;
     }

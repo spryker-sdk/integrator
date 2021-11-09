@@ -44,7 +44,7 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
             $classInformationTransfer = $this->createClassBuilderFacade()->unwireClassInstance(
                 $classInformationTransfer,
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
-                $targetMethodName
+                $targetMethodName,
             );
 
             if ($classInformationTransfer) {
@@ -57,7 +57,7 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
                     'Plugin %s was removed from %s::%s',
                     $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                     $targetClassName,
-                    $targetMethodName
+                    $targetMethodName,
                 ), InputOutputInterface::DEBUG);
             }
         }

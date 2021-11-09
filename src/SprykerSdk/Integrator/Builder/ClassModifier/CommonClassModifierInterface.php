@@ -24,7 +24,7 @@ interface CommonClassModifierInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
-     * @param \PhpParser\Node[] $methodAst
+     * @param array<\PhpParser\Node> $methodAst
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -41,7 +41,7 @@ interface CommonClassModifierInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $methodName
-     * @param bool|int|float|string|array|null $value
+     * @param array|string|float|int|bool|null $value
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */

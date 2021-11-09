@@ -15,7 +15,6 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
 use SprykerSdk\Integrator\Common\UtilText\Filter\CamelCaseToSeparator;
-use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
@@ -73,7 +72,7 @@ class ClassGenerator implements ClassGeneratorInterface
 
         $moduleDir = $this->resolveModuleDir(
             $this->classHelper->getOrganisationName($className),
-            $this->classHelper->getModuleName($className)
+            $this->classHelper->getModuleName($className),
         );
 
         $classBuilder = $this->builderFactory->class($this->classHelper->getShortClassName($className));
@@ -86,7 +85,7 @@ class ClassGenerator implements ClassGeneratorInterface
             $classNamespaceBuilder = $this->extendNamespaceBuilderWithParentClass($classNamespaceBuilder, $className, $parentClass);
 
             $classInformationTransfer->setParent(
-                $this->classLoader->loadClass($parentClass)
+                $this->classLoader->loadClass($parentClass),
             );
         }
 
@@ -99,7 +98,7 @@ class ClassGenerator implements ClassGeneratorInterface
                 $moduleDir
                 . '/src'
                 . $this->convertClassNameToPath($className)
-                . '.php'
+                . '.php',
             );
 
         return $classInformationTransfer;
@@ -197,7 +196,7 @@ class ClassGenerator implements ClassGeneratorInterface
     /**
      * @param string $className
      *
-     * @return string|array<string>
+     * @return array<string>|string
      */
     protected function convertClassNameToPath(string $className)
     {

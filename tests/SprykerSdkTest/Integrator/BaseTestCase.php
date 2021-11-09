@@ -78,10 +78,10 @@ class BaseTestCase extends PHPUnitTestCase
         $zip = new ZipArchive();
         $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
-        /** @var \SplFileInfo[] $files */
+        /** @var array<\SplFileInfo> $files */
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($dirPath),
-            RecursiveIteratorIterator::LEAVES_ONLY
+            RecursiveIteratorIterator::LEAVES_ONLY,
         );
 
         foreach ($files as $name => $file) {

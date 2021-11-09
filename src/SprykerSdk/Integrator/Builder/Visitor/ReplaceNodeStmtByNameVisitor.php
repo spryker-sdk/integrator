@@ -22,13 +22,13 @@ class ReplaceNodeStmtByNameVisitor extends NodeVisitorAbstract
     protected $name;
 
     /**
-     * @var \PhpParser\Node[]
+     * @var array<\PhpParser\Node>
      */
     protected $stmt;
 
     /**
      * @param string $name
-     * @param \PhpParser\Node[] $stmts
+     * @param array<\PhpParser\Node> $stmts
      */
     public function __construct(string $name, array $stmts)
     {
@@ -39,7 +39,7 @@ class ReplaceNodeStmtByNameVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return int|\PhpParser\Node|null
+     * @return \PhpParser\Node|int|null
      */
     public function enterNode(Node $node)
     {

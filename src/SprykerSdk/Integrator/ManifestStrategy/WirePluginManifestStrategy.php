@@ -39,7 +39,7 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
             $inputOutput->writeln(sprintf(
                 'Target module %s/%s does not exists in your system.',
                 $this->classHelper->getOrganisationName($targetClassName),
-                $this->classHelper->getModuleName($targetClassName)
+                $this->classHelper->getModuleName($targetClassName),
             ), InputOutputInterface::DEBUG);
 
             return false;
@@ -51,7 +51,7 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
             $inputOutput->writeln(sprintf(
                 'Your version of module %s/%s does not support needed plugin stack. Please, update it to use full functionality.',
                 $this->classHelper->getOrganisationName($targetClassName),
-                $this->classHelper->getModuleName($targetClassName)
+                $this->classHelper->getModuleName($targetClassName),
             ), InputOutputInterface::DEBUG);
 
             return false;
@@ -68,7 +68,7 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
                 $targetMethodName,
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] ?? '',
-                $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? ''
+                $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '',
             );
 
             if ($isDry) {
@@ -81,7 +81,7 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
                 'Plugin %s was added to %s::%s',
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $classInformationTransfer->getClassName(),
-                $targetMethodName
+                $targetMethodName,
             ), InputOutputInterface::DEBUG);
         }
 

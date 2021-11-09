@@ -38,11 +38,11 @@ class ClassFileWriter implements ClassFileWriterInterface
             $code = $this->classPrinter->printFormatPreserving(
                 $classInformationTransfer->getClassTokenTree(),
                 $classInformationTransfer->getOriginalClassTokenTree(),
-                $classInformationTransfer->getTokens()
+                $classInformationTransfer->getTokens(),
             );
         } else {
             $code = $this->classPrinter->prettyPrintFile(
-                $classInformationTransfer->getClassTokenTree()
+                $classInformationTransfer->getClassTokenTree(),
             );
         }
 

@@ -13,6 +13,9 @@ use SprykerSdkTest\Integrator\BaseTestCase;
 
 class ComposerLockReaderTest extends BaseTestCase
 {
+    /**
+     * @var string
+     */
     private const DEFAULT_PACKAGE_NAME = 'Nikic.PhpParser';
 
     /**
@@ -23,7 +26,7 @@ class ComposerLockReaderTest extends BaseTestCase
         $composerLockReader = $this->createComposerLockReadr();
 
         $this->assertTrue(count($composerLockReader->getModuleVersions()) > 0);
-        $this->assertArrayHasKey(self::DEFAULT_PACKAGE_NAME, $composerLockReader->getModuleVersions());
+        $this->assertArrayHasKey(static::DEFAULT_PACKAGE_NAME, $composerLockReader->getModuleVersions());
     }
 
     /**

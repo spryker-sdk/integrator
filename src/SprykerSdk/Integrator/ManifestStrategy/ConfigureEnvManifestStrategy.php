@@ -42,7 +42,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
                 "'Provide value for $target global configuration.'",
                 $choices,
                 $inputOutput,
-                $defaultValue
+                $defaultValue,
             );
         }
 
@@ -50,7 +50,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
         if (!file_exists($configFileName)) {
             $inputOutput->writeln(sprintf(
                 'File %s does not exist. Please check filepath.',
-                $configFileName
+                $configFileName,
             ), InputOutputInterface::DEBUG);
 
             return false;
@@ -63,7 +63,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
             'Global config %s was added with to %s value %s',
             $target,
             $configFileName,
-            $value
+            $value,
         ), InputOutputInterface::DEBUG);
 
         return true;

@@ -14,24 +14,54 @@ use InvalidArgumentException;
 
 class ModuleTransfer extends AbstractTransfer
 {
+    /**
+     * @var string
+     */
     public const NAME = 'name';
 
+    /**
+     * @var string
+     */
     public const NAME_DASHED = 'nameDashed';
 
+    /**
+     * @var string
+     */
     public const ORGANIZATION = 'organization';
 
+    /**
+     * @var string
+     */
     public const APPLICATION = 'application';
 
+    /**
+     * @var string
+     */
     public const LAYER = 'layer';
 
+    /**
+     * @var string
+     */
     public const PATH = 'path';
 
+    /**
+     * @var string
+     */
     public const OPTIONS = 'options';
 
+    /**
+     * @var string
+     */
     public const DEPENDENT_MODULE = 'dependentModule';
 
+    /**
+     * @var string
+     */
     public const APPLICATIONS = 'applications';
 
+    /**
+     * @var string
+     */
     public const IS_STANDALONE = 'isStandalone';
 
     /**
@@ -75,7 +105,7 @@ class ModuleTransfer extends AbstractTransfer
     protected $dependentModule;
 
     /**
-     * @var \ArrayObject|\SprykerSdk\Integrator\Transfer\ApplicationTransfer[]
+     * @var \SprykerSdk\Integrator\Transfer\ApplicationTransfer[]|\ArrayObject
      */
     protected $applications;
 
@@ -249,7 +279,7 @@ class ModuleTransfer extends AbstractTransfer
     public function setName($name)
     {
         $this->name = $name;
-        $this->modifiedProperties[self::NAME] = true;
+        $this->modifiedProperties[static::NAME] = true;
 
         return $this;
     }
@@ -285,7 +315,7 @@ class ModuleTransfer extends AbstractTransfer
      */
     public function requireName()
     {
-        $this->assertPropertyIsSet(self::NAME);
+        $this->assertPropertyIsSet(static::NAME);
 
         return $this;
     }
@@ -300,7 +330,7 @@ class ModuleTransfer extends AbstractTransfer
     public function setNameDashed($nameDashed)
     {
         $this->nameDashed = $nameDashed;
-        $this->modifiedProperties[self::NAME_DASHED] = true;
+        $this->modifiedProperties[static::NAME_DASHED] = true;
 
         return $this;
     }
@@ -336,7 +366,7 @@ class ModuleTransfer extends AbstractTransfer
      */
     public function requireNameDashed()
     {
-        $this->assertPropertyIsSet(self::NAME_DASHED);
+        $this->assertPropertyIsSet(static::NAME_DASHED);
 
         return $this;
     }
@@ -351,7 +381,7 @@ class ModuleTransfer extends AbstractTransfer
     public function setOrganization(?OrganizationTransfer $organization = null)
     {
         $this->organization = $organization;
-        $this->modifiedProperties[self::ORGANIZATION] = true;
+        $this->modifiedProperties[static::ORGANIZATION] = true;
 
         return $this;
     }
@@ -387,7 +417,7 @@ class ModuleTransfer extends AbstractTransfer
      */
     public function requireOrganization()
     {
-        $this->assertPropertyIsSet(self::ORGANIZATION);
+        $this->assertPropertyIsSet(static::ORGANIZATION);
 
         return $this;
     }
@@ -402,7 +432,7 @@ class ModuleTransfer extends AbstractTransfer
     public function setApplication(?ApplicationTransfer $application = null)
     {
         $this->application = $application;
-        $this->modifiedProperties[self::APPLICATION] = true;
+        $this->modifiedProperties[static::APPLICATION] = true;
 
         return $this;
     }
@@ -438,7 +468,7 @@ class ModuleTransfer extends AbstractTransfer
      */
     public function requireApplication()
     {
-        $this->assertPropertyIsSet(self::APPLICATION);
+        $this->assertPropertyIsSet(static::APPLICATION);
 
         return $this;
     }
@@ -453,7 +483,7 @@ class ModuleTransfer extends AbstractTransfer
     public function setLayer(?LayerTransfer $layer = null)
     {
         $this->layer = $layer;
-        $this->modifiedProperties[self::LAYER] = true;
+        $this->modifiedProperties[static::LAYER] = true;
 
         return $this;
     }
@@ -489,7 +519,7 @@ class ModuleTransfer extends AbstractTransfer
      */
     public function requireLayer()
     {
-        $this->assertPropertyIsSet(self::LAYER);
+        $this->assertPropertyIsSet(static::LAYER);
 
         return $this;
     }
@@ -504,7 +534,7 @@ class ModuleTransfer extends AbstractTransfer
     public function setPath($path)
     {
         $this->path = $path;
-        $this->modifiedProperties[self::PATH] = true;
+        $this->modifiedProperties[static::PATH] = true;
 
         return $this;
     }
@@ -540,7 +570,7 @@ class ModuleTransfer extends AbstractTransfer
      */
     public function requirePath()
     {
-        $this->assertPropertyIsSet(self::PATH);
+        $this->assertPropertyIsSet(static::PATH);
 
         return $this;
     }
@@ -555,7 +585,7 @@ class ModuleTransfer extends AbstractTransfer
     public function setOptions(?OptionsTransfer $options = null)
     {
         $this->options = $options;
-        $this->modifiedProperties[self::OPTIONS] = true;
+        $this->modifiedProperties[static::OPTIONS] = true;
 
         return $this;
     }
@@ -591,7 +621,7 @@ class ModuleTransfer extends AbstractTransfer
      */
     public function requireOptions()
     {
-        $this->assertPropertyIsSet(self::OPTIONS);
+        $this->assertPropertyIsSet(static::OPTIONS);
 
         return $this;
     }
@@ -606,7 +636,7 @@ class ModuleTransfer extends AbstractTransfer
     public function setDependentModule(?ModuleTransfer $dependentModule = null)
     {
         $this->dependentModule = $dependentModule;
-        $this->modifiedProperties[self::DEPENDENT_MODULE] = true;
+        $this->modifiedProperties[static::DEPENDENT_MODULE] = true;
 
         return $this;
     }
@@ -642,7 +672,7 @@ class ModuleTransfer extends AbstractTransfer
      */
     public function requireDependentModule()
     {
-        $this->assertPropertyIsSet(self::DEPENDENT_MODULE);
+        $this->assertPropertyIsSet(static::DEPENDENT_MODULE);
 
         return $this;
     }
@@ -650,14 +680,14 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module Development|ModuleFinder
      *
-     * @param \ArrayObject|\SprykerSdk\Integrator\Transfer\ApplicationTransfer[] $applications
+     * @param \SprykerSdk\Integrator\Transfer\ApplicationTransfer[]|\ArrayObject $applications
      *
      * @return $this
      */
     public function setApplications(ArrayObject $applications)
     {
         $this->applications = $applications;
-        $this->modifiedProperties[self::APPLICATIONS] = true;
+        $this->modifiedProperties[static::APPLICATIONS] = true;
 
         return $this;
     }
@@ -665,7 +695,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module Development|ModuleFinder
      *
-     * @return \ArrayObject|\SprykerSdk\Integrator\Transfer\ApplicationTransfer[]
+     * @return \SprykerSdk\Integrator\Transfer\ApplicationTransfer[]|\ArrayObject
      */
     public function getApplications()
     {
@@ -682,7 +712,7 @@ class ModuleTransfer extends AbstractTransfer
     public function addApplication(ApplicationTransfer $application)
     {
         $this->applications[] = $application;
-        $this->modifiedProperties[self::APPLICATIONS] = true;
+        $this->modifiedProperties[static::APPLICATIONS] = true;
 
         return $this;
     }
@@ -694,7 +724,7 @@ class ModuleTransfer extends AbstractTransfer
      */
     public function requireApplications()
     {
-        $this->assertCollectionPropertyIsSet(self::APPLICATIONS);
+        $this->assertCollectionPropertyIsSet(static::APPLICATIONS);
 
         return $this;
     }
@@ -709,7 +739,7 @@ class ModuleTransfer extends AbstractTransfer
     public function setIsStandalone($isStandalone)
     {
         $this->isStandalone = $isStandalone;
-        $this->modifiedProperties[self::IS_STANDALONE] = true;
+        $this->modifiedProperties[static::IS_STANDALONE] = true;
 
         return $this;
     }
@@ -745,7 +775,7 @@ class ModuleTransfer extends AbstractTransfer
      */
     public function requireIsStandalone()
     {
-        $this->assertPropertyIsSet(self::IS_STANDALONE);
+        $this->assertPropertyIsSet(static::IS_STANDALONE);
 
         return $this;
     }

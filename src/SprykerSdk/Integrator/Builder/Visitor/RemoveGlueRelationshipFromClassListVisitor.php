@@ -88,7 +88,7 @@ class RemoveGlueRelationshipFromClassListVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return int|\PhpParser\Node|\PhpParser\Node\Stmt\Expression|null
+     * @return \PhpParser\Node|\PhpParser\Node\Stmt\Expression|int|null
      */
     public function leaveNode(Node $node)
     {

@@ -32,7 +32,7 @@ class PackageFinder implements PackageFinderInterface
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Transfer\PackageTransfer[]
+     * @return array<\SprykerSdk\Integrator\Transfer\PackageTransfer>
      */
     public function getPackages(): array
     {

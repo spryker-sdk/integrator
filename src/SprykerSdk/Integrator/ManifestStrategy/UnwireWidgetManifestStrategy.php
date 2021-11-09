@@ -18,6 +18,10 @@ class UnwireWidgetManifestStrategy extends AbstractManifestStrategy
      * @var string
      */
     protected const TARGET_CLASS_NAME = '\SprykerShop\Yves\ShopApplication\ShopApplicationDependencyProvider';
+
+    /**
+     * @var string
+     */
     protected const TARGET_METHOD_NAME = 'getGlobalWidgets';
 
     /**
@@ -48,7 +52,7 @@ class UnwireWidgetManifestStrategy extends AbstractManifestStrategy
             $classInformationTransfer = $this->createClassBuilderFacade()->unwireClassConstant(
                 $classInformationTransfer,
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
-                static::TARGET_METHOD_NAME
+                static::TARGET_METHOD_NAME,
             );
 
             if ($isDry) {
@@ -61,7 +65,7 @@ class UnwireWidgetManifestStrategy extends AbstractManifestStrategy
                 'Widget %s was removed from %s::%s',
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $classInformationTransfer->getClassName(),
-                static::TARGET_METHOD_NAME
+                static::TARGET_METHOD_NAME,
             ), InputOutputInterface::DEBUG);
         }
 

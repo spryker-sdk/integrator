@@ -15,6 +15,9 @@ use PhpParser\NodeVisitorAbstract;
 
 class CloneNodeWithClearPositionVisitor extends NodeVisitorAbstract
 {
+    /**
+     * @var array
+     */
     protected const POSITION_ATTRIBUTES = [
         'startLine',
         'startTokenPos',
@@ -26,7 +29,7 @@ class CloneNodeWithClearPositionVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return int|\PhpParser\Node|\PhpParser\Node[]|null
+     * @return \PhpParser\Node|\PhpParser\Node[]|int|null
      */
     public function leaveNode(Node $node)
     {
@@ -57,7 +60,7 @@ class CloneNodeWithClearPositionVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $origNode
      *
-     * @return int|\PhpParser\Node|null
+     * @return \PhpParser\Node|int|null
      */
     public function enterNode(Node $origNode)
     {

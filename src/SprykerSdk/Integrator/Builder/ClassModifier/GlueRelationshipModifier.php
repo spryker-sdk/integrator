@@ -139,8 +139,8 @@ class GlueRelationshipModifier implements GlueRelationshipModifierInterface
                 $this->builderFactory->methodCall(
                     $methodNode->params[0]->var,
                     'addRelationship',
-                    $this->builderFactory->args($arguments)
-                )
+                    $this->builderFactory->args($arguments),
+                ),
             ),
         ];
     }
@@ -210,7 +210,7 @@ class GlueRelationshipModifier implements GlueRelationshipModifierInterface
                 }
 
                 return ($node->args[1]->value instanceof New_) && $node->args[1]->value->class->toString() === $classNameToAdd;
-            }
+            },
         );
 
         return (bool)$node;

@@ -157,8 +157,8 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     {
         return new ArrayItem(
             (new BuilderFactory())->new(
-                (new ClassHelper())->getShortClassName($this->className)
-            )
+                (new ClassHelper())->getShortClassName($this->className),
+            ),
         );
     }
 }

@@ -106,7 +106,7 @@ class ManifestReader implements ManifestReaderInterface
 
         $filePath = $moduleRecipiesDir . sprintf(
             '%s/installer-manifest.json',
-            $moduleVersion
+            $moduleVersion,
         );
 
         if (file_exists($filePath)) {
@@ -121,7 +121,7 @@ class ManifestReader implements ManifestReaderInterface
 
         return $moduleRecipiesDir . sprintf(
             '%s/installer-manifest.json',
-            $nextSuitableVersion
+            $nextSuitableVersion,
         );
     }
 
@@ -188,7 +188,7 @@ class ManifestReader implements ManifestReaderInterface
         $pivotArray = array_splice(
             $versions,
             (int)floor((count($versions) - 1) / 2),
-            1
+            1,
         );
 
         $smaller = [];
@@ -205,7 +205,7 @@ class ManifestReader implements ManifestReaderInterface
         return array_merge(
             $this->sortArray($smaller),
             $pivotArray,
-            $this->sortArray($greater)
+            $this->sortArray($greater),
         );
     }
 }

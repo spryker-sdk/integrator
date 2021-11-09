@@ -40,26 +40,26 @@ class ClassDiffPrinter implements ClassDiffPrinterInterface
             $code = $this->classPrinter->printFormatPreserving(
                 $classInformationTransfer->getClassTokenTree(),
                 $classInformationTransfer->getOriginalClassTokenTree(),
-                $classInformationTransfer->getTokens()
+                $classInformationTransfer->getTokens(),
             );
             $originalCode = $this->classPrinter->printFormatPreserving(
                 $classInformationTransfer->getOriginalClassTokenTree(),
                 $classInformationTransfer->getOriginalClassTokenTree(),
-                $classInformationTransfer->getTokens()
+                $classInformationTransfer->getTokens(),
             );
         } else {
             $code = $this->classPrinter->prettyPrintFile(
-                $classInformationTransfer->getClassTokenTree()
+                $classInformationTransfer->getClassTokenTree(),
             );
         }
 
         $builder = new DiffOnlyOutputBuilder(
-            "--- Original\n+++ New\n"
+            "--- Original\n+++ New\n",
         );
         $differ = (new Differ($builder));
         $diff = $differ->diff(
             $originalCode,
-            $code
+            $code,
         );
 
         if ($diff === "--- Original\n+++ New\n") {

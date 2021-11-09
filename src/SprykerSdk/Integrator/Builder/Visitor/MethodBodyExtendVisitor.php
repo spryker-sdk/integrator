@@ -44,7 +44,7 @@ class MethodBodyExtendVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return int|\PhpParser\Node|null
+     * @return \PhpParser\Node|int|null
      */
     public function enterNode(Node $node)
     {
@@ -58,7 +58,7 @@ class MethodBodyExtendVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return int|\PhpParser\Node|\PhpParser\Node[]|null
+     * @return \PhpParser\Node|\PhpParser\Node[]|int|null
      */
     public function leaveNode(Node $node)
     {

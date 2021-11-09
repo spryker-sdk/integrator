@@ -13,12 +13,24 @@ use InvalidArgumentException;
 
 class OrganizationTransfer extends AbstractTransfer
 {
+    /**
+     * @var string
+     */
     public const NAME = 'name';
 
+    /**
+     * @var string
+     */
     public const NAME_DASHED = 'nameDashed';
 
+    /**
+     * @var string
+     */
     public const IS_PROJECT = 'isProject';
 
+    /**
+     * @var string
+     */
     public const ROOT_PATH = 'rootPath';
 
     /**
@@ -122,7 +134,7 @@ class OrganizationTransfer extends AbstractTransfer
     public function setName($name)
     {
         $this->name = $name;
-        $this->modifiedProperties[self::NAME] = true;
+        $this->modifiedProperties[static::NAME] = true;
 
         return $this;
     }
@@ -158,7 +170,7 @@ class OrganizationTransfer extends AbstractTransfer
      */
     public function requireName()
     {
-        $this->assertPropertyIsSet(self::NAME);
+        $this->assertPropertyIsSet(static::NAME);
 
         return $this;
     }
@@ -173,7 +185,7 @@ class OrganizationTransfer extends AbstractTransfer
     public function setNameDashed($nameDashed)
     {
         $this->nameDashed = $nameDashed;
-        $this->modifiedProperties[self::NAME_DASHED] = true;
+        $this->modifiedProperties[static::NAME_DASHED] = true;
 
         return $this;
     }
@@ -209,7 +221,7 @@ class OrganizationTransfer extends AbstractTransfer
      */
     public function requireNameDashed()
     {
-        $this->assertPropertyIsSet(self::NAME_DASHED);
+        $this->assertPropertyIsSet(static::NAME_DASHED);
 
         return $this;
     }
@@ -224,7 +236,7 @@ class OrganizationTransfer extends AbstractTransfer
     public function setIsProject($isProject)
     {
         $this->isProject = $isProject;
-        $this->modifiedProperties[self::IS_PROJECT] = true;
+        $this->modifiedProperties[static::IS_PROJECT] = true;
 
         return $this;
     }
@@ -260,7 +272,7 @@ class OrganizationTransfer extends AbstractTransfer
      */
     public function requireIsProject()
     {
-        $this->assertPropertyIsSet(self::IS_PROJECT);
+        $this->assertPropertyIsSet(static::IS_PROJECT);
 
         return $this;
     }
@@ -275,7 +287,7 @@ class OrganizationTransfer extends AbstractTransfer
     public function setRootPath($rootPath)
     {
         $this->rootPath = $rootPath;
-        $this->modifiedProperties[self::ROOT_PATH] = true;
+        $this->modifiedProperties[static::ROOT_PATH] = true;
 
         return $this;
     }
@@ -311,7 +323,7 @@ class OrganizationTransfer extends AbstractTransfer
      */
     public function requireRootPath()
     {
-        $this->assertPropertyIsSet(self::ROOT_PATH);
+        $this->assertPropertyIsSet(static::ROOT_PATH);
 
         return $this;
     }

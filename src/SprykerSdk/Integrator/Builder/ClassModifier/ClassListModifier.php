@@ -89,15 +89,15 @@ class ClassListModifier implements ClassListModifierInterface
                 new AddClassToClassListVisitor(
                     $targetMethodName,
                     $classNameToAdd,
-                    $constantName
-                )
+                    $constantName,
+                ),
             ];
 
             return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
         }
 
         $visitors = [
-            new AddUseVisitor($classNameToAdd)
+            new AddUseVisitor($classNameToAdd),
         ];
         $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
 
@@ -132,7 +132,7 @@ class ClassListModifier implements ClassListModifierInterface
 
         $visitors = [
             new RemoveUseVisitor($classNameToRemove),
-            new RemoveClassFromClassListVisitor($targetMethodName, $classNameToRemove)
+            new RemoveClassFromClassListVisitor($targetMethodName, $classNameToRemove),
         ];
 
         return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);

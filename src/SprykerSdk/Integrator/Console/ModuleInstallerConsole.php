@@ -26,7 +26,14 @@ class ModuleInstallerConsole extends Command
     use IntegratorFactoryAwareTrait;
     use IntegratorFacadeAwareTrait;
 
+    /**
+     * @var string
+     */
     protected const ARGUMENT_MODULE_NAMES = 'module-names';
+
+    /**
+     * @var string
+     */
     protected const FLAG_DRY = 'dry';
 
     /**
@@ -40,7 +47,7 @@ class ModuleInstallerConsole extends Command
             ->addArgument(
                 static::ARGUMENT_MODULE_NAMES,
                 InputArgument::OPTIONAL,
-                'Name of modules which should be build, separated by `,`'
+                'Name of modules which should be build, separated by `,`',
             );
     }
 
@@ -65,7 +72,7 @@ class ModuleInstallerConsole extends Command
     /**
      * @param \Symfony\Component\Console\Input\InputInterface $input
      *
-     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
+     * @return array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
      */
     protected function getModuleList(InputInterface $input): array
     {

@@ -13,6 +13,9 @@ use SprykerSdk\Integrator\IntegratorConfig;
 
 class SprykerLockWriter implements SprykerLockWriterInterface
 {
+    /**
+     * @var string
+     */
     protected const REPLACE_4_WITH_2_SPACES = '/^(  +?)\\1(?=[^ ])/m';
 
     /**

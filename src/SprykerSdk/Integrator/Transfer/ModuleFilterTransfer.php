@@ -13,10 +13,19 @@ use InvalidArgumentException;
 
 class ModuleFilterTransfer extends AbstractTransfer
 {
+    /**
+     * @var string
+     */
     public const ORGANIZATION = 'organization';
 
+    /**
+     * @var string
+     */
     public const APPLICATION = 'application';
 
+    /**
+     * @var string
+     */
     public const MODULE = 'module';
 
     /**
@@ -98,7 +107,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     public function setOrganization(?OrganizationTransfer $organization = null)
     {
         $this->organization = $organization;
-        $this->modifiedProperties[self::ORGANIZATION] = true;
+        $this->modifiedProperties[static::ORGANIZATION] = true;
 
         return $this;
     }
@@ -134,7 +143,7 @@ class ModuleFilterTransfer extends AbstractTransfer
      */
     public function requireOrganization()
     {
-        $this->assertPropertyIsSet(self::ORGANIZATION);
+        $this->assertPropertyIsSet(static::ORGANIZATION);
 
         return $this;
     }
@@ -149,7 +158,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     public function setApplication(?ApplicationTransfer $application = null)
     {
         $this->application = $application;
-        $this->modifiedProperties[self::APPLICATION] = true;
+        $this->modifiedProperties[static::APPLICATION] = true;
 
         return $this;
     }
@@ -185,7 +194,7 @@ class ModuleFilterTransfer extends AbstractTransfer
      */
     public function requireApplication()
     {
-        $this->assertPropertyIsSet(self::APPLICATION);
+        $this->assertPropertyIsSet(static::APPLICATION);
 
         return $this;
     }
@@ -200,7 +209,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     public function setModule(?ModuleTransfer $module = null)
     {
         $this->module = $module;
-        $this->modifiedProperties[self::MODULE] = true;
+        $this->modifiedProperties[static::MODULE] = true;
 
         return $this;
     }
@@ -236,7 +245,7 @@ class ModuleFilterTransfer extends AbstractTransfer
      */
     public function requireModule()
     {
-        $this->assertPropertyIsSet(self::MODULE);
+        $this->assertPropertyIsSet(static::MODULE);
 
         return $this;
     }

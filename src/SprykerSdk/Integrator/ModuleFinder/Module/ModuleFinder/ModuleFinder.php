@@ -13,8 +13,8 @@ use Laminas\Filter\FilterChain;
 use Laminas\Filter\StringToLower;
 use Laminas\Filter\Word\CamelCaseToDash;
 use Laminas\Filter\Word\DashToCamelCase;
-use SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface;
 use SprykerSdk\Integrator\Transfer\ApplicationTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
@@ -35,7 +35,7 @@ class ModuleFinder implements ModuleFinderInterface
     protected $moduleMatcher;
 
     /**
-     * @var \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
+     * @var array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
      */
     protected static $moduleTransferCollection;
 
@@ -52,7 +52,7 @@ class ModuleFinder implements ModuleFinderInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
+     * @return array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
      */
     public function getModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -78,7 +78,7 @@ class ModuleFinder implements ModuleFinderInterface
      * @param array $moduleTransferCollection
      * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
+     * @return array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
      */
     protected function addStandaloneModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
@@ -110,10 +110,10 @@ class ModuleFinder implements ModuleFinderInterface
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
-     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer[] $moduleTransferCollection
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransferCollection
      * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
+     * @return array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
      */
     protected function addModuleToCollection(
         ModuleTransfer $moduleTransfer,
@@ -154,7 +154,7 @@ class ModuleFinder implements ModuleFinderInterface
      * @param array $moduleTransferCollection
      * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
+     * @return array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
      */
     protected function addModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {

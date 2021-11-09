@@ -162,7 +162,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
      *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $methodName
-     * @param bool|int|float|string|array|null $value
+     * @param array|string|float|int|bool|null $value
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */

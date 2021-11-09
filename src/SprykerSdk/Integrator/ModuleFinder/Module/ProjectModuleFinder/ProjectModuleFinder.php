@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ModuleFinder\Module\ProjectModuleFinder;
 
-use SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface;
 use SprykerSdk\Integrator\Transfer\ApplicationTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
@@ -43,7 +43,7 @@ class ProjectModuleFinder implements ProjectModuleFinderInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer|null $moduleFilterTransfer
      *
-     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer[]
+     * @return array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
      */
     public function getProjectModules(?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {

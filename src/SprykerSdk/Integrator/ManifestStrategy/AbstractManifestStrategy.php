@@ -49,7 +49,7 @@ abstract class AbstractManifestStrategy implements ManifestStrategyInterface
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param string|null $defaultValue
      *
-     * @return bool|float|int|mixed
+     * @return mixed|float|int|bool
      */
     protected function askValue(string $question, array $choices, InputOutputInterface $inputOutput, ?string $defaultValue)
     {

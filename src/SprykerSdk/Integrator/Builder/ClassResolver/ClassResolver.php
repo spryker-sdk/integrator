@@ -26,7 +26,7 @@ class ClassResolver implements ClassResolverInterface
     protected $classGenerator;
 
     /**
-     * @var \SprykerSdk\Integrator\Transfer\ClassInformationTransfer[]
+     * @var array<\SprykerSdk\Integrator\Transfer\ClassInformationTransfer>
      */
     protected static $generatedClassList = [];
 

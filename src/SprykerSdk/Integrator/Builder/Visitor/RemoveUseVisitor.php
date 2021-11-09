@@ -47,7 +47,7 @@ class RemoveUseVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return int|\PhpParser\Node|array<\PhpParser\Node>|null
+     * @return \PhpParser\Node|\PhpParser\Node[]|int|null
      */
     public function leaveNode(Node $node)
     {
@@ -96,6 +96,7 @@ class RemoveUseVisitor extends NodeVisitorAbstract
             /** @var \PhpParser\Node\Stmt\Use_ $stmt */
             if ($stmt->getType() !== static::STATEMENT_USE) {
                 $result[] = $stmt;
+
                 continue;
             }
             foreach ($stmt->uses as $use) {

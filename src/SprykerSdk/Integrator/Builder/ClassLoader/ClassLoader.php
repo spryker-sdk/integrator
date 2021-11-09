@@ -10,8 +10,6 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\ClassLoader;
 
 use PhpParser\Lexer;
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
@@ -66,7 +64,7 @@ class ClassLoader implements ClassLoaderInterface
 
         if ($reflectionClass->getParentClass()) {
             $classInformationTransfer->setParent(
-                $this->loadClass($reflectionClass->getParentClass()->getName())
+                $this->loadClass($reflectionClass->getParentClass()->getName()),
             );
         }
 
