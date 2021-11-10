@@ -22,7 +22,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SprykerSdk\\": "src/SprykerSdk/"
+            "SprykerSdk\\Integrator\\": "src"
         }
     },
     "autoload-dev": {
