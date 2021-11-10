@@ -22,9 +22,9 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
      * @param string $targetClassName
      * @param string $customOrganisation
      *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
-    public function resolveClass(string $targetClassName, string $customOrganisation = ''): ClassInformationTransfer
+    public function resolveClass(string $targetClassName, string $customOrganisation = ''): ?ClassInformationTransfer
     {
         return $this->getFactory()
             ->createClassResolver()

@@ -747,12 +747,12 @@ class PackageTransfer extends AbstractTransfer
     public function toArrayRecursiveNotCamelCased()
     {
         return [
-            'composer_name' => $this->composerName instanceof AbstractTransfer ? $this->composerName->toArray(true, false) : $this->composerName,
-            'organization_name' => $this->organizationName instanceof AbstractTransfer ? $this->organizationName->toArray(true, false) : $this->organizationName,
-            'organization_name_dashed' => $this->organizationNameDashed instanceof AbstractTransfer ? $this->organizationNameDashed->toArray(true, false) : $this->organizationNameDashed,
-            'package_name' => $this->packageName instanceof AbstractTransfer ? $this->packageName->toArray(true, false) : $this->packageName,
-            'package_name_dashed' => $this->packageNameDashed instanceof AbstractTransfer ? $this->packageNameDashed->toArray(true, false) : $this->packageNameDashed,
-            'path' => $this->path instanceof AbstractTransfer ? $this->path->toArray(true, false) : $this->path,
+            'composer_name' => $this->composerName,
+            'organization_name' => $this->organizationName,
+            'organization_name_dashed' => $this->organizationNameDashed,
+            'package_name' => $this->packageName,
+            'package_name_dashed' => $this->packageNameDashed,
+            'path' => $this->path,
         ];
     }
 
@@ -762,12 +762,12 @@ class PackageTransfer extends AbstractTransfer
     public function toArrayRecursiveCamelCased()
     {
         return [
-            'composerName' => $this->composerName instanceof AbstractTransfer ? $this->composerName->toArray(true, true) : $this->composerName,
-            'organizationName' => $this->organizationName instanceof AbstractTransfer ? $this->organizationName->toArray(true, true) : $this->organizationName,
-            'organizationNameDashed' => $this->organizationNameDashed instanceof AbstractTransfer ? $this->organizationNameDashed->toArray(true, true) : $this->organizationNameDashed,
-            'packageName' => $this->packageName instanceof AbstractTransfer ? $this->packageName->toArray(true, true) : $this->packageName,
-            'packageNameDashed' => $this->packageNameDashed instanceof AbstractTransfer ? $this->packageNameDashed->toArray(true, true) : $this->packageNameDashed,
-            'path' => $this->path instanceof AbstractTransfer ? $this->path->toArray(true, true) : $this->path,
+            'composerName' => $this->composerName,
+            'organizationName' => $this->organizationName,
+            'organizationNameDashed' => $this->organizationNameDashed,
+            'packageName' => $this->packageName,
+            'packageNameDashed' => $this->packageNameDashed,
+            'path' => $this->path,
         ];
     }
 }

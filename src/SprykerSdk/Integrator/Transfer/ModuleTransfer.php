@@ -928,7 +928,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayRecursiveCamelCased()
+    public function modifiedToArrayRecursiveCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -946,15 +946,12 @@ class ModuleTransfer extends AbstractTransfer
                 case 'nameDashed':
                 case 'path':
                 case 'isStandalone':
-                    $values[$arrayKey] = $value;
-
-                    break;
                 case 'organization':
                 case 'application':
                 case 'layer':
                 case 'options':
                 case 'dependentModule':
-                    $values[$arrayKey] = $value instanceof AbstractTransfer ? $value->modifiedToArray(true, true) : $value;
+                    $values[$arrayKey] = $value;
 
                     break;
                 case 'applications':
@@ -970,7 +967,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayRecursiveNotCamelCased()
+    public function modifiedToArrayRecursiveNotCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -988,15 +985,12 @@ class ModuleTransfer extends AbstractTransfer
                 case 'nameDashed':
                 case 'path':
                 case 'isStandalone':
-                    $values[$arrayKey] = $value;
-
-                    break;
                 case 'organization':
                 case 'application':
                 case 'layer':
                 case 'options':
                 case 'dependentModule':
-                    $values[$arrayKey] = $value instanceof AbstractTransfer ? $value->modifiedToArray(true, false) : $value;
+                    $values[$arrayKey] = $value;
 
                     break;
                 case 'applications':
@@ -1046,7 +1040,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return void
      */
-    protected function initCollectionProperties()
+    protected function initCollectionProperties(): void
     {
         $this->applications = $this->applications ?: new ArrayObject();
     }
@@ -1054,7 +1048,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayNotRecursiveCamelCased()
+    public function toArrayNotRecursiveCamelCased(): array
     {
         return [
             'name' => $this->name,
@@ -1073,7 +1067,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayNotRecursiveNotCamelCased()
+    public function toArrayNotRecursiveNotCamelCased(): array
     {
         return [
             'name' => $this->name,
@@ -1092,38 +1086,38 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayRecursiveNotCamelCased()
+    public function toArrayRecursiveNotCamelCased(): array
     {
         return [
-            'name' => $this->name instanceof AbstractTransfer ? $this->name->toArray(true, false) : $this->name,
-            'name_dashed' => $this->nameDashed instanceof AbstractTransfer ? $this->nameDashed->toArray(true, false) : $this->nameDashed,
-            'path' => $this->path instanceof AbstractTransfer ? $this->path->toArray(true, false) : $this->path,
-            'is_standalone' => $this->isStandalone instanceof AbstractTransfer ? $this->isStandalone->toArray(true, false) : $this->isStandalone,
-            'organization' => $this->organization instanceof AbstractTransfer ? $this->organization->toArray(true, false) : $this->organization,
-            'application' => $this->application instanceof AbstractTransfer ? $this->application->toArray(true, false) : $this->application,
-            'layer' => $this->layer instanceof AbstractTransfer ? $this->layer->toArray(true, false) : $this->layer,
-            'options' => $this->options instanceof AbstractTransfer ? $this->options->toArray(true, false) : $this->options,
-            'dependent_module' => $this->dependentModule instanceof AbstractTransfer ? $this->dependentModule->toArray(true, false) : $this->dependentModule,
-            'applications' => $this->applications instanceof AbstractTransfer ? $this->applications->toArray(true, false) : $this->addValuesToCollection($this->applications, true, false),
+            'name' => $this->name ,
+            'name_dashed' => $this->nameDashed,
+            'path' => $this->path,
+            'is_standalone' => $this->isStandalone,
+            'organization' => $this->organization,
+            'application' => $this->application,
+            'layer' => $this->layer,
+            'options' => $this->options,
+            'dependent_module' => $this->dependentModule,
+            'applications' => $this->addValuesToCollection($this->applications, true, false),
         ];
     }
 
     /**
      * @return array
      */
-    public function toArrayRecursiveCamelCased()
+    public function toArrayRecursiveCamelCased(): array
     {
         return [
-            'name' => $this->name instanceof AbstractTransfer ? $this->name->toArray(true, true) : $this->name,
-            'nameDashed' => $this->nameDashed instanceof AbstractTransfer ? $this->nameDashed->toArray(true, true) : $this->nameDashed,
-            'path' => $this->path instanceof AbstractTransfer ? $this->path->toArray(true, true) : $this->path,
-            'isStandalone' => $this->isStandalone instanceof AbstractTransfer ? $this->isStandalone->toArray(true, true) : $this->isStandalone,
-            'organization' => $this->organization instanceof AbstractTransfer ? $this->organization->toArray(true, true) : $this->organization,
-            'application' => $this->application instanceof AbstractTransfer ? $this->application->toArray(true, true) : $this->application,
-            'layer' => $this->layer instanceof AbstractTransfer ? $this->layer->toArray(true, true) : $this->layer,
-            'options' => $this->options instanceof AbstractTransfer ? $this->options->toArray(true, true) : $this->options,
-            'dependentModule' => $this->dependentModule instanceof AbstractTransfer ? $this->dependentModule->toArray(true, true) : $this->dependentModule,
-            'applications' => $this->applications instanceof AbstractTransfer ? $this->applications->toArray(true, true) : $this->addValuesToCollection($this->applications, true, true),
+            'name' => $this->name,
+            'nameDashed' => $this->nameDashed,
+            'path' => $this->path,
+            'isStandalone' => $this->isStandalone,
+            'organization' => $this->organization,
+            'application' => $this->application,
+            'layer' => $this->layer,
+            'options' => $this->options,
+            'dependentModule' => $this->dependentModule,
+            'applications' => $this->addValuesToCollection($this->applications, true, true),
         ];
     }
 }

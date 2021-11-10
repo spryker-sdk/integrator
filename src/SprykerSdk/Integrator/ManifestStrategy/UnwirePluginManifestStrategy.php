@@ -37,7 +37,7 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
             $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass($targetClassName, $namespace);
-            if (!$classInformationTransfer) {
+            if ($classInformationTransfer === null) {
                 continue;
             }
 

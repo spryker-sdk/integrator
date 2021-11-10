@@ -63,7 +63,12 @@ class ComposerLockReader implements ComposerLockReaderInterface
             return [];
         }
 
-        $lockData = json_decode(file_get_contents($composerLockFilePath), true);
+        $json = file_get_contents($composerLockFilePath);
+        if (!$json){
+            return [];
+        }
+
+        $lockData = json_decode($json, true);
 
         if (json_last_error()) {
             return [];

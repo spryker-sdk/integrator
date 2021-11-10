@@ -1,6 +1,10 @@
 parameters:
-    level: 2
+    level: 7
     paths:
         - src/
     checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: false
     ignoreErrors:
+        - '#Access to an undefined property PhpParser\\Node::\$(?:name|items|stmts)#'
+

@@ -401,7 +401,7 @@ class ModuleFilterTransfer extends AbstractTransfer
                 case 'organization':
                 case 'application':
                 case 'module':
-                    $values[$arrayKey] = $value instanceof AbstractTransfer ? $value->modifiedToArray(true, true) : $value;
+                    $values[$arrayKey] = $value;
 
                     break;
             }
@@ -430,7 +430,7 @@ class ModuleFilterTransfer extends AbstractTransfer
                 case 'organization':
                 case 'application':
                 case 'module':
-                    $values[$arrayKey] = $value instanceof AbstractTransfer ? $value->modifiedToArray(true, false) : $value;
+                    $values[$arrayKey] = $value;
 
                     break;
             }

@@ -9,13 +9,15 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassResolver;
 
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
+
 interface ClassResolverInterface
 {
     /**
      * @param string $targetClassName
      * @param string $customOrganisation
      *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
-    public function resolveClass(string $targetClassName, string $customOrganisation = '');
+    public function resolveClass(string $targetClassName, string $customOrganisation = ''): ?ClassInformationTransfer;
 }

@@ -814,12 +814,8 @@ class ClassInformationTransfer extends AbstractTransfer
                 case 'filePath':
                 case 'classTokenTree':
                 case 'originalClassTokenTree':
-                case 'tokens':
-                    $values[$arrayKey] = $value;
-
-                    break;
                 case 'parent':
-                    $values[$arrayKey] = $value instanceof AbstractTransfer ? $value->modifiedToArray(true, true) : $value;
+                    $values[$arrayKey] = $value;
 
                     break;
                 case 'methods':
@@ -835,7 +831,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayRecursiveNotCamelCased()
+    public function modifiedToArrayRecursiveNotCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -855,11 +851,8 @@ class ClassInformationTransfer extends AbstractTransfer
                 case 'classTokenTree':
                 case 'originalClassTokenTree':
                 case 'tokens':
-                    $values[$arrayKey] = $value;
-
-                    break;
                 case 'parent':
-                    $values[$arrayKey] = $value instanceof AbstractTransfer ? $value->modifiedToArray(true, false) : $value;
+                    $values[$arrayKey] = $value;
 
                     break;
                 case 'methods':
@@ -875,7 +868,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayNotRecursiveNotCamelCased()
+    public function modifiedToArrayNotRecursiveNotCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -892,7 +885,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayNotRecursiveCamelCased()
+    public function modifiedToArrayNotRecursiveCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -909,7 +902,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @return void
      */
-    protected function initCollectionProperties()
+    protected function initCollectionProperties(): void
     {
         $this->methods = $this->methods ?: new ArrayObject();
     }
@@ -917,7 +910,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayNotRecursiveCamelCased()
+    public function toArrayNotRecursiveCamelCased(): array
     {
         return [
             'fullyQualifiedClassName' => $this->fullyQualifiedClassName,
@@ -934,7 +927,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayNotRecursiveNotCamelCased()
+    public function toArrayNotRecursiveNotCamelCased(): array
     {
         return [
             'fully_qualified_class_name' => $this->fullyQualifiedClassName,
@@ -951,34 +944,34 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayRecursiveNotCamelCased()
+    public function toArrayRecursiveNotCamelCased(): array
     {
         return [
-            'fully_qualified_class_name' => $this->fullyQualifiedClassName instanceof AbstractTransfer ? $this->fullyQualifiedClassName->toArray(true, false) : $this->fullyQualifiedClassName,
-            'class_name' => $this->className instanceof AbstractTransfer ? $this->className->toArray(true, false) : $this->className,
-            'file_path' => $this->filePath instanceof AbstractTransfer ? $this->filePath->toArray(true, false) : $this->filePath,
-            'class_token_tree' => $this->classTokenTree instanceof AbstractTransfer ? $this->classTokenTree->toArray(true, false) : $this->classTokenTree,
-            'original_class_token_tree' => $this->originalClassTokenTree instanceof AbstractTransfer ? $this->originalClassTokenTree->toArray(true, false) : $this->originalClassTokenTree,
-            'tokens' => $this->tokens instanceof AbstractTransfer ? $this->tokens->toArray(true, false) : $this->tokens,
-            'parent' => $this->parent instanceof AbstractTransfer ? $this->parent->toArray(true, false) : $this->parent,
-            'methods' => $this->methods instanceof AbstractTransfer ? $this->methods->toArray(true, false) : $this->addValuesToCollection($this->methods, true, false),
+            'fully_qualified_class_name' => $this->fullyQualifiedClassName,
+            'class_name' => $this->className,
+            'file_path' => $this->filePath,
+            'class_token_tree' => $this->classTokenTree,
+            'original_class_token_tree' => $this->originalClassTokenTree,
+            'tokens' => $this->tokens,
+            'parent' => $this->parent,
+            'methods' => $this->addValuesToCollection($this->methods, true, false),
         ];
     }
 
     /**
      * @return array
      */
-    public function toArrayRecursiveCamelCased()
+    public function toArrayRecursiveCamelCased(): array
     {
         return [
-            'fullyQualifiedClassName' => $this->fullyQualifiedClassName instanceof AbstractTransfer ? $this->fullyQualifiedClassName->toArray(true, true) : $this->fullyQualifiedClassName,
-            'className' => $this->className instanceof AbstractTransfer ? $this->className->toArray(true, true) : $this->className,
-            'filePath' => $this->filePath instanceof AbstractTransfer ? $this->filePath->toArray(true, true) : $this->filePath,
-            'classTokenTree' => $this->classTokenTree instanceof AbstractTransfer ? $this->classTokenTree->toArray(true, true) : $this->classTokenTree,
-            'originalClassTokenTree' => $this->originalClassTokenTree instanceof AbstractTransfer ? $this->originalClassTokenTree->toArray(true, true) : $this->originalClassTokenTree,
-            'tokens' => $this->tokens instanceof AbstractTransfer ? $this->tokens->toArray(true, true) : $this->tokens,
-            'parent' => $this->parent instanceof AbstractTransfer ? $this->parent->toArray(true, true) : $this->parent,
-            'methods' => $this->methods instanceof AbstractTransfer ? $this->methods->toArray(true, true) : $this->addValuesToCollection($this->methods, true, true),
+            'fullyQualifiedClassName' => $this->fullyQualifiedClassName,
+            'className' => $this->className,
+            'filePath' => $this->filePath,
+            'classTokenTree' => $this->classTokenTree,
+            'originalClassTokenTree' => $this->originalClassTokenTree,
+            'tokens' => $this->tokens,
+            'parent' => $this->parent,
+            'methods' => $this->addValuesToCollection($this->methods, true, true),
         ];
     }
 }

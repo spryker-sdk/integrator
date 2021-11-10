@@ -37,7 +37,12 @@ class SprykerLockReader implements SprykerLockReaderInterface
             return [];
         }
 
-        $lockData = json_decode(file_get_contents($integratorLockFilePath), true);
+        $json = file_get_contents($integratorLockFilePath);
+        if (!$json) {
+            return [];
+        }
+
+        $lockData = json_decode($json, true);
 
         if (json_last_error()) {
             return [];

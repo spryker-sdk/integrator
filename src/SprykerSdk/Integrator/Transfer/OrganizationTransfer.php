@@ -585,10 +585,10 @@ class OrganizationTransfer extends AbstractTransfer
     public function toArrayRecursiveNotCamelCased()
     {
         return [
-            'name' => $this->name instanceof AbstractTransfer ? $this->name->toArray(true, false) : $this->name,
-            'name_dashed' => $this->nameDashed instanceof AbstractTransfer ? $this->nameDashed->toArray(true, false) : $this->nameDashed,
-            'is_project' => $this->isProject instanceof AbstractTransfer ? $this->isProject->toArray(true, false) : $this->isProject,
-            'root_path' => $this->rootPath instanceof AbstractTransfer ? $this->rootPath->toArray(true, false) : $this->rootPath,
+            'name' => $this->name,
+            'name_dashed' => $this->nameDashed,
+            'is_project' => $this->isProject,
+            'root_path' => $this->rootPath,
         ];
     }
 
@@ -598,10 +598,10 @@ class OrganizationTransfer extends AbstractTransfer
     public function toArrayRecursiveCamelCased()
     {
         return [
-            'name' => $this->name instanceof AbstractTransfer ? $this->name->toArray(true, true) : $this->name,
-            'nameDashed' => $this->nameDashed instanceof AbstractTransfer ? $this->nameDashed->toArray(true, true) : $this->nameDashed,
-            'isProject' => $this->isProject instanceof AbstractTransfer ? $this->isProject->toArray(true, true) : $this->isProject,
-            'rootPath' => $this->rootPath instanceof AbstractTransfer ? $this->rootPath->toArray(true, true) : $this->rootPath,
+            'name' =>$this->name,
+            'nameDashed' => $this->nameDashed,
+            'isProject' => $this->isProject,
+            'rootPath' => $this->rootPath,
         ];
     }
 }
