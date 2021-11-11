@@ -23,6 +23,9 @@ class SeparatorToCamelCase
         // This should be the fastest solution compared to
         // any preg_*() or array_map() solution
         $explodedString = explode($separator, $string);
+        if (!$explodedString) {
+            return '';
+        }
 
         $result = ($upperCaseFirst) ? '' : array_shift($explodedString);
 

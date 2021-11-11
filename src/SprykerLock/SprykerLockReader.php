@@ -27,7 +27,7 @@ class SprykerLockReader implements SprykerLockReaderInterface
     }
 
     /**
-     * @return array<string, array<string>>
+     * @return array<string, array<string, array<string>>>
      */
     public function getLockFileData(): array
     {

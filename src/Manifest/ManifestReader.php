@@ -60,7 +60,12 @@ class ManifestReader implements ManifestReaderInterface
                 continue;
             }
 
-            $manifest = json_decode(file_get_contents($filePath), true);
+            $json = file_get_contents($filePath);
+            if(!$json) {
+                continue;
+            }
+
+            $manifest = json_decode($json, true);
 
             if ($manifest) {
                 $manifests[$moduleFullName] = $manifest;
@@ -148,8 +153,9 @@ class ManifestReader implements ManifestReaderInterface
         }
 
         $versions = $this->sortArray($versions);
+        $end = end($versions);
 
-        return end($versions);
+        return !$end ? null : $end;
     }
 
     /**
@@ -161,7 +167,7 @@ class ManifestReader implements ManifestReaderInterface
     {
         $validModuleVersions = [];
         $moduleVersionDirectories = scandir($moduleRecipesDir);
-        $moduleVersionDirectories = array_diff($moduleVersionDirectories, ['.', '..']);
+        $moduleVersionDirectories = !$moduleVersionDirectories ? [] : array_diff($moduleVersionDirectories, ['.', '..']);
 
         foreach ($moduleVersionDirectories as $moduleVersionDirectory) {
             if (!is_dir($moduleRecipesDir . $moduleVersionDirectory)) {

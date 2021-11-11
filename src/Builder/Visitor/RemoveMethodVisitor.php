@@ -19,6 +19,11 @@ class RemoveMethodVisitor extends NodeVisitorAbstract
     /**
      * @var string
      */
+    protected const STATEMENT_CLASS = 'Class_';
+
+    /**
+     * @var string
+     */
     protected $methodNameToRemove;
 
     /**
@@ -36,7 +41,7 @@ class RemoveMethodVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if (!($node->getType() instanceof Class_)) {
+        if (!($node->getType() == static::STATEMENT_CLASS)) {
             return $node;
         }
 

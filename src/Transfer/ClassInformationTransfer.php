@@ -596,9 +596,7 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
-     * @param \SprykerSdk\Integrator\Transfer\MethodInformationTransfer[]|\ArrayObject $methods
+     * @param \ArrayObject $methods
      *
      * @return $this
      */
@@ -611,9 +609,7 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
-     * @return \SprykerSdk\Integrator\Transfer\MethodInformationTransfer[]|\ArrayObject
+     * @return \ArrayObject
      */
     public function getMethods()
     {
@@ -904,7 +900,7 @@ class ClassInformationTransfer extends AbstractTransfer
      */
     protected function initCollectionProperties(): void
     {
-        $this->methods = $this->methods ?: new ArrayObject();
+        $this->methods = new ArrayObject();
     }
 
     /**

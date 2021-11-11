@@ -40,6 +40,10 @@ class SprykerLockWriter implements SprykerLockWriterInterface
     {
         $lockFilePath = $this->config->getIntegratorLockFilePath();
         $json = json_encode($lockData, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+        if(!$json){
+            return 0;
+        }
+
         $json = preg_replace(static::REPLACE_4_WITH_2_SPACES, '$1', $json) . PHP_EOL;
         if (file_put_contents($lockFilePath, $json) === false) {
             return 1;

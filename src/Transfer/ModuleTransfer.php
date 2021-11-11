@@ -85,7 +85,7 @@ class ModuleTransfer extends AbstractTransfer
     protected $application;
 
     /**
-     * @var \SprykerSdk\Integrator\Transfer\LayerTransfer|null
+     * @var \SprykerSdk\Integrator\Transfer\AbstractTransfer|null
      */
     protected $layer;
 
@@ -95,7 +95,7 @@ class ModuleTransfer extends AbstractTransfer
     protected $path;
 
     /**
-     * @var \SprykerSdk\Integrator\Transfer\OptionsTransfer|null
+     * @var \SprykerSdk\Integrator\Transfer\AbstractTransfer|null
      */
     protected $options;
 
@@ -105,7 +105,7 @@ class ModuleTransfer extends AbstractTransfer
     protected $dependentModule;
 
     /**
-     * @var \SprykerSdk\Integrator\Transfer\ApplicationTransfer[]|\ArrayObject
+     * @var array<\SprykerSdk\Integrator\Transfer\ApplicationTransfer>|\ArrayObject
      */
     protected $applications;
 
@@ -476,11 +476,11 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @param \SprykerSdk\Integrator\Transfer\LayerTransfer|null $layer
+     * @param \SprykerSdk\Integrator\Transfer\AbstractTransfer|null $layer
      *
      * @return $this
      */
-    public function setLayer(?LayerTransfer $layer = null)
+    public function setLayer(?AbstractTransfer $layer = null)
     {
         $this->layer = $layer;
         $this->modifiedProperties[static::LAYER] = true;
@@ -491,7 +491,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module SprykGui
      *
-     * @return \SprykerSdk\Integrator\Transfer\LayerTransfer|null
+     * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer|null
      */
     public function getLayer()
     {
@@ -499,9 +499,7 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
-     * @return \SprykerSdk\Integrator\Transfer\LayerTransfer
+     * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer
      */
     public function getLayerOrFail()
     {
@@ -513,8 +511,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
      * @return $this
      */
     public function requireLayer()
@@ -525,8 +521,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @param string|null $path
      *
      * @return $this
@@ -550,8 +544,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return string
      */
     public function getPathOrFail()
@@ -564,8 +556,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return $this
      */
     public function requirePath()
@@ -576,13 +566,11 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
-     * @param \SprykerSdk\Integrator\Transfer\OptionsTransfer|null $options
+     * @param \SprykerSdk\Integrator\Transfer\AbstractTransfer|null $options
      *
      * @return $this
      */
-    public function setOptions(?OptionsTransfer $options = null)
+    public function setOptions(?AbstractTransfer $options = null)
     {
         $this->options = $options;
         $this->modifiedProperties[static::OPTIONS] = true;
@@ -591,9 +579,7 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
-     * @return \SprykerSdk\Integrator\Transfer\OptionsTransfer|null
+     * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer|null
      */
     public function getOptions()
     {
@@ -601,9 +587,7 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
-     * @return \SprykerSdk\Integrator\Transfer\OptionsTransfer
+     * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer
      */
     public function getOptionsOrFail()
     {
@@ -615,8 +599,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
      * @return $this
      */
     public function requireOptions()
@@ -627,8 +609,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
      * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer|null $dependentModule
      *
      * @return $this
@@ -642,8 +622,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
      * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer|null
      */
     public function getDependentModule()
@@ -652,8 +630,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
      * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer
      */
     public function getDependentModuleOrFail()
@@ -666,8 +642,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
      * @return $this
      */
     public function requireDependentModule()
@@ -678,8 +652,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @param \SprykerSdk\Integrator\Transfer\ApplicationTransfer[]|\ArrayObject $applications
      *
      * @return $this
@@ -693,9 +665,7 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ApplicationTransfer[]|\ArrayObject
+     * @return array<\SprykerSdk\Integrator\Transfer\ApplicationTransfer>|\ArrayObject
      */
     public function getApplications()
     {
@@ -703,8 +673,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @param \SprykerSdk\Integrator\Transfer\ApplicationTransfer $application
      *
      * @return $this
@@ -718,8 +686,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireApplications()
@@ -730,8 +696,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @param bool|null $isStandalone
      *
      * @return $this
@@ -745,8 +709,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return bool|null
      */
     public function getIsStandalone()
@@ -755,8 +717,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return bool
      */
     public function getIsStandaloneOrFail()
@@ -769,8 +729,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireIsStandalone()
@@ -781,9 +739,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @param array $data
-     * @param bool $ignoreMissingProperty
-     *
      * @throws \InvalidArgumentException
      *
      * @return $this
@@ -879,6 +834,8 @@ class ModuleTransfer extends AbstractTransfer
         if (!$isRecursive && $camelCasedKeys) {
             return $this->toArrayNotRecursiveCamelCased();
         }
+
+        return [];
     }
 
     /**

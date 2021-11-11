@@ -186,19 +186,21 @@ class ClassGenerator implements ClassGeneratorInterface
      */
     protected function findLicenseBlock(string $moduleDir): string
     {
-        if (file_exists($moduleDir . '.license')) {
-            return file_get_contents($moduleDir . '.license');
+        if (!file_exists($moduleDir . '.license')) {
+            return '';
         }
 
-        return '';
+        $dir = file_get_contents($moduleDir . '.license');
+
+        return !$dir ? '' : $dir;
     }
 
     /**
      * @param string $className
      *
-     * @return array<string>|string
+     * @return string
      */
-    protected function convertClassNameToPath(string $className)
+    protected function convertClassNameToPath(string $className): string
     {
         return str_replace('\\', '/', $className);
     }

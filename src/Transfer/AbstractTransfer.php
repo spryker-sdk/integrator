@@ -289,9 +289,9 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      * @param mixed $value
      * @param bool $ignoreMissingProperty
      *
-     * @return \SprykerSdk\Integrator\Transfer\AbstrastTransfer
+     * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer
      */
-    protected function initializeNestedTransferObject($property, $value, $ignoreMissingProperty = false)
+    protected function initializeNestedTransferObject($property, $value, $ignoreMissingProperty = false): AbstractTransfer
     {
         $type = $this->transferMetadata[$property]['type'];
 
@@ -363,7 +363,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     }
 
     /**
-     * @return string
+     * @return string|false
      */
     public function serialize()
     {

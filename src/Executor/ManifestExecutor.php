@@ -110,6 +110,7 @@ class ManifestExecutor implements ManifestExecutorInterface
         $unappliedManifests = [];
         foreach ($manifests as $moduleName => $manifestList) {
             foreach ($manifestList as $manifestType => $moduleManifests) {
+                /** @var array $moduleManifest */
                 foreach ($moduleManifests as $moduleManifest) {
                     $manifestHash = sha1(json_encode($moduleManifest) . $manifestType . $moduleName);
                     if (isset($lockedModules[$moduleName][$manifestType][$manifestHash])) {

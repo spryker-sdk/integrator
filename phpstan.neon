@@ -7,4 +7,5 @@ parameters:
     treatPhpDocTypesAsCertain: false
     ignoreErrors:
         - '#Access to an undefined property PhpParser\\Node::\$(?:name|items|stmts)#'
+        - '#Call to an undefined method [a-zA-Z0-9\|\\_]+::toString\(\)#'
 

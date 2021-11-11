@@ -4,14 +4,11 @@
  * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
-
 declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Transfer;
 
-use InvalidArgumentException;
-
-class ApplicationTransfer extends AbstractTransfer
+class MethodInformationTransfer extends AbstractTransfer
 {
     /**
      * @var string
@@ -19,9 +16,19 @@ class ApplicationTransfer extends AbstractTransfer
     public const NAME = 'name';
 
     /**
+     * @var string
+     */
+    public const RETURN_TYPE = 'returnType';
+
+    /**
      * @var string|null
      */
     protected $name;
+
+    /**
+     * @var \SprykerSdk\Integrator\Transfer\AbstractTransfer|null
+     */
+    protected $returnType;
 
     /**
      * @var array
@@ -29,6 +36,9 @@ class ApplicationTransfer extends AbstractTransfer
     protected $transferPropertyNameMap = [
         'name' => 'name',
         'Name' => 'name',
+        'return_type' => 'returnType',
+        'returnType' => 'returnType',
+        'ReturnType' => 'returnType',
     ];
 
     /**
@@ -47,11 +57,21 @@ class ApplicationTransfer extends AbstractTransfer
             'is_nullable' => false,
             'is_strict' => false,
         ],
+        self::RETURN_TYPE => [
+            'type' => 'SprykerSdk\Integrator\Transfer\AbstractTransfer',
+            'type_shim' => null,
+            'name_underscore' => 'return_type',
+            'is_collection' => false,
+            'is_transfer' => true,
+            'is_value_object' => false,
+            'rest_request_parameter' => 'no',
+            'is_associative' => false,
+            'is_nullable' => false,
+            'is_strict' => false,
+        ],
     ];
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @param string|null $name
      *
      * @return $this
@@ -59,14 +79,12 @@ class ApplicationTransfer extends AbstractTransfer
     public function setName($name)
     {
         $this->name = $name;
-        $this->modifiedProperties[static::NAME] = true;
+        $this->modifiedProperties[self::NAME] = true;
 
         return $this;
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return string|null
      */
     public function getName()
@@ -75,7 +93,7 @@ class ApplicationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
+     * @throws \Throwable
      *
      * @return string
      */
@@ -89,13 +107,60 @@ class ApplicationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
+     * @throws \Throwable
      *
      * @return $this
      */
     public function requireName()
     {
-        $this->assertPropertyIsSet(static::NAME);
+        $this->assertPropertyIsSet(self::NAME);
+
+        return $this;
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\AbstractTransfer|null $returnType
+     *
+     * @return $this
+     */
+    public function setReturnType(AbstractTransfer $returnType = null)
+    {
+        $this->returnType = $returnType;
+        $this->modifiedProperties[self::RETURN_TYPE] = true;
+
+        return $this;
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer|null
+     */
+    public function getReturnType()
+    {
+        return $this->returnType;
+    }
+
+    /**
+     * @throws \Throwable
+     *
+     * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer
+     */
+    public function getReturnTypeOrFail()
+    {
+        if ($this->returnType === null) {
+            $this->throwNullValueException(static::RETURN_TYPE);
+        }
+
+        return $this->returnType;
+    }
+
+    /**
+     * @throws \Throwable
+     *
+     * @return $this
+     */
+    public function requireReturnType()
+    {
+        $this->assertPropertyIsSet(self::RETURN_TYPE);
 
         return $this;
     }
@@ -104,7 +169,7 @@ class ApplicationTransfer extends AbstractTransfer
      * @param array $data
      * @param bool $ignoreMissingProperty
      *
-     * @throws \InvalidArgumentException
+     * @throws \Throwable
      *
      * @return $this
      */
@@ -119,9 +184,23 @@ class ApplicationTransfer extends AbstractTransfer
                     $this->modifiedProperties[$normalizedPropertyName] = true;
 
                     break;
+                case 'returnType':
+                    if (is_array($value)) {
+                        $type = $this->transferMetadata[$normalizedPropertyName]['type'];
+
+                        $value = (new $type())->fromArray($value, $ignoreMissingProperty);
+                    }
+
+                    if ($this->isPropertyStrict($normalizedPropertyName)) {
+                        $this->assertInstanceOfTransfer($normalizedPropertyName, $value);
+                    }
+                    $this->$normalizedPropertyName = $value;
+                    $this->modifiedProperties[$normalizedPropertyName] = true;
+
+                    break;
                 default:
                     if (!$ignoreMissingProperty) {
-                        throw new InvalidArgumentException(sprintf('Missing property `%s` in `%s`', $property, static::class));
+                        throw new \InvalidArgumentException(sprintf('Missing property `%s` in `%s`', $property, static::class));
                     }
             }
         }
@@ -135,7 +214,7 @@ class ApplicationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false): array
+    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false)
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayRecursiveNotCamelCased();
@@ -239,6 +318,7 @@ class ApplicationTransfer extends AbstractTransfer
             }
             switch ($property) {
                 case 'name':
+                case 'returnType':
                     $values[$arrayKey] = $value;
 
                     break;
@@ -266,6 +346,7 @@ class ApplicationTransfer extends AbstractTransfer
             }
             switch ($property) {
                 case 'name':
+                case 'returnType':
                     $values[$arrayKey] = $value;
 
                     break;
@@ -295,7 +376,7 @@ class ApplicationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayNotRecursiveCamelCased()
+    public function modifiedToArrayNotRecursiveCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -319,40 +400,44 @@ class ApplicationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayNotRecursiveCamelCased()
+    public function toArrayNotRecursiveCamelCased(): array
     {
         return [
             'name' => $this->name,
+            'returnType' => $this->returnType,
         ];
     }
 
     /**
      * @return array
      */
-    public function toArrayNotRecursiveNotCamelCased()
+    public function toArrayNotRecursiveNotCamelCased(): array
     {
         return [
             'name' => $this->name,
+            'return_type' => $this->returnType,
         ];
     }
 
     /**
      * @return array
      */
-    public function toArrayRecursiveNotCamelCased()
+    public function toArrayRecursiveNotCamelCased(): array
     {
         return [
             'name' => $this->name,
+            'return_type' => $this->returnType,
         ];
     }
 
     /**
      * @return array
      */
-    public function toArrayRecursiveCamelCased()
+    public function toArrayRecursiveCamelCased(): array
     {
         return [
             'name' => $this->name,
+            'returnType' => $this->returnType,
         ];
     }
 }
