@@ -22,7 +22,16 @@ class NullIO implements IOInterface
      */
     public function write($messages, bool $newline = false, int $options = 0): void
     {
-        echo $messages;
+        if (!is_array($messages)) {
+            echo $messages;
+        } else {
+            foreach ($messages as $message) {
+                echo $message;
+                if ($newline) {
+                    echo '<br>';
+                }
+            }
+        }
     }
 
     /**
@@ -35,7 +44,8 @@ class NullIO implements IOInterface
      */
     public function writeln($messages, int $options = 0): void
     {
-        echo $messages . '<br>';
+        $this->write($messages, true, $options);
+        echo '<br>';
     }
 
     /**

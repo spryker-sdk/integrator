@@ -17,14 +17,14 @@ use PhpParser\NodeVisitorAbstract;
 class AddMethodVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var \PhpParser\Node\Stmt\ClassMethod
+     * @var \PhpParser\Node
      */
     protected $classMethodNode;
 
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod $classMethodNode
+     * @param \PhpParser\Node $classMethodNode
      */
-    public function __construct(ClassMethod $classMethodNode)
+    public function __construct(Node $classMethodNode)
     {
         $this->classMethodNode = $classMethodNode;
     }

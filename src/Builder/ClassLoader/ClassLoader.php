@@ -54,17 +54,27 @@ class ClassLoader implements ClassLoaderInterface
 
         $reflectionClass = new ReflectionClass($className);
 
-        $originalSyntaxTree = $this->parser->parse(file_get_contents($reflectionClass->getFileName()));
+        $fileName = $reflectionClass->getFileName();
+        if (!$fileName) {
+            return $classInformationTransfer;
+        }
+        $fileContents = file_get_contents($fileName);
+        if (!$fileContents) {
+            return $classInformationTransfer;
+        }
+
+        $originalSyntaxTree = $this->parser->parse($fileContents);
         $syntaxTree = $this->traverseOriginalSyntaxTree($originalSyntaxTree);
 
         $classInformationTransfer->setClassTokenTree($syntaxTree)
             ->setOriginalClassTokenTree($originalSyntaxTree)
             ->setTokens($this->lexer->getTokens())
-            ->setFilePath($reflectionClass->getFileName());
+            ->setFilePath($fileName);
 
-        if ($reflectionClass->getParentClass()) {
+        $parentClass = $reflectionClass->getParentClass();
+        if ($parentClass) {
             $classInformationTransfer->setParent(
-                $this->loadClass($reflectionClass->getParentClass()->getName()),
+                $this->loadClass($parentClass->getName()),
             );
         }
 

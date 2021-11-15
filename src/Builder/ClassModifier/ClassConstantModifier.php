@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
-use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
+use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddConstantVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -18,14 +18,14 @@ class ClassConstantModifier implements ClassConstantModifierInterface
     use AddVisitorsTrait;
 
     /**
-     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder
+     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
      */
     protected $classNodeFinder;
 
     /**
-     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder $classNodeFinder
+     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      */
-    public function __construct(ClassNodeFinder $classNodeFinder)
+    public function __construct(ClassNodeFinderInterface $classNodeFinder)
     {
         $this->classNodeFinder = $classNodeFinder;
     }

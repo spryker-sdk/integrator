@@ -105,7 +105,10 @@ class ModuleFinder implements ModuleFinderInterface
      */
     protected function getStandaloneModuleFinder(): Finder
     {
-        return (new Finder())->directories()->depth('== 0')->in(APPLICATION_VENDOR_DIR . '/spryker/');
+        return (new Finder())
+            ->directories()
+            ->depth('== 0')
+            ->in($this->config->getVendorDirectory() . 'spryker/');
     }
 
     /**
@@ -343,10 +346,11 @@ class ModuleFinder implements ModuleFinderInterface
         }
 
         $fileContent = file_get_contents($pathToComposerJson);
+        if (!$fileContent) {
+            return [];
+        }
 
-        $composerJsonAsArray = json_decode($fileContent, true);
-
-        return $composerJsonAsArray;
+        return json_decode($fileContent, true);
     }
 
     /**
@@ -357,9 +361,24 @@ class ModuleFinder implements ModuleFinderInterface
     protected function getOrganizationNameFromComposer(array $composerJsonAsArray): string
     {
         $nameFragments = explode('/', $composerJsonAsArray['name']);
-        $organizationName = $nameFragments[0];
 
-        return $organizationName;
+        return $nameFragments[0];
+    }
+
+    /**
+     * @param \Symfony\Component\Finder\SplFileInfo $directoryInfo
+     *
+     * @return array<mixed>
+     */
+    protected function getSrcPosition(SplFileInfo $directoryInfo): array
+    {
+        $directoryPath = $directoryInfo->getRealPath();
+        $pathFragments = !$directoryPath ? [] : explode(DIRECTORY_SEPARATOR, $directoryPath);
+
+        return [
+            $pathFragments,
+            array_search('src', $pathFragments),
+        ];
     }
 
     /**
@@ -369,12 +388,9 @@ class ModuleFinder implements ModuleFinderInterface
      */
     protected function getOrganizationNameFromDirectory(SplFileInfo $directoryInfo): string
     {
-        $pathFragments = explode(DIRECTORY_SEPARATOR, $directoryInfo->getRealPath());
-        $vendorPosition = array_search('vendor', $pathFragments);
+        [$pathFragments, $srcPosition] = $this->getSrcPosition($directoryInfo);
 
-        $organizationName = $pathFragments[$vendorPosition + 1];
-
-        return $organizationName;
+        return $pathFragments[$srcPosition + 1];
     }
 
     /**
@@ -384,12 +400,9 @@ class ModuleFinder implements ModuleFinderInterface
      */
     protected function getApplicationNameFromDirectory(SplFileInfo $directoryInfo): string
     {
-        $pathFragments = explode(DIRECTORY_SEPARATOR, $directoryInfo->getRealPath());
-        $vendorPosition = array_search('vendor', $pathFragments);
+        [$pathFragments, $srcPosition] = $this->getSrcPosition($directoryInfo);
 
-        $applicationName = $pathFragments[$vendorPosition + 2];
-
-        return $applicationName;
+        return $pathFragments[$srcPosition + 2];
     }
 
     /**
@@ -400,9 +413,8 @@ class ModuleFinder implements ModuleFinderInterface
     protected function getModuleNameFromComposer(array $composerJsonAsArray): string
     {
         $nameFragments = explode('/', $composerJsonAsArray['name']);
-        $moduleName = $nameFragments[1];
 
-        return $moduleName;
+        return $nameFragments[1];
     }
 
     /**

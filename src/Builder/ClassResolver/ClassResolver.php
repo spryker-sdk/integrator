@@ -9,19 +9,19 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassResolver;
 
-use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGenerator;
-use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
+use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface;
+use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassResolver implements ClassResolverInterface
 {
     /**
-     * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader
+     * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
      */
     protected $classLoader;
 
     /**
-     * @var \SprykerSdk\Integrator\Builder\ClassGenerator\ClassGenerator
+     * @var \SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface
      */
     protected $classGenerator;
 
@@ -31,12 +31,12 @@ class ClassResolver implements ClassResolverInterface
     protected static $generatedClassList = [];
 
     /**
-     * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader $classLoader
-     * @param \SprykerSdk\Integrator\Builder\ClassGenerator\ClassGenerator $classGenerator
+     * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface $classLoader
+     * @param \SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface $classGenerator
      */
     public function __construct(
-        ClassLoader $classLoader,
-        ClassGenerator $classGenerator
+        ClassLoaderInterface $classLoader,
+        ClassGeneratorInterface $classGenerator
     ) {
         $this->classLoader = $classLoader;
         $this->classGenerator = $classGenerator;

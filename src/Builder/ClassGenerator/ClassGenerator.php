@@ -13,7 +13,7 @@ use PhpParser\Builder\Class_;
 use PhpParser\Builder\Namespace_;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
-use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
+use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Common\UtilText\Filter\CamelCaseToSeparator;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
@@ -22,7 +22,7 @@ use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 class ClassGenerator implements ClassGeneratorInterface
 {
     /**
-     * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader
+     * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
      */
     protected $classLoader;
 
@@ -42,13 +42,13 @@ class ClassGenerator implements ClassGeneratorInterface
     protected $config;
 
     /**
-     * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader $classLoader
+     * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface $classLoader
      * @param \SprykerSdk\Integrator\Helper\ClassHelperInterface $classHelper
      * @param \PhpParser\BuilderFactory $builderFactory
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
      */
     public function __construct(
-        ClassLoader $classLoader,
+        ClassLoaderInterface $classLoader,
         ClassHelperInterface $classHelper,
         BuilderFactory $builderFactory,
         IntegratorConfig $config
@@ -162,14 +162,14 @@ class ClassGenerator implements ClassGeneratorInterface
     protected function resolveModuleDir(string $organisation, string $module): string
     {
         if (in_array($organisation, $this->config->getCoreNonSplitOrganisations())) {
-            return $this->config->getCoreRootDirectory()
+            return $this->config->getVendorDirectory()
                 . sprintf($this->config->getNonSplitRepositoryPathPattern(), $this->camelCaseToDash($organisation))
                 . $module
                 . DIRECTORY_SEPARATOR;
         }
 
         if (in_array($organisation, $this->config->getCoreNamespaces())) {
-            return $this->config->getCoreRootDirectory()
+            return $this->config->getVendorDirectory()
                 . $organisation
                 . DIRECTORY_SEPARATOR
                 . $module

@@ -12,7 +12,8 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
-use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
+use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface;
+use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemovePluginFromPluginListVisitor;
@@ -25,12 +26,12 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
     use AddVisitorsTrait;
 
     /**
-     * @var \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifier
+     * @var \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface
      */
     protected $commonClassModifier;
 
     /**
-     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder
+     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
      */
     protected $classNodeFinder;
 
@@ -40,13 +41,13 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
     protected $classMethodChecker;
 
     /**
-     * @param \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifier $commonClassModifier
-     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder $classNodeFinder
+     * @param \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface $commonClassModifier
+     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface $classMethodChecker
      */
     public function __construct(
-        CommonClassModifier $commonClassModifier,
-        ClassNodeFinder $classNodeFinder,
+        CommonClassModifierInterface $commonClassModifier,
+        ClassNodeFinderInterface $classNodeFinder,
         ClassMethodCheckerInterface $classMethodChecker
     ) {
         $this->commonClassModifier = $commonClassModifier;

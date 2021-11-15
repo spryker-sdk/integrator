@@ -11,20 +11,20 @@ namespace SprykerSdk\Integrator\Executor;
 
 use RuntimeException;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
-use SprykerSdk\Integrator\Manifest\ManifestReader;
+use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
 use SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface;
-use SprykerSdk\Integrator\SprykerLock\SprykerLockReader;
-use SprykerSdk\Integrator\SprykerLock\SprykerLockWriter;
+use SprykerSdk\Integrator\SprykerLock\SprykerLockReaderInterface;
+use SprykerSdk\Integrator\SprykerLock\SprykerLockWriterInterface;
 
 class ManifestExecutor implements ManifestExecutorInterface
 {
     /**
-     * @var \SprykerSdk\Integrator\SprykerLock\SprykerLockReader
+     * @var \SprykerSdk\Integrator\SprykerLock\SprykerLockReaderInterface
      */
     protected $sprykerLockReader;
 
     /**
-     * @var \SprykerSdk\Integrator\Manifest\ManifestReader
+     * @var \SprykerSdk\Integrator\Manifest\ManifestReaderInterface
      */
     protected $manifestReader;
 
@@ -34,20 +34,20 @@ class ManifestExecutor implements ManifestExecutorInterface
     protected $manifestExecutors;
 
     /**
-     * @var \SprykerSdk\Integrator\SprykerLock\SprykerLockWriter
+     * @var \SprykerSdk\Integrator\SprykerLock\SprykerLockWriterInterface
      */
     protected $sprykerLockWriter;
 
     /**
-     * @param \SprykerSdk\Integrator\SprykerLock\SprykerLockReader $sprykerLockReader
-     * @param \SprykerSdk\Integrator\Manifest\ManifestReader $manifestReader
-     * @param \SprykerSdk\Integrator\SprykerLock\SprykerLockWriter $sprykerLockWriter
+     * @param \SprykerSdk\Integrator\SprykerLock\SprykerLockReaderInterface $sprykerLockReader
+     * @param \SprykerSdk\Integrator\Manifest\ManifestReaderInterface $manifestReader
+     * @param \SprykerSdk\Integrator\SprykerLock\SprykerLockWriterInterface $sprykerLockWriter
      * @param array<\SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface> $manifestExecutors
      */
     public function __construct(
-        SprykerLockReader $sprykerLockReader,
-        ManifestReader $manifestReader,
-        SprykerLockWriter $sprykerLockWriter,
+        SprykerLockReaderInterface $sprykerLockReader,
+        ManifestReaderInterface $manifestReader,
+        SprykerLockWriterInterface $sprykerLockWriter,
         array $manifestExecutors
     ) {
         $this->sprykerLockReader = $sprykerLockReader;

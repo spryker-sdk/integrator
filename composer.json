@@ -47,7 +47,7 @@
     "scripts": {
         "cs-check": "vendor/bin/phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/ tests/SprykerSdkTest/",
         "cs-fix": "vendor/bin/phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/ tests/SprykerSdkTest/",
-        "stan": "vendor/bin/phpstan.phar analyse",
+        "stan": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/phpunit"
     },
     "extra": {

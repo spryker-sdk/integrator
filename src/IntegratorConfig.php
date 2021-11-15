@@ -181,9 +181,9 @@ class IntegratorConfig extends AbstractConfig
     /**
      * @return string
      */
-    public function getCoreRootDirectory(): string
+    public function getVendorDirectory(): string
     {
-        return APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR;
+        return APPLICATION_VENDOR_DIR . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -197,6 +197,14 @@ class IntegratorConfig extends AbstractConfig
             . DIRECTORY_SEPARATOR
             . 'Bundles'
             . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplicationSourceDir(): string
+    {
+        return APPLICATION_SOURCE_DIR;
     }
 
     /**

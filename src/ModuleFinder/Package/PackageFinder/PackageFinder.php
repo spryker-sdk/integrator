@@ -60,7 +60,10 @@ class PackageFinder implements PackageFinderInterface
      */
     protected function getPackageFinder(): Finder
     {
-        return (new Finder())->directories()->depth('== 0')->in(APPLICATION_VENDOR_DIR . '/spryker/');
+        return (new Finder())
+            ->directories()
+            ->depth('== 0')
+            ->in($this->config->getVendorDirectory() . 'spryker/');
     }
 
     /**
@@ -98,9 +101,11 @@ class PackageFinder implements PackageFinderInterface
     {
         $pathToComposerJson = sprintf('%s/composer.json', $path);
         $fileContent = file_get_contents($pathToComposerJson);
-        $composerJsonAsArray = json_decode($fileContent, true);
+        if (!$fileContent) {
+            return [];
+        }
 
-        return $composerJsonAsArray;
+        return json_decode($fileContent, true);
     }
 
     /**

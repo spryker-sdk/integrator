@@ -20,7 +20,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
-use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
+use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\CloneNodeWithClearPositionVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveMethodVisitor;
@@ -30,7 +30,7 @@ use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 class CommonClassModifier implements CommonClassModifierInterface
 {
     /**
-     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder
+     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
      */
     protected $classNodeFinder;
 
@@ -40,11 +40,11 @@ class CommonClassModifier implements CommonClassModifierInterface
     protected $classMethodChecker;
 
     /**
-     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder $classNodeFinder
+     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface $classMethodChecker
      */
     public function __construct(
-        ClassNodeFinder $classNodeFinder,
+        ClassNodeFinderInterface $classNodeFinder,
         ClassMethodCheckerInterface $classMethodChecker
     ) {
         $this->classNodeFinder = $classNodeFinder;

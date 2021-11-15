@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Manifest;
 
-use SprykerSdk\Integrator\Composer\ComposerLockReader;
+use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use ZipArchive;
@@ -22,15 +22,15 @@ class ManifestReader implements ManifestReaderInterface
     protected $config;
 
     /**
-     * @var \SprykerSdk\Integrator\Composer\ComposerLockReader
+     * @var \SprykerSdk\Integrator\Composer\ComposerLockReaderInterface
      */
     protected $composerLockReader;
 
     /**
-     * @param \SprykerSdk\Integrator\Composer\ComposerLockReader $composerLockReader
+     * @param \SprykerSdk\Integrator\Composer\ComposerLockReaderInterface $composerLockReader
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
      */
-    public function __construct(ComposerLockReader $composerLockReader, IntegratorConfig $config)
+    public function __construct(ComposerLockReaderInterface $composerLockReader, IntegratorConfig $config)
     {
         $this->config = $config;
         $this->composerLockReader = $composerLockReader;

@@ -108,7 +108,7 @@ class ComposerInputOutputAdapter implements InputOutputInterface
             return $default;
         }
 
-        return $this->symfonyStyle->select($question, $choices, $default);
+        return $this->symfonyStyle->select($question, $choices, (string)$default);
     }
 
     /**

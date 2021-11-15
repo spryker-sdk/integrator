@@ -11,7 +11,7 @@ namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
-use Zend\Filter\Word\CamelCaseToSeparator;
+use SprykerSdk\Integrator\Common\UtilText\Filter\CamelCaseToSeparator;
 
 class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
 {
@@ -64,7 +64,7 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
     {
         [$organisation, $moduleName] = explode('.', $moduleName);
 
-        return $this->config->getCoreRootDirectory()
+        return $this->config->getVendorDirectory()
             . mb_strtolower($this->camelCaseToDash($organisation))
             . DIRECTORY_SEPARATOR
             . mb_strtolower($this->camelCaseToDash($moduleName))
@@ -91,6 +91,6 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
      */
     protected function camelCaseToDash(string $value): string
     {
-        return (new CamelCaseToSeparator('-'))->filter($value);
+        return (new CamelCaseToSeparator())->filter($value, '-');
     }
 }

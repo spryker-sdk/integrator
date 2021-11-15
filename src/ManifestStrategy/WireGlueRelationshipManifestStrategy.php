@@ -33,7 +33,7 @@ class WireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
     }
 
     /**
-     * @param array<string> $manifest
+     * @param array<mixed> $manifest
      * @param string $moduleName
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
@@ -71,7 +71,7 @@ class WireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
             );
 
             if ($isDry) {
-                $applied = $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
+                $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
             } else {
                 $applied = $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }
