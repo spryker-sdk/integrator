@@ -9,9 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator;
 
-use SprykerSdk\Integrator\Common\AbstractConfig;
-
-class IntegratorConfig extends AbstractConfig
+class IntegratorConfig
 {
     /**
      * @var string
@@ -88,6 +86,30 @@ class IntegratorConfig extends AbstractConfig
         'spryker-sdk',
         'spryker-merchant-portal',
     ];
+
+    /**
+     * @var self|null
+     */
+    protected static $instance;
+
+    final private function __construct()
+    {
+    }
+
+    /**
+     * @api
+     *
+     * @return \SprykerSdk\Integrator\IntegratorConfig
+     */
+    public static function getInstance()
+    {
+        if (static::$instance === null) {
+            static::$instance = new static();
+            static::$instance->loadConfig();
+        }
+
+        return static::$instance;
+    }
 
     /**
      * @return void

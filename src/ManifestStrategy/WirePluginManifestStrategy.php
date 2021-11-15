@@ -24,7 +24,7 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
     }
 
     /**
-     * @param array<string> $manifest
+     * @param array<mixed> $manifest
      * @param string $moduleName
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry

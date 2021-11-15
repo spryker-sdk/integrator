@@ -97,14 +97,14 @@ class ProjectModuleFinder implements ProjectModuleFinderInterface
      */
     protected function getProjectModuleFinder(array $projectOrganizationModuleDirectories): Finder
     {
-        $finder = new Finder();
-        $finder
+        /** @var \Closure $callback */
+        $callback = $this->getFilenameSortCallback();
+
+        return (new Finder())
             ->directories()
             ->depth('== 0')
             ->in($projectOrganizationModuleDirectories)
-            ->sort($this->getFilenameSortCallback());
-
-        return $finder;
+            ->sort($callback);
     }
 
     /**

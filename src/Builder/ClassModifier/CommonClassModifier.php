@@ -81,7 +81,7 @@ class CommonClassModifier implements CommonClassModifierInterface
         if ($this->classMethodChecker->isMethodReturnArray($methodSyntaxTree)) {
             $methodBody = $this->buildMethodBodyToReturnArray($targetMethodName, $methodSyntaxTree);
         } elseif (count($methodSyntaxTree->params) === 1) {
-            $methodBody = [new Return_($methodSyntaxTree->params[]->var)];
+            $methodBody = [new Return_($methodSyntaxTree->params[0]->var)];
         }
 
         $nodeTraverser = new NodeTraverser();

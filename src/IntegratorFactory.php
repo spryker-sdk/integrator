@@ -41,7 +41,6 @@ use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinterInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
-use SprykerSdk\Integrator\Common\AbstractConfig;
 use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
