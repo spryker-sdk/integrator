@@ -20,10 +20,14 @@ class SeparatorToCamelCase
      */
     public function filter(string $string, string $separator = '-', bool $upperCaseFirst = false): string
     {
+        if ($separator === '') {
+            return '';
+        }
+
         // This should be the fastest solution compared to
         // any preg_*() or array_map() solution
         $explodedString = explode($separator, $string);
-        if (!$explodedString) {
+        if (count($explodedString) == 0) {
             return '';
         }
 

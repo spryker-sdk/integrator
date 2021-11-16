@@ -31,9 +31,9 @@ class ClassDiffPrinter implements ClassDiffPrinterInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      *
-     * @return string|null
+     * @return string
      */
-    public function printDiff(ClassInformationTransfer $classInformationTransfer): ?string
+    public function printDiff(ClassInformationTransfer $classInformationTransfer): string
     {
         $originalCode = '';
         if ($classInformationTransfer->getOriginalClassTokenTree()) {
@@ -63,7 +63,7 @@ class ClassDiffPrinter implements ClassDiffPrinterInterface
         );
 
         if ($diff === "--- Original\n+++ New\n") {
-            return null;
+            return '';
         }
 
         return $diff;

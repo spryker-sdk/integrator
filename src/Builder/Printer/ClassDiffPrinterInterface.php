@@ -16,7 +16,7 @@ interface ClassDiffPrinterInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      *
-     * @return string|null
+     * @return string
      */
-    public function printDiff(ClassInformationTransfer $classInformationTransfer): ?string;
+    public function printDiff(ClassInformationTransfer $classInformationTransfer): string;
 }
