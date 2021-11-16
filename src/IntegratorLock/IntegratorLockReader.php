@@ -7,11 +7,11 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\SprykerLock;
+namespace SprykerSdk\Integrator\IntegratorLock;
 
 use SprykerSdk\Integrator\IntegratorConfig;
 
-class SprykerLockReader implements SprykerLockReaderInterface
+class IntegratorLockReader implements IntegratorLockReaderInterface
 {
     /**
      * @var \SprykerSdk\Integrator\IntegratorConfig

@@ -598,7 +598,7 @@ class OrganizationTransfer extends AbstractTransfer
     public function toArrayRecursiveCamelCased()
     {
         return [
-            'name' =>$this->name,
+            'name' => $this->name,
             'nameDashed' => $this->nameDashed,
             'isProject' => $this->isProject,
             'rootPath' => $this->rootPath,

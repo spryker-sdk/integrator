@@ -53,7 +53,6 @@ class AddConstantVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        /** @var \PhpParser\Node\Stmt\Class_ $node */
         if (!($node instanceof Class_)) {
             return $node;
         }

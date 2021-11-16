@@ -45,7 +45,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "cs-check": "vendor/bin/phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/ tests/SprykerSdkTest/",
+        "cs-check": "vendor/bin/phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml --standard=phpcs.xml.dist src/ tests/SprykerSdkTest/",
         "cs-fix": "vendor/bin/phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/ tests/SprykerSdkTest/",
         "stan": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/phpunit"

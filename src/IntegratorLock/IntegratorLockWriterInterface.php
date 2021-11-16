@@ -7,12 +7,14 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\SprykerLock;
+namespace SprykerSdk\Integrator\IntegratorLock;
 
-interface SprykerLockReaderInterface
+interface IntegratorLockWriterInterface
 {
     /**
-     * @return array<string, array<string, array<string>>>
+     * @param array $lockData
+     *
+     * @return int
      */
-    public function getLockFileData(): array;
+    public function storeLock(array $lockData): int;
 }

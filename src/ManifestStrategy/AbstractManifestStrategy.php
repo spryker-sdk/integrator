@@ -28,6 +28,7 @@ abstract class AbstractManifestStrategy implements ManifestStrategyInterface
 
     /**
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @param \SprykerSdk\Integrator\Helper\ClassHelperInterface $classHelper
      */
     public function __construct(IntegratorConfig $config, ClassHelperInterface $classHelper)
     {

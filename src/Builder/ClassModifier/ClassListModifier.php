@@ -12,7 +12,6 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
-use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddClassToClassListVisitor;

@@ -92,7 +92,7 @@ class IntegratorConfig
      */
     protected static $instance;
 
-    final private function __construct()
+    final protected function __construct()
     {
     }
 

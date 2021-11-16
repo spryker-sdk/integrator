@@ -11,7 +11,6 @@ namespace SprykerSdk\Integrator\Builder\Visitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 
 class AddMethodVisitor extends NodeVisitorAbstract
@@ -36,7 +35,6 @@ class AddMethodVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        /** @var \PhpParser\Node\Stmt\Class_ $node */
         if (!($node instanceof Class_)) {
             return $node;
         }

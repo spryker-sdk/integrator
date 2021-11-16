@@ -58,7 +58,7 @@ class MethodBodyExtendVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return \PhpParser\Node|array<\PhpParser\Node>
+     * @return \PhpParser\Node|\PhpParser\Node[]
      */
     public function leaveNode(Node $node)
     {

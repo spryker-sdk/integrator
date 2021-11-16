@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
+use SprykerSdk\Integrator\Common\UtilText\Filter\CamelCaseToSeparator;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Integrator\Common\UtilText\Filter\CamelCaseToSeparator;
 
 class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
 {

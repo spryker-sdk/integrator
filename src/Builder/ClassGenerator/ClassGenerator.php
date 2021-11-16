@@ -192,7 +192,7 @@ class ClassGenerator implements ClassGeneratorInterface
 
         $dir = file_get_contents($moduleDir . '.license');
 
-        return !$dir ? '' : $dir;
+        return $dir ?: '';
     }
 
     /**

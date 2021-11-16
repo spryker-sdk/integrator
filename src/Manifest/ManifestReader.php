@@ -61,7 +61,7 @@ class ManifestReader implements ManifestReaderInterface
             }
 
             $json = file_get_contents($filePath);
-            if(!$json) {
+            if (!$json) {
                 continue;
             }
 
@@ -155,7 +155,7 @@ class ManifestReader implements ManifestReaderInterface
         $versions = $this->sortArray($versions);
         $end = end($versions);
 
-        return !$end ? null : $end;
+        return $end ?: null;
     }
 
     /**

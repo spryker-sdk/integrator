@@ -20,7 +20,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use RuntimeException;
-use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\MethodBodyExtendVisitor;

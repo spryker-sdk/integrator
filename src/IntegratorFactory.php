@@ -47,6 +47,10 @@ use SprykerSdk\Integrator\Executor\ManifestExecutor;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
+use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReader;
+use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
+use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriter;
+use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
 use SprykerSdk\Integrator\Manifest\ManifestReader;
 use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureEnvManifestStrategy;
@@ -62,10 +66,6 @@ use SprykerSdk\Integrator\ManifestStrategy\WirePluginManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireWidgetManifestStrategy;
 use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacade;
 use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacadeInterface;
-use SprykerSdk\Integrator\SprykerLock\SprykerLockReader;
-use SprykerSdk\Integrator\SprykerLock\SprykerLockReaderInterface;
-use SprykerSdk\Integrator\SprykerLock\SprykerLockWriter;
-use SprykerSdk\Integrator\SprykerLock\SprykerLockWriterInterface;
 
 class IntegratorFactory
 {
@@ -83,27 +83,27 @@ class IntegratorFactory
     public function creatManifestExecutor(): ManifestExecutorInterface
     {
         return new ManifestExecutor(
-            $this->createSprykerLockReader(),
+            $this->createIntegratorLockReader(),
             $this->createManifestReader(),
-            $this->createSprykerLockWriter(),
+            $this->createIntegratorLockWriter(),
             $this->getManifestExecutorStrategies(),
         );
     }
 
     /**
-     * @return \SprykerSdk\Integrator\SprykerLock\SprykerLockReaderInterface
+     * @return \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface
      */
-    public function createSprykerLockReader(): SprykerLockReaderInterface
+    public function createIntegratorLockReader(): IntegratorLockReaderInterface
     {
-        return new SprykerLockReader($this->getConfig());
+        return new IntegratorLockReader($this->getConfig());
     }
 
     /**
-     * @return \SprykerSdk\Integrator\SprykerLock\SprykerLockWriterInterface
+     * @return \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface
      */
-    public function createSprykerLockWriter(): SprykerLockWriterInterface
+    public function createIntegratorLockWriter(): IntegratorLockWriterInterface
     {
-        return new SprykerLockWriter($this->getConfig());
+        return new IntegratorLockWriter($this->getConfig());
     }
 
     /**
@@ -391,6 +391,8 @@ class IntegratorFactory
     }
 
     /**
+     * @param \PhpParser\Lexer|null $lexer
+     *
      * @return \PhpParser\Parser
      */
     public function createPhpParserParser(?Lexer $lexer = null): Parser

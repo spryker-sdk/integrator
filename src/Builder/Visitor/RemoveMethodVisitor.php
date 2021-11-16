@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\Visitor;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 

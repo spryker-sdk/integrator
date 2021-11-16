@@ -7,11 +7,11 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\SprykerLock;
+namespace SprykerSdk\Integrator\IntegratorLock;
 
 use SprykerSdk\Integrator\IntegratorConfig;
 
-class SprykerLockWriter implements SprykerLockWriterInterface
+class IntegratorLockWriter implements IntegratorLockWriterInterface
 {
     /**
      * @var string
@@ -40,7 +40,7 @@ class SprykerLockWriter implements SprykerLockWriterInterface
     {
         $lockFilePath = $this->config->getIntegratorLockFilePath();
         $json = json_encode($lockData, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-        if(!$json){
+        if (!$json) {
             return 0;
         }
 

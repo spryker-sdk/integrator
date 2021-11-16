@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Transfer;
 
+use InvalidArgumentException;
+
 class MethodInformationTransfer extends AbstractTransfer
 {
     /**
@@ -79,7 +81,7 @@ class MethodInformationTransfer extends AbstractTransfer
     public function setName($name)
     {
         $this->name = $name;
-        $this->modifiedProperties[self::NAME] = true;
+        $this->modifiedProperties[static::NAME] = true;
 
         return $this;
     }
@@ -93,8 +95,6 @@ class MethodInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @throws \Throwable
-     *
      * @return string
      */
     public function getNameOrFail()
@@ -107,13 +107,11 @@ class MethodInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @throws \Throwable
-     *
      * @return $this
      */
     public function requireName()
     {
-        $this->assertPropertyIsSet(self::NAME);
+        $this->assertPropertyIsSet(static::NAME);
 
         return $this;
     }
@@ -123,10 +121,10 @@ class MethodInformationTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setReturnType(AbstractTransfer $returnType = null)
+    public function setReturnType(?AbstractTransfer $returnType = null)
     {
         $this->returnType = $returnType;
-        $this->modifiedProperties[self::RETURN_TYPE] = true;
+        $this->modifiedProperties[static::RETURN_TYPE] = true;
 
         return $this;
     }
@@ -140,8 +138,6 @@ class MethodInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @throws \Throwable
-     *
      * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer
      */
     public function getReturnTypeOrFail()
@@ -154,13 +150,11 @@ class MethodInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @throws \Throwable
-     *
      * @return $this
      */
     public function requireReturnType()
     {
-        $this->assertPropertyIsSet(self::RETURN_TYPE);
+        $this->assertPropertyIsSet(static::RETURN_TYPE);
 
         return $this;
     }
@@ -169,7 +163,7 @@ class MethodInformationTransfer extends AbstractTransfer
      * @param array $data
      * @param bool $ignoreMissingProperty
      *
-     * @throws \Throwable
+     * @throws \InvalidArgumentException
      *
      * @return $this
      */
@@ -200,7 +194,7 @@ class MethodInformationTransfer extends AbstractTransfer
                     break;
                 default:
                     if (!$ignoreMissingProperty) {
-                        throw new \InvalidArgumentException(sprintf('Missing property `%s` in `%s`', $property, static::class));
+                        throw new InvalidArgumentException(sprintf('Missing property `%s` in `%s`', $property, static::class));
                     }
             }
         }

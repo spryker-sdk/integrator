@@ -297,6 +297,8 @@ class IntegratorFacadeTest extends BaseTestCase
     }
 
     /**
+     * @param string|null $moduleName
+     *
      * @return \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer
      */
     private function buildModuleFilterTransfer(?string $moduleName = null): ModuleFilterTransfer

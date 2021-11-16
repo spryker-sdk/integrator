@@ -156,12 +156,12 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      * @param bool $ignoreMissingProperty
      *
      * @return $this
      */
-    public function fromArray(array $data, $ignoreMissingProperty = false)
+    public function fromArray(array $data, bool $ignoreMissingProperty = false)
     {
         foreach ($data as $property => $value) {
             if ($this->hasProperty($property, $ignoreMissingProperty) === false) {
@@ -289,9 +289,9 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      * @param mixed $value
      * @param bool $ignoreMissingProperty
      *
-     * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer
+     * @return self
      */
-    protected function initializeNestedTransferObject($property, $value, $ignoreMissingProperty = false): AbstractTransfer
+    protected function initializeNestedTransferObject($property, $value, $ignoreMissingProperty = false): self
     {
         $type = $this->transferMetadata[$property]['type'];
 
@@ -369,7 +369,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     {
         $json = json_encode($this->modifiedToArray());
 
-        return !$json ? '{}' : $json;
+        return $json ?: '{}';
     }
 
     /**

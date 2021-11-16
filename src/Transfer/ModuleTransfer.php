@@ -105,7 +105,7 @@ class ModuleTransfer extends AbstractTransfer
     protected $dependentModule;
 
     /**
-     * @var array<\SprykerSdk\Integrator\Transfer\ApplicationTransfer>|\ArrayObject
+     * @var \ArrayObject|array<\SprykerSdk\Integrator\Transfer\ApplicationTransfer>
      */
     protected $applications;
 
@@ -665,7 +665,7 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @return array<\SprykerSdk\Integrator\Transfer\ApplicationTransfer>|\ArrayObject
+     * @return \ArrayObject|array<\SprykerSdk\Integrator\Transfer\ApplicationTransfer>
      */
     public function getApplications()
     {
@@ -739,11 +739,14 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
+     * @param array<string, mixed> $data
+     * @param bool $ignoreMissingProperty
+     *
      * @throws \InvalidArgumentException
      *
      * @return $this
      */
-    public function fromArray(array $data, $ignoreMissingProperty = false)
+    public function fromArray(array $data, bool $ignoreMissingProperty = false)
     {
         foreach ($data as $property => $value) {
             $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? null;
@@ -1046,7 +1049,7 @@ class ModuleTransfer extends AbstractTransfer
     public function toArrayRecursiveNotCamelCased(): array
     {
         return [
-            'name' => $this->name ,
+            'name' => $this->name,
             'name_dashed' => $this->nameDashed,
             'path' => $this->path,
             'is_standalone' => $this->isStandalone,
