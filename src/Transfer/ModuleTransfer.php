@@ -115,7 +115,7 @@ class ModuleTransfer extends AbstractTransfer
     protected $isStandalone;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $transferPropertyNameMap = [
         'name' => 'name',

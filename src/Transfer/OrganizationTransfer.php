@@ -54,7 +54,7 @@ class OrganizationTransfer extends AbstractTransfer
     protected $rootPath;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $transferPropertyNameMap = [
         'name' => 'name',

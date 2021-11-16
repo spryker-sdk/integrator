@@ -95,7 +95,7 @@ class ClassInformationTransfer extends AbstractTransfer
     protected $methods;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $transferPropertyNameMap = [
         'fully_qualified_class_name' => 'fullyQualifiedClassName',

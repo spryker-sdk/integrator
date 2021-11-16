@@ -31,7 +31,7 @@ class MethodInformationTransfer extends AbstractTransfer
     protected $returnType;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $transferPropertyNameMap = [
         'name' => 'name',

@@ -44,7 +44,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     protected $module;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $transferPropertyNameMap = [
         'organization' => 'organization',

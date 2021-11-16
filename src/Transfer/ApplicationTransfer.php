@@ -24,7 +24,7 @@ class ApplicationTransfer extends AbstractTransfer
     protected $name;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $transferPropertyNameMap = [
         'name' => 'name',

@@ -18,7 +18,7 @@ class SeparatorToCamelCase
      *
      * @return string
      */
-    public function filter($string, $separator = '-', $upperCaseFirst = false): string
+    public function filter(string $string, string $separator = '-', bool $upperCaseFirst = false): string
     {
         // This should be the fastest solution compared to
         // any preg_*() or array_map() solution
@@ -27,7 +27,7 @@ class SeparatorToCamelCase
             return '';
         }
 
-        $result = ($upperCaseFirst) ? '' : array_shift($explodedString);
+        $result = $upperCaseFirst ? '' : array_shift($explodedString);
 
         foreach ($explodedString as $part) {
             $result .= ucfirst($part);

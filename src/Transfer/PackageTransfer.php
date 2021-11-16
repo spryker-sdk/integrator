@@ -74,7 +74,7 @@ class PackageTransfer extends AbstractTransfer
     protected $path;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $transferPropertyNameMap = [
         'composer_name' => 'composerName',

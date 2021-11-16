@@ -158,14 +158,12 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
 
         $organisationTransfer = (new OrganizationTransfer())
             ->setNameDashed($organization)
-            ->setName($dashToCamelCaseFilter->filter($organization));
+            ->setName($dashToCamelCaseFilter->filter($organization, '-'));
 
-        $moduleTransfer = (new ModuleTransfer())
+        return (new ModuleTransfer())
             ->setNameDashed($moduleName)
-            ->setName($dashToCamelCaseFilter->filter($moduleName))
+            ->setName($dashToCamelCaseFilter->filter($moduleName, '-'))
             ->setOrganization($organisationTransfer);
-
-        return $moduleTransfer;
     }
 
     /**
