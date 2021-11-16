@@ -16,20 +16,15 @@ class SeparatorToCamelCase
      * @param string $separator
      * @param bool $upperCaseFirst
      *
+     * @phpstan-param non-empty-string $separator
+     *
      * @return string
      */
     public function filter(string $string, string $separator = '-', bool $upperCaseFirst = false): string
     {
-        if ($separator === '') {
-            return '';
-        }
-
         // This should be the fastest solution compared to
         // any preg_*() or array_map() solution
         $explodedString = explode($separator, $string);
-        if (count($explodedString) == 0) {
-            return '';
-        }
 
         $result = $upperCaseFirst ? '' : array_shift($explodedString);
 
