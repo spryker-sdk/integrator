@@ -19,7 +19,7 @@ interface ManifestStrategyInterface
     public function getType(): string;
 
     /**
-     * @param array<mixed> $manifest
+     * @param array<string, mixed> $manifest
      * @param string $moduleName
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry

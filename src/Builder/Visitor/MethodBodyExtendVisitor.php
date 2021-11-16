@@ -22,7 +22,7 @@ class MethodBodyExtendVisitor extends NodeVisitorAbstract
     protected $methodName;
 
     /**
-     * @var array
+     * @var array<\PhpParser\Node>
      */
     protected $methodBody;
 
@@ -33,7 +33,7 @@ class MethodBodyExtendVisitor extends NodeVisitorAbstract
 
     /**
      * @param string $methodName
-     * @param array $methodBody
+     * @param array<\PhpParser\Node> $methodBody
      */
     public function __construct(string $methodName, array $methodBody)
     {
@@ -58,7 +58,7 @@ class MethodBodyExtendVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return \PhpParser\Node|array<mixed>
+     * @return \PhpParser\Node|array<\PhpParser\Node>
      */
     public function leaveNode(Node $node)
     {

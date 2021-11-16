@@ -363,11 +363,13 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     }
 
     /**
-     * @return string|false
+     * @return string
      */
     public function serialize()
     {
-        return json_encode($this->modifiedToArray());
+        $json = json_encode($this->modifiedToArray());
+
+        return !$json ? '{}' : $json;
     }
 
     /**

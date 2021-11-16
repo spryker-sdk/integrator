@@ -46,7 +46,7 @@ class ClassLoader implements ClassLoaderInterface
      */
     public function loadClass(string $className): ClassInformationTransfer
     {
-        /** @var class-string $className */
+        /** @phpstan-var class-string $className */
         $className = ltrim($className, '\\');
 
         $classInformationTransfer = (new ClassInformationTransfer())

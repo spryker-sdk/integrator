@@ -78,7 +78,7 @@ class ClassGenerator implements ClassGeneratorInterface
         $classBuilder = $this->builderFactory->class($this->classHelper->getShortClassName($className));
         $classNamespaceBuilder = $this->builderFactory
             ->namespace(ltrim($this->classHelper->getClassNamespace($className), '\\'))
-            ->setDocComment($this->findLicenseBlock($moduleDir));
+            ->setDocComment($this->getLicenseBlock($moduleDir));
 
         if ($parentClass) {
             $classBuilder = $this->extendClassBuilderWithParentClass($classBuilder, $className, $parentClass);
@@ -184,7 +184,7 @@ class ClassGenerator implements ClassGeneratorInterface
      *
      * @return string
      */
-    protected function findLicenseBlock(string $moduleDir): string
+    protected function getLicenseBlock(string $moduleDir): string
     {
         if (!file_exists($moduleDir . '.license')) {
             return '';
