@@ -5,14 +5,13 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdkTest\Integrator\Business;
+namespace SprykerSdkTest\Integrator;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFacade;
 use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
-use SprykerSdkTest\Integrator\BaseTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +23,14 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class IntegratorFacadeTest extends BaseTestCase
 {
+    /**
+     * @var string
+     */
     protected const RECIPES_DIR_PATH = '_data/recipes/src';
+
+    /**
+     * @var string
+     */
     protected const ZIP_PATH = '_data/recipes/archive.zip';
 
     /**
@@ -97,11 +103,11 @@ class IntegratorFacadeTest extends BaseTestCase
 
         // Assert
         $testFilePath = './tests/_tests_files/test_integrator_unwire_plugin_dependency_provider.php';
-        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorDefault/TestIntegratorDefaultDependencyProvider.php';
+        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorUnwirePlugin/TestIntegratorUnwirePluginDependencyProvider.php';
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
-        $this->assertSame(trim(file_get_contents($classPath)), trim(file_get_contents($testFilePath)));
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
     }
 
     /**
@@ -290,6 +296,8 @@ class IntegratorFacadeTest extends BaseTestCase
     }
 
     /**
+     * @param string|null $moduleName
+     *
      * @return \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer
      */
     private function buildModuleFilterTransfer(?string $moduleName = null): ModuleFilterTransfer
@@ -371,6 +379,7 @@ class IntegratorFacadeTest extends BaseTestCase
      */
     private function prepareTestEnv(): void
     {
+        $this->removeTmpDirectory();
         $this->createTmpDirectory();
         $this->createTmpStandaloneModulesDirectory();
         $this->copyProjectMockToTmpDirectory();
@@ -381,6 +390,6 @@ class IntegratorFacadeTest extends BaseTestCase
      */
     private function clearTestEnv(): void
     {
-        $this->removeTmpDirectory();
+        //$this->removeTmpDirectory();
     }
 }

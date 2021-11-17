@@ -1,0 +1,3 @@
+## Integrator documentation
+
+### Manifest types

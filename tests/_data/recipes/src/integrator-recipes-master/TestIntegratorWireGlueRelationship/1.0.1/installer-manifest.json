@@ -1,6 +1,7 @@
 {
     "wire-glue-relationship": [
         {
+            "target": "\\Pyz\\Glue\\GlueApplication\\GlueApplicationDependencyProvider",
             "source": {
                 "\\Spryker\\Glue\\TestIntegratorWireGlueRelationship\\WireGlueRelationshipConfig::TEST_ITEMS_WIRE": "\\Spryker\\Glue\\TestIntegratorWireGlueRelationship\\Plugin\\WireGlueRelationshipPlugin"
             }

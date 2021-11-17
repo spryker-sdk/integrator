@@ -1,4 +1,16 @@
 parameters:
-    level: 2
-
+    level: 7
+    paths:
+        - src/
+    bootstrapFiles:
+        - tests/bootstrap.php
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    treatPhpDocTypesAsCertain: false
     ignoreErrors:
+        - '#Call to an undefined method object::fromArray\(\)#'
+        - '#Call to an undefined method [a-zA-Z0-9\|\\_]+::toString\(\)#'
+        - '#Access to an undefined property PhpParser\\Node::\$(?:name|items|stmts)#'
+        - '#Access to an undefined property PhpParser\\[a-zA-Z0-9\|\\_]+::\$value#'
+        - '#Binary operation "." between non-empty-string and PhpParser\\[a-zA-Z0-9\|\\_]+ results in an error#'
+        - '#Property PhpParser\\Node\\Stmt\\ClassLike::\$stmts \(array<PhpParser\\Node\\Stmt>\) does not accept array<PhpParser\\Node>#'
