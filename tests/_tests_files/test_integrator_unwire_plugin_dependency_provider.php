@@ -5,14 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Pyz\Zed\TestIntegratorDefault;
+namespace Pyz\Zed\TestIntegratorUnwirePlugin;
 
 use Spryker\Zed\TestIntegratorDefault\Communication\Plugin\TestIntegratorDefault1Plugin;
 use Spryker\Zed\TestIntegratorDefault\Communication\Plugin\TestIntegratorDefault2Plugin;
-use Spryker\Zed\TestIntegratorDefault\TestIntegratorDefaultDependencyProvider as SprykerTestIntegratodDefaultDependencyProvider;
-use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\TestIntegratorUnwirePlugin;
 
-class TestIntegratorDefaultDependencyProvider extends SprykerTestIntegratodDefaultDependencyProvider
+class TestIntegratorUnwirePluginDependencyProvider
 {
     public function getTestPlugins(): array
     {

@@ -1,6 +1,7 @@
 {
     "unwire-glue-relationship": [
         {
+            "target": "\\Pyz\\Glue\\GlueApplication\\GlueApplicationDependencyProvider",
             "source": {
                 "\\Spryker\\Glue\\TestIntegratorUnwireGlueRelationship\\UnwireGlueRelationshipConfig::TEST_ITEMS_UNWIRE": "\\Spryker\\Glue\\TestIntegratorUnwireGlueRelationship\\Plugin\\UnwireGlueRelationshipPlugin"
             }

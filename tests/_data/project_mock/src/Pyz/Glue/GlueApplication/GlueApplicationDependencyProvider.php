@@ -3,12 +3,11 @@
 
 namespace Pyz\Glue\GlueApplication;
 
-use Spryker\Glue\GlueApplication\GlueApplicationDependencyProvider as SprykerGlueApplicationDependencyProvider;
 use Spryker\Glue\GlueApplication\ResourceRelationshipCollectionInterface;
 use Spryker\Glue\TestIntegratorUnwireGlueRelationship\Plugin\UnwireGlueRelationshipPlugin;
 use Spryker\Glue\TestIntegratorUnwireGlueRelationship\UnwireGlueRelationshipConfig;
 
-class GlueApplicationDependencyProvider extends SprykerGlueApplicationDependencyProvider
+class GlueApplicationDependencyProvider
 {
     /**
      * @param \Spryker\Glue\GlueApplication\ResourceRelationshipCollectionInterface $resourceRelationshipCollection

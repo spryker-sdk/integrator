@@ -1,0 +1,9 @@
+{
+    "name": "spryker/test-integrator-unwire-widget",
+    "type": "composer-plugin",
+    "description": "test-integrator-unwire-widget module",
+    "license": "proprietary",
+    "require": {
+        "php": ">=7.4"
+    }
+}

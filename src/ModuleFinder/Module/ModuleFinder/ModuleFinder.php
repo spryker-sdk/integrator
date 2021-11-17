@@ -178,7 +178,10 @@ class ModuleFinder implements ModuleFinderInterface
      */
     protected function getModuleFinder(): Finder
     {
-        return (new Finder())->directories()->depth('== 0')->in($this->getModuleDirectories());
+        return (new Finder())
+            ->directories()
+            ->depth('== 0')
+            ->in($this->getModuleDirectories());
     }
 
     /**

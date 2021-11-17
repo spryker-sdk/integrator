@@ -177,6 +177,7 @@ class GlueRelationshipModifier implements GlueRelationshipModifierInterface
 
         [$keyClass, $keyConst] = explode('::', $key);
 
+        $this->nodeTraverser->addVisitor(new RemoveUseVisitor($keyClass));
         $this->nodeTraverser->addVisitor(new RemoveUseVisitor($classNameToRemove));
         $this->nodeTraverser->addVisitor(new RemoveGlueRelationshipFromClassListVisitor($targetMethodName, $keyClass, $keyConst, $classNameToRemove));
         $classInformationTransfer->setClassTokenTree($this->nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));

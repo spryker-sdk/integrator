@@ -1,0 +1,9 @@
+{
+    "name": "spryker/test-integrator-unwire-glue-relationship",
+    "type": "composer-plugin",
+    "description": "test-integrator-unwire-glue-relationship module",
+    "license": "proprietary",
+    "require": {
+        "php": ">=7.4"
+    }
+}

@@ -21,7 +21,7 @@ class ManifestExecutor implements ManifestExecutorInterface
     /**
      * @var \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface
      */
-    protected $sprykerLockReader;
+    protected $integratorLockReader;
 
     /**
      * @var \SprykerSdk\Integrator\Manifest\ManifestReaderInterface
@@ -36,24 +36,24 @@ class ManifestExecutor implements ManifestExecutorInterface
     /**
      * @var \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface
      */
-    protected $sprykerLockWriter;
+    protected $integratorLockWriter;
 
     /**
-     * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface $sprykerLockReader
+     * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface $integratorLockReader
      * @param \SprykerSdk\Integrator\Manifest\ManifestReaderInterface $manifestReader
-     * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface $sprykerLockWriter
+     * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface $integratorLockWriter
      * @param array<\SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface> $manifestExecutors
      */
     public function __construct(
-        IntegratorLockReaderInterface $sprykerLockReader,
+        IntegratorLockReaderInterface $integratorLockReader,
         ManifestReaderInterface $manifestReader,
-        IntegratorLockWriterInterface $sprykerLockWriter,
+        IntegratorLockWriterInterface $integratorLockWriter,
         array $manifestExecutors
     ) {
-        $this->sprykerLockReader = $sprykerLockReader;
+        $this->integratorLockReader = $integratorLockReader;
         $this->manifestReader = $manifestReader;
         $this->manifestExecutors = $manifestExecutors;
-        $this->sprykerLockWriter = $sprykerLockWriter;
+        $this->integratorLockWriter = $integratorLockWriter;
     }
 
     /**
@@ -69,7 +69,7 @@ class ManifestExecutor implements ManifestExecutorInterface
 
         $manifests = $this->manifestReader->readManifests($moduleTransfers);
 
-        $lockedModules = $this->sprykerLockReader->getLockFileData();
+        $lockedModules = $this->integratorLockReader->getLockFileData();
 
         $unappliedManifests = $this->findUnappliedManifests($manifests, $lockedModules);
 
@@ -96,7 +96,7 @@ class ManifestExecutor implements ManifestExecutorInterface
             return 0;
         }
 
-        return $this->sprykerLockWriter->storeLock($lockedModules);
+        return $this->integratorLockWriter->storeLock($lockedModules);
     }
 
     /**

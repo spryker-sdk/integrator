@@ -1,0 +1,9 @@
+{
+    "name": "spryker/test-integrator-copy-module-file",
+    "type": "composer-plugin",
+    "description": "test-integrator-copy-module-file module",
+    "license": "proprietary",
+    "require": {
+        "php": ">=7.4"
+    }
+}
