@@ -51,7 +51,7 @@ class ComposerLockReader implements ComposerLockReaderInterface
             $packages[$packageName] = $packageData['version'];
 
             if (strpos($packageData['version'], 'dev-') !== false) {
-                $versionFromExtra = isset($packageData['extra']['branch-alias']['dev-master']) ? $packageData['extra']['branch-alias']['dev-master'] : false;
+                $versionFromExtra = $packageData['extra']['branch-alias']['dev-master'] ?? false;
                 if ($versionFromExtra) {
                     $aliasedVersion = str_replace('x-dev', '0', $versionFromExtra);
                     $packages[$packageName] = $aliasedVersion;
