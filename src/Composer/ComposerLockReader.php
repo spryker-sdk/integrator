@@ -40,6 +40,8 @@ class ComposerLockReader implements ComposerLockReaderInterface
         $packages = [];
 
         $dashToCamelCaseFilter = new SeparatorToCamelCase();
+
+        /** @var array $packageData */
         foreach ($composerLockData['packages'] as $packageData) {
             if ($packageData['version'] === 'dev-master') {
                 continue;
@@ -47,6 +49,14 @@ class ComposerLockReader implements ComposerLockReaderInterface
             [$org, $module] = explode('/', $packageData['name']);
             $packageName = $dashToCamelCaseFilter->filter($org, '-', true) . '.' . $dashToCamelCaseFilter->filter($module, '-', true);
             $packages[$packageName] = $packageData['version'];
+
+            if (strpos($packageData['version'], 'dev-') !== false) {
+                $versionFromExtra = $packageData['extra']['branch-alias']['dev-master'] ?? false;
+                if ($versionFromExtra) {
+                    $aliasedVersion = str_replace('x-dev', '0', $versionFromExtra);
+                    $packages[$packageName] = $aliasedVersion;
+                }
+            }
         }
 
         return $packages;
