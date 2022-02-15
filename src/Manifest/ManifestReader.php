@@ -43,34 +43,34 @@ class ManifestReader implements ManifestReaderInterface
      */
     public function readManifests(array $moduleTransfers): array
     {
-        $this->updateRepositoryFolder();
+        //TODO::Revert $this->updateRepositoryFolder();
         $manifests = [];
         $moduleComposerData = $this->composerLockReader->getModuleVersions();
 
-        foreach ($moduleTransfers as $moduleTransfer) {
-            $moduleFullName = $moduleTransfer->getOrganization()->getName() . '.' . $moduleTransfer->getName();
+//        foreach ($moduleTransfers as $moduleTransfer) {
+//            $moduleFullName = $moduleTransfers[0]->getOrganization()->getName() . '.' . $moduleTransfer->getName();
 
-            if (!isset($moduleComposerData[$moduleFullName])) {
-                continue;
-            }
+//            if (!isset($moduleComposerData[$moduleFullName])) {
+//                continue;
+//            }
 
-            $filePath = $this->resolveManifestVersion($moduleTransfer, $moduleComposerData[$moduleFullName]);
-
-            if (!$filePath) {
-                continue;
-            }
+            $filePath = '/data/vendor/spryker-sdk/integrator/data/recipes/integrator-recipes-master/AssetExternal/1.0.0/installer-manifest.json';// $this->resolveManifestVersion($moduleTransfer, $moduleComposerData[$moduleFullName]);
+//
+//            if (!$filePath) {
+//                continue;
+//            }
 
             $json = file_get_contents($filePath);
-            if (!$json) {
-                continue;
-            }
+//            if (!$json) {
+//                continue;
+//            }
 
             $manifest = json_decode($json, true);
 
-            if ($manifest) {
-                $manifests[$moduleFullName] = $manifest;
-            }
-        }
+//            if ($manifest) {
+                $manifests['Spryker.AssetExternal'] = $manifest;
+//            }
+//        }
 
         return $manifests;
     }

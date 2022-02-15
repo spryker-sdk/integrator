@@ -69,6 +69,7 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] ?? '',
                 $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '',
+                $manifest[IntegratorConfig::MANIFEST_KEY_INDEX] ?? null,
             );
 
             if ($isDry) {

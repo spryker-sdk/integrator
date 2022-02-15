@@ -13,6 +13,7 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 
@@ -49,6 +50,11 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $after;
 
     /**
+     * @var string|null
+     */
+    protected $index;
+
+    /**
      * @var bool
      */
     protected $methodFound = false;
@@ -58,13 +64,15 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      * @param string $className
      * @param string $before
      * @param string $after
+     * @param string|null $index
      */
-    public function __construct(string $methodName, string $className, string $before = '', string $after = '')
+    public function __construct(string $methodName, string $className, string $before = '', string $after = '', ?string $index = null)
     {
         $this->methodName = $methodName;
         $this->className = ltrim($className, '\\');
         $this->before = ltrim($before, '\\');
         $this->after = ltrim($after, '\\');
+        $this->index = $index;
     }
 
     /**
@@ -103,6 +111,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         $itemAdded = false;
         foreach ($node->items as $item) {
             $nodeClassName = $item->value->class->toString();
+            //TODO::It works only for single number keys
             if ($nodeClassName === $this->before) {
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $items[] = $item;
@@ -110,6 +119,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
                 continue;
             }
+            //TODO::It works only for single number keys
             if ($nodeClassName === $this->after) {
                 $items[] = $item;
                 $items[] = $this->createArrayItemWithInstanceOf();
@@ -159,6 +169,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             (new BuilderFactory())->new(
                 (new ClassHelper())->getShortClassName($this->className),
             ),
+            $this->index ? new String_($this->index) : null
         );
     }
 }

@@ -60,6 +60,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
      * @param string $classNameToAdd
      * @param string $before
      * @param string $after
+     * @param string|null $index
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -68,7 +69,8 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
         string $targetMethodName,
         string $classNameToAdd,
         string $before = '',
-        string $after = ''
+        string $after = '',
+        ?string $index = null
     ): ClassInformationTransfer {
         $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         if (!$methodNode) {
@@ -76,6 +78,8 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
             $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         }
 
+        //TODO::we should create AddUseVisitor for index if it uses namespace
+        // 1. We should check if some class is used or it is static:: call or it is string
         if ($this->classMethodChecker->isMethodReturnArray($methodNode)) {
             $visitors = [
                 new AddUseVisitor($classNameToAdd),
@@ -84,6 +88,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
                     $classNameToAdd,
                     $before,
                     $after,
+                    $index,
                 ),
             ];
 
