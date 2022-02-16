@@ -10,6 +10,11 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
 use PhpParser\BuilderFactory;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
@@ -79,11 +84,9 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
             $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         }
 
-        //TODO::we should create AddUseVisitor for index if it uses namespace
-        // 1. We should check if some class is used or it is static:: call or it is string
-        $indexExpr = new String_($index);
-
         if ($this->classMethodChecker->isMethodReturnArray($methodNode)) {
+            $indexAddUseVisitor = $this->createIndexAddUseVisitor($index);
+
             $visitors = [
                 new AddUseVisitor($classNameToAdd),
                 new AddPluginToPluginListVisitor(
@@ -91,9 +94,13 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
                     $classNameToAdd,
                     $before,
                     $after,
-                    $indexExpr,
+                    $this->createIndexExpr($index),
                 ),
             ];
+
+            if ($indexAddUseVisitor) {
+                $visitors[] = $indexAddUseVisitor;
+            }
 
             return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
         }
@@ -108,6 +115,51 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
         $this->commonClassModifier->replaceMethodBody($classInformationTransfer, $targetMethodName, $methodBody);
 
         return $classInformationTransfer;
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return \PhpParser\Node\Expr
+     */
+    protected function createIndexExpr(string $index): Expr
+    {
+        if (strpos($index, 'static::') === 0) {
+            $indexParts = explode('::', $index);
+
+            return new ClassConstFetch(
+                new Name('static'),
+                $indexParts[1]
+            );
+        }
+
+        if (strpos($index, '::') !== false) {
+            $indexParts = explode('::', $index);
+            $classNamespaceChain = explode('\\', $indexParts[0]);
+
+            return new ClassConstFetch(
+                new Name(end($classNamespaceChain)),
+                $indexParts[1]
+            );
+        }
+
+        return new String_($index);
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return \SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor|null
+     */
+    protected function createIndexAddUseVisitor(string $index): ?AddUseVisitor
+    {
+        if (strpos($index, '::') === false) {
+            return null;
+        }
+
+        $indexParts = explode('::', $index);
+
+        return new AddUseVisitor($indexParts[0]);
     }
 
     /**
