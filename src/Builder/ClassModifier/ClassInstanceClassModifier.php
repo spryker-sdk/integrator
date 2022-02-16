@@ -151,9 +151,9 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
      *
      * @return \SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor|null
      */
-    protected function createIndexAddUseVisitor(string $index): ?AddUseVisitor
+    protected function createIndexAddUseVisitor(?string $index): ?AddUseVisitor
     {
-        if (strpos($index, '::') === false) {
+        if (!$index || strpos($index, '::') === false) {
             return null;
         }
 
