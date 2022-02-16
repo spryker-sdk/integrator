@@ -43,36 +43,12 @@ class ManifestReader implements ManifestReaderInterface
      */
     public function readManifests(array $moduleTransfers): array
     {
-        $this->updateRepositoryFolder();
-        $manifests = [];
-        $moduleComposerData = $this->composerLockReader->getModuleVersions();
-
-        foreach ($moduleTransfers as $moduleTransfer) {
-            $moduleFullName = $moduleTransfer->getOrganization()->getName() . '.' . $moduleTransfer->getName();
-
-            if (!isset($moduleComposerData[$moduleFullName])) {
-                continue;
-            }
-
-            $filePath = $this->resolveManifestVersion($moduleTransfer, $moduleComposerData[$moduleFullName]);
-
-            if (!$filePath) {
-                continue;
-            }
-
-            $json = file_get_contents($filePath);
-            if (!$json) {
-                continue;
-            }
-
-            $manifest = json_decode($json, true);
-
-            if ($manifest) {
-                $manifests[$moduleFullName] = $manifest;
-            }
-        }
-
-        return $manifests;
+        return [
+            'Spryker.ApplicationCatalogGui' => json_decode(
+                file_get_contents('vendor/spryker-sdk/integrator/data/recipes/integrator-recipes-master/ApplicationCatalogGui/1.0.0/installer-manifest.json'),
+                true,
+            ),
+        ];
     }
 
     /**
