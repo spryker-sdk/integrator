@@ -64,7 +64,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      * @param string $className
      * @param string $before
      * @param string $after
-     * @param string|null $index
+     * @param \PhpParser\Node\Expr|null $index
      */
     public function __construct(string $methodName, string $className, string $before = '', string $after = '', ?Expr $index = null)
     {
