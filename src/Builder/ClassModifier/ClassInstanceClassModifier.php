@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
 use PhpParser\BuilderFactory;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
@@ -80,6 +81,8 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
 
         //TODO::we should create AddUseVisitor for index if it uses namespace
         // 1. We should check if some class is used or it is static:: call or it is string
+        $indexExpr = new String_($index);
+
         if ($this->classMethodChecker->isMethodReturnArray($methodNode)) {
             $visitors = [
                 new AddUseVisitor($classNameToAdd),
@@ -88,7 +91,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
                     $classNameToAdd,
                     $before,
                     $after,
-                    $index,
+                    $indexExpr,
                 ),
             ];
 

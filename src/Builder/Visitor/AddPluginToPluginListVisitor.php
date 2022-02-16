@@ -11,9 +11,9 @@ namespace SprykerSdk\Integrator\Builder\Visitor;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 
@@ -50,7 +50,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $after;
 
     /**
-     * @var string|null
+     * @var \PhpParser\Node\Expr|null
      */
     protected $index;
 
@@ -66,7 +66,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      * @param string $after
      * @param string|null $index
      */
-    public function __construct(string $methodName, string $className, string $before = '', string $after = '', ?string $index = null)
+    public function __construct(string $methodName, string $className, string $before = '', string $after = '', ?Expr $index = null)
     {
         $this->methodName = $methodName;
         $this->className = ltrim($className, '\\');
@@ -111,7 +111,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         $itemAdded = false;
         foreach ($node->items as $item) {
             $nodeClassName = $item->value->class->toString();
-            //TODO::It works only for single number keys
             if ($nodeClassName === $this->before) {
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $items[] = $item;
@@ -119,7 +118,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
                 continue;
             }
-            //TODO::It works only for single number keys
             if ($nodeClassName === $this->after) {
                 $items[] = $item;
                 $items[] = $this->createArrayItemWithInstanceOf();
@@ -169,7 +167,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             (new BuilderFactory())->new(
                 (new ClassHelper())->getShortClassName($this->className),
             ),
-            $this->index ? new String_($this->index) : null
+            $this->index,
         );
     }
 }
