@@ -13,7 +13,10 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 
@@ -50,7 +53,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $after;
 
     /**
-     * @var \PhpParser\Node\Expr|null
+     * @var string|null
      */
     protected $index;
 
@@ -64,9 +67,9 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      * @param string $className
      * @param string $before
      * @param string $after
-     * @param \PhpParser\Node\Expr|null $index
+     * @param string|null $index
      */
-    public function __construct(string $methodName, string $className, string $before = '', string $after = '', ?Expr $index = null)
+    public function __construct(string $methodName, string $className, string $before = '', string $after = '', ?string $index = null)
     {
         $this->methodName = $methodName;
         $this->className = ltrim($className, '\\');
@@ -167,7 +170,36 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             (new BuilderFactory())->new(
                 (new ClassHelper())->getShortClassName($this->className),
             ),
-            $this->index,
+            $this->index ? $this->createIndexExpr($this->index) : null,
         );
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return \PhpParser\Node\Expr
+     */
+    protected function createIndexExpr(string $index): Expr
+    {
+        if (strpos($index, 'static::') === 0) {
+            $indexParts = explode('::', $index);
+
+            return new ClassConstFetch(
+                new Name('static'),
+                $indexParts[1]
+            );
+        }
+
+        if (strpos($index, '::') !== false) {
+            $indexParts = explode('::', $index);
+            $classNamespaceChain = explode('\\', $indexParts[0]);
+
+            return new ClassConstFetch(
+                new Name(end($classNamespaceChain)),
+                $indexParts[1]
+            );
+        }
+
+        return new String_($index);
     }
 }

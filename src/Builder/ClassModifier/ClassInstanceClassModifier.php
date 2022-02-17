@@ -85,8 +85,6 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
         }
 
         if ($this->classMethodChecker->isMethodReturnArray($methodNode)) {
-            $indexAddUseVisitor = $this->createIndexAddUseVisitor($index);
-
             $visitors = [
                 new AddUseVisitor($classNameToAdd),
                 new AddPluginToPluginListVisitor(
@@ -94,12 +92,12 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
                     $classNameToAdd,
                     $before,
                     $after,
-                    $this->createIndexExpr($index),
+                    $index,
                 ),
             ];
 
-            if ($indexAddUseVisitor) {
-                $visitors[] = $indexAddUseVisitor;
+            if ($this->isIndexClassNamespace($index)) {
+                $visitors[] = new AddUseVisitor($this->getClassNamespaceFromIndex($index));
             }
 
             return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
@@ -118,48 +116,23 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
     }
 
     /**
-     * @param string $index
+     * @param string|null $index
      *
-     * @return \PhpParser\Node\Expr
+     * @return bool
      */
-    protected function createIndexExpr(string $index): Expr
+    protected function isIndexClassNamespace(?string $index): bool
     {
-        if (strpos($index, 'static::') === 0) {
-            $indexParts = explode('::', $index);
-
-            return new ClassConstFetch(
-                new Name('static'),
-                $indexParts[1]
-            );
-        }
-
-        if (strpos($index, '::') !== false) {
-            $indexParts = explode('::', $index);
-            $classNamespaceChain = explode('\\', $indexParts[0]);
-
-            return new ClassConstFetch(
-                new Name(end($classNamespaceChain)),
-                $indexParts[1]
-            );
-        }
-
-        return new String_($index);
+        return $index && strpos($index, '::') !== false && strpos($index, 'static::') === false;
     }
 
     /**
      * @param string $index
      *
-     * @return \SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor|null
+     * @return string
      */
-    protected function createIndexAddUseVisitor(?string $index): ?AddUseVisitor
+    protected function getClassNamespaceFromIndex(string $index): string
     {
-        if (!$index || strpos($index, '::') === false) {
-            return null;
-        }
-
-        $indexParts = explode('::', $index);
-
-        return new AddUseVisitor($indexParts[0]);
+        return explode('::', $index)[0];
     }
 
     /**

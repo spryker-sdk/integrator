@@ -12,8 +12,8 @@ composer require --dev spryker-sdk/integrator
 ```
 
 ## How it works
-1. Every time when the integrator is run it uploads recipes from `spryker-sdk/integrator-recipes` and uses the master branch. They are uploaded into this folder: `vendor/spryker-sdk/integrator/data/recipes/`.
-2. It gathers the list of dependencies from `composer.json` and their uploaded versions from `composer.lock` of the project.
+1. Every time the integrator runs it downloads recipes from `spryker-sdk/integrator-recipes` and uses the master branch. The recipes are downloaded into this folder: `vendor/spryker-sdk/integrator/data/recipes/`.
+2. It gathers the list of dependencies from `composer.json` and their installed versions from `composer.lock` of the project.
 3. The integrator checks manifests (recipes) versions and collect manifests that should be applied.
 4. All gathered manifest are applied to the project code.
 
@@ -43,7 +43,7 @@ docker/sdk cli
 ```shell
 vendor/bin/integrator
 ```
-4. The changes from the source manifest file should be applied to target places and should appear in the `integrator.lock` file in the source project directory.
+4. Changes defined in the manifest file will be applied on the project level and will be logged in the `integrator.lock` file in the root directory of the project.
 
 ### Why should we do in this way?
 The integrator gathers dependencies from the `composer.json` file and it means that no one spryker module is instaled directly. All spryker modules are installed in the `spryker/spryker` package. Because of it, we can not apply recipes to the specific spryker module.
