@@ -3,6 +3,21 @@
         {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getTestPlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestIntegratorWirePlugin"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getTestPlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestIntegratorWirePluginIndex",
+            "index": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginConfig::TEST_INTEGRATOR_WIRE_PLUGIN"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getTestPlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestIntegratorWirePluginStaticIndex",
+            "index": "static::TEST_INTEGRATOR_WIRE_PLUGIN_STATIC_INDEX"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getTestPlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestIntegratorWirePluginStringIndex",
+            "index": "TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX"
         }
     ]
 }

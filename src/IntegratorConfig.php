@@ -29,6 +29,11 @@ class IntegratorConfig
     /**
      * @var string
      */
+    public const MANIFEST_KEY_INDEX = 'index';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_DEFAULT_VALUE = 'default';
 
     /**
