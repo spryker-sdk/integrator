@@ -96,7 +96,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
                 ),
             ];
 
-            if ($this->isIndexClassNamespace($index)) {
+            if ($this->isIndexFullyQualifiedClassName($index)) {
                 $visitors[] = new AddUseVisitor($this->getClassNamespaceFromIndex($index));
             }
 
@@ -120,7 +120,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
      *
      * @return bool
      */
-    protected function isIndexClassNamespace(?string $index): bool
+    protected function isIndexFullyQualifiedClassName(?string $index): bool
     {
         return $index && strpos($index, '::') !== false && strpos($index, 'static::') === false;
     }
