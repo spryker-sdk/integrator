@@ -97,7 +97,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
             ];
 
             if ($this->isIndexFullyQualifiedClassName($index)) {
-                $visitors[] = new AddUseVisitor($this->getClassNamespaceFromIndex($index));
+                $visitors[] = new AddUseVisitor($this->getFullyQualifiedClassNameFromIndex($index));
             }
 
             return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
@@ -130,7 +130,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
      *
      * @return string
      */
-    protected function getClassNamespaceFromIndex(string $index): string
+    protected function getFullyQualifiedClassNameFromIndex(string $index): string
     {
         return explode('::', $index)[0];
     }
