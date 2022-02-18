@@ -80,7 +80,7 @@ class ModuleTransfer extends AbstractTransfer
     protected $nameDashed;
 
     /**
-     * @var int|null
+     * @var string|null
      */
     protected $version;
 
@@ -184,7 +184,7 @@ class ModuleTransfer extends AbstractTransfer
             'is_strict' => false,
         ],
         self::VERSION => [
-            'type' => 'int',
+            'type' => 'string',
             'type_shim' => null,
             'name_underscore' => 'version',
             'is_collection' => false,
@@ -400,7 +400,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module Integrator|SprykGui|Development|ModuleFinder
      *
-     * @param int|null $version
+     * @param string|null $version
      *
      * @return $this
      */
@@ -415,7 +415,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module Integrator|SprykGui|Development|ModuleFinder
      *
-     * @return int|null
+     * @return string|null
      */
     public function getVersion()
     {
@@ -425,7 +425,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @module Integrator|SprykGui|Development|ModuleFinder
      *
-     * @return int
+     * @return string
      */
     public function getVersionOrFail()
     {
