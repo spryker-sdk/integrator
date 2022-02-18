@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Manifest;
 
+use Composer\InstalledVersions;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
@@ -43,18 +44,25 @@ class ManifestReader implements ManifestReaderInterface
      */
     public function readManifests(array $moduleTransfers): array
     {
-        $this->updateRepositoryFolder();
+        // Do not update repository folder when in local development
+        if (!is_dir($this->config->getLocalRecipesDirectory())) {
+            $this->updateRepositoryFolder();
+        }
+
         $manifests = [];
         $moduleComposerData = $this->composerLockReader->getModuleVersions();
 
         foreach ($moduleTransfers as $moduleTransfer) {
             $moduleFullName = $moduleTransfer->getOrganization()->getName() . '.' . $moduleTransfer->getName();
 
-            if (!isset($moduleComposerData[$moduleFullName])) {
+            // Get the version from installed packages or the CLI passed one (e.g. Spryker.Acl:3.6.0).
+            $version = $moduleComposerData[$moduleFullName] ?? $moduleTransfer->getVersion();
+
+            if (!$version) {
                 continue;
             }
 
-            $filePath = $this->resolveManifestVersion($moduleTransfer, $moduleComposerData[$moduleFullName]);
+            $filePath = $this->resolveManifestVersion($moduleTransfer, $version);
 
             if (!$filePath) {
                 continue;
@@ -103,13 +111,20 @@ class ManifestReader implements ManifestReaderInterface
     protected function resolveManifestVersion(ModuleTransfer $moduleTransfer, string $moduleVersion)
     {
         $archiveDir = 'integrator-recipes-master/';
-        $moduleRecipiesDir = sprintf('%s%s%s/', $this->config->getRecipesDirectory(), $archiveDir, $moduleTransfer->getName());
+        $moduleRecipesDir = sprintf('%s%s%s/', $this->config->getRecipesDirectory(), $archiveDir, $moduleTransfer->getName());
 
-        if (!is_dir($moduleRecipiesDir)) {
+        // When the recipes installed for local development use those instead of the one from the archive.
+        if (is_dir($this->config->getLocalRecipesDirectory())) {
+            $moduleRecipesDir = sprintf('%s%s/', $this->config->getLocalRecipesDirectory(), $moduleTransfer->getName());
+        }
+
+        // Check if module has any recipes
+        if (!is_dir($moduleRecipesDir)) {
             return null;
         }
 
-        $filePath = $moduleRecipiesDir . sprintf(
+        // Recipe path with module name and expected version
+        $filePath = $moduleRecipesDir . sprintf(
             '%s/installer-manifest.json',
             $moduleVersion,
         );
@@ -118,13 +133,13 @@ class ManifestReader implements ManifestReaderInterface
             return $filePath;
         }
 
-        $nextSuitableVersion = $this->findNextSuitableVersion($moduleRecipiesDir, $moduleVersion);
+        $nextSuitableVersion = $this->findNextSuitableVersion($moduleRecipesDir, $moduleVersion);
 
         if (!$nextSuitableVersion) {
             return null;
         }
 
-        return $moduleRecipiesDir . sprintf(
+        return $moduleRecipesDir . sprintf(
             '%s/installer-manifest.json',
             $nextSuitableVersion,
         );

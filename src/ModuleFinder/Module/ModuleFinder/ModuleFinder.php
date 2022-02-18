@@ -127,6 +127,8 @@ class ModuleFinder implements ModuleFinderInterface
             return $moduleTransferCollection;
         }
 
+        $moduleTransfer->setVersion($moduleFilterTransfer->getModule()->getVersion());
+
         $moduleTransferCollection[$this->buildCollectionKey($moduleTransfer)] = $moduleTransfer;
 
         return $moduleTransferCollection;
