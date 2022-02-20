@@ -74,6 +74,11 @@ class IntegratorConfig
     /**
      * @var string
      */
+    protected const LOCAL_RECIPES_DIRECTORY = 'vendor/spryker-sdk/integrator-recipes/';
+
+    /**
+     * @var string
+     */
     protected const RECIPES_URL = 'https://github.com/spryker-sdk/integrator-recipes/archive/master.zip';
 
     /**
@@ -293,6 +298,16 @@ class IntegratorConfig
     public function getRecipesDirectory(): string
     {
         return $this->getProjectRootDirectory() . static::RECIPES_DIRECTORY;
+    }
+
+    /**
+     * This is used for local development purposes only.
+     *
+     * @return string
+     */
+    public function getLocalRecipesDirectory(): string
+    {
+        return $this->getProjectRootDirectory() . static::LOCAL_RECIPES_DIRECTORY;
     }
 
     /**
