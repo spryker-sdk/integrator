@@ -49,112 +49,93 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
         $mainNavigationXmlElement = simplexml_load_file(static::TARGET_NAVIGATION_FILE);
 
         foreach ($manifest['navigation'] as $navigationKey => $navigationData) {
-            $navigationXmlElement = $this->buildChildNavigation($navigationData);
+            //TODO::Should it (the injection of navigation into the nested exist navigation item) be implemented now?
+            // Check cthe comment inside the getTargetNavigationXmlElement method.
+//            if (strpos($navigationKey, '.') === false) {
+//                $targetXmlElement = $mainNavigationXmlElement;
+//            } else {
+//                $targetXmlElement = $this->getTargetNavigationXmlElement($mainNavigationXmlElement, $navigationKey);
+//                $navigationKey = explode('.', $navigationKey)[0];
+//            }
+            $targetXmlElement = $mainNavigationXmlElement;
 
-//            $mainNavigationXmlElement->addChild($navigationKey, $navigationXmlElement);
+            //TODO::check if navigation is present and skip if it is (check it in nested group of navigation)
+            // if ($targetXmlElement has this navigation) {
+            //     should we update navigation for existing method or just call `continue`?
+            //     continue;
+            // }
+
+            $navigationXmlElement = $targetXmlElement->addChild($navigationKey);
+            $this->buildChildNavigation($navigationData, $navigationXmlElement);
         }
 
-        //prepare simpleSmlStructure from navifgation array
-        //foreach parent elements and add them until
-
-        $simpleXmlElement = simplexml_load_file(static::TARGET_NAVIGATION_FILE);
-        $simpleXmlElement->
-        dd($simpleXmlElement);
-
-
-        //TODO::Should it be implemented now?
-        // if it should be added in neested structure we sholud check if it is present at first otherwise add in to the end of main list
-
-        // Get XML
-        // parse XML (how can we process structure that are in XML? Do we have some parser in Spryker?)
-        // check if navigation is present and skip if it is (check it in nested group of navigation)
         // find the place where the new navigation should be added
         // add navigation in the found place. If place was not found than and add in into the end of the main list
-        // save changes into source navigation file
 
-
-        // Should we use JSON structure or XML string?
-        // It depends on approach that will be used during processing navigations structure.
-        // I guess, we should parse XML into array to be able to easy manipulate with navigations.
-        // How to test your code -  read README file in this PR https://github.com/spryker-sdk/integrator/pull/14/files
-
-        // Proposed structure of navigations
-        /**
-        vendor/spryker-sdk/integrator/data/recipes/integrator-recipes-master/ApplicationCatalogGui/1.0.0/installer-manifest.json
-
-
-        {
-        "navigation": [
-        {
-        "navigation-configuration": {
-        "application-catalog-gui": {
-        "label": "Apps",
-        "title": "Apps",
-        "icon": "fa-archive",
-        "bundle": "application-catalog-gui",
-        "controller": "index",
-        "action": "index",
-        "pages": [
-        "bla1": {
-        "label": "bla1",
-        "title": "bla1",
-        "icon": "fa-archive",
-        "bundle": "bla1",
-        "controller": "bla",
-        "action": "one"
-        },
-        "bla2": {
-        "label": "bla2",
-        "title": "bla2",
-        "icon": "fa-archive",
-        "bundle": "bla1",
-        "controller": "bla",
-        "action": "two",
-        "pages": [
-        ...
-        ]
-        }
-        ]
-        }
-        },
-        "after": "users"
-        }
-        ]
-        }
-
-         */
+        // TODO::It saves without the needed format -spaces and new lines. Should we solve it and Hoq if someone know?
+        $mainNavigationXmlElement->saveXML(static::TARGET_NAVIGATION_FILE);
 
         return true;
     }
 
     /**
      * @param array<string, string|array> $navigationData
+     * @param \SimpleXMLElement $newXmlElement
      *
-     * @return \SimpleXMLElement
+     * @return void
      */
-    protected function buildChildNavigation(array $navigationData): SimpleXMLElement
+    protected function buildChildNavigation(array $navigationData, SimpleXMLElement $newXmlElement): void
     {
-        $mainNavigationXmlElement = new SimpleXMLElement("<?xml version='1.0'?><name></name>");
-
         foreach ($navigationData as $navigationDataKey => $navigationDataValue) {
             if ($navigationDataKey === 'pages') {
                 continue;
             }
 
-            $mainNavigationXmlElement->addChild($navigationDataKey, $navigationDataValue);
+            $newXmlElement->addChild($navigationDataKey, $navigationDataValue);
         }
 
+
         if (!isset($navigationData['pages']) || !is_array($navigationData['pages'])) {
-            return $mainNavigationXmlElement;
+            return;
         }
 
         foreach ($navigationData['pages'] as $navigationChildKey => $navigationChildData) {
-            $navigationXmlElement = $this->buildChildNavigation($navigationChildData);
+            $childXmlElement = $newXmlElement->addChild($navigationChildKey);
 
-            $mainNavigationXmlElement->addChild($navigationChildKey);
-            $mainNavigationXmlElement->offsetGet()
+            // Be careful, the empty SimpleXMLElement with `!` symbol return `true`.
+            if (!$childXmlElement instanceof SimpleXMLElement) {
+                continue;
+            }
+
+            $this->buildChildNavigation($navigationChildData, $childXmlElement);
+        }
+    }
+
+    /**
+     * @param \SimpleXMLElement $mainNavigationXmlElement
+     * @param string $qualifiedNavigationNamespace
+     *
+     * @return \SimpleXMLElement|null
+     */
+    protected function getTargetNavigationXmlElement(SimpleXMLElement $mainNavigationXmlElement, string $qualifiedNavigationNamespace): ?SimpleXMLElement
+    {
+        $namespaceElements = explode('.', $qualifiedNavigationNamespace);
+        $targetXmlElement = null;
+
+        foreach ($namespaceElements as $namespaceElement) {
+            if (end($namespaceElements) === $namespaceElement) {
+                return $targetXmlElement;
+            }
+
+            //TODO:: This method does not allow to get children and no one another as well. If you know the way how to do it than implement this feature othervise
+            // contact to Rene and decide should it be implemented now or can be postponed - the injection of navigation into the nested exist navigation item.
+            $targetXmlElement = $mainNavigationXmlElement->children($namespaceElement);
+
+            if ($targetXmlElement === null) {
+                return null;
+            }
         }
 
-        return $mainNavigationXmlElement;
+        return $targetXmlElement;
     }
 }

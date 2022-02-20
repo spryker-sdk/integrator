@@ -10,12 +10,6 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
 use PhpParser\BuilderFactory;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
