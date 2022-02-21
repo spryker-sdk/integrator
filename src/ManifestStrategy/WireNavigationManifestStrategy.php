@@ -11,7 +11,7 @@ namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SimpleXMLElement;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
-use function _PHPStan_3e014c27f\RingCentral\Psr7\str;
+use SprykerSdk\Integrator\Exception\UnexpectedNavigationXmlStructureException;
 
 class WireNavigationManifestStrategy extends AbstractManifestStrategy
 {
@@ -23,7 +23,7 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
     /**
      * @var string
      */
-    protected const KEY_NAVIGATION_CONFIGURATIONS = 'navigation';
+    protected const KEY_NAVIGATIONS_CONFIGURATION = 'navigations';
 
     /**
      * @var string
@@ -62,10 +62,15 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
             return false;
         }
 
-        $navigationConfiguration = $this->getNavigationConfiguration();
+        try {
+            $navigationConfiguration = $this->getNavigationConfiguration();
+        } catch (UnexpectedNavigationXmlStructureException $unexpectedNavigationXmlStructureException) {
+            return false;
+        }
+        
         $navigationConfiguration = $this->applyNewNavigationConfigurations(
             $navigationConfiguration,
-            $manifest[static::KEY_NAVIGATION_CONFIGURATIONS],
+            $manifest[static::KEY_NAVIGATIONS_CONFIGURATION],
             $manifest[static::KEY_NAVIGATION_POSITION_BEFORE] ?? null,
             $manifest[static::KEY_NAVIGATION_POSITION_AFTER] ?? null,
         );
@@ -81,6 +86,10 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
     {
         $mainNavigationXmlElement = simplexml_load_file($this->getNavigationSourceFilePath());
         $mainNavigationAsJson = json_encode($mainNavigationXmlElement);
+
+        if ($mainNavigationAsJson === false) {
+            throw new UnexpectedNavigationXmlStructureException();
+        }
 
         return json_decode($mainNavigationAsJson, true);
     }

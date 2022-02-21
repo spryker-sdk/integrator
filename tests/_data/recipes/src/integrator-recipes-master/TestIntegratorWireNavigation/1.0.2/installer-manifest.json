@@ -1,7 +1,7 @@
 {
     "wire-navigation": [
         {
-            "navigation": {
+            "navigations": {
                 "before-main": {
                     "label": "Before main",
                     "title": "Before main",
@@ -25,7 +25,7 @@
             "before": "main"
         },
         {
-            "navigation": {
+            "navigations": {
                 "after-main": {
                     "label": "After main",
                     "title": "After main",
@@ -39,7 +39,7 @@
             "after": "main"
         },
         {
-            "navigation": {
+            "navigations": {
                 "main": {
                     "label": "new main",
                     "title": "new main",
@@ -63,7 +63,7 @@
             }
         },
         {
-            "navigation": {
+            "navigations": {
                 "new-latest": {
                     "label": "New latest",
                     "title": "New latest",
