@@ -46,96 +46,131 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
             return false;
         }
 
-        $mainNavigationXmlElement = simplexml_load_file(static::TARGET_NAVIGATION_FILE);
 
-        foreach ($manifest['navigation'] as $navigationKey => $navigationData) {
-            //TODO::Should it (the injection of navigation into the nested exist navigation item) be implemented now?
-            // Check cthe comment inside the getTargetNavigationXmlElement method.
-//            if (strpos($navigationKey, '.') === false) {
-//                $targetXmlElement = $mainNavigationXmlElement;
-//            } else {
-//                $targetXmlElement = $this->getTargetNavigationXmlElement($mainNavigationXmlElement, $navigationKey);
-//                $navigationKey = explode('.', $navigationKey)[0];
-//            }
-            $targetXmlElement = $mainNavigationXmlElement;
-
-            //TODO::check if navigation is present and skip if it is (check it in nested group of navigation)
-            // if ($targetXmlElement has this navigation) {
-            //     should we update navigation for existing method or just call `continue`?
-            //     continue;
-            // }
-
-            $navigationXmlElement = $targetXmlElement->addChild($navigationKey);
-            $this->buildChildNavigation($navigationData, $navigationXmlElement);
-        }
-
-        // find the place where the new navigation should be added
-        // add navigation in the found place. If place was not found than and add in into the end of the main list
-
-        // TODO::It saves without the needed format -spaces and new lines. Should we solve it and Hoq if someone know?
-        $mainNavigationXmlElement->saveXML(static::TARGET_NAVIGATION_FILE);
+        $navigationConfiguration = $this->getNavigationConfiguration();
+        $navigationConfiguration = $this->applyNewNavigationConfigurations(
+            $navigationConfiguration,
+            $manifest['navigation'],//TODO
+            $manifest['before'] ?? null,//TODO
+            $manifest['after'] ?? null,//TODO
+        );
+        $this->saveNavigationConfigurationsIntoSourceFile($navigationConfiguration);
 
         return true;
     }
 
     /**
-     * @param array<string, string|array> $navigationData
-     * @param \SimpleXMLElement $newXmlElement
+     * @return array<string|int, array|string>
+     */
+    protected function getNavigationConfiguration(): array
+    {
+        $mainNavigationXmlElement = simplexml_load_file(static::TARGET_NAVIGATION_FILE);
+        $mainNavigationAsJson = json_encode($mainNavigationXmlElement);
+
+        return json_decode($mainNavigationAsJson, true);
+    }
+
+    /**
+     * @param array<string|int, array|string> $navigationConfiguration
+     * @param array<string|int, array|string> $newNavigationConfiguration
+     * @param string|null $before
+     * @param string|null $after
+     *
+     * @return array<string|int, array|string>
+     */
+    protected function applyNewNavigationConfigurations(
+        array $navigationConfiguration,
+        array $newNavigationConfiguration,
+        ?string $before = null,
+        ?string $after = null
+    ): array {
+        $resultNavigationConfiguration = [];
+        $itemAdded = false;
+
+        foreach ($navigationConfiguration as $navigationItemKey => $navigationItemConfiguration) {
+            if ($navigationItemKey === $before) {
+                $this->injectNewNavigationConfigurations($resultNavigationConfiguration, $navigationConfiguration, $newNavigationConfiguration);
+                $resultNavigationConfiguration[$navigationItemKey] = $navigationItemConfiguration;
+                $itemAdded = true;
+
+                continue;
+            }
+
+            if ($navigationItemKey === $after) {
+                $resultNavigationConfiguration[$navigationItemKey] = $navigationItemConfiguration;
+                $this->injectNewNavigationConfigurations($resultNavigationConfiguration, $navigationConfiguration, $newNavigationConfiguration);
+                $itemAdded = true;
+
+                continue;
+            }
+
+            $resultNavigationConfiguration[$navigationItemKey] = $navigationItemConfiguration;
+        }
+
+        if (!$itemAdded) {
+            $this->injectNewNavigationConfigurations($resultNavigationConfiguration, $navigationConfiguration, $newNavigationConfiguration);
+        }
+
+        return $resultNavigationConfiguration;
+    }
+
+    /**
+     * @param array<string|int, array|string> $sourceNavigationConfigurations
+     * @param array<string|int, array|string> $resultNavigationConfigurations
+     * @param array<string|int, array|string> $newNavigationConfigurations
      *
      * @return void
      */
-    protected function buildChildNavigation(array $navigationData, SimpleXMLElement $newXmlElement): void
-    {
-        foreach ($navigationData as $navigationDataKey => $navigationDataValue) {
-            if ($navigationDataKey === 'pages') {
+    protected function injectNewNavigationConfigurations(
+        array &$resultNavigationConfigurations,
+        array $sourceNavigationConfigurations,
+        array $newNavigationConfigurations
+    ): void {
+        foreach ($newNavigationConfigurations as $navigationItemKey => $navigationItemConfiguration) {
+            if (isset($sourceNavigationConfigurations[$navigationItemKey])) {
                 continue;
             }
 
-            $newXmlElement->addChild($navigationDataKey, $navigationDataValue);
-        }
-
-
-        if (!isset($navigationData['pages']) || !is_array($navigationData['pages'])) {
-            return;
-        }
-
-        foreach ($navigationData['pages'] as $navigationChildKey => $navigationChildData) {
-            $childXmlElement = $newXmlElement->addChild($navigationChildKey);
-
-            // Be careful, the empty SimpleXMLElement with `!` symbol return `true`.
-            if (!$childXmlElement instanceof SimpleXMLElement) {
-                continue;
-            }
-
-            $this->buildChildNavigation($navigationChildData, $childXmlElement);
+            $resultNavigationConfigurations[$navigationItemKey] = $navigationItemConfiguration;
         }
     }
 
     /**
-     * @param \SimpleXMLElement $mainNavigationXmlElement
-     * @param string $qualifiedNavigationNamespace
+     * @param array<string|int, array|string> $navigationConfiguration
      *
-     * @return \SimpleXMLElement|null
+     * @return void
      */
-    protected function getTargetNavigationXmlElement(SimpleXMLElement $mainNavigationXmlElement, string $qualifiedNavigationNamespace): ?SimpleXMLElement
+    protected function saveNavigationConfigurationsIntoSourceFile(array $navigationConfiguration): void
     {
-        $namespaceElements = explode('.', $qualifiedNavigationNamespace);
-        $targetXmlElement = null;
+        $this->transformNavigationConfigurationToXmlElement(
+            $navigationConfiguration,
+            new SimpleXMLElement('<config/>')
+        )->saveXML(static::TARGET_NAVIGATION_FILE);
+    }
 
-        foreach ($namespaceElements as $namespaceElement) {
-            if (end($namespaceElements) === $namespaceElement) {
-                return $targetXmlElement;
+    /**
+     * @param array<string|int, array|string> $navigationConfigurations
+     * @param SimpleXMLElement $parentXmlElement
+     *
+     * @return SimpleXMLElement
+     */
+    public function transformNavigationConfigurationToXmlElement(array $navigationConfigurations, SimpleXMLElement $parentXmlElement): SimpleXMLElement
+    {
+        foreach ($navigationConfigurations as $navigationName => $navigationData) {
+            if (is_int($navigationName) || (is_array($navigationData) && empty($navigationData))) {
+                continue;
             }
 
-            //TODO:: This method does not allow to get children and no one another as well. If you know the way how to do it than implement this feature othervise
-            // contact to Rene and decide should it be implemented now or can be postponed - the injection of navigation into the nested exist navigation item.
-            $targetXmlElement = $mainNavigationXmlElement->children($namespaceElement);
+            if (is_array($navigationData)) {
+                $childElement = $parentXmlElement->addChild($navigationName);
+                $this->transformNavigationConfigurationToXmlElement($navigationData, $childElement);
 
-            if ($targetXmlElement === null) {
-                return null;
+                continue;
             }
+
+            $parentXmlElement->addChild($navigationName, $navigationData);
         }
 
-        return $targetXmlElement;
+        return $parentXmlElement;
     }
 }
