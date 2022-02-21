@@ -1,0 +1,9 @@
+{
+    "name": "spryker/test-integrator-wire-navigation",
+    "type": "composer-plugin",
+    "description": "test-integrator-wire-navigation module",
+    "license": "proprietary",
+    "require": {
+        "php": ">=7.4"
+    }
+}

@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SimpleXMLElement;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use function _PHPStan_3e014c27f\RingCentral\Psr7\str;
 
 class WireNavigationManifestStrategy extends AbstractManifestStrategy
 {
@@ -18,6 +19,21 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
      * @var string
      */
     protected const TARGET_NAVIGATION_FILE = 'config/Zed/navigation.xml';
+
+    /**
+     * @var string
+     */
+    protected const KEY_NAVIGATION_CONFIGURATIONS = 'navigation';
+
+    /**
+     * @var string
+     */
+    protected const KEY_NAVIGATION_POSITION_AFTER = 'after';
+
+    /**
+     * @var string
+     */
+    protected const KEY_NAVIGATION_POSITION_BEFORE = 'before';
 
     /**
      * @return string
@@ -37,7 +53,7 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
-        if (!file_exists(static::TARGET_NAVIGATION_FILE)) {
+        if (!file_exists($this->getNavigationSourceFilePath())) {
             $inputOutput->writeln(sprintf(
                 'The project doesn\'n have the navigation source file: %s.',
                 static::TARGET_NAVIGATION_FILE,
@@ -46,13 +62,12 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
             return false;
         }
 
-
         $navigationConfiguration = $this->getNavigationConfiguration();
         $navigationConfiguration = $this->applyNewNavigationConfigurations(
             $navigationConfiguration,
-            $manifest['navigation'],//TODO
-            $manifest['before'] ?? null,//TODO
-            $manifest['after'] ?? null,//TODO
+            $manifest[static::KEY_NAVIGATION_CONFIGURATIONS],
+            $manifest[static::KEY_NAVIGATION_POSITION_BEFORE] ?? null,
+            $manifest[static::KEY_NAVIGATION_POSITION_AFTER] ?? null,
         );
         $this->saveNavigationConfigurationsIntoSourceFile($navigationConfiguration);
 
@@ -64,7 +79,7 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
      */
     protected function getNavigationConfiguration(): array
     {
-        $mainNavigationXmlElement = simplexml_load_file(static::TARGET_NAVIGATION_FILE);
+        $mainNavigationXmlElement = simplexml_load_file($this->getNavigationSourceFilePath());
         $mainNavigationAsJson = json_encode($mainNavigationXmlElement);
 
         return json_decode($mainNavigationAsJson, true);
@@ -145,7 +160,7 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
         $this->transformNavigationConfigurationToXmlElement(
             $navigationConfiguration,
             new SimpleXMLElement('<config/>')
-        )->saveXML(static::TARGET_NAVIGATION_FILE);
+        )->saveXML($this->getNavigationSourceFilePath());
     }
 
     /**
@@ -168,9 +183,17 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
                 continue;
             }
 
-            $parentXmlElement->addChild($navigationName, $navigationData);
+            $parentXmlElement->addChild($navigationName, (string)$navigationData);
         }
 
         return $parentXmlElement;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getNavigationSourceFilePath(): string
+    {
+        return $this->config->getProjectRootDirectory() . static::TARGET_NAVIGATION_FILE;
     }
 }

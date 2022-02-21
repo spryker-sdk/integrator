@@ -1,0 +1,80 @@
+{
+    "wire-navigation": [
+        {
+            "navigation": {
+                "before-main": {
+                    "label": "Before main",
+                    "title": "Before main",
+                    "icon": "fa-archive",
+                    "bundle": "before-main",
+                    "controller": "index",
+                    "action": "index",
+                    "pages": {
+                        "before-main-nested": {
+                            "label": "Before main - nested",
+                            "title": "Before main - nested",
+                            "icon": "fa-archive",
+                            "bundle": "before-main-nested",
+                            "controller": "index",
+                            "action": "index",
+                            "visible": 0
+                        }
+                    }
+                }
+            },
+            "before": "main"
+        },
+        {
+            "navigation": {
+                "after-main": {
+                    "label": "After main",
+                    "title": "After main",
+                    "icon": "fa-archive",
+                    "bundle": "after-main",
+                    "controller": "index",
+                    "action": "index",
+                    "visible": 0
+                }
+            },
+            "after": "main"
+        },
+        {
+            "navigation": {
+                "main": {
+                    "label": "new main",
+                    "title": "new main",
+                    "icon": "fa-archive",
+                    "bundle": "new-main",
+                    "controller": "index",
+                    "action": "index",
+                    "visible": 0,
+                    "pages": {
+                        "main-nested": {
+                            "label": "main - nested",
+                            "title": "main - nested",
+                            "icon": "fa-archive",
+                            "bundle": "main-nested",
+                            "controller": "index",
+                            "action": "index",
+                            "visible": 0
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "navigation": {
+                "new-latest": {
+                    "label": "New latest",
+                    "title": "New latest",
+                    "icon": "fa-archive",
+                    "bundle": "after-main",
+                    "controller": "index",
+                    "action": "index",
+                    "visible": 0
+                }
+            },
+            "after": "not-present"
+        }
+    ]
+}
