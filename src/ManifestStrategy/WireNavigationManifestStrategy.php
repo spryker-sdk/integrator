@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
+use DOMDocument;
 use SimpleXMLElement;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Exception\UnexpectedNavigationXmlStructureException;
@@ -63,26 +64,31 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
         }
 
         try {
-            $navigationConfiguration = $this->getNavigationConfiguration();
+            $navigation = $this->getNavigation();
         } catch (UnexpectedNavigationXmlStructureException $unexpectedNavigationXmlStructureException) {
             return false;
         }
-        
-        $navigationConfiguration = $this->applyNewNavigationConfigurations(
-            $navigationConfiguration,
+
+        $navigation = $this->applyNewNavigation(
+            $navigation,
             $manifest[static::KEY_NAVIGATIONS_CONFIGURATION],
             $manifest[static::KEY_NAVIGATION_POSITION_BEFORE] ?? null,
             $manifest[static::KEY_NAVIGATION_POSITION_AFTER] ?? null,
         );
-        $this->saveNavigationConfigurationsIntoSourceFile($navigationConfiguration);
 
-        return true;
+        if ($isDry) {
+            $inputOutput->writeln($this->getXmlNavigationFromArrayNavigation($navigation)->asXML() ?: '');
+
+            return true;
+        }
+
+        return $this->writeNavigationSchema($navigation);
     }
 
     /**
      * @return array<string|int, array|string>
      */
-    protected function getNavigationConfiguration(): array
+    protected function getNavigation(): array
     {
         $mainNavigationXmlElement = simplexml_load_file($this->getNavigationSourceFilePath());
         $mainNavigationAsJson = json_encode($mainNavigationXmlElement);
@@ -95,99 +101,109 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
     }
 
     /**
-     * @param array<string|int, array|string> $navigationConfiguration
-     * @param array<string|int, array|string> $newNavigationConfiguration
+     * @param array<string|int, array|string> $navigation
+     * @param array<string|int, array|string> $newNavigations
      * @param string|null $before
      * @param string|null $after
      *
      * @return array<string|int, array|string>
      */
-    protected function applyNewNavigationConfigurations(
-        array $navigationConfiguration,
-        array $newNavigationConfiguration,
+    protected function applyNewNavigation(
+        array $navigation,
+        array $newNavigations,
         ?string $before = null,
         ?string $after = null
     ): array {
-        $resultNavigationConfiguration = [];
-        $itemAdded = false;
+        $key = $before ?? $after;
+        $position = array_search($key, array_keys($navigation));
 
-        foreach ($navigationConfiguration as $navigationItemKey => $navigationItemConfiguration) {
-            if ($navigationItemKey === $before) {
-                $this->injectNewNavigationConfigurations($resultNavigationConfiguration, $navigationConfiguration, $newNavigationConfiguration);
-                $resultNavigationConfiguration[$navigationItemKey] = $navigationItemConfiguration;
-                $itemAdded = true;
-
-                continue;
-            }
-
-            if ($navigationItemKey === $after) {
-                $resultNavigationConfiguration[$navigationItemKey] = $navigationItemConfiguration;
-                $this->injectNewNavigationConfigurations($resultNavigationConfiguration, $navigationConfiguration, $newNavigationConfiguration);
-                $itemAdded = true;
-
-                continue;
-            }
-
-            $resultNavigationConfiguration[$navigationItemKey] = $navigationItemConfiguration;
+        if ($position === false) {
+            return $this->addNewNavigations($navigation, $newNavigations);
         }
 
-        if (!$itemAdded) {
-            $this->injectNewNavigationConfigurations($resultNavigationConfiguration, $navigationConfiguration, $newNavigationConfiguration);
+        $offset = $position + 1;
+
+        if ($before !== null) {
+            $offset--;
         }
 
-        return $resultNavigationConfiguration;
+        return array_slice($navigation, 0, $offset, true)
+            + $newNavigations
+            + array_slice($navigation, $offset, null, true);
     }
 
     /**
-     * @param array<string|int, array|string> $sourceNavigationConfigurations
-     * @param array<string|int, array|string> $resultNavigationConfigurations
-     * @param array<string|int, array|string> $newNavigationConfigurations
+     * @param array<string|int, array|string> $navigation
+     * @param array<string|int, array|string> $newNavigations
      *
-     * @return void
+     * @return array<string|int, array|string>
      */
-    protected function injectNewNavigationConfigurations(
-        array &$resultNavigationConfigurations,
-        array $sourceNavigationConfigurations,
-        array $newNavigationConfigurations
-    ): void {
-        foreach ($newNavigationConfigurations as $navigationItemKey => $navigationItemConfiguration) {
-            if (isset($sourceNavigationConfigurations[$navigationItemKey])) {
+    protected function addNewNavigations(
+        array $navigation,
+        array $newNavigations
+    ): array {
+        foreach ($newNavigations as $navigationItemKey => $navigationItemData) {
+            if (isset($navigation[$navigationItemKey])) {
                 continue;
             }
 
-            $resultNavigationConfigurations[$navigationItemKey] = $navigationItemConfiguration;
+            $navigation[$navigationItemKey] = $navigationItemData;
         }
+
+        return $navigation;
     }
 
     /**
-     * @param array<string|int, array|string> $navigationConfiguration
+     * @param array<string|int, array|string> $navigation
      *
-     * @return void
+     * @return bool
      */
-    protected function saveNavigationConfigurationsIntoSourceFile(array $navigationConfiguration): void
+    protected function writeNavigationSchema(array $navigation): bool
     {
-        $this->transformNavigationConfigurationToXmlElement(
-            $navigationConfiguration,
-            new SimpleXMLElement('<config/>')
-        )->saveXML($this->getNavigationSourceFilePath());
+        $navigationXmlElement = $this->getXmlNavigationFromArrayNavigation($navigation);
+        $xmlString = $navigationXmlElement->asXML();
+
+        if ($xmlString === false) {
+            return false;
+        }
+
+        $navigationXmlDomDocument = new DOMDocument();
+        $navigationXmlDomDocument->preserveWhiteSpace = false;
+        $navigationXmlDomDocument->formatOutput = true;
+        $navigationXmlDomDocument->loadXML($xmlString);
+
+        return $navigationXmlDomDocument->save($this->getNavigationSourceFilePath()) !== false;
     }
 
     /**
-     * @param array<string|int, array|string> $navigationConfigurations
+     * @param array<string|int, array|string> $navigation
+     *
+     * @return \SimpleXMLElement
+     */
+    protected function getXmlNavigationFromArrayNavigation(array $navigation): SimpleXMLElement
+    {
+        return $this->transformNavigationToXmlElement(
+            $navigation,
+            new SimpleXMLElement('<config/>')
+        );
+    }
+
+    /**
+     * @param array<string|int, array|string> $navigation
      * @param SimpleXMLElement $parentXmlElement
      *
      * @return SimpleXMLElement
      */
-    public function transformNavigationConfigurationToXmlElement(array $navigationConfigurations, SimpleXMLElement $parentXmlElement): SimpleXMLElement
+    public function transformNavigationToXmlElement(array $navigation, SimpleXMLElement $parentXmlElement): SimpleXMLElement
     {
-        foreach ($navigationConfigurations as $navigationName => $navigationData) {
+        foreach ($navigation as $navigationName => $navigationData) {
             if (is_int($navigationName) || (is_array($navigationData) && empty($navigationData))) {
                 continue;
             }
 
             if (is_array($navigationData)) {
                 $childElement = $parentXmlElement->addChild($navigationName);
-                $this->transformNavigationConfigurationToXmlElement($navigationData, $childElement);
+                $this->transformNavigationToXmlElement($navigationData, $childElement);
 
                 continue;
             }

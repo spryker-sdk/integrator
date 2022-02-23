@@ -1,2 +1,48 @@
 <?xml version="1.0"?>
-<config><before-main><label>Before main</label><title>Before main</title><icon>fa-archive</icon><bundle>before-main</bundle><controller>index</controller><action>index</action><pages><before-main-nested><label>Before main - nested</label><title>Before main - nested</title><icon>fa-archive</icon><bundle>before-main-nested</bundle><controller>index</controller><action>index</action><visible>0</visible></before-main-nested></pages></before-main><main><label>Main</label><title>Main</title><icon>fa-archive</icon><bundle>main</bundle><controller>index</controller><action>index</action></main><after-main><label>After main</label><title>After main</title><icon>fa-archive</icon><bundle>after-main</bundle><controller>index</controller><action>index</action><visible>0</visible></after-main><new-latest><label>New latest</label><title>New latest</title><icon>fa-archive</icon><bundle>after-main</bundle><controller>index</controller><action>index</action><visible>0</visible></new-latest></config>
+<config>
+  <before-main>
+    <label>Before main</label>
+    <title>Before main</title>
+    <icon>fa-archive</icon>
+    <bundle>before-main</bundle>
+    <controller>index</controller>
+    <action>index</action>
+    <pages>
+      <before-main-nested>
+        <label>Before main - nested</label>
+        <title>Before main - nested</title>
+        <icon>fa-archive</icon>
+        <bundle>before-main-nested</bundle>
+        <controller>index</controller>
+        <action>index</action>
+        <visible>0</visible>
+      </before-main-nested>
+    </pages>
+  </before-main>
+  <main>
+    <label>Main</label>
+    <title>Main</title>
+    <icon>fa-archive</icon>
+    <bundle>main</bundle>
+    <controller>index</controller>
+    <action>index</action>
+  </main>
+  <after-main>
+    <label>After main</label>
+    <title>After main</title>
+    <icon>fa-archive</icon>
+    <bundle>after-main</bundle>
+    <controller>index</controller>
+    <action>index</action>
+    <visible>0</visible>
+  </after-main>
+  <new-latest>
+    <label>New latest</label>
+    <title>New latest</title>
+    <icon>fa-archive</icon>
+    <bundle>after-main</bundle>
+    <controller>index</controller>
+    <action>index</action>
+    <visible>0</visible>
+  </new-latest>
+</config>
