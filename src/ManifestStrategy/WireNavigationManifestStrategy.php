@@ -37,6 +37,21 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
     protected const KEY_NAVIGATION_POSITION_BEFORE = 'before';
 
     /**
+     * @var string
+     */
+    protected const NAVIGATION_DATA_KEY_BUNDLE = 'bundle';
+
+    /**
+     * @var string
+     */
+    protected const NAVIGATION_DATA_KEY_MODULE = 'module';
+
+    /**
+     * @var string
+     */
+    protected const NAVIGATION_DATA_KEY_PAGES = 'pages';
+
+    /**
      * @return string
      */
     public function getType(): string
@@ -54,15 +69,6 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
-        if (!file_exists($this->getNavigationSourceFilePath())) {
-            $inputOutput->writeln(sprintf(
-                'The project doesn\'n have the navigation source file: %s.',
-                static::TARGET_NAVIGATION_FILE,
-            ), InputOutputInterface::DEBUG);
-
-            return false;
-        }
-
         try {
             $navigation = $this->getNavigation();
         } catch (UnexpectedNavigationXmlStructureException $unexpectedNavigationXmlStructureException) {
@@ -76,13 +82,7 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
             $manifest[static::KEY_NAVIGATION_POSITION_AFTER] ?? null,
         );
 
-        if ($isDry) {
-            $inputOutput->writeln($this->getXmlNavigationFromArrayNavigation($navigation)->asXML() ?: '');
-
-            return true;
-        }
-
-        return $this->writeNavigationSchema($navigation);
+        return $this->writeNavigationSchema($navigation, $inputOutput, $isDry);
     }
 
     /**
@@ -90,6 +90,10 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
      */
     protected function getNavigation(): array
     {
+        if (!file_exists($this->getNavigationSourceFilePath())) {
+            return [];
+        }
+
         $mainNavigationXmlElement = simplexml_load_file($this->getNavigationSourceFilePath());
         $mainNavigationAsJson = json_encode($mainNavigationXmlElement);
 
@@ -114,6 +118,7 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
         ?string $before = null,
         ?string $after = null
     ): array {
+        $newNavigations = $this->prepareNewNavigationsToApplying($newNavigations);
         $key = $before ?? $after;
         $position = array_search($key, array_keys($navigation));
 
@@ -130,6 +135,32 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
         return array_slice($navigation, 0, $offset, true)
             + $newNavigations
             + array_slice($navigation, $offset, null, true);
+    }
+
+    /**
+     * @param array<string|int, array|string> $newNavigations
+     *
+     * @return array<string|int, array|string>
+     */
+    protected function prepareNewNavigationsToApplying(array $newNavigations): array
+    {
+        $resultNewNavigations = [];
+
+        foreach ($newNavigations as $navigationKey => $navigationData) {
+            $resultNewNavigations[$navigationKey] = $navigationData;
+            $resultNewNavigations[$navigationKey][self::NAVIGATION_DATA_KEY_BUNDLE] = $resultNewNavigations[$navigationKey][self::NAVIGATION_DATA_KEY_MODULE];
+            unset($resultNewNavigations[$navigationKey][self::NAVIGATION_DATA_KEY_MODULE]);
+
+            if (!isset($resultNewNavigations[$navigationKey][self::NAVIGATION_DATA_KEY_PAGES])) {
+                continue;
+            }
+
+            $resultNewNavigations[$navigationKey][self::NAVIGATION_DATA_KEY_PAGES] = $this->prepareNewNavigationsToApplying(
+                $resultNewNavigations[$navigationKey][self::NAVIGATION_DATA_KEY_PAGES]
+            );
+        }
+
+        return $resultNewNavigations;
     }
 
     /**
@@ -155,24 +186,41 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
 
     /**
      * @param array<string|int, array|string> $navigation
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
+     * @param bool $isDry
      *
      * @return bool
      */
-    protected function writeNavigationSchema(array $navigation): bool
+    protected function writeNavigationSchema(array $navigation, InputOutputInterface $inputOutput, bool $isDry): bool
     {
-        $navigationXmlElement = $this->getXmlNavigationFromArrayNavigation($navigation);
-        $xmlString = $navigationXmlElement->asXML();
+        $navigationXmlString = $this->getXmlNavigationFromArrayNavigation($navigation)->asXML();
 
-        if ($xmlString === false) {
+        if ($isDry) {
+            $inputOutput->writeln($navigationXmlString ?: '');
+
+            return true;
+        }
+
+        if ($navigationXmlString === false) {
             return false;
         }
 
-        $navigationXmlDomDocument = new DOMDocument();
+        $navigationXmlDomDocument = new DOMDocument('1.0');
         $navigationXmlDomDocument->preserveWhiteSpace = false;
         $navigationXmlDomDocument->formatOutput = true;
-        $navigationXmlDomDocument->loadXML($xmlString);
+        $navigationXmlDomDocument->loadXML($navigationXmlString);
 
-        return $navigationXmlDomDocument->save($this->getNavigationSourceFilePath()) !== false;
+        $callback = function ($matches) {
+            $multiplier = (strlen($matches[1]) / 2) * 4;
+
+            return str_repeat(' ', $multiplier) . '<';
+        };
+
+        $content = preg_replace_callback('/^( +)</m', $callback, $navigationXmlDomDocument->saveXML());
+
+        file_put_contents($this->getNavigationSourceFilePath(), $content);
+
+        return true;
     }
 
     /**
@@ -194,7 +242,7 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
      *
      * @return SimpleXMLElement
      */
-    public function transformNavigationToXmlElement(array $navigation, SimpleXMLElement $parentXmlElement): SimpleXMLElement
+    protected function transformNavigationToXmlElement(array $navigation, SimpleXMLElement $parentXmlElement): SimpleXMLElement
     {
         foreach ($navigation as $navigationName => $navigationData) {
             if (is_int($navigationName) || (is_array($navigationData) && empty($navigationData))) {

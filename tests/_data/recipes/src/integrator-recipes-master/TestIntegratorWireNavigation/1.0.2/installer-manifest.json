@@ -6,7 +6,7 @@
                     "label": "Before main",
                     "title": "Before main",
                     "icon": "fa-archive",
-                    "bundle": "before-main",
+                    "module": "before-main",
                     "controller": "index",
                     "action": "index",
                     "pages": {
@@ -14,7 +14,7 @@
                             "label": "Before main - nested",
                             "title": "Before main - nested",
                             "icon": "fa-archive",
-                            "bundle": "before-main-nested",
+                            "module": "before-main-nested",
                             "controller": "index",
                             "action": "index",
                             "visible": 0
@@ -30,7 +30,7 @@
                     "label": "After main",
                     "title": "After main",
                     "icon": "fa-archive",
-                    "bundle": "after-main",
+                    "module": "after-main",
                     "controller": "index",
                     "action": "index",
                     "visible": 0
@@ -44,7 +44,7 @@
                     "label": "new main",
                     "title": "new main",
                     "icon": "fa-archive",
-                    "bundle": "new-main",
+                    "module": "new-main",
                     "controller": "index",
                     "action": "index",
                     "visible": 0,
@@ -53,7 +53,7 @@
                             "label": "main - nested",
                             "title": "main - nested",
                             "icon": "fa-archive",
-                            "bundle": "main-nested",
+                            "module": "main-nested",
                             "controller": "index",
                             "action": "index",
                             "visible": 0
@@ -68,7 +68,7 @@
                     "label": "New latest",
                     "title": "New latest",
                     "icon": "fa-archive",
-                    "bundle": "after-main",
+                    "module": "after-main",
                     "controller": "index",
                     "action": "index",
                     "visible": 0
