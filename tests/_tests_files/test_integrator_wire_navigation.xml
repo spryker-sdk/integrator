@@ -4,6 +4,7 @@
         <label>Before main</label>
         <title>Before main</title>
         <icon>fa-archive</icon>
+        <bundle>before-main</bundle>
         <controller>index</controller>
         <action>index</action>
         <pages>
@@ -11,13 +12,12 @@
                 <label>Before main - nested</label>
                 <title>Before main - nested</title>
                 <icon>fa-archive</icon>
+                <bundle>before-main-nested</bundle>
                 <controller>index</controller>
                 <action>index</action>
                 <visible>0</visible>
-                <bundle>before-main-nested</bundle>
             </before-main-nested>
         </pages>
-        <bundle>before-main</bundle>
     </before-main>
     <main>
         <label>Main</label>
@@ -31,18 +31,18 @@
         <label>After main</label>
         <title>After main</title>
         <icon>fa-archive</icon>
+        <bundle>after-main</bundle>
         <controller>index</controller>
         <action>index</action>
         <visible>0</visible>
-        <bundle>after-main</bundle>
     </after-main>
     <new-latest>
         <label>New latest</label>
         <title>New latest</title>
         <icon>fa-archive</icon>
+        <bundle>after-main</bundle>
         <controller>index</controller>
         <action>index</action>
         <visible>0</visible>
-        <bundle>after-main</bundle>
     </new-latest>
 </config>
