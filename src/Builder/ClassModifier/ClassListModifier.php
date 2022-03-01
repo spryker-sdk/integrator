@@ -68,6 +68,8 @@ class ClassListModifier implements ClassListModifierInterface
      * @param string $targetMethodName
      * @param string $classNameToAdd
      * @param string $constantName
+     * @param string $before
+     * @param string $after
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -75,7 +77,9 @@ class ClassListModifier implements ClassListModifierInterface
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
         string $classNameToAdd,
-        string $constantName
+        string $constantName,
+        string $before = '',
+        string $after = ''
     ): ClassInformationTransfer {
         $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         if (!$methodNode) {
@@ -90,6 +94,8 @@ class ClassListModifier implements ClassListModifierInterface
                     $targetMethodName,
                     $classNameToAdd,
                     $constantName,
+                    $before,
+                    $after,
                 ),
             ];
 

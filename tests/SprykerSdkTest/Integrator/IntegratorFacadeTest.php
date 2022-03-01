@@ -253,6 +253,30 @@ class IntegratorFacadeTest extends BaseTestCase
     }
 
     /**
+     * @return void
+     */
+    public function testRunInstallationAddArrayOption(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorAddArrayOption'),
+            $ioAdapter,
+            false,
+        );
+
+        // Assert
+        $testFilePath = './tests/_tests_files/test_integrator_add_array_option_config.php';
+        $classPath = './tests/tmp/src/Pyz/Client/TestIntegratorAddArrayOption/TestIntegratorAddArrayOptionConfig.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+    }
+
+    /**
      * @return \SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter
      */
     private function buildSymfonyConsoleInputOutputAdapter(): SymfonyConsoleInputOutputAdapter

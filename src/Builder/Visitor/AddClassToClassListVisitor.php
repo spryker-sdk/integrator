@@ -48,15 +48,34 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
     protected $constantName;
 
     /**
+     * @var string
+     */
+    protected $before;
+
+    /**
+     * @var string
+     */
+    protected $after;
+
+    /**
      * @param string $methodName
      * @param string $className
      * @param string $constantName
+     * @param string $before
+     * @param string $after
      */
-    public function __construct(string $methodName, string $className, string $constantName)
-    {
+    public function __construct(
+        string $methodName,
+        string $className,
+        string $constantName,
+        string $before = '',
+        string $after = ''
+    ) {
         $this->methodName = $methodName;
         $this->className = ltrim($className, '\\');
         $this->constantName = $constantName;
+        $this->before = ltrim($before, '\\');
+        $this->after = ltrim($after, '\\');
     }
 
     /**
@@ -91,7 +110,11 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
             return $node;
         }
 
-        $node->items[] = $this->createArrayItemWithInstanceOf();
+        if ($this->before || $this->after) {
+            $node->items = $this->addArrayItemToPosition($node);
+        } else {
+            $node->items[] = $this->createArrayItemWithInstanceOf();
+        }
 
         return $node;
     }
@@ -124,5 +147,42 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
                 $this->constantName,
             ),
         );
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return array
+     */
+    protected function addArrayItemToPosition(Node $node): array
+    {
+        $items = [];
+        $itemAdded = false;
+
+        foreach ($node->items as $item) {
+            $nodeValue = sprintf("%s::%s", $item->value->class->toString(), $item->value->name->toString());
+            if ($nodeValue === $this->before) {
+                $items[] = $this->createArrayItemWithInstanceOf();
+                $items[] = $item;
+                $itemAdded = true;
+
+                continue;
+            }
+            if ($nodeValue === $this->after) {
+                $items[] = $item;
+                $items[] = $this->createArrayItemWithInstanceOf();
+                $itemAdded = true;
+
+                continue;
+            }
+
+            $items[] = $item;
+        }
+
+        if (!$itemAdded) {
+            $items[] = $this->createArrayItemWithInstanceOf();
+        }
+
+        return $items;
     }
 }
