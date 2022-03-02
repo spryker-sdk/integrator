@@ -17,14 +17,14 @@ use SprykerSdk\Integrator\IntegratorConfig;
  * Currently, this strategy only supports adding constants to the array.
  * String support may be added in the future.
  */
-class AddArrayOptionManifestStrategy extends AbstractManifestStrategy
+class AddArrayElementManifestStrategy extends AbstractManifestStrategy
 {
     /**
      * @return string
      */
     public function getType(): string
     {
-        return 'add-array-option';
+        return 'add-array-element';
     }
 
     /**
@@ -66,13 +66,13 @@ class AddArrayOptionManifestStrategy extends AbstractManifestStrategy
                 continue;
             }
 
-            [$sourceClassName, $sourceConstName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE]);
+            [$valueClassName, $valueConstName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_VALUE]);
 
             $classInformationTransfer = $this->createClassBuilderFacade()->wireClassConstant(
                 $classInformationTransfer,
                 $targetMethodName,
-                $sourceClassName,
-                $sourceConstName,
+                $valueClassName,
+                $valueConstName,
                 $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] ?? '',
                 $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '',
             );
@@ -84,8 +84,8 @@ class AddArrayOptionManifestStrategy extends AbstractManifestStrategy
             }
 
             $inputOutput->writeln(sprintf(
-                'Option %s was added to %s::%s',
-                $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
+                'Element `%s` was added to `%s::%s`',
+                $manifest[IntegratorConfig::MANIFEST_KEY_VALUE],
                 $classInformationTransfer->getClassName(),
                 $targetMethodName,
             ), InputOutputInterface::DEBUG);

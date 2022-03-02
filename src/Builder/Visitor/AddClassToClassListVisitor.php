@@ -111,7 +111,7 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
         }
 
         if ($this->before || $this->after) {
-            $node->items = $this->addArrayOptionToPosition($node);
+            $node->items = $this->addArrayElementToPosition($node);
         } else {
             $node->items[] = $this->createArrayItemWithInstanceOf();
         }
@@ -154,7 +154,7 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
      *
      * @return array
      */
-    protected function addArrayOptionToPosition(Node $node): array
+    protected function addArrayElementToPosition(Node $node): array
     {
         $items = [];
         $itemAdded = false;

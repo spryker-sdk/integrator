@@ -1,8 +1,8 @@
 <?php
 
-namespace Pyz\Client\TestIntegratorAddArrayOption;
+namespace Pyz\Client\TestIntegratorAddArrayElement;
 
-class TestIntegratorAddArrayOptionConfig
+class TestIntegratorAddArrayElementConfig
 {
     protected function getTestConfiguration(): array
     {

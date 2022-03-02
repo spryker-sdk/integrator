@@ -13,6 +13,6 @@
         "spryker/test-integrator-configure-env": "^1.0.4",
         "spryker/test-integrator-wire-glue-relationship": "^1.0.1",
         "spryker/test-integrator-unwire-glue-relationship": "^1.0.1",
-        "spryker/test-integrator-add-array-option": "^1.0"
+        "spryker/test-integrator-add-array-element": "^1.0"
     }
 }

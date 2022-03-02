@@ -255,21 +255,21 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
-    public function testRunInstallationAddArrayOption(): void
+    public function testRunInstallationAddArrayElement(): void
     {
         // Arrange
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
         $this->createIntegratorFacade()->runInstallation(
-            $this->getModuleList('TestIntegratorAddArrayOption'),
+            $this->getModuleList('TestIntegratorAddArrayElement'),
             $ioAdapter,
             false,
         );
 
         // Assert
-        $testFilePath = './tests/_tests_files/test_integrator_add_array_option_config.php';
-        $classPath = './tests/tmp/src/Pyz/Client/TestIntegratorAddArrayOption/TestIntegratorAddArrayOptionConfig.php';
+        $testFilePath = './tests/_tests_files/test_integrator_add_array_element_config.php';
+        $classPath = './tests/tmp/src/Pyz/Client/TestIntegratorAddArrayElement/TestIntegratorAddArrayElementConfig.php';
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
