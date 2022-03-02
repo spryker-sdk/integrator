@@ -13,6 +13,10 @@ use ReflectionClass;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
+/**
+ * Currently, this strategy only supports adding constants to the array.
+ * String support may be added in the future.
+ */
 class AddArrayOptionManifestStrategy extends AbstractManifestStrategy
 {
     /**
@@ -37,9 +41,8 @@ class AddArrayOptionManifestStrategy extends AbstractManifestStrategy
 
         if (!class_exists($targetClassName)) {
             $inputOutput->writeln(sprintf(
-                'Target module %s/%s does not exists in your system.',
-                $this->classHelper->getOrganisationName($targetClassName),
-                $this->classHelper->getModuleName($targetClassName),
+                'Target class %s does not exists in your system.',
+                $targetClassName,
             ), InputOutputInterface::DEBUG);
 
             return false;
