@@ -41,7 +41,7 @@ class AddArrayOptionManifestStrategy extends AbstractManifestStrategy
 
         if (!class_exists($targetClassName)) {
             $inputOutput->writeln(sprintf(
-                'Target class %s does not exists in your system.',
+                'Target class `%s` does not exists in your system.',
                 $targetClassName,
             ), InputOutputInterface::DEBUG);
 
@@ -52,7 +52,7 @@ class AddArrayOptionManifestStrategy extends AbstractManifestStrategy
 
         if (!$targetClassInfo->hasMethod($targetMethodName)) {
             $inputOutput->writeln(sprintf(
-                'Your class %s does not contain %s method',
+                'Your class `%s` does not contain `%s` method',
                 $targetClassName,
                 $targetMethodName,
             ), InputOutputInterface::DEBUG);
