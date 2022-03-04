@@ -1,3 +1,3 @@
-## Integrator documentation
+# Integrator documentation
 
-### Manifest types
+## Manifest types
