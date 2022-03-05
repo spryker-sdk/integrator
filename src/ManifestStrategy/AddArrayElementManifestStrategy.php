@@ -41,7 +41,7 @@ class AddArrayElementManifestStrategy extends AbstractManifestStrategy
 
         if (!class_exists($targetClassName)) {
             $inputOutput->writeln(sprintf(
-                'Target module `%s/%s` does not exists in your system.',
+                'Target module `%s.%s` does not exists in your system.',
                 $this->classHelper->getOrganisationName($targetClassName),
                 $this->classHelper->getModuleName($targetClassName),
             ), InputOutputInterface::DEBUG);
@@ -53,7 +53,7 @@ class AddArrayElementManifestStrategy extends AbstractManifestStrategy
 
         if (!$targetClassInfo->hasMethod($targetMethodName)) {
             $inputOutput->writeln(sprintf(
-                'Your version of module `%s/%s` does not contain required configuration method `%s`. Please, update it to use full functionality.',
+                'Your version of module `%s.%s` does not contain required configuration method `%s()`. Please, update it to use full functionality.',
                 $this->classHelper->getOrganisationName($targetClassName),
                 $this->classHelper->getModuleName($targetClassName),
                 $targetMethodName,
