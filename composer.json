@@ -57,6 +57,9 @@
         "class": "SprykerSdk\\Integrator\\Plugin\\Composer\\InstallerComposerPlugin"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
