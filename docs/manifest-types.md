@@ -271,6 +271,6 @@ This type of manifest adds a navigation entry into the navigation.xml.
 
 https://github.com/spryker-sdk/integrator/issues
 Here you can propose new types or missing functionality regarding manifests.
-If approved we will implement them in our side.
+If approved we will implement them on our side.
 
 You can also open PRs with suggested changes.
