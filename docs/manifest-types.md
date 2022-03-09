@@ -16,12 +16,12 @@ SprykerShop/
 
 
 All manifests have such structure for common types. More data you can find below for every manifest.
-```
+```json
 {
     "manifest-key-here": [
         {
-            "target": "this-is-a-place-where-data-needs-to-be-changed-or-where-to-copy-smth",
-            "source": "this-is what we want to add-remove-copy"
+            "target": "this-is-where-data-needs-to-be-changed-or-where-to-copy-smth",
+            "source": "this-is-what-we-want-to-add-remove-copy"
         }
     ]
 }
@@ -36,16 +36,16 @@ This manifest type adds Plugin to desired place (by defining exact method) of th
 
 ```json
 {
-  "wire-plugin": [
-    {
-      "target": "\Spryker\Client\Cart\CartDependencyProvider::getQuoteStorageStrategyPlugins",
-      "source": "\Spryker\Client\Cart\Plugin\SessionQuoteStorageStrategyPlugin",
-      "position": {
-        "before": "",
-        "after": ""
-      }
-    }
-  ]
+    "wire-plugin": [
+        {
+            "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getQuoteStorageStrategyPlugins",
+            "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin",
+            "position": {
+                "before": "",
+                "after": ""
+            }
+        }
+    ]
 }
 ```
 
@@ -55,12 +55,12 @@ This manifest type removes Plugin from specified place of code.
 
 ```json
 {
-  "unwire-plugin": [
-    {
-      "target": "\Spryker\Client\Cart\CartDependencyProvider::getQuoteStorageStrategyPlugins",
-      "source": "\Spryker\Client\Cart\Plugin\SessionQuoteStorageStrategyPlugin",
-    }
-  ]
+    "unwire-plugin": [
+        {
+            "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getQuoteStorageStrategyPlugins",
+            "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin"
+        }
+    ]
 }
 ```
 
@@ -70,11 +70,11 @@ This manifest adds Widget class to the SprykerShop.
 
 ```json
 {
-  "wire-widget": [
-    {
-      "source": "\SprykerShop\Yves\CartPage\Widget\ProductAbstractAddToCartButtonWidget",
-    }
-  ]
+    "wire-widget": [
+        {
+          "source": "\\SprykerShop\\Yves\\CartPage\\Widget\\ProductAbstractAddToCartButtonWidget"
+        }
+    ]
 }
 ```
 
@@ -84,11 +84,11 @@ This manifest removes Widget class from the SprykerShop.
 
 ```json
 {
-  "unwire-widget": [
-    {
-      "source": "\SprykerShop\Yves\CartPage\Widget\RemoveFromCartFormWidget"
-    }
-  ]
+    "unwire-widget": [
+        {
+          "source": "\\SprykerShop\\Yves\\CartPage\\Widget\\RemoveFromCartFormWidget"
+        }
+    ]
 }
 ```
 
@@ -98,15 +98,15 @@ This manifest adds a constant to specified target class. To set value you can sp
 
 ```json
 {
-  "configure-module": [
-    {
-       "target": "\Spryker\Client\Catalog\CatalogConfig::PAGINATION_VALID_ITEMS_PER_PAGE",
-       "value": [
-        10,
-        1000
-       ]
-    }
-  ]
+    "configure-module": [
+        {
+            "target": "\\Spryker\\Client\\Catalog\\CatalogConfig::PAGINATION_VALID_ITEMS_PER_PAGE",
+            "value": [
+                10,
+                1000
+            ]
+        }
+    ]
 }
 ```
 
@@ -118,17 +118,17 @@ If we want to give exact value we set value field. If it isn't set then Intergra
 
 ```json
 {
-  "configure-env": [
-    {
-      "target": "\Spryker\Shared\GlueApplication\GlueApplicationConstants::GLUE_APPLICATION_DOMAIN",
-      "value": "Value 1 But can be empty (value field is not set)"
-      "defaultValue": "Value 1",
-      "choices": [
-        "Value 1",
-        "Value 1"
-      ]
-    }
-  ]
+    "configure-env": [
+        {
+            "target": "\\Spryker\\Shared\\GlueApplication\\GlueApplicationConstants::GLUE_APPLICATION_DOMAIN",
+            "value": "Value 1 But can be empty (value field is not set)",
+            "defaultValue": "Value 1",
+            "choices": [
+                "Value 1",
+                "Value 1"
+            ]
+        }
+    ]
 }
 ```
 
@@ -156,7 +156,7 @@ This manifest adds relationship for Glue and internally adds a call of addRelati
     "wire-glue-relationship": [
         {
             "source": {
-                "\Spryker\Glue\SalesReturnsRestApi\SalesReturnsRestApiConfig::RESOURCE_RETURN_ITEMS": "\Spryker\Glue\OrdersRestApi\Plugin\OrderItemByResourceIdResourceRelationshipPlugin"
+                "\\Spryker\\Glue\\SalesReturnsRestApi\\SalesReturnsRestApiConfig::RESOURCE_RETURN_ITEMS": "\\Spryker\\Glue\\OrdersRestApi\\Plugin\\OrderItemByResourceIdResourceRelationshipPlugin"
             }
         }
     ]
@@ -172,7 +172,7 @@ This manifest removes Glue relationship from the code.
     "unwire-relationship": [
         {
             "source": {
-                "\Spryker\Glue\SalesReturnsRestApi\SalesReturnsRestApiConfig::RESOURCE_RETURN_ITEMS": "\Spryker\Glue\OrdersRestApi\Plugin\OrderItemByResourceIdResourceRelationshipPlugin"
+                "\\Spryker\\Glue\\SalesReturnsRestApi\\SalesReturnsRestApiConfig::RESOURCE_RETURN_ITEMS": "\\Spryker\\Glue\\OrdersRestApi\\Plugin\\OrderItemByResourceIdResourceRelationshipPlugin"
             }
         }
     ]
@@ -208,7 +208,6 @@ This manifest contains glossary keys for project’s glossary.yml file.This miti
                     "de_DE": "Versand",
                     "en_US": "Shipping"
                 }
-                ...
             }
         ]
     ]
@@ -224,18 +223,18 @@ This type of manifest adds a source constant as an element to the array returned
     "add-config-array-element": [
         {
             "target": "\\Pyz\\Client\\TestIntegratorAddArrayElement\\TestIntegratorAddArrayElementConfig::getTestConfiguration",
-            "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddArrayElement::TEST_INTEGRATION_ADD_ARRAY_ELEMENT_CONST"
+            "value": "\\Spryker\\Shared\\TestIntegrator\\TestIntegratorAddArrayElement::TEST_INTEGRATION_ADD_ARRAY_ELEMENT_CONST"
         },
         {
             "target": "\\Pyz\\Client\\TestIntegratorAddArrayElement\\TestIntegratorAddArrayElementConfig::getTestConfiguration",
-            "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddArrayElementBefore::TEST_INTEGRATION_ADD_ARRAY_ELEMENT_CONST_BEFORE",
+            "value": "\\Spryker\\Shared\\TestIntegrator\\TestIntegratorAddArrayElementBefore::TEST_INTEGRATION_ADD_ARRAY_ELEMENT_CONST_BEFORE",
             "position": {
                 "before": "TestIntegratorAddArrayElement::TEST_INTEGRATION_ADD_ARRAY_ELEMENT_CONST"
             }
         },
         {
             "target": "\\Pyz\\Client\\TestIntegratorAddArrayElement\\TestIntegratorAddArrayElementConfig::getTestConfiguration",
-            "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddArrayElementAfter::TEST_INTEGRATION_ADD_ARRAY_ELEMENT_CONST_AFTER",
+            "value": "\\Spryker\\Shared\\TestIntegrator\\TestIntegratorAddArrayElementAfter::TEST_INTEGRATION_ADD_ARRAY_ELEMENT_CONST_AFTER",
             "position": {
                 "after": "TestIntegratorAddArrayElement::TEST_INTEGRATION_ADD_ARRAY_ELEMENT_CONST"
             }
