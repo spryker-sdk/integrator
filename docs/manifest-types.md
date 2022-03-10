@@ -243,7 +243,7 @@ This type of manifest adds a source constant as an element to the array returned
 }
 ```
 
-### [WIP] Wire Navigation Manifest
+### Wire Navigation Manifest
 
 This type of manifest adds a navigation entry into the navigation.xml.
 
