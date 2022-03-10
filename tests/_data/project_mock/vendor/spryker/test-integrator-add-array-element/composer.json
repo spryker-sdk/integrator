@@ -1,9 +1,0 @@
-{
-    "name": "spryker/test-integrator-add-array-element",
-    "type": "composer-plugin",
-    "description": "test-integrator-add-array-element module",
-    "license": "proprietary",
-    "require": {
-        "php": ">=7.4"
-    }
-}

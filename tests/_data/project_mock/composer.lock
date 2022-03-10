@@ -37,7 +37,7 @@
             "version": "1.0.1"
         },
         {
-            "name": "spryker/test-integrator-add-array-element",
+            "name": "spryker/test-integrator-add-config-array-element",
             "version": "1.0.0"
         }
     ]

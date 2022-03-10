@@ -17,14 +17,14 @@ use SprykerSdk\Integrator\IntegratorConfig;
  * Currently, this strategy only supports adding constants to the array.
  * String support may be added in the future.
  */
-class AddArrayElementManifestStrategy extends AbstractManifestStrategy
+class AddConfigArrayElementManifestStrategy extends AbstractManifestStrategy
 {
     /**
      * @return string
      */
     public function getType(): string
     {
-        return 'add-array-element';
+        return 'add-config-array-element';
     }
 
     /**

@@ -53,7 +53,7 @@ use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriter;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
 use SprykerSdk\Integrator\Manifest\ManifestReader;
 use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
-use SprykerSdk\Integrator\ManifestStrategy\AddArrayElementManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\AddConfigArrayElementManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureEnvManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureModuleManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\CopyModuleFileManifestStrategy;
@@ -148,9 +148,9 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createAddArrayElementManifestStrategy(): ManifestStrategyInterface
+    public function createAddConfigArrayElementManifestStrategy(): ManifestStrategyInterface
     {
-        return new AddArrayElementManifestStrategy(
+        return new AddConfigArrayElementManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
         );
@@ -456,7 +456,7 @@ class IntegratorFactory
             $this->createUnwirePluginManifestStrategy(),
             $this->createWireWidgetManifestStrategy(),
             $this->createUnwireWidgetManifestStrategy(),
-            $this->createAddArrayElementManifestStrategy(),
+            $this->createAddConfigArrayElementManifestStrategy(),
             $this->createConfigureModuleManifestStrategy(),
             $this->createCopyFileManifestStrategy(),
             $this->createConfigureEnvManifestStrategy(),

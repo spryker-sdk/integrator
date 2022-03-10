@@ -1,0 +1,22 @@
+{
+    "add-config-array-element": [
+        {
+            "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestConfiguration",
+            "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddConfigArrayElement::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST"
+        },
+        {
+            "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestConfiguration",
+            "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddConfigArrayElementBefore::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST_BEFORE",
+            "position": {
+                "before": "TestIntegratorAddConfigArrayElement::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST"
+            }
+        },
+        {
+            "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestConfiguration",
+            "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddConfigArrayElementAfter::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST_AFTER",
+            "position": {
+                "after": "TestIntegratorAddConfigArrayElementBefore::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST_BEFORE"
+            }
+        }
+    ]
+}
