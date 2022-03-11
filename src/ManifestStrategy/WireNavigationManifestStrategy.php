@@ -256,7 +256,7 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
     }
 
     /**
-     * @param array<string|int, array<string, mixed>> $navigation
+     * @param array<string|int, array<string, mixed>|string> $navigation
      * @param SimpleXMLElement $parentXmlElement
      *
      * @return SimpleXMLElement
