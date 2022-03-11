@@ -18,28 +18,28 @@
         "spryker/code-sniffer": "@stable",
         "phpunit/phpunit": "^9.5.0",
         "phpstan/phpstan": "^1.0.0",
-        "symfony/filesystem": "^5.3"
+        "symfony/filesystem": "^5.3.0"
     },
     "autoload": {
         "psr-4": {
-            "SprykerSdk\\Integrator\\": "src"
+            "SprykerSdk\\Integrator\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "SprykerSdkTest\\": "tests/SprykerSdkTest/",
             "Pyz\\": "tests/tmp/src/Pyz",
-            "Spryker\\Zed\\TestIntegratorWirePlugin\\": "tests/tmp/vendor/spryker/test-integrator-wire-plugin/src/Spryker/Zed/TestIntegratorWirePlugin",
-            "Spryker\\Zed\\TestIntegratorDefault\\": "tests/tmp/vendor/spryker/test-integrator-default/src/Spryker/Zed/TestIntegratorDefault",
-            "Spryker\\Zed\\TestIntegratorUnwirePlugin\\": "tests/tmp/vendor/spryker/test-integrator-unwire-plugin/src/Spryker/Zed/TestIntegratorUnwirePlugin",
-            "Spryker\\Zed\\TestIntegratorConfigureModule\\": "tests/tmp/vendor/spryker/test-integrator-configure-module/src/Spryker/Zed/TestIntegratorConfigureModule",
-            "Spryker\\Zed\\TestIntegratorWireWidget\\": "tests/tmp/vendor/spryker/test-integrator-wire-widget/src/Spryker/Yves/TestIntegratorWireWidget",
-            "Spryker\\Zed\\TestIntegratorUnwireWidget\\": "tests/tmp/vendor/spryker/test-integrator-unwire-widget/src/Spryker/Yves/TestIntegratorUnwireWidget",
-            "Spryker\\Shared\\TestIntegratorConfigureEnv\\": "tests/tmp/vendor/spryker/test-integrator-configure-env/src/Spryker/Shared/TestIntegratorConfigureEnv",
-            "Spryker\\Glue\\TestIntegratorWireGlueRelationship\\": "tests/tmp/vendor/spryker/test-integrator-wire-glue-relationship/src/Spryker/Glue/TestIntegratorWireGlueRelationship",
-            "Spryker\\Glue\\TestIntegratorUnwireGlueRelationship\\": "tests/tmp/vendor/spryker/test-integrator-unwire-glue-relationship/src/Spryker/Glue/TestIntegratorUnwireGlueRelationship",
-            "Spryker\\Glue\\GlueApplication\\": "tests/tmp/vendor/spryker/glue-application/src/Spryker/Glue/GlueApplication",
-            "SprykerShop\\Yves\\ShopApplication\\": "tests/tmp/vendor/spryker-shop/shop-application/src/SprykerShop/Yves/ShopApplication"
+            "Spryker\\Zed\\TestIntegratorWirePlugin\\": "tests/tmp/vendor/spryker/test-integrator-wire-plugin/src/Spryker/Zed/TestIntegratorWirePlugin/",
+            "Spryker\\Zed\\TestIntegratorDefault\\": "tests/tmp/vendor/spryker/test-integrator-default/src/Spryker/Zed/TestIntegratorDefault/",
+            "Spryker\\Zed\\TestIntegratorUnwirePlugin\\": "tests/tmp/vendor/spryker/test-integrator-unwire-plugin/src/Spryker/Zed/TestIntegratorUnwirePlugin/",
+            "Spryker\\Zed\\TestIntegratorConfigureModule\\": "tests/tmp/vendor/spryker/test-integrator-configure-module/src/Spryker/Zed/TestIntegratorConfigureModule/",
+            "Spryker\\Zed\\TestIntegratorWireWidget\\": "tests/tmp/vendor/spryker/test-integrator-wire-widget/src/Spryker/Yves/TestIntegratorWireWidget/",
+            "Spryker\\Zed\\TestIntegratorUnwireWidget\\": "tests/tmp/vendor/spryker/test-integrator-unwire-widget/src/Spryker/Yves/TestIntegratorUnwireWidget/",
+            "Spryker\\Shared\\TestIntegratorConfigureEnv\\": "tests/tmp/vendor/spryker/test-integrator-configure-env/src/Spryker/Shared/TestIntegratorConfigureEnv/",
+            "Spryker\\Glue\\TestIntegratorWireGlueRelationship\\": "tests/tmp/vendor/spryker/test-integrator-wire-glue-relationship/src/Spryker/Glue/TestIntegratorWireGlueRelationship/",
+            "Spryker\\Glue\\TestIntegratorUnwireGlueRelationship\\": "tests/tmp/vendor/spryker/test-integrator-unwire-glue-relationship/src/Spryker/Glue/TestIntegratorUnwireGlueRelationship/",
+            "Spryker\\Glue\\GlueApplication\\": "tests/tmp/vendor/spryker/glue-application/src/Spryker/Glue/GlueApplication/",
+            "SprykerShop\\Yves\\ShopApplication\\": "tests/tmp/vendor/spryker-shop/shop-application/src/SprykerShop/Yves/ShopApplication/"
         }
     },
     "minimum-stability": "dev",

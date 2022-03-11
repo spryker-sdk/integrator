@@ -15,4 +15,4 @@ composer require --dev spryker-sdk/integrator
 1. Every time the integrator runs it downloads recipes from `spryker-sdk/integrator-recipes` and uses the master branch. The recipes are downloaded into this folder: `vendor/spryker-sdk/integrator/data/recipes/`.
 2. It gathers the list of dependencies from `composer.json` and their installed versions from `composer.lock` of the project.
 3. The integrator checks manifests (recipes) versions and collect manifests that should be applied.
-4. All gathered manifest are applied to the project code.
+4. All gathered manifests are applied to the project code and are logged in the `integrator.lock` file in the project root directory.
