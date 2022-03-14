@@ -126,6 +126,8 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
      * @param string $targetMethodName
      * @param string $classNameToAdd
      * @param string $constantName
+     * @param string $before
+     * @param string $after
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -133,11 +135,20 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
         string $classNameToAdd,
-        string $constantName
+        string $constantName,
+        string $before = '',
+        string $after = ''
     ): ClassInformationTransfer {
         return $this->getFactory()
             ->createClassListModifier()
-            ->wireClassConstant($classInformationTransfer, $targetMethodName, $classNameToAdd, $constantName);
+            ->wireClassConstant(
+                $classInformationTransfer,
+                $targetMethodName,
+                $classNameToAdd,
+                $constantName,
+                $before,
+                $after
+            );
     }
 
     /**
