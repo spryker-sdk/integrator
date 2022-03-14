@@ -5,6 +5,7 @@
     "require": {
         "php": ">=8.0",
         "spryker/test-integrator-wire-plugin": "^1.0",
+        "spryker/test-integrator-wire-navigation": "^1.0",
         "spryker/test-integrator-unwire-plugin": "^1.0",
         "spryker/test-integrator-configure-module": "^1.0",
         "spryker/test-integrator-copy-module-file": "^1.0",

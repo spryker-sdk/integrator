@@ -59,6 +59,7 @@ use SprykerSdk\Integrator\ManifestStrategy\ConfigureModuleManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\CopyModuleFileManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ExecuteConsoleManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface;
+use SprykerSdk\Integrator\ManifestStrategy\WireNavigationManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\UnwireGlueRelationshipManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\UnwirePluginManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\UnwireWidgetManifestStrategy;
@@ -239,6 +240,17 @@ class IntegratorFactory
     public function createExecuteConsoleManifestStrategy(): ManifestStrategyInterface
     {
         return new ExecuteConsoleManifestStrategy(
+            $this->getConfig(),
+            $this->createClassHelper(),
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
+     */
+    public function createNavigationManifestStrategy(): ManifestStrategyInterface
+    {
+        return new WireNavigationManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
         );
@@ -463,6 +475,7 @@ class IntegratorFactory
             $this->createWireGlueRelationshipManifestStrategy(),
             $this->createUnwireGlueRelationshipManifestStrategy(),
             $this->createExecuteConsoleManifestStrategy(),
+            $this->createNavigationManifestStrategy(),
         ];
     }
 }

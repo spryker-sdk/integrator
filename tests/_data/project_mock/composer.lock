@@ -5,6 +5,10 @@
             "version": "1.0.2"
         },
         {
+            "name": "spryker/test-integrator-wire-navigation",
+            "version": "1.0.2"
+        },
+        {
             "name": "spryker/test-integrator-unwire-plugin",
             "version": "1.0.3"
         },
