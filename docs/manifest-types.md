@@ -195,7 +195,7 @@ This manifest executes console command.
 }
 ```
 
-### [WIP] Glossary Key Manifest
+### Glossary Key Manifest
 
 This manifest contains glossary keys for project’s glossary.yml file.This mitigates “BC breaks” as it allows adding those missing ones, even if they are introduced in minors.
 
