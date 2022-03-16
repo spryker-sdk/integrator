@@ -12,8 +12,8 @@ performed starting from the first (major) version.
 Based on the (minor) module version it encounters it only performs the
 necessary steps.
 
-Those so-called "recipes" reside in this repository:
-https://github.com/spryker-sdk/integrator-recipes
+Those so-called "module manifests" reside in this repository:
+https://github.com/spryker-sdk/integrator-manifests
 
 ## Manifest types
 
