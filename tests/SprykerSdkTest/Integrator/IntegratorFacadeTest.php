@@ -26,12 +26,12 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @var string
      */
-    protected const RECIPES_DIR_PATH = '_data/recipes/src';
+    protected const MANIFESTS_DIR_PATH = '_data/manifests/src';
 
     /**
      * @var string
      */
-    protected const ZIP_PATH = '_data/recipes/archive.zip';
+    protected const ZIP_PATH = '_data/manifests/archive.zip';
 
     /**
      * @return void
@@ -39,7 +39,7 @@ class IntegratorFacadeTest extends BaseTestCase
     public static function setUpBeforeClass(): void
     {
         $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
-        $dirPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::RECIPES_DIR_PATH;
+        $dirPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::MANIFESTS_DIR_PATH;
 
         parent::zipDir($dirPath, $zipPath);
     }
