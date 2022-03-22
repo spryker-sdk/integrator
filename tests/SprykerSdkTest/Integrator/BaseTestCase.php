@@ -104,15 +104,15 @@ class BaseTestCase extends PHPUnitTestCase
     /**
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    protected function createClassInformationTransfer(): ClassInformationTransfer
+    protected function createClassInformationTransfer(string $className, string $filePath): ClassInformationTransfer
     {
         $parser = $this->getFactory()->createPhpParserParser();
 
         $classInformationTransfer = (new ClassInformationTransfer())
-            ->setClassName('\Pyz\Zed\TestIntegratorDefault\TestIntegratorDefaultConfig')
-            ->setFullyQualifiedClassName('\Pyz\Zed\TestIntegratorDefault\TestIntegratorDefaultConfig');
+            ->setClassName($className)
+            ->setFullyQualifiedClassName($className);
 
-        $originalSyntaxTree = $parser->parse(file_get_contents('./tests/_tests_files/test_integrator_configure_module.php'));
+        $originalSyntaxTree = $parser->parse(file_get_contents($filePath));
         $syntaxTree = $this->traverseOriginalSyntaxTree($originalSyntaxTree);
 
         $classInformationTransfer->setClassTokenTree($syntaxTree)

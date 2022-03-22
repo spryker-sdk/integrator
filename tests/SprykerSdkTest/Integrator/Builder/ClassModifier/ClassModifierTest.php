@@ -14,7 +14,10 @@ class ClassModifierTest extends BaseTestCase
     public function testSetMethodReturnValueSetScalarValue(): void
     {
         //Arrange
-        $classInformationTransfer = $this->createClassInformationTransfer();
+        $classInformationTransfer = $this->createClassInformationTransfer(
+            '\Pyz\Zed\TestIntegratorDefault\TestIntegratorDefaultConfig',
+            './tests/_tests_files/test_integrator_configure_module.php',
+        );
         $classModifier = $this->getFactory()->createCommonClassModifier();
         $finder = $this->getFactory()->createClassNodeFinder();
         $value = 'value_that_we_are_looking';
@@ -35,7 +38,10 @@ class ClassModifierTest extends BaseTestCase
     public function testSetMethodReturnValueSetLiteralValue(): void
     {
         //Arrange
-        $classInformationTransfer = $this->createClassInformationTransfer();
+        $classInformationTransfer = $this->createClassInformationTransfer(
+            '\Pyz\Zed\TestIntegratorDefault\TestIntegratorDefaultConfig',
+            './tests/_tests_files/test_integrator_configure_module.php',
+        );
         $classModifier = $this->getFactory()->createCommonClassModifier();
         $finder = $this->getFactory()->createClassNodeFinder();
         $value = [
