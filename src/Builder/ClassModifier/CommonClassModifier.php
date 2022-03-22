@@ -12,6 +12,7 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
@@ -19,7 +20,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
+use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
+use SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\CloneNodeWithClearPositionVisitor;
@@ -165,9 +168,37 @@ class CommonClassModifier implements CommonClassModifierInterface
             $classInformationTransfer = $this->overrideMethodFromParent($classInformationTransfer, $methodName);
         }
 
-        $methodBody = [new Return_((new BuilderFactory())->val($value))];
+        $methodBody = [new Return_($this->buildReturnValue($value))];
 
         return $this->replaceMethodBody($classInformationTransfer, $methodName, $methodBody);
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @throws \SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException
+     *
+     * @return \PhpParser\Node\Expr
+     */
+    protected function buildReturnValue($value): Expr
+    {
+        if (is_array($value) && isset($value['is_literal'])) {
+            $parserFactory = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+
+            $preparedValue = sprintf('<?php %s;', $value['value']);
+            $tree = $parserFactory->parse($preparedValue);
+
+            /** @var \PhpParser\Node\Stmt\Expression|null $expression */
+            $expression = $tree[0] ?? null;
+
+            if ($expression === null) {
+                throw new LiteralValueParsingException(sprintf('Value is not valid PHP code. %s', $value['value']));
+            }
+
+            return $expression->expr;
+        }
+
+        return (new BuilderFactory())->val($value);
     }
 
     /**

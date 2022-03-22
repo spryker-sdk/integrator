@@ -7,7 +7,7 @@
 
 declare(strict_types = 1);
 
-namespace SprykerSdkTest\Zed\Integrator\Builder\ClassLoader;
+namespace SprykerSdkTest\Integrator\Builder\ClassLoader;
 
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
 use SprykerSdk\Integrator\Helper\ClassHelper;
@@ -29,7 +29,7 @@ class ClassLoaderTest extends BaseTestCase
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader
      */
-    private function createClassLoader(): ClassLoader
+    protected function createClassLoader(): ClassLoader
     {
         return $this->getFactory()->createClassLoader();
     }
