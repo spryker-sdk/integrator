@@ -16,7 +16,7 @@ class ClassModifierTest extends BaseTestCase
         //Arrange
         $classInformationTransfer = $this->createClassInformationTransfer(
             '\Pyz\Zed\TestIntegratorDefault\TestIntegratorDefaultConfig',
-            './tests/_tests_files/test_integrator_configure_module.php',
+            './tests/_tests_files/test_integrator_config_module_class_modifier.php',
         );
         $classModifier = $this->getFactory()->createCommonClassModifier();
         $finder = $this->getFactory()->createClassNodeFinder();
@@ -40,7 +40,7 @@ class ClassModifierTest extends BaseTestCase
         //Arrange
         $classInformationTransfer = $this->createClassInformationTransfer(
             '\Pyz\Zed\TestIntegratorDefault\TestIntegratorDefaultConfig',
-            './tests/_tests_files/test_integrator_configure_module.php',
+            './tests/_tests_files/test_integrator_config_module_class_modifier.php',
         );
         $classModifier = $this->getFactory()->createCommonClassModifier();
         $finder = $this->getFactory()->createClassNodeFinder();
