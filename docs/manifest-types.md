@@ -134,7 +134,7 @@ If we want to give exact value we set value field. If it isn't set then Intergra
 
 ### Literal values
 
-Sometime configs are using not only simple scalar values or constants, but also functions or typecasting. For such cases config value should look like this:
+Sometimes configs are using not only simple scalar values or constants, but also functions or typecasting. For such cases config value should look like this:
 
 ```json
 {
