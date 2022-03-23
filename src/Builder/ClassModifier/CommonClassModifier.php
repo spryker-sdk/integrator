@@ -192,7 +192,7 @@ class CommonClassModifier implements CommonClassModifierInterface
             $expression = $tree[0] ?? null;
 
             if ($expression === null) {
-                throw new LiteralValueParsingException(sprintf('Value is not a valid PHP code. %s', $value['value']));
+                throw new LiteralValueParsingException(sprintf('Value is not valid PHP code. `%s`', $value['value']));
             }
 
             return $expression->expr;
