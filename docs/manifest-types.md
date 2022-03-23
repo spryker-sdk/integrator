@@ -132,6 +132,24 @@ If we want to give exact value we set value field. If it isn't set then Intergra
 }
 ```
 
+### Literal values
+
+Sometime configs are using not only simple scalar values or constants, but also functions or typecasting. For such cases config value should look like this:
+
+```json
+{
+    "configure-env": [
+        {
+            "target": "\\Spryker\\Shared\\GlueApplication\\GlueApplicationConstants::GLUE_APPLICATION_DOMAIN",
+            "value": {
+                "is_literal": true,
+                "value": "getenv('APPLICATION_NAME')"
+            }
+        }
+    ]
+}
+```
+
 ### Copy Module File Manifest
 
 This manifest copies Module file from the source to the target path.
