@@ -64,12 +64,12 @@ class IntegratorConfig
     /**
      * @var string
      */
-    protected const RECIPES_DIRECTORY = 'vendor/spryker-sdk/integrator/data/recipes/';
+    protected const MANIFESTS_DIRECTORY = 'vendor/spryker-sdk/integrator/data/manifests/';
 
     /**
      * @var string
      */
-    protected const RECIPES_URL = 'https://github.com/spryker-sdk/integrator-recipes/archive/master.zip';
+    protected const MANIFESTS_URL = 'https://github.com/spryker-sdk/integrator-manifests/archive/master.zip';
 
     /**
      * @var array|null
@@ -285,21 +285,21 @@ class IntegratorConfig
     /**
      * @return string
      */
-    public function getRecipesDirectory(): string
+    public function getManifestsDirectory(): string
     {
-        return $this->getProjectRootDirectory() . static::RECIPES_DIRECTORY;
+        return $this->getProjectRootDirectory() . static::MANIFESTS_DIRECTORY;
     }
 
     /**
      * @return string
      */
-    public function getRecipesRepository(): string
+    public function getManifestsRepository(): string
     {
         if (defined('TEST_INTEGRATOR_MODE')) {
-            return 'tests/_data/recipes/archive.zip';
+            return 'tests/_data/manifests/archive.zip';
         }
 
-        return static::RECIPES_URL;
+        return static::MANIFESTS_URL;
     }
 
     /**
