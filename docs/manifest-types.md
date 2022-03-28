@@ -29,6 +29,21 @@ All manifests have such structure for common types. More data you can find below
 
 ## Available manifest types
 
+| Type                                                  | Generation | Integration |
+|-------------------------------------------------------|------------|-------------|
+| [wire-plugin](#wire-plugin)                           | YES        | YES         |
+| [unwire-plugin](#unwire-plugin)                       |            |             |
+| [wire-widget](#wire-widget)                           |            |             |
+| [unwire-widget](#unwire-widget)                       |            |             |
+| [configure-module](#configure-module)                 |            |             |
+| [configure-env](#configure-env)                       |            |             |
+| [copy-module-file](#copy-module-file)                 |            |             |
+| [wire-glue-relationship](#wire-glue-relationship)     |            |             |
+| [unwire-glue-relationship](#unwire-glue-relationship) |            |             |
+| [glossary-key](#glossary-key)                         | YES        |             |
+| [add-config-array-element](#add-config-array-element) |            |             |
+| [wire-navigation](#wire-navigation)                   | YES        |             |
+
 
 ### Wire Plugin Manifest
 
@@ -132,7 +147,7 @@ If we want to give exact value we set value field. If it isn't set then Intergra
 }
 ```
 
-### Literal values
+#### Literal values
 
 Sometimes configs are using not only simple scalar values or constants, but also functions or typecasting. For such cases config value should look like this:
 
@@ -152,7 +167,7 @@ Sometimes configs are using not only simple scalar values or constants, but also
 
 ### Copy Module File Manifest
 
-This manifest copies Module file from the source to the target path.
+This manifest copies a specific file from the source to the target path.
 
 ```json
 {
