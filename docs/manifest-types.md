@@ -44,6 +44,8 @@ All manifests have such structure for common types. More data you can find below
 | [add-config-array-element](#add-config-array-element) |            |             |
 | [wire-navigation](#wire-navigation)                   | YES        |             |
 
+Generation is currently handled in release app (Spryker internally), whereas Integration is done though this code base directly with
+[Strategy classes](//github.com/spryker-sdk/integrator/tree/master/src/ManifestStrategy/).
 
 ### Wire Plugin Manifest
 
