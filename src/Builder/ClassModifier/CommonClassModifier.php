@@ -208,8 +208,11 @@ class CommonClassModifier implements CommonClassModifierInterface
      */
     protected function isMethodReturnArrayEmpty(ClassMethod $node): bool
     {
+        /** @var array<\PhpParser\Node> $nodes */
+        $nodes = $node->stmts;
+
         /** @var \PhpParser\Node\Expr\Array_|null $arrayNode */
-        $arrayNode = (new NodeFinder())->findFirst($node->stmts, function (Node $node) {
+        $arrayNode = (new NodeFinder())->findFirst($nodes, function (Node $node) {
             return $node instanceof Array_;
         });
 

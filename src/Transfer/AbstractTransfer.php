@@ -43,7 +43,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return array
      */
-    public function toArray($isRecursive = true, $camelCasedKeys = false)
+    public function toArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         return $this->propertiesToArray($this->getPropertyNames(), $isRecursive, 'toArray', $camelCasedKeys);
     }
@@ -54,7 +54,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return array
      */
-    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false)
+    public function modifiedToArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         return $this->propertiesToArray(array_keys($this->modifiedProperties), $isRecursive, 'modifiedToArray', $camelCasedKeys);
     }
@@ -64,7 +64,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return bool
      */
-    public function isPropertyModified($propertyName)
+    public function isPropertyModified(string $propertyName): bool
     {
         return isset($this->modifiedProperties[$propertyName]);
     }
@@ -86,7 +86,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     /**
      * @return void
      */
-    protected function initCollectionProperties()
+    protected function initCollectionProperties(): void
     {
         foreach ($this->transferMetadata as $property => $metaData) {
             if ($metaData['is_collection'] && $this->$property === null) {
@@ -103,7 +103,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return array
      */
-    private function propertiesToArray(array $properties, $isRecursive, $childConvertMethodName, $camelCasedKeys = false)
+    private function propertiesToArray(array $properties, bool $isRecursive, string $childConvertMethodName, bool $camelCasedKeys = false): array
     {
         $values = [];
 
@@ -226,7 +226,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return \ArrayObject
      */
-    protected function processArrayObject($elementType, $arrayObject, $ignoreMissingProperty = false): ArrayObject
+    protected function processArrayObject(string $elementType, $arrayObject, bool $ignoreMissingProperty = false): ArrayObject
     {
         $result = new ArrayObject();
         foreach ($arrayObject as $key => $arrayElement) {
@@ -253,7 +253,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return void
      */
-    protected function assertPropertyIsSet($property): void
+    protected function assertPropertyIsSet(string $property): void
     {
         if ($this->$property === null) {
             throw new Exception(sprintf(
@@ -271,7 +271,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return void
      */
-    protected function assertCollectionPropertyIsSet($property): void
+    protected function assertCollectionPropertyIsSet(string $property): void
     {
         /** @var \ArrayObject $collection */
         $collection = $this->$property;
@@ -291,7 +291,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return self
      */
-    protected function initializeNestedTransferObject($property, $value, $ignoreMissingProperty = false): self
+    protected function initializeNestedTransferObject(string $property, $value, bool $ignoreMissingProperty = false): self
     {
         $type = $this->transferMetadata[$property]['type'];
 
@@ -323,7 +323,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return bool
      */
-    protected function hasProperty($property, $ignoreMissingProperty)
+    protected function hasProperty(string $property, bool $ignoreMissingProperty): bool
     {
         if (isset($this->transferPropertyNameMap[$property])) {
             return true;
@@ -348,8 +348,14 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return array
      */
-    private function addValuesToCollection($value, $values, $arrayKey, $isRecursive, $childConvertMethodName, $camelCasedKeys = false)
-    {
+    private function addValuesToCollection(
+        $value,
+        array $values,
+        string $arrayKey,
+        bool $isRecursive,
+        string $childConvertMethodName,
+        bool $camelCasedKeys = false
+    ): array {
         foreach ($value as $elementKey => $arrayElement) {
             if (is_array($arrayElement) || is_scalar($arrayElement)) {
                 $values[$arrayKey][$elementKey] = $arrayElement;
@@ -365,7 +371,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     /**
      * @return string
      */
-    public function serialize()
+    public function serialize(): string
     {
         $json = json_encode($this->modifiedToArray());
 
@@ -379,7 +385,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return void
      */
-    public function unserialize($serialized)
+    public function unserialize(string $serialized): void
     {
         try {
             $this->fromArray(json_decode($serialized, true), true);
@@ -398,17 +404,17 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     }
 
     /**
-     * @param string $offset
+     * @param mixed $offset
      *
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->transferMetadata[$offset]);
     }
 
     /**
-     * @param string $offset
+     * @param mixed $offset
      *
      * @return mixed
      */
@@ -423,7 +429,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->$offset = $value;
     }
@@ -435,7 +441,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new Exception('Transfer object as an array is available only for read');
     }

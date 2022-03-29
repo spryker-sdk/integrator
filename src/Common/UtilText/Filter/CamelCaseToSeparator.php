@@ -17,9 +17,9 @@ class CamelCaseToSeparator
      *
      * @return string
      */
-    public function filter($string, $separator = '-'): string
+    public function filter(string $string, string $separator = '-'): string
     {
-        $filtered = preg_replace('/([a-z])([A-Z])/', '$1' . addcslashes($separator, '$') . '$2', $string);
+        $filtered = (string)preg_replace('/([a-z])([A-Z])/', '$1' . addcslashes($separator, '$') . '$2', $string);
 
         return strtolower($filtered);
     }

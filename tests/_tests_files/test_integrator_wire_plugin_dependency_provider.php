@@ -1,12 +1,17 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace Pyz\Zed\TestIntegratorWirePlugin;
 
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePlugin;
 
 class TestIntegratorWirePluginDependencyProvider
 {
-    public function getTestPlugins() : array
+    public function getTestPlugins(): array
     {
         return [
             new TestIntegratorWirePlugin(),

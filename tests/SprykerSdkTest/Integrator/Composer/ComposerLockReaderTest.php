@@ -21,7 +21,7 @@ class ComposerLockReaderTest extends BaseTestCase
     /**
      * @return void
      */
-    public function testGetModuleVersions()
+    public function testGetModuleVersions(): void
     {
         $composerLockReader = $this->createComposerLockReadr();
 

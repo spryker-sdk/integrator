@@ -12,6 +12,7 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
+use RuntimeException;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddClassToClassListVisitor;
@@ -69,6 +70,8 @@ class ClassListModifier implements ClassListModifierInterface
      * @param string $classNameToAdd
      * @param string $constantName
      *
+     * @throws \RuntimeException
+     *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function wireClassConstant(
@@ -81,6 +84,10 @@ class ClassListModifier implements ClassListModifierInterface
         if (!$methodNode) {
             $classInformationTransfer = $this->commonClassModifier->overrideMethodFromParent($classInformationTransfer, $targetMethodName);
             $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
+        }
+
+        if ($methodNode === null) {
+            throw new RuntimeException('Method node not found');
         }
 
         if ($this->classMethodChecker->isMethodReturnArray($methodNode)) {

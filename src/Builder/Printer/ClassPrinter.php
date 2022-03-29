@@ -22,9 +22,12 @@ class ClassPrinter extends Standard
      *
      * @return string
      */
-    protected function pExpr_Array(Array_ $node)
+    protected function pExpr_Array(Array_ $node): string
     {
-        return '[' . $this->pCommaSeparatedMultiline($node->items, true) . $this->nl . ']';
+        /** @var array<\PhpParser\Node> $items */
+        $items = $node->items;
+
+        return '[' . $this->pCommaSeparatedMultiline($items, true) . $this->nl . ']';
     }
 
     /**

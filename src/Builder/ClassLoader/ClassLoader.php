@@ -65,7 +65,7 @@ class ClassLoader implements ClassLoaderInterface
         }
 
         $originalSyntaxTree = $this->parser->parse($fileContents);
-        $syntaxTree = $this->traverseOriginalSyntaxTree($originalSyntaxTree);
+        $syntaxTree = $originalSyntaxTree ? $this->traverseOriginalSyntaxTree($originalSyntaxTree) : [];
 
         $classInformationTransfer->setClassTokenTree($syntaxTree)
             ->setOriginalClassTokenTree($originalSyntaxTree)
@@ -83,11 +83,11 @@ class ClassLoader implements ClassLoaderInterface
     }
 
     /**
-     * @param array<\PhpParser\Node\Stmt>|null $originalSyntaxTree
+     * @param array<\PhpParser\Node\Stmt> $originalSyntaxTree
      *
      * @return array<\PhpParser\Node>
      */
-    protected function traverseOriginalSyntaxTree(?array $originalSyntaxTree): array
+    protected function traverseOriginalSyntaxTree(array $originalSyntaxTree): array
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new CloningVisitor());
