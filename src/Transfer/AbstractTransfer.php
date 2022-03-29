@@ -379,13 +379,13 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     }
 
     /**
-     * @param string $serialized
+     * @param mixed $serialized
      *
      * @throws \Exception
      *
      * @return void
      */
-    public function unserialize(string $serialized): void
+    public function unserialize($serialized): void
     {
         try {
             $this->fromArray(json_decode($serialized, true), true);
