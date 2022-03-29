@@ -57,6 +57,7 @@ use SprykerSdk\Integrator\ManifestStrategy\ConfigureEnvManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureModuleManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\CopyModuleFileManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ExecuteConsoleManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\GlossaryManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface;
 use SprykerSdk\Integrator\ManifestStrategy\UnwireGlueRelationshipManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\UnwirePluginManifestStrategy;
@@ -194,6 +195,17 @@ class IntegratorFactory
     public function createConfigureEnvManifestStrategy(): ManifestStrategyInterface
     {
         return new ConfigureEnvManifestStrategy(
+            $this->getConfig(),
+            $this->createClassHelper(),
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
+     */
+    public function createGlossaryManifestStrategy(): ManifestStrategyInterface
+    {
+        return new GlossaryManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
         );
@@ -450,6 +462,7 @@ class IntegratorFactory
             $this->createWireGlueRelationshipManifestStrategy(),
             $this->createUnwireGlueRelationshipManifestStrategy(),
             $this->createExecuteConsoleManifestStrategy(),
+            $this->createGlossaryManifestStrategy(),
         ];
     }
 }

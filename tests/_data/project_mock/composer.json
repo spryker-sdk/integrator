@@ -12,6 +12,7 @@
         "spryker/test-integrator-unwire-widget": "^1.0",
         "spryker/test-integrator-configure-env": "^1.0.4",
         "spryker/test-integrator-wire-glue-relationship": "^1.0.1",
-        "spryker/test-integrator-unwire-glue-relationship": "^1.0.1"
+        "spryker/test-integrator-unwire-glue-relationship": "^1.0.1",
+        "spryker/test-integrator-glossary": "^1.0.3"
     }
 }
