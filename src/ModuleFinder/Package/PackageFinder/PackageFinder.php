@@ -131,7 +131,7 @@ class PackageFinder implements PackageFinderInterface
      */
     protected function isModule(PackageTransfer $packageTransfer): bool
     {
-        $composerJsonAsArray = $this->getComposerJsonAsArray($packageTransfer->getPath());
+        $composerJsonAsArray = $this->getComposerJsonAsArray($packageTransfer->getPathOrFail());
         $description = $composerJsonAsArray['description'];
 
         return (bool)preg_match('/\smodule$/', $description);

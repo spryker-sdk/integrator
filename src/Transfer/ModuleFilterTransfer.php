@@ -98,8 +98,6 @@ class ModuleFilterTransfer extends AbstractTransfer
     ];
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @param \SprykerSdk\Integrator\Transfer\OrganizationTransfer|null $organization
      *
      * @return $this
@@ -113,21 +111,17 @@ class ModuleFilterTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return \SprykerSdk\Integrator\Transfer\OrganizationTransfer|null
      */
-    public function getOrganization()
+    public function getOrganization(): ?OrganizationTransfer
     {
         return $this->organization;
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return \SprykerSdk\Integrator\Transfer\OrganizationTransfer
      */
-    public function getOrganizationOrFail()
+    public function getOrganizationOrFail(): OrganizationTransfer
     {
         if ($this->organization === null) {
             $this->throwNullValueException(static::ORGANIZATION);
@@ -137,8 +131,6 @@ class ModuleFilterTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireOrganization()
@@ -149,8 +141,6 @@ class ModuleFilterTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @param \SprykerSdk\Integrator\Transfer\ApplicationTransfer|null $application
      *
      * @return $this
@@ -164,21 +154,17 @@ class ModuleFilterTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return \SprykerSdk\Integrator\Transfer\ApplicationTransfer|null
      */
-    public function getApplication()
+    public function getApplication(): ?ApplicationTransfer
     {
         return $this->application;
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return \SprykerSdk\Integrator\Transfer\ApplicationTransfer
      */
-    public function getApplicationOrFail()
+    public function getApplicationOrFail(): ApplicationTransfer
     {
         if ($this->application === null) {
             $this->throwNullValueException(static::APPLICATION);
@@ -188,8 +174,6 @@ class ModuleFilterTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireApplication()
@@ -200,8 +184,6 @@ class ModuleFilterTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer|null $module
      *
      * @return $this
@@ -215,21 +197,17 @@ class ModuleFilterTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer|null
      */
-    public function getModule()
+    public function getModule(): ?ModuleTransfer
     {
         return $this->module;
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer
      */
-    public function getModuleOrFail()
+    public function getModuleOrFail(): ModuleTransfer
     {
         if ($this->module === null) {
             $this->throwNullValueException(static::MODULE);
@@ -239,8 +217,6 @@ class ModuleFilterTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireModule()
@@ -258,10 +234,10 @@ class ModuleFilterTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function fromArray(array $data, $ignoreMissingProperty = false)
+    public function fromArray(array $data, bool $ignoreMissingProperty = false)
     {
         foreach ($data as $property => $value) {
-            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? null;
+            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? '';
 
             switch ($normalizedPropertyName) {
                 case 'organization':
@@ -295,7 +271,7 @@ class ModuleFilterTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false): array
+    public function modifiedToArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayRecursiveNotCamelCased();
@@ -319,7 +295,7 @@ class ModuleFilterTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function toArray($isRecursive = true, $camelCasedKeys = false): array
+    public function toArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->toArrayRecursiveNotCamelCased();
@@ -344,7 +320,7 @@ class ModuleFilterTransfer extends AbstractTransfer
      *
      * @return array
      */
-    protected function addValuesToCollectionModified($value, $isRecursive, $camelCasedKeys)
+    protected function addValuesToCollectionModified($value, bool $isRecursive, bool $camelCasedKeys): array
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
@@ -366,7 +342,7 @@ class ModuleFilterTransfer extends AbstractTransfer
      *
      * @return array
      */
-    protected function addValuesToCollection($value, $isRecursive, $camelCasedKeys)
+    protected function addValuesToCollection($value, bool $isRecursive, bool $camelCasedKeys): array
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
@@ -384,7 +360,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayRecursiveCamelCased()
+    public function modifiedToArrayRecursiveCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -413,7 +389,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayRecursiveNotCamelCased()
+    public function modifiedToArrayRecursiveNotCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -442,7 +418,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayNotRecursiveNotCamelCased()
+    public function modifiedToArrayNotRecursiveNotCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -459,7 +435,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayNotRecursiveCamelCased()
+    public function modifiedToArrayNotRecursiveCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -476,26 +452,14 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @return void
      */
-    protected function initCollectionProperties()
+    protected function initCollectionProperties(): void
     {
     }
 
     /**
      * @return array
      */
-    public function toArrayNotRecursiveCamelCased()
-    {
-        return [
-            'organization' => $this->organization,
-            'application' => $this->application,
-            'module' => $this->module,
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function toArrayNotRecursiveNotCamelCased()
+    public function toArrayNotRecursiveCamelCased(): array
     {
         return [
             'organization' => $this->organization,
@@ -507,7 +471,19 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayRecursiveNotCamelCased()
+    public function toArrayNotRecursiveNotCamelCased(): array
+    {
+        return [
+            'organization' => $this->organization,
+            'application' => $this->application,
+            'module' => $this->module,
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function toArrayRecursiveNotCamelCased(): array
     {
         return [
             'organization' => $this->organization instanceof AbstractTransfer ? $this->organization->toArray(true, false) : $this->organization,
@@ -519,7 +495,7 @@ class ModuleFilterTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayRecursiveCamelCased()
+    public function toArrayRecursiveCamelCased(): array
     {
         return [
             'organization' => $this->organization instanceof AbstractTransfer ? $this->organization->toArray(true, true) : $this->organization,

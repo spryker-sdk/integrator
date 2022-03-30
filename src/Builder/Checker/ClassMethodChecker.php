@@ -32,6 +32,10 @@ class ClassMethodChecker implements ClassMethodCheckerInterface
             return true;
         }
 
+        if (!$node->stmts) {
+            return false;
+        }
+
         $lastNode = end($node->stmts);
 
         if ($lastNode instanceof Return_ && $lastNode->expr instanceof Array_) {

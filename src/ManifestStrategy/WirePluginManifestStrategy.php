@@ -72,7 +72,10 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
             );
 
             if ($isDry) {
-                $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
+                $diff = $this->createClassBuilderFacade()->printDiff($classInformationTransfer);
+                if ($diff) {
+                    $inputOutput->writeln($diff);
+                }
             } else {
                 $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }

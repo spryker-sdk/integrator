@@ -12,11 +12,11 @@ namespace SprykerSdk\Integrator\Common\UtilText\Filter;
 class SeparatorToCamelCase
 {
     /**
+     * @phpstan-param non-empty-string $separator
+     *
      * @param string $string
      * @param string $separator
      * @param bool $upperCaseFirst
-     *
-     * @phpstan-param non-empty-string $separator
      *
      * @return string
      */

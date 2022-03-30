@@ -48,7 +48,7 @@ class ManifestReader implements ManifestReaderInterface
         $moduleComposerData = $this->composerLockReader->getModuleVersions();
 
         foreach ($moduleTransfers as $moduleTransfer) {
-            $moduleFullName = $moduleTransfer->getOrganization()->getName() . '.' . $moduleTransfer->getName();
+            $moduleFullName = $moduleTransfer->getOrganizationOrFail()->getNameOrFail() . '.' . $moduleTransfer->getNameOrFail();
 
             if (!isset($moduleComposerData[$moduleFullName])) {
                 continue;
@@ -100,7 +100,7 @@ class ManifestReader implements ManifestReaderInterface
      *
      * @return string|null
      */
-    protected function resolveManifestVersion(ModuleTransfer $moduleTransfer, string $moduleVersion)
+    protected function resolveManifestVersion(ModuleTransfer $moduleTransfer, string $moduleVersion): ?string
     {
         $archiveDir = 'integrator-manifests-master/';
         $moduleRecipiesDir = sprintf('%s%s%s/', $this->config->getManifestsDirectory(), $archiveDir, $moduleTransfer->getName());
