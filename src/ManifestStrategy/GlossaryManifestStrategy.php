@@ -16,12 +16,12 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     /**
      * @var string
      */
-    protected const GLOSSARY_FILE_EXIST_ERROR = 'File %s does not exist. Please check filepath.';
+    protected const GLOSSARY_FILE_EXIST_ERROR = 'File `%s` does not exist. Please check filepath.';
 
     /**
      * @var string
      */
-    protected const GLOSSARY_KEY_ADD_DEBUG_MESSAGE = 'Glossary key %s was added to glossary file %s';
+    protected const GLOSSARY_KEY_ADD_DEBUG_MESSAGE = 'Glossary key `%s` was added to glossary file `%s`';
 
     /**
      * @return string

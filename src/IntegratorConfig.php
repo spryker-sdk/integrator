@@ -74,7 +74,7 @@ class IntegratorConfig
     /**
      * @var string
      */
-    protected const GLOSSARY_LOCAL_PATH = 'data/import/common/common/glossary.csv';
+    protected const PATH_GLOSSARY = 'data/import/common/common/glossary.csv';
 
     /**
      * @var array<string, mixed>|null
@@ -306,7 +306,7 @@ class IntegratorConfig
      */
     public function getGlossaryFilePath(): string
     {
-        return $this->getProjectRootDirectory() . static::GLOSSARY_LOCAL_PATH;
+        return $this->getProjectRootDirectory() . static::PATH_GLOSSARY;
     }
 
     /**

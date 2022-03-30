@@ -2,3 +2,7 @@ shopping_list.pre.check.product_merchant_inactive;Merchant is inactive.;en_US
 shopping_list.pre.check.product_merchant_inactive;Der Händler ist nicht aktiv.;de_DE
 shopping_list.pre.check.product_merchant_not_approved;Merchant is not approved.;en_US
 shopping_list.pre.check.product_merchant_not_approved;Der Händler ist nicht bestätigt.;de_DE
+shopping_list.pre.check.product_merchant_inactive_test;Merchant is inactive.;en_US
+shopping_list.pre.check.product_merchant_inactive_test;Der Händler ist nicht aktiv.;de_DE
+shopping_list.pre.check.product_merchant_not_approved_test;Merchant is not approved.;en_US
+shopping_list.pre.check.product_merchant_not_approved_test;Der Händler ist nicht bestätigt.;de_DE

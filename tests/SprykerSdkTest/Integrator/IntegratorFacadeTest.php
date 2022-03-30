@@ -252,7 +252,6 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
     }
 
-
     /**
      * @return void
      */
