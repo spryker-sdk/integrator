@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace SprykerSdkTest\Integrator\Builder\ClassModifier;
 
 use PhpParser\Node\Expr\FuncCall;
@@ -28,7 +33,7 @@ class ClassModifierTest extends BaseTestCase
 
         //Assert
         $this->assertTrue(isset($stmts[0]));
-        $this->assertTrue(Return_::class === get_class($stmts[0]));
+        $this->assertTrue(get_class($stmts[0]) === Return_::class);
         $this->assertSame($stmts[0]->expr->value, $value);
     }
 
@@ -55,7 +60,7 @@ class ClassModifierTest extends BaseTestCase
 
         //Assert
         $this->assertTrue(isset($stmts[0]));
-        $this->assertTrue(Return_::class === get_class($stmts[0]));
-        $this->assertTrue(FuncCall::class === get_class($stmts[0]->expr));
+        $this->assertTrue(get_class($stmts[0]) === Return_::class);
+        $this->assertTrue(get_class($stmts[0]->expr) === FuncCall::class);
     }
 }

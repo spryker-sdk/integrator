@@ -46,7 +46,7 @@ class ClassFileWriter implements ClassFileWriterInterface
             );
         }
 
-        return $this->filePutContents($classInformationTransfer->getFilePath(), $code);
+        return $this->filePutContents($classInformationTransfer->getFilePathOrFail(), $code);
     }
 
     /**

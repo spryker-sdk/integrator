@@ -77,7 +77,7 @@ class IntegratorConfig
     protected const GLOSSARY_LOCAL_PATH = 'data/import/common/common/glossary.csv';
 
     /**
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     protected $config;
 
@@ -93,7 +93,7 @@ class IntegratorConfig
     ];
 
     /**
-     * @var self|null
+     * @var static|null
      */
     protected static $instance;
 
@@ -104,7 +104,7 @@ class IntegratorConfig
     /**
      * @api
      *
-     * @return \SprykerSdk\Integrator\IntegratorConfig
+     * @return static
      */
     public static function getInstance()
     {
@@ -174,7 +174,10 @@ class IntegratorConfig
      */
     public function getProjectNamespaces(): array
     {
-        return $this->config[static::PROJECT_NAMESPACES];
+        /** @var array<string, mixed> $config */
+        $config = $this->config;
+
+        return $config[static::PROJECT_NAMESPACES];
     }
 
     /**
@@ -182,7 +185,10 @@ class IntegratorConfig
      */
     public function getCoreNamespaces(): array
     {
-        return $this->config[static::CORE_NAMESPACES];
+        /** @var array<string, mixed> $config */
+        $config = $this->config;
+
+        return $config[static::CORE_NAMESPACES];
     }
 
     /**
@@ -318,7 +324,7 @@ class IntegratorConfig
     /**
      * @return array
      */
-    public function getApplications()
+    public function getApplications(): array
     {
         return [
             'Client',

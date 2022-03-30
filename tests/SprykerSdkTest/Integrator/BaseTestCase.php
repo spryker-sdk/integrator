@@ -102,6 +102,9 @@ class BaseTestCase extends PHPUnitTestCase
     }
 
     /**
+     * @param string $className
+     * @param string $filePath
+     *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     protected function createClassInformationTransfer(string $className, string $filePath): ClassInformationTransfer

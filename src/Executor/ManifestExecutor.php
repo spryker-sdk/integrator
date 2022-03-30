@@ -153,8 +153,8 @@ class ManifestExecutor implements ManifestExecutorInterface
         foreach ($moduleTransfers as $moduleTransfer) {
             $moduleTransfer->requireName()
                 ->requireNameDashed()
-                ->requireOrganization()
-                ->getOrganization()
+                ->requireOrganization();
+            $moduleTransfer->getOrganizationOrFail()
                 ->requireNameDashed()
                 ->requireName();
         }

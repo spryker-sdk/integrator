@@ -125,13 +125,11 @@ class OrganizationTransfer extends AbstractTransfer
     ];
 
     /**
-     * @module Integrator|SprykGui|Development|ModuleFinder
-     *
      * @param string|null $name
      *
      * @return $this
      */
-    public function setName($name)
+    public function setName(?string $name)
     {
         $this->name = $name;
         $this->modifiedProperties[static::NAME] = true;
@@ -140,21 +138,17 @@ class OrganizationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|SprykGui|Development|ModuleFinder
-     *
      * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
-     * @module Integrator|SprykGui|Development|ModuleFinder
-     *
      * @return string
      */
-    public function getNameOrFail()
+    public function getNameOrFail(): string
     {
         if ($this->name === null) {
             $this->throwNullValueException(static::NAME);
@@ -164,8 +158,6 @@ class OrganizationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|SprykGui|Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireName()
@@ -176,13 +168,11 @@ class OrganizationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Development|ModuleFinder
-     *
      * @param string|null $nameDashed
      *
      * @return $this
      */
-    public function setNameDashed($nameDashed)
+    public function setNameDashed(?string $nameDashed)
     {
         $this->nameDashed = $nameDashed;
         $this->modifiedProperties[static::NAME_DASHED] = true;
@@ -191,21 +181,17 @@ class OrganizationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Development|ModuleFinder
-     *
      * @return string|null
      */
-    public function getNameDashed()
+    public function getNameDashed(): ?string
     {
         return $this->nameDashed;
     }
 
     /**
-     * @module Integrator|Development|ModuleFinder
-     *
      * @return string
      */
-    public function getNameDashedOrFail()
+    public function getNameDashedOrFail(): string
     {
         if ($this->nameDashed === null) {
             $this->throwNullValueException(static::NAME_DASHED);
@@ -215,8 +201,6 @@ class OrganizationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireNameDashed()
@@ -227,13 +211,11 @@ class OrganizationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @param bool|null $isProject
      *
      * @return $this
      */
-    public function setIsProject($isProject)
+    public function setIsProject(?bool $isProject)
     {
         $this->isProject = $isProject;
         $this->modifiedProperties[static::IS_PROJECT] = true;
@@ -242,21 +224,17 @@ class OrganizationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return bool|null
      */
-    public function getIsProject()
+    public function getIsProject(): ?bool
     {
         return $this->isProject;
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return bool
      */
-    public function getIsProjectOrFail()
+    public function getIsProjectOrFail(): bool
     {
         if ($this->isProject === null) {
             $this->throwNullValueException(static::IS_PROJECT);
@@ -266,8 +244,6 @@ class OrganizationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireIsProject()
@@ -278,13 +254,11 @@ class OrganizationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
      * @param string|null $rootPath
      *
      * @return $this
      */
-    public function setRootPath($rootPath)
+    public function setRootPath(?string $rootPath)
     {
         $this->rootPath = $rootPath;
         $this->modifiedProperties[static::ROOT_PATH] = true;
@@ -293,21 +267,17 @@ class OrganizationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
      * @return string|null
      */
-    public function getRootPath()
+    public function getRootPath(): ?string
     {
         return $this->rootPath;
     }
 
     /**
-     * @module SprykGui
-     *
      * @return string
      */
-    public function getRootPathOrFail()
+    public function getRootPathOrFail(): string
     {
         if ($this->rootPath === null) {
             $this->throwNullValueException(static::ROOT_PATH);
@@ -317,8 +287,6 @@ class OrganizationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
      * @return $this
      */
     public function requireRootPath()
@@ -336,10 +304,10 @@ class OrganizationTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function fromArray(array $data, $ignoreMissingProperty = false)
+    public function fromArray(array $data, bool $ignoreMissingProperty = false)
     {
         foreach ($data as $property => $value) {
-            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? null;
+            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? '';
 
             switch ($normalizedPropertyName) {
                 case 'name':
@@ -366,7 +334,7 @@ class OrganizationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false): array
+    public function modifiedToArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayRecursiveNotCamelCased();
@@ -390,7 +358,7 @@ class OrganizationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function toArray($isRecursive = true, $camelCasedKeys = false): array
+    public function toArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->toArrayRecursiveNotCamelCased();
@@ -415,7 +383,7 @@ class OrganizationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    protected function addValuesToCollectionModified($value, $isRecursive, $camelCasedKeys)
+    protected function addValuesToCollectionModified($value, bool $isRecursive, bool $camelCasedKeys): array
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
@@ -437,7 +405,7 @@ class OrganizationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    protected function addValuesToCollection($value, $isRecursive, $camelCasedKeys)
+    protected function addValuesToCollection($value, bool $isRecursive, bool $camelCasedKeys): array
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
@@ -455,7 +423,7 @@ class OrganizationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayRecursiveCamelCased()
+    public function modifiedToArrayRecursiveCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -485,7 +453,7 @@ class OrganizationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayRecursiveNotCamelCased()
+    public function modifiedToArrayRecursiveNotCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -515,7 +483,7 @@ class OrganizationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayNotRecursiveNotCamelCased()
+    public function modifiedToArrayNotRecursiveNotCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -532,7 +500,7 @@ class OrganizationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayNotRecursiveCamelCased()
+    public function modifiedToArrayNotRecursiveCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -549,14 +517,14 @@ class OrganizationTransfer extends AbstractTransfer
     /**
      * @return void
      */
-    protected function initCollectionProperties()
+    protected function initCollectionProperties(): void
     {
     }
 
     /**
      * @return array
      */
-    public function toArrayNotRecursiveCamelCased()
+    public function toArrayNotRecursiveCamelCased(): array
     {
         return [
             'name' => $this->name,
@@ -569,7 +537,7 @@ class OrganizationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayNotRecursiveNotCamelCased()
+    public function toArrayNotRecursiveNotCamelCased(): array
     {
         return [
             'name' => $this->name,
@@ -582,7 +550,7 @@ class OrganizationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayRecursiveNotCamelCased()
+    public function toArrayRecursiveNotCamelCased(): array
     {
         return [
             'name' => $this->name,
@@ -595,7 +563,7 @@ class OrganizationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayRecursiveCamelCased()
+    public function toArrayRecursiveCamelCased(): array
     {
         return [
             'name' => $this->name,

@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\Finder;
 
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassMethod;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 interface ClassNodeFinderInterface
@@ -19,7 +22,7 @@ interface ClassNodeFinderInterface
      *
      * @return \PhpParser\Node\Stmt\ClassMethod|null
      */
-    public function findMethodNode(ClassInformationTransfer $classInformationTransfer, string $targetMethodName);
+    public function findMethodNode(ClassInformationTransfer $classInformationTransfer, string $targetMethodName): ?ClassMethod;
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
@@ -27,12 +30,12 @@ interface ClassNodeFinderInterface
      *
      * @return \PhpParser\Node\Stmt\ClassConst|null
      */
-    public function findConstantNode(ClassInformationTransfer $classInformationTransfer, string $targetNodeName);
+    public function findConstantNode(ClassInformationTransfer $classInformationTransfer, string $targetNodeName): ?ClassConst;
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      *
      * @return \PhpParser\Node\Stmt\Class_|null
      */
-    public function findClassNode(ClassInformationTransfer $classInformationTransfer);
+    public function findClassNode(ClassInformationTransfer $classInformationTransfer): ?Class_;
 }
