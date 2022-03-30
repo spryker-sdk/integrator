@@ -124,6 +124,9 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
         $mappedGlossaryLinesByGlossaryKeysAndLanguages = [];
         $glossaryContent = file_get_contents($this->config->getGlossaryFilePath());
         $glossaryLines = explode("\n", $glossaryContent);
+        if (empty($glossaryLines)) {
+            return $mappedGlossaryLinesByGlossaryKeysAndLanguages;
+        }
         foreach ($glossaryLines as $glossaryLine) {
             $glossaryLineParts = explode(';', $glossaryLine);
             if (count($glossaryLineParts) != static::GLOSSARY_LINE_PARTS_COUNT) {
