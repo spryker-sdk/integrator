@@ -75,7 +75,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
 
     /**
      * @param array<string, array<string, string>> $manifest
-     * @param array<string, array<string, string>> $existingGlossaryFileLines
+     * @param array<array-key, string> $existingGlossaryFileLines
      *
      * @return array<array-key, string>
      */
