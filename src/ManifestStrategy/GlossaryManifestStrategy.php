@@ -148,7 +148,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
         $mappedGlossaryLinesByGlossaryKeysAndLanguages = [];
         foreach ($glossaryExistingFileLines as $glossaryLine) {
             $glossaryLineParts = explode(';', $glossaryLine);
-            if (count($glossaryLineParts) != static::GLOSSARY_LINE_PARTS_COUNT) {
+            if (count($glossaryLineParts) !== static::GLOSSARY_LINE_PARTS_COUNT) {
                 continue;
             }
             $mappedGlossaryLinesByGlossaryKeysAndLanguages[$glossaryLineParts[0]][$glossaryLineParts[2]] = trim($glossaryLine);
