@@ -24,6 +24,11 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     protected const GLOSSARY_KEY_ADD_DEBUG_MESSAGE = 'Glossary key `%s` was added to glossary file `%s`';
 
     /**
+     * @var int
+     */
+    protected const GLOSSARY_LINE_PARTS_COUNT = 3;
+
+    /**
      * @return string
      */
     public function getType(): string
@@ -51,8 +56,14 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
             return false;
         }
 
+        $mappedGlossaryLinesByGlossaryKeysAndLanguages = $this->createMappedGlossaryLinesByGlossaryKeysAndLanguages();
         foreach ($manifest as $manifestKey => $manifestValue) {
-            $this->writeManifestKeyToGlossaryFile($manifestKey, $manifestValue, $isDry);
+            $this->writeManifestKeyToGlossaryFile(
+                $manifestKey,
+                $manifestValue,
+                $mappedGlossaryLinesByGlossaryKeysAndLanguages,
+                $isDry,
+            );
             $inputOutput->writeln(sprintf(
                 static::GLOSSARY_KEY_ADD_DEBUG_MESSAGE,
                 $manifestKey,
@@ -66,13 +77,21 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     /**
      * @param string $manifestKey
      * @param array<string, string> $manifestValue
+     * @param array<string, array<string, string>> $mappedGlossaryLinesByGlossaryKeysAndLanguages
      * @param bool $isDry
      *
      * @return void
      */
-    protected function writeManifestKeyToGlossaryFile(string $manifestKey, array $manifestValue, bool $isDry): void
-    {
+    protected function writeManifestKeyToGlossaryFile(
+        string $manifestKey,
+        array $manifestValue,
+        array $mappedGlossaryLinesByGlossaryKeysAndLanguages,
+        bool $isDry
+    ): void {
         foreach ($manifestValue as $keyLanguage => $keyValue) {
+            if (isset($mappedGlossaryLinesByGlossaryKeysAndLanguages[$manifestKey][$keyLanguage])) {
+                continue;
+            }
             $glossaryFileLine = $this->createGlossaryFileLine($manifestKey, $keyLanguage, $keyValue);
             if ($isDry) {
                 continue;
@@ -95,5 +114,24 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
             $keyValue,
             $keyLanguage,
         ]) . "\n";
+    }
+
+    /**
+     * @return array<string, array<string, string>>
+     */
+    protected function createMappedGlossaryLinesByGlossaryKeysAndLanguages(): array
+    {
+        $mappedGlossaryLinesByGlossaryKeysAndLanguages = [];
+        $glossaryContent = file_get_contents($this->config->getGlossaryFilePath());
+        $glossaryLines = explode("\n", $glossaryContent);
+        foreach ($glossaryLines as $glossaryLine) {
+            $glossaryLineParts = explode(';', $glossaryLine);
+            if (count($glossaryLineParts) != static::GLOSSARY_LINE_PARTS_COUNT) {
+                continue;
+            }
+            $mappedGlossaryLinesByGlossaryKeysAndLanguages[$glossaryLineParts[0]][$glossaryLineParts[2]] = $glossaryLine;
+        }
+
+        return $mappedGlossaryLinesByGlossaryKeysAndLanguages;
     }
 }

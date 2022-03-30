@@ -1,13 +1,13 @@
 {
     "glossary-key": {
         "new": {
-            "shopping_list.pre.check.product_merchant_inactive_new": {
-                "en_US": "Merchant is inactive.",
-                "de_DE": "Der Händler ist nicht aktiv."
+            "shopping_list.pre.check.test_key_new": {
+                "en_US": "new value",
+                "de_DE": "new value"
             },
-            "shopping_list.pre.check.product_merchant_not_approved_new": {
-                "en_US": "Merchant is not approved.",
-                "de_DE": "Der Händler ist nicht bestätigt."
+            "shopping_list.pre.check.test_key_existing": {
+                "en_US": "other value",
+                "de_DE": "other value"
             }
         }
     }
