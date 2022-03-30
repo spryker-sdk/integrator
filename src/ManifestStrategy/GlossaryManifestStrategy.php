@@ -163,6 +163,9 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     protected function createGlossaryExistingFileLines(): array
     {
         $glossaryContent = trim(file_get_contents($this->config->getGlossaryFilePath()));
+        if (!$glossaryContent) {
+            return [];
+        }
 
         return explode("\n", $glossaryContent);
     }
