@@ -16,7 +16,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     /**
      * @var string
      */
-    protected const GLOSSARY_FILE_EXIST_ERROR = 'File `%s` does not exist. Please check filepath.';
+    protected const GLOSSARY_FILE_EXIST_ERROR = 'File `%s` does not exist. Please check file path or customize using `IntegratorConfig::getGlossaryFilePath()`.';
 
     /**
      * @var string
@@ -72,11 +72,11 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
      */
     protected function writeManifestKeyToGlossaryFile(string $manifestKey, array $manifestValue, bool $isDry): void
     {
-        if ($isDry) {
-            return;
-        }
         foreach ($manifestValue as $keyLanguage => $keyValue) {
             $glossaryFileLine = $this->createGlossaryFileLine($manifestKey, $keyLanguage, $keyValue);
+            if ($isDry) {
+                continue;
+            }
             file_put_contents($this->config->getGlossaryFilePath(), $glossaryFileLine, FILE_APPEND);
         }
     }

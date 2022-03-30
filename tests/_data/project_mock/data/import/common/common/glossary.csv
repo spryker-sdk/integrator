@@ -1,4 +1,4 @@
-shopping_list.pre.check.product_merchant_inactive;Merchant is inactive.;en_US
-shopping_list.pre.check.product_merchant_inactive;Der Händler ist nicht aktiv.;de_DE
-shopping_list.pre.check.product_merchant_not_approved;Merchant is not approved.;en_US
-shopping_list.pre.check.product_merchant_not_approved;Der Händler ist nicht bestätigt.;de_DE
+shopping_list.pre.check.product_merchant_inactive_existing;Merchant is inactive.;en_US
+shopping_list.pre.check.product_merchant_inactive_existing;Der Händler ist nicht aktiv.;de_DE
+shopping_list.pre.check.product_merchant_not_approved_existing;Merchant is not approved.;en_US
+shopping_list.pre.check.product_merchant_not_approved_existing;Der Händler ist nicht bestätigt.;de_DE
