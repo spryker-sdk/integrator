@@ -265,12 +265,14 @@ class IntegratorFacadeTest extends BaseTestCase
             ->runInstallation($this->getModuleList('TestIntegratorGlossary'), $ioAdapter, false);
 
         // Assert
+        $existingGlossaryFilePath = './tests/_data/project_mock/data/import/common/common/glossary.csv';
         $testFilePath = './tests/_tests_files/test_integrator_glossary.csv';
         $testResultFile = './tests/tmp/data/import/common/common/glossary.csv';
 
         $this->assertFileExists($testFilePath);
         $this->assertFileExists($testResultFile);
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($testResultFile)));
+        $this->assertStringContainsString(trim(file_get_contents($existingGlossaryFilePath)), trim(file_get_contents($testResultFile)));
     }
 
     /**
