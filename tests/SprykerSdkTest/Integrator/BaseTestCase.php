@@ -10,7 +10,7 @@ namespace SprykerSdkTest\Integrator;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
-use PHPUnit\Framework\TestCase as PHPUnitTestCase;
+use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SprykerSdk\Integrator\IntegratorConfig;
@@ -19,7 +19,7 @@ use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use Symfony\Component\Filesystem\Filesystem;
 use ZipArchive;
 
-class BaseTestCase extends PHPUnitTestCase
+class BaseTestCase extends TestCase
 {
     use IntegratorFactoryAwareTrait;
 
