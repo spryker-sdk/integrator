@@ -15,6 +15,16 @@ use SprykerSdk\Integrator\IntegratorConfig;
 class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
 {
     /**
+     * @var string
+     */
+    protected const CONFIG_FILE_EXIST_ERROR = 'File `%s` does not exist. Please check file path or customize using `IntegratorConfig::getConfigPath()`.';
+
+    /**
+     * @var string
+     */
+    protected const CONFIG_FILE_SUCCESSFULLY_UPDATED = 'Global config `%s` was added with to %s value `%s`';
+
+    /**
      * @return string
      */
     public function getType(): string
@@ -49,7 +59,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
         $configFileName = $this->config->getConfigPath();
         if (!file_exists($configFileName)) {
             $inputOutput->writeln(sprintf(
-                'File %s does not exist. Please check filepath.',
+                static::CONFIG_FILE_EXIST_ERROR,
                 $configFileName,
             ), InputOutputInterface::DEBUG);
 
@@ -60,10 +70,10 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
         }
 
         $inputOutput->writeln(sprintf(
-            'Global config %s was added with to %s value %s',
+            static::CONFIG_FILE_SUCCESSFULLY_UPDATED,
             $target,
             $configFileName,
-            $value,
+            is_array($value) ? json_encode($value) : $value,
         ), InputOutputInterface::DEBUG);
 
         return true;

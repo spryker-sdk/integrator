@@ -9,6 +9,27 @@
                 "Value 2",
                 "Value 3"
             ]
+        },
+        {
+            "target": "\\Spryker\\Shared\\TestIntegratorConfigureEnv\\TestIntegratorConfigureEnvConstants::TEST_COMPLEX_VALUE",
+            "value": {
+                "is_literal": true,
+                "value": "str_replace(\n    '__LINE__',\n    PHP_EOL,\n    getenv('SPRYKER_OAUTH_KEY_PRIVATE') ?: '',\n) ?: null"
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\TestIntegratorConfigureEnv\\TestIntegratorConfigureEnvConstants::TEST_CONCATENATION_VALUE",
+            "value": {
+                "is_literal": true,
+                "value": "APPLICATION_SOURCE_DIR . '/Generated/Glue/Specification/spryker_rest_api.schema.yml'"
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\TestIntegratorConfigureEnv\\TestIntegratorConfigureEnvConstants::TEST_CONCATENATION_VALUE",
+            "value": {
+                "is_literal": true,
+                "value": "getenv('SPRYKER_OAUTH_ENCRYPTION_KEY') ?: null"
+            }
         }
     ]
 }

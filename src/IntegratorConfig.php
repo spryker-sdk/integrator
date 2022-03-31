@@ -29,7 +29,7 @@ class IntegratorConfig
     /**
      * @var string
      */
-    public const MANIFEST_KEY_DEFAULT_VALUE = 'default';
+    public const MANIFEST_KEY_DEFAULT_VALUE = 'defaultValue';
 
     /**
      * @var string
