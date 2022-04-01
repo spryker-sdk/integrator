@@ -121,7 +121,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
      */
     protected function createGlossaryFileLine(string $manifestKey, string $keyLanguage, string $keyValue): string
     {
-        return implode(';', [
+        return implode(',', [
             $manifestKey,
             $keyValue,
             $keyLanguage,
