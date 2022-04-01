@@ -46,12 +46,12 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
             return false;
         }
 
-        $existingGlossaryFileLines = $this->createGlossaryExistingFileLines();
-        $updatingGlossaryFileLines = $this->getUpdatingGlossaryFileLines(
+        $existingGlossaryFileLines = $this->getGlossaryExistingFileLines();
+        $updatedGlossaryFileLines = $this->getUpdatedGlossaryFileLines(
             $manifest,
             $existingGlossaryFileLines,
         );
-        $resultGlossaryFileLines = array_merge($existingGlossaryFileLines, $updatingGlossaryFileLines);
+        $resultGlossaryFileLines = array_merge($existingGlossaryFileLines, $updatedGlossaryFileLines);
         if (!$isDry) {
             file_put_contents($this->config->getGlossaryFilePath(), implode("\n", $resultGlossaryFileLines));
         }
@@ -69,7 +69,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
      *
      * @return array<array-key, string>
      */
-    protected function getUpdatingGlossaryFileLines(
+    protected function getUpdatedGlossaryFileLines(
         array $manifest,
         array $existingGlossaryFileLines
     ): array {
@@ -137,7 +137,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     {
         $mappedGlossaryLinesByGlossaryKeysAndLanguages = [];
         foreach ($glossaryExistingFileLines as $glossaryLine) {
-            $glossaryLineParts = explode(';', $glossaryLine);
+            $glossaryLineParts = explode(',', $glossaryLine);
             if (count($glossaryLineParts) !== static::GLOSSARY_LINE_PARTS_COUNT) {
                 continue;
             }
@@ -150,13 +150,13 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     /**
      * @return array<array-key, string>
      */
-    protected function createGlossaryExistingFileLines(): array
+    protected function getGlossaryExistingFileLines(): array
     {
         $glossaryContent = file_get_contents($this->config->getGlossaryFilePath());
         if (!$glossaryContent) {
             return [];
         }
 
-        return explode("\n", trim($glossaryContent));
+        return explode(PHP_EOL, trim($glossaryContent));
     }
 }
