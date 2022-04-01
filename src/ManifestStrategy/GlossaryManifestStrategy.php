@@ -14,16 +14,6 @@ use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 class GlossaryManifestStrategy extends AbstractManifestStrategy
 {
     /**
-     * @var string
-     */
-    protected const GLOSSARY_FILE_EXIST_ERROR = 'File `%s` does not exist. Please check file path or customize using `IntegratorConfig::getGlossaryFilePath()`.';
-
-    /**
-     * @var string
-     */
-    protected const GLOSSARY_FILE_SUCCESSFULLY_UPDATED = 'Glossary file `%s` successfully updated';
-
-    /**
      * @var int
      */
     protected const GLOSSARY_LINE_PARTS_COUNT = 3;
@@ -49,7 +39,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
         $glossaryFilePath = $this->config->getGlossaryFilePath();
         if (!file_exists($glossaryFilePath)) {
             $inputOutput->writeln(sprintf(
-                static::GLOSSARY_FILE_EXIST_ERROR,
+                'File `%s` does not exist. Please check file path or customize using `IntegratorConfig::getGlossaryFilePath()`.',
                 $glossaryFilePath,
             ), InputOutputInterface::DEBUG);
 
@@ -66,7 +56,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
             file_put_contents($this->config->getGlossaryFilePath(), implode("\n", $resultGlossaryFileLines));
         }
         $inputOutput->writeln(sprintf(
-            static::GLOSSARY_FILE_SUCCESSFULLY_UPDATED,
+            'Glossary file `%s` successfully updated',
             $glossaryFilePath,
         ), InputOutputInterface::DEBUG);
 
