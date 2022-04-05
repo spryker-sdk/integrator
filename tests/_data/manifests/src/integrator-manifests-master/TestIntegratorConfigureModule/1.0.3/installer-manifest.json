@@ -3,6 +3,56 @@
         {
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getTestConfiguration",
             "value": "\\Spryker\\Zed\\TestIntegratorConfigureModule\\TestIntegratorConfigureModuleConfig::TEST_CONFIG_MODULE"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getTestConfigurationAssociativeArray",
+            "value": "[\n            '@CatalogPage/views/catalog-with-cms-slot/catalog-with-cms-slot.twig' => [\n                \\Spryker\\Shared\\CmsSlotBlockCategoryConnector\\CmsSlotBlockCategoryConnectorConfig::CONDITION_KEY,\n            ],\n            '@Cms/templates/placeholders-title-content-slot/placeholders-title-content-slot.twig' => [\n                \\Spryker\\Shared\\CmsSlotBlockCategoryConnector\\CmsSlotBlockCmsConnectorConfig::CONDITION_KEY,\n            ],\n            '@ProductDetailPage/views/pdp/pdp.twig' => [\n                \\Spryker\\Shared\\CmsSlotBlockCategoryConnector\\CmsSlotBlockProductCategoryConnectorConfig::CONDITION_KEY,\n            ],\n        ]",
+            "is_literal": true
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getTestConfigurationAnyConstants",
+            "value": "[\n            \\Spryker\\Shared\\CmsChartContentWidgetConfigurationProvider::FUNCTION_NAME => new \\Spryker\\Shared\\CmsChartContentWidgetConfigurationProvider(),\n            \\Spryker\\Shared\\CmsProductContentWidgetConfigurationProvider::FUNCTION_NAME => new \\Spryker\\Shared\\CmsProductContentWidgetConfigurationProvider(),\n            \\Spryker\\Shared\\CmsProductSetContentWidgetConfigurationProvider::FUNCTION_NAME => new \\Spryker\\Shared\\CmsProductSetContentWidgetConfigurationProvider()]",
+            "is_literal": true
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getTestConfigurationPlusParentFields",
+            "value": "[\n            'sales' => '/sales/customer/customer-orders',\n            'notes' => '/customer-note-gui/index/index',\n        ] + parent::getCustomerDetailExternalBlocksUrls();",
+            "is_literal": true
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getTestConfigurationMergeParentFields",
+            "value": "array_merge(\n            parent::getMerchantOmsProcesses(),\n            [\n                static::MAIN_MERCHANT_OMS_PROCESS_NAME,\n            ],\n        )",
+            "is_literal": true
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getTestConfigurationMergeParentFields2",
+            "value": "array_merge(\n            parent::getMerchantProcessInitialStateMap(),\n            [\n                static::MAIN_MERCHANT_OMS_PROCESS_NAME => static::MAIN_MERCHANT_STATE_MACHINE_INITIAL_STATE,\n            ],\n        )",
+            "is_literal": true
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getTestConfigurationMergeParentFields3",
+            "value": "array_merge(parent::getItemFieldsForIsSameItemComparison(), [\n            ItemTransfer::MERCHANT_REFERENCE,\n            ItemTransfer::PRODUCT_OFFER_REFERENCE,\n        ])",
+            "is_literal": true
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getTestConfigurationMergeParentFields4",
+            "value": "array_merge(\n            parent::getCorePropelSchemaPathPatterns(),\n            [APPLICATION_VENDOR_DIR . '/spryker/spryker/Bundles/*/src/*/Zed/*/Persistence/Propel/Schema/'],\n        )",
+            "is_literal": true
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getTestConfigurationMergeParentFields5",
+            "value": "array_merge(parent::getQuoteFieldsAllowedForSaving(), [\n            QuoteTransfer::BUNDLE_ITEMS,\n            QuoteTransfer::CART_NOTE, #CartNoteFeature,\n            QuoteTransfer::EXPENSES,\n        ])",
+            "is_literal": true
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getTestConfigurationSophisticatedExpression",
+            "value": "$templateList = [\n            CmsBlockCategoryConnectorConfig::CATEGORY_TEMPLATE_ONLY_CMS_BLOCK => '@CatalogPage/views/simple-cms-block/simple-cms-block.twig',\n            CmsBlockCategoryConnectorConfig::CATEGORY_TEMPLATE_WITH_CMS_BLOCK => '@CatalogPage/views/catalog-with-cms-block/catalog-with-cms-block.twig',\n        ];\n        $templateList += parent::getTemplateList();\n\n        return $templateList",
+            "is_literal": true
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getTestConfigurationSophisticatedExpression2",
+            "value": "$paymentMethodStatemachineMapping = $this->getPaymentMethodStatemachineMapping();\n\n        if (!array_key_exists($quoteTransfer->getPayment()->getPaymentSelection(), $paymentMethodStatemachineMapping)) {\n            return parent::determineProcessForOrderItem($quoteTransfer, $itemTransfer);\n        }\n\n        return $paymentMethodStatemachineMapping[$quoteTransfer->getPayment()->getPaymentSelection()]",
+            "is_literal": true
         }
     ]
 }

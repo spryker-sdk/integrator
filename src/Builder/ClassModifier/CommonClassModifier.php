@@ -12,7 +12,6 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
@@ -28,10 +27,16 @@ use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\CloneNodeWithClearPositionVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodeStmtByNameVisitor;
+use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class CommonClassModifier implements CommonClassModifierInterface
 {
+    /**
+     * @var int
+     */
+    protected const TREE_RETURN_STATEMENT_COUNT_ELEMENTS = 1;
+
     /**
      * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
      */
@@ -167,38 +172,37 @@ class CommonClassModifier implements CommonClassModifierInterface
         if (!$methodNode) {
             $classInformationTransfer = $this->overrideMethodFromParent($classInformationTransfer, $methodName);
         }
-
-        $methodBody = [new Return_($this->buildReturnValue($value))];
+        $methodBody = $this->createReturnBody($value);
 
         return $this->replaceMethodBody($classInformationTransfer, $methodName, $methodBody);
     }
 
     /**
-     * @param mixed $value
+     * @param array|string|float|int|bool|null $value
      *
      * @throws \SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException
      *
-     * @return \PhpParser\Node\Expr
+     * @return array<array-key, \PhpParser\Node\Stmt>
      */
-    protected function buildReturnValue($value): Expr
+    protected function createReturnBody($value): array
     {
-        if (is_array($value) && isset($value['is_literal'])) {
-            $parserFactory = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-
-            $preparedValue = sprintf('<?php %s;', $value['value']);
-            $tree = $parserFactory->parse($preparedValue);
-
-            /** @var \PhpParser\Node\Stmt\Expression|null $expression */
-            $expression = $tree[0] ?? null;
-
-            if ($expression === null) {
-                throw new LiteralValueParsingException(sprintf('Value is not valid PHP code: `%s`', $value['value']));
-            }
-
-            return $expression->expr;
+        if (!is_array($value) || !isset($value[IntegratorConfig::MANIFEST_KEY_IS_LITERAL])) {
+            return [new Return_((new BuilderFactory())->val($value))];
         }
 
-        return (new BuilderFactory())->val($value);
+        $parserFactory = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $preparedValue = sprintf('<?php %s;', $value[IntegratorConfig::MANIFEST_KEY_VALUE]);
+        $tree = $parserFactory->parse($preparedValue);
+        if ($tree && count($tree) != static::TREE_RETURN_STATEMENT_COUNT_ELEMENTS) {
+            return $tree;
+        }
+        /** @var \PhpParser\Node\Stmt\Expression|null $returnExpression */
+        $returnExpression = $tree[0] ?? null;
+        if (!$returnExpression) {
+            throw new LiteralValueParsingException(sprintf('Value is not valid PHP code: `%s`', $value['value']));
+        }
+
+        return [new Return_($returnExpression->expr)];
     }
 
     /**

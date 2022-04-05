@@ -40,6 +40,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
         $value = $manifest[IntegratorConfig::MANIFEST_KEY_VALUE] ?? null;
         $choices = $manifest[IntegratorConfig::MANIFEST_KEY_CHOICES] ?? [];
         $defaultValue = $manifest[IntegratorConfig::MANIFEST_KEY_DEFAULT_VALUE] ?? null;
+        $isLiteral = $manifest[IntegratorConfig::MANIFEST_KEY_IS_LITERAL] ?? false;
 
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
@@ -59,7 +60,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
             }
 
             if (method_exists($targetClassName, $targetPointName)) {
-                $classInformationTransfer = $this->adjustMethod($classInformationTransfer, $targetPointName, $value);
+                $classInformationTransfer = $this->adjustMethod($classInformationTransfer, $targetPointName, $value, $isLiteral);
             } elseif ($this->constantExists($manifest[IntegratorConfig::MANIFEST_KEY_TARGET])) {
                 $classInformationTransfer = $this->createClassBuilderFacade()->setConstant($classInformationTransfer, $targetPointName, $value);
             } else {
@@ -97,12 +98,17 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetPointName
      * @param mixed $value
+     * @param bool $isLiteral
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    protected function adjustMethod(ClassInformationTransfer $classInformationTransfer, string $targetPointName, $value): ClassInformationTransfer
-    {
-        if (is_string($value) && strpos($value, '::')) {
+    protected function adjustMethod(
+        ClassInformationTransfer $classInformationTransfer,
+        string $targetPointName,
+        $value,
+        bool $isLiteral
+    ): ClassInformationTransfer {
+        if ($this->isConstantValue($value, $isLiteral)) {
             [$className, $constantName] = explode('::', $value);
 
             return $this->createClassBuilderFacade()->wireClassConstant(
@@ -116,8 +122,37 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
         return $this->createClassBuilderFacade()->setMethodReturnValue(
             $classInformationTransfer,
             $targetPointName,
-            $value,
+            $this->createClassBuilderFacadeMethodValue($value, $isLiteral),
         );
+    }
+
+    /**
+     * @param mixed $value
+     * @param bool $isLiteral
+     *
+     * @return bool
+     */
+    protected function isConstantValue($value, bool $isLiteral): bool
+    {
+        return !$isLiteral && is_string($value) && strpos($value, '::');
+    }
+
+    /**
+     * @param mixed $value
+     * @param bool $isLiteral
+     *
+     * @return mixed
+     */
+    protected function createClassBuilderFacadeMethodValue($value, bool $isLiteral)
+    {
+        if ($isLiteral) {
+            return [
+                IntegratorConfig::MANIFEST_KEY_VALUE => $value,
+                IntegratorConfig::MANIFEST_KEY_IS_LITERAL => $isLiteral,
+            ];
+        }
+
+        return $value;
     }
 
     /**
