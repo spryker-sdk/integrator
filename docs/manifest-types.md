@@ -104,7 +104,8 @@ This manifest adds a constant to specified target class. To set value you can sp
             "value": [
                 10,
                 1000
-            ]
+            ],
+            "is_literal": true
         }
     ]
 }
