@@ -36,8 +36,6 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
-        file_put_contents($this->config->getGlossaryFilePath(),  'TEST');
-        return true;
         $glossaryFilePath = $this->config->getGlossaryFilePath();
         if (!file_exists($glossaryFilePath)) {
             $inputOutput->writeln(sprintf(
