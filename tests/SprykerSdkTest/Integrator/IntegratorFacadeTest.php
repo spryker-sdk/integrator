@@ -9,6 +9,7 @@ namespace SprykerSdkTest\Integrator;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
+use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorFacade;
 use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
@@ -267,7 +268,8 @@ class IntegratorFacadeTest extends BaseTestCase
         // Assert
         $projectGlossaryFilePath = './tests/_data/project_mock/data/import/common/common/glossary.csv';
         $testFilePath = './tests/_tests_files/test_integrator_glossary.csv';
-        $testResultFile = '/home/runner/work/integrator/integrator/tests/tmp/data/import/common/common/glossary.csv';
+        $testResultFile = './tests/tmp/data/import/common/common/glossary.csv';
+        echo 'IntegratorConfig::getInstance()->getGlossaryFilePath() : ' . (IntegratorConfig::getInstance()->getGlossaryFilePath());
 
         $this->assertFileExists($testFilePath);
         $this->assertFileExists($testResultFile);
