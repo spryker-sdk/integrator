@@ -47,11 +47,11 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
         }
 
         $existingGlossaryFileLines = $this->getGlossaryExistingFileLines();
-        $glossaryFileLinesForAdd = $this->getGlossaryFileLinesForAdd(
+        $updatedGlossaryFileLines = $this->getUpdatedGlossaryFileLines(
             $manifest,
             $existingGlossaryFileLines,
         );
-        $resultGlossaryFileLines = array_merge($existingGlossaryFileLines, $glossaryFileLinesForAdd);
+        $resultGlossaryFileLines = array_merge($existingGlossaryFileLines, $updatedGlossaryFileLines);
         if (!$isDry) {
             file_put_contents($this->config->getGlossaryFilePath(), implode("\n", $resultGlossaryFileLines));
         }
@@ -69,66 +69,62 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
      *
      * @return array<array-key, string>
      */
-    protected function getGlossaryFileLinesForAdd(
+    protected function getUpdatedGlossaryFileLines(
         array $manifest,
         array $existingGlossaryFileLines
     ): array {
-        $indexGlossaryLinesByGlossaryKeysAndLanguages = $this->indexGlossaryLinesByGlossaryKeysAndLanguages(
+        $mappedGlossaryLinesByGlossaryKeysAndLanguages = $this->createMappedGlossaryLinesByGlossaryKeysAndLanguages(
             $existingGlossaryFileLines,
         );
-        $glossaryFileLinesForAdd = [];
-        foreach ($manifest as $glossaryKey => $glossaryValues) {
-            $glossaryKeyFileLinesForAdd = $this->getGlossaryKeyFileLinesFromGlossaryKey(
-                $glossaryKey,
-                $glossaryValues,
-                $indexGlossaryLinesByGlossaryKeysAndLanguages,
+        $updatingGlossaryFileLines = [];
+        foreach ($manifest as $manifestKey => $manifestValue) {
+            $glossaryUpdatingFileLines = $this->getGlossaryFileLinesFromManifestKey(
+                $manifestKey,
+                $manifestValue,
+                $mappedGlossaryLinesByGlossaryKeysAndLanguages,
             );
-            $glossaryFileLinesForAdd = array_merge($glossaryFileLinesForAdd, $glossaryKeyFileLinesForAdd);
+            $updatingGlossaryFileLines = array_merge($updatingGlossaryFileLines, $glossaryUpdatingFileLines);
         }
 
-        return $glossaryFileLinesForAdd;
+        return $updatingGlossaryFileLines;
     }
 
     /**
-     * @param string $glossaryKey
-     * @param array<string, string> $glossaryValues
-     * @param array<string, array<string, string>> $indexGlossaryLinesByGlossaryKeysAndLanguages
+     * @param string $manifestKey
+     * @param array<string, string> $manifestValue
+     * @param array<string, array<string, string>> $mappedGlossaryLinesByGlossaryKeysAndLanguages
      *
      * @return array<array-key, string>
      */
-    protected function getGlossaryKeyFileLinesFromGlossaryKey(
-        string $glossaryKey,
-        array $glossaryValues,
-        array $indexGlossaryLinesByGlossaryKeysAndLanguages
+    protected function getGlossaryFileLinesFromManifestKey(
+        string $manifestKey,
+        array $manifestValue,
+        array $mappedGlossaryLinesByGlossaryKeysAndLanguages
     ): array {
-        $glossaryKeyFileLines = [];
-        foreach ($glossaryValues as $glossaryKeyLanguage => $glossaryKeyValue) {
-            if (isset($indexGlossaryLinesByGlossaryKeysAndLanguages[$glossaryKey][$glossaryKeyLanguage])) {
+        $glossaryUpdatingFileLines = [];
+        foreach ($manifestValue as $keyLanguage => $keyValue) {
+            if (isset($mappedGlossaryLinesByGlossaryKeysAndLanguages[$manifestKey][$keyLanguage])) {
                 continue;
             }
-            $glossaryKeyFileLines[] = $this->createGlossaryFileLine(
-                $glossaryKey,
-                $glossaryKeyLanguage,
-                $glossaryKeyValue,
-            );
+            $glossaryUpdatingFileLines[] = $this->createGlossaryFileLine($manifestKey, $keyLanguage, $keyValue);
         }
 
-        return $glossaryKeyFileLines;
+        return $glossaryUpdatingFileLines;
     }
 
     /**
-     * @param string $glossaryKey
-     * @param string $glossaryKeyLanguage
-     * @param string $glossaryKeyValue
+     * @param string $manifestKey
+     * @param string $keyLanguage
+     * @param string $keyValue
      *
      * @return string
      */
-    protected function createGlossaryFileLine(string $glossaryKey, string $glossaryKeyLanguage, string $glossaryKeyValue): string
+    protected function createGlossaryFileLine(string $manifestKey, string $keyLanguage, string $keyValue): string
     {
         return implode(',', [
-            $glossaryKey,
-            $glossaryKeyValue,
-            $glossaryKeyLanguage,
+            $manifestKey,
+            $keyValue,
+            $keyLanguage,
         ]);
     }
 
@@ -137,18 +133,18 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
      *
      * @return array<string, array<string, string>>
      */
-    protected function indexGlossaryLinesByGlossaryKeysAndLanguages(array $glossaryExistingFileLines): array
+    protected function createMappedGlossaryLinesByGlossaryKeysAndLanguages(array $glossaryExistingFileLines): array
     {
-        $indexGlossaryLinesByGlossaryKeysAndLanguages = [];
+        $mappedGlossaryLinesByGlossaryKeysAndLanguages = [];
         foreach ($glossaryExistingFileLines as $glossaryLine) {
             $glossaryLineParts = explode(',', $glossaryLine);
             if (count($glossaryLineParts) !== static::GLOSSARY_LINE_PARTS_COUNT) {
                 continue;
             }
-            $indexGlossaryLinesByGlossaryKeysAndLanguages[$glossaryLineParts[0]][$glossaryLineParts[2]] = trim($glossaryLine);
+            $mappedGlossaryLinesByGlossaryKeysAndLanguages[$glossaryLineParts[0]][$glossaryLineParts[2]] = trim($glossaryLine);
         }
 
-        return $indexGlossaryLinesByGlossaryKeysAndLanguages;
+        return $mappedGlossaryLinesByGlossaryKeysAndLanguages;
     }
 
     /**
