@@ -272,7 +272,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->assertFileExists($testFilePath);
         $this->assertFileExists($testResultFile);
         $this->assertStringContainsString(trim(file_get_contents($projectGlossaryFilePath)), trim(file_get_contents($testResultFile)));
-        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($testResultFile)));
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($projectGlossaryFilePath)));
     }
 
     /**
