@@ -269,6 +269,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $testFilePath = './tests/_tests_files/test_integrator_glossary.csv';
         $testResultFile = './tests/tmp/data/import/common/common/glossary.csv';
         echo "\n\n";
+        echo trim(file_get_contents($projectGlossaryFilePath)) . "\n\n\n";
         echo trim(file_get_contents($testResultFile)) . "\n\n\n";
         echo trim(file_get_contents($testFilePath)) . "\n\n\n";
 
