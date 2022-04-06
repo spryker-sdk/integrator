@@ -268,6 +268,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $projectGlossaryFilePath = './tests/_data/project_mock/data/import/common/common/glossary.csv';
         $testFilePath = './tests/_tests_files/test_integrator_glossary.csv';
         $testResultFile = './tests/tmp/data/import/common/common/glossary.csv';
+        echo 'APPLICATION_ROOT_DIR : ' . APPLICATION_ROOT_DIR . "\n";
 
         $this->assertFileExists($testFilePath);
         $this->assertFileExists($testResultFile);
