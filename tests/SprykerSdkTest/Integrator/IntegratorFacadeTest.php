@@ -269,7 +269,6 @@ class IntegratorFacadeTest extends BaseTestCase
         $projectGlossaryFilePath = './tests/_data/project_mock/data/import/common/common/glossary.csv';
         $testFilePath = './tests/_tests_files/test_integrator_glossary.csv';
         $testResultFile = './tests/tmp/data/import/common/common/glossary.csv';
-        echo 'IntegratorConfig::getInstance()->getGlossaryFilePath() : ' . (IntegratorConfig::getInstance()->getGlossaryFilePath());
 
         $this->assertFileExists($testFilePath);
         $this->assertFileExists($testResultFile);
