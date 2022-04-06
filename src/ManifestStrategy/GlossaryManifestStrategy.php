@@ -47,12 +47,10 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
         }
 
         $existingGlossaryFileLines = $this->getGlossaryExistingFileLines();
-        print_r($existingGlossaryFileLines);
         $glossaryFileLinesForAdd = $this->getGlossaryFileLinesForAdd(
             $manifest,
             $existingGlossaryFileLines,
         );
-        print_r($glossaryFileLinesForAdd);
         $resultGlossaryFileLines = array_merge($existingGlossaryFileLines, $glossaryFileLinesForAdd);
         if (!$isDry) {
             file_put_contents($this->config->getGlossaryFilePath(), implode("\n", $resultGlossaryFileLines));
@@ -78,7 +76,6 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
         $indexGlossaryLinesByGlossaryKeysAndLanguages = $this->indexGlossaryLinesByGlossaryKeysAndLanguages(
             $existingGlossaryFileLines,
         );
-        print_r($indexGlossaryLinesByGlossaryKeysAndLanguages);
         $glossaryFileLinesForAdd = [];
         foreach ($manifest as $glossaryKey => $glossaryValues) {
             $glossaryKeyFileLinesForAdd = $this->getGlossaryKeyFileLinesFromGlossaryKey(
