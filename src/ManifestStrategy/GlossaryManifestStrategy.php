@@ -37,6 +37,14 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
         $glossaryFilePath = $this->config->getGlossaryFilePath();
+        if (!file_exists($glossaryFilePath)) {
+            $inputOutput->writeln(sprintf(
+                'File `%s` does not exist. Please check file path or customize using `IntegratorConfig::getGlossaryFilePath()`.',
+                $glossaryFilePath,
+            ), InputOutputInterface::DEBUG);
+
+            return false;
+        }
 
         $existingGlossaryFileLines = $this->getGlossaryExistingFileLines();
         $glossaryFileLinesForAdd = $this->getGlossaryFileLinesForAdd(
