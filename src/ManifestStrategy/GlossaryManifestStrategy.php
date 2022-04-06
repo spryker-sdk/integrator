@@ -47,13 +47,13 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
         }
 
         $existingGlossaryFileLines = $this->getGlossaryExistingFileLines();
-        $updatedGlossaryFileLines = $this->getUpdatedGlossaryFileLines(
+        $glossaryFileLinesForAdd = $this->getGlossaryFileLinesForAdd(
             $manifest,
             $existingGlossaryFileLines,
         );
-        $resultGlossaryFileLines = array_merge($existingGlossaryFileLines, $updatedGlossaryFileLines);
+        $resultGlossaryFileLines = array_merge($existingGlossaryFileLines, $glossaryFileLinesForAdd);
         if (!$isDry) {
-            file_put_contents($this->config->getGlossaryFilePath(), implode("\n", $resultGlossaryFileLines));
+            file_put_contents($this->config->getGlossaryFilePath(), implode(PHP_EOL, $resultGlossaryFileLines));
         }
         $inputOutput->writeln(sprintf(
             'Glossary file `%s` successfully updated',
@@ -69,62 +69,66 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
      *
      * @return array<array-key, string>
      */
-    protected function getUpdatedGlossaryFileLines(
+    protected function getGlossaryFileLinesForAdd(
         array $manifest,
         array $existingGlossaryFileLines
     ): array {
-        $mappedGlossaryLinesByGlossaryKeysAndLanguages = $this->createMappedGlossaryLinesByGlossaryKeysAndLanguages(
+        $indexGlossaryLinesByGlossaryKeysAndLanguages = $this->indexGlossaryLinesByGlossaryKeysAndLanguages(
             $existingGlossaryFileLines,
         );
-        $updatingGlossaryFileLines = [];
-        foreach ($manifest as $manifestKey => $manifestValue) {
-            $glossaryUpdatingFileLines = $this->getGlossaryFileLinesFromManifestKey(
-                $manifestKey,
-                $manifestValue,
-                $mappedGlossaryLinesByGlossaryKeysAndLanguages,
+        $glossaryFileLinesForAdd = [];
+        foreach ($manifest as $glossaryKey => $glossaryValues) {
+            $glossaryKeyFileLinesForAdd = $this->getGlossaryKeyFileLinesFromGlossaryKey(
+                $glossaryKey,
+                $glossaryValues,
+                $indexGlossaryLinesByGlossaryKeysAndLanguages,
             );
-            $updatingGlossaryFileLines = array_merge($updatingGlossaryFileLines, $glossaryUpdatingFileLines);
+            $glossaryFileLinesForAdd = array_merge($glossaryFileLinesForAdd, $glossaryKeyFileLinesForAdd);
         }
 
-        return $updatingGlossaryFileLines;
+        return $glossaryFileLinesForAdd;
     }
 
     /**
-     * @param string $manifestKey
-     * @param array<string, string> $manifestValue
-     * @param array<string, array<string, string>> $mappedGlossaryLinesByGlossaryKeysAndLanguages
+     * @param string $glossaryKey
+     * @param array<string, string> $glossaryValues
+     * @param array<string, array<string, string>> $indexGlossaryLinesByGlossaryKeysAndLanguages
      *
      * @return array<array-key, string>
      */
-    protected function getGlossaryFileLinesFromManifestKey(
-        string $manifestKey,
-        array $manifestValue,
-        array $mappedGlossaryLinesByGlossaryKeysAndLanguages
+    protected function getGlossaryKeyFileLinesFromGlossaryKey(
+        string $glossaryKey,
+        array $glossaryValues,
+        array $indexGlossaryLinesByGlossaryKeysAndLanguages
     ): array {
-        $glossaryUpdatingFileLines = [];
-        foreach ($manifestValue as $keyLanguage => $keyValue) {
-            if (isset($mappedGlossaryLinesByGlossaryKeysAndLanguages[$manifestKey][$keyLanguage])) {
+        $glossaryKeyFileLines = [];
+        foreach ($glossaryValues as $glossaryKeyLanguage => $glossaryKeyValue) {
+            if (isset($indexGlossaryLinesByGlossaryKeysAndLanguages[$glossaryKey][$glossaryKeyLanguage])) {
                 continue;
             }
-            $glossaryUpdatingFileLines[] = $this->createGlossaryFileLine($manifestKey, $keyLanguage, $keyValue);
+            $glossaryKeyFileLines[] = $this->createGlossaryFileLine(
+                $glossaryKey,
+                $glossaryKeyLanguage,
+                $glossaryKeyValue,
+            );
         }
 
-        return $glossaryUpdatingFileLines;
+        return $glossaryKeyFileLines;
     }
 
     /**
-     * @param string $manifestKey
-     * @param string $keyLanguage
-     * @param string $keyValue
+     * @param string $glossaryKey
+     * @param string $glossaryKeyLanguage
+     * @param string $glossaryKeyValue
      *
      * @return string
      */
-    protected function createGlossaryFileLine(string $manifestKey, string $keyLanguage, string $keyValue): string
+    protected function createGlossaryFileLine(string $glossaryKey, string $glossaryKeyLanguage, string $glossaryKeyValue): string
     {
         return implode(',', [
-            $manifestKey,
-            $keyValue,
-            $keyLanguage,
+            $glossaryKey,
+            $glossaryKeyValue,
+            $glossaryKeyLanguage,
         ]);
     }
 
@@ -133,18 +137,18 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
      *
      * @return array<string, array<string, string>>
      */
-    protected function createMappedGlossaryLinesByGlossaryKeysAndLanguages(array $glossaryExistingFileLines): array
+    protected function indexGlossaryLinesByGlossaryKeysAndLanguages(array $glossaryExistingFileLines): array
     {
-        $mappedGlossaryLinesByGlossaryKeysAndLanguages = [];
+        $indexGlossaryLinesByGlossaryKeysAndLanguages = [];
         foreach ($glossaryExistingFileLines as $glossaryLine) {
             $glossaryLineParts = explode(',', $glossaryLine);
             if (count($glossaryLineParts) !== static::GLOSSARY_LINE_PARTS_COUNT) {
                 continue;
             }
-            $mappedGlossaryLinesByGlossaryKeysAndLanguages[$glossaryLineParts[0]][$glossaryLineParts[2]] = trim($glossaryLine);
+            $indexGlossaryLinesByGlossaryKeysAndLanguages[$glossaryLineParts[0]][$glossaryLineParts[2]] = trim($glossaryLine);
         }
 
-        return $mappedGlossaryLinesByGlossaryKeysAndLanguages;
+        return $indexGlossaryLinesByGlossaryKeysAndLanguages;
     }
 
     /**
