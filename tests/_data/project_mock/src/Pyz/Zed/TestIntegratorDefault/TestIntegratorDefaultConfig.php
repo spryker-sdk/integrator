@@ -12,57 +12,41 @@ use Generated\Shared\Transfer\QuoteTransfer;
 
 class TestIntegratorDefaultConfig
 {
-    public function getTestConfiguration(): array
+    public function getTestConfigurationValue(): string
+    {
+        return TestIntegratorConfigureModuleConfig::TEST_CONFIG_MODULE_TO_CHANGE;
+    }
+
+    public function getTestConfigurationValue2(): string
+    {
+        return $this->getPathToRoot();
+    }
+
+    public function getTestConfigurationValue3(): string
+    {
+        return APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'phpcs_to_change.xml';
+    }
+
+    public function getTestConfigurationArray(): array
+    {
+        return [
+            TestIntegratorConfigureModuleConfig::TEST_CONFIG_MODULE_TO_CHANGE,
+        ];
+    }
+
+    public function getTestConfigurationArray2(): array
+    {
+        return [
+            TestIntegratorConfigureModuleConfig::TEST_CONFIG_MODULE_TO_CHANGE => true,
+        ];
+    }
+
+    public function getTestConfigurationIsLiteralExpression(): array
     {
         return [];
     }
 
-    public function getTestConfigurationAssociativeArray(): array
-    {
-        return [];
-    }
-
-    public function getTestConfigurationAnyConstants(): array
-    {
-        return [];
-    }
-
-    public function getTestConfigurationPlusParentFields(): array
-    {
-        return [];
-    }
-
-    public function getTestConfigurationMergeParentFields(): array
-    {
-        return [];
-    }
-
-    public function getTestConfigurationMergeParentFields2(): array
-    {
-        return [];
-    }
-
-    public function getTestConfigurationMergeParentFields3(): array
-    {
-        return [];
-    }
-
-    public function getTestConfigurationMergeParentFields4(): array
-    {
-        return [];
-    }
-
-    public function getTestConfigurationMergeParentFields5(): array
-    {
-        return [];
-    }
-
-    public function getTestConfigurationSophisticatedExpression(): array
-    {
-        return [];
-    }
-
-    public function getTestConfigurationSophisticatedExpression2(QuoteTransfer $quoteTransfer, ItemTransfer $itemTransfer): array
+    public function getTestConfigurationIsLiteralExpression2(QuoteTransfer $quoteTransfer, ItemTransfer $itemTransfer): array
     {
         return [];
     }

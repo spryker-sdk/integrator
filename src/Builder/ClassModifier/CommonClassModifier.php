@@ -187,7 +187,11 @@ class CommonClassModifier implements CommonClassModifierInterface
     protected function createReturnBody($value): array
     {
         if (!is_array($value) || !isset($value[IntegratorConfig::MANIFEST_KEY_IS_LITERAL])) {
-            return [new Return_((new BuilderFactory())->val($value))];
+            $preparedValue = sprintf('<?php %s;', $value);
+            $parserFactory = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+            $tree = $parserFactory->parse($preparedValue);
+
+            return [new Return_($tree[0]->expr)];
         }
 
         $parserFactory = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
