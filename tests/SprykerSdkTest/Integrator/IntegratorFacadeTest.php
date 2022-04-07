@@ -213,7 +213,7 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
-    public function testRunInstallationConfigureEnv2(): void
+    public function testRunInstallationConfigureEnvChoices(): void
     {
         // Arrange
         $fileSystem = $this->createFilesystem();
