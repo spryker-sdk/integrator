@@ -11,6 +11,24 @@
             ]
         },
         {
+            "target": "\\Spryker\\Shared\\TestIntegratorConfigureEnv\\TestIntegratorConfigureEnvConstants::TEST_VALUE_DEFAULT",
+            "defaultValue": "Value 1",
+            "choices": [
+                "Value 1",
+                "Value 2",
+                "Value 3"
+            ]
+        },
+        {
+            "target": "\\Spryker\\Shared\\TestIntegratorConfigureEnv\\TestIntegratorConfigureEnvConstants::TEST_VALUE_CHOICE",
+            "defaultValue": "Value 1",
+            "choices": [
+                "Value choice 1",
+                "Value choice 2",
+                "Value choice 3"
+            ]
+        },
+        {
             "target": "\\Spryker\\Shared\\TestIntegratorConfigureEnv\\TestIntegratorConfigureEnvConstants::TEST_COMPLEX_VALUE",
             "value": {
                 "is_literal": true,

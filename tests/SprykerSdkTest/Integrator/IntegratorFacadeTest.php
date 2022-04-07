@@ -213,6 +213,51 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
+    public function testRunInstallationConfigureEnv2(): void
+    {
+        // Arrange
+        $fileSystem = $this->createFilesystem();
+        if ($fileSystem->exists($this->getTempDirectoryPath())) {
+            $fileSystem->copy('./tests/_data/project_mock/config/Shared/config_default.php', './tests/tmp/config/Shared/config_default.php');
+            $fileSystem->copy('./tests/_data/project_mock/composer.json', './tests/tmp/composer.json');
+            $fileSystem->copy('./tests/_data/project_mock/composer.lock', './tests/tmp/composer.lock');
+        }
+
+        $ioAdapter = $this->createMockSymfonyConsoleChoiceInputOutput('Value choice 1');
+
+        // Act
+        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorConfigureEnv'), $ioAdapter, false);
+
+        // Assert
+        $testFilePath = './tests/_tests_files/test_integrator_configure_env_choices.php';
+        $classPath = './tests/tmp/config/Shared/config_default.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface
+     */
+    public function createMockSymfonyConsoleChoiceInputOutput(string $value): InputOutputInterface
+    {
+        $ioAdapterMock = $this->createMock(SymfonyConsoleInputOutputAdapter::class);
+
+        $ioAdapterMock->method('choice')
+            ->willReturn($value);
+        $ioAdapterMock->method('confirm')
+            ->willReturn(true);
+
+        return $ioAdapterMock;
+    }
+
+    /**
+     * @return void
+     */
     public function testRunInstallationWireGlueRelaitonship(): void
     {
         // Arrange
