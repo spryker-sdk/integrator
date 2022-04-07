@@ -43,32 +43,25 @@ class ManifestReader implements ManifestReaderInterface
      */
     public function readManifests(array $moduleTransfers): array
     {
-//        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), 'readManifests' . "\n", FILE_APPEND);
         $this->updateRepositoryFolder();
         $manifests = [];
         $moduleComposerData = $this->composerLockReader->getModuleVersions();
 
         foreach ($moduleTransfers as $moduleTransfer) {
             $moduleFullName = $moduleTransfer->getOrganizationOrFail()->getNameOrFail() . '.' . $moduleTransfer->getNameOrFail();
-//            file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$moduleFullName : ' . $moduleFullName . "\n", FILE_APPEND);
 
             if (!isset($moduleComposerData[$moduleFullName])) {
-//                file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), 'continue' . "\n", FILE_APPEND);
                 continue;
             }
-//            file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$moduleComposerData[$moduleFullName] : ' . json_encode($moduleComposerData[$moduleFullName]) . "\n", FILE_APPEND);
 
             $filePath = $this->resolveManifestVersion($moduleTransfer, $moduleComposerData[$moduleFullName]);
-//            file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$filePath : ' . $filePath . "\n", FILE_APPEND);
 
             if (!$filePath) {
-//                file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '! $filePath : ' . "\n", FILE_APPEND);
                 continue;
             }
 
             $json = file_get_contents($filePath);
             if (!$json) {
-//                file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '! $json : ' . "\n", FILE_APPEND);
                 continue;
             }
 
@@ -78,7 +71,6 @@ class ManifestReader implements ManifestReaderInterface
                 $manifests[$moduleFullName] = $manifest;
             }
         }
-//        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$manifests : ' . json_encode($manifests) . "\n", FILE_APPEND);
 
         return $manifests;
     }
