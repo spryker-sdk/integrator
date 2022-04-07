@@ -110,10 +110,13 @@ class ManifestReader implements ManifestReaderInterface
      */
     protected function resolveManifestVersion(ModuleTransfer $moduleTransfer, string $moduleVersion): ?string
     {
+        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), 'resolveManifestVersion  : ' . "\n", FILE_APPEND);
         $archiveDir = 'integrator-manifests-master/';
         $moduleRecipiesDir = sprintf('%s%s%s/', $this->config->getManifestsDirectory(), $archiveDir, $moduleTransfer->getName());
+        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$moduleRecipiesDir : ' . $moduleRecipiesDir . "\n", FILE_APPEND);
 
         if (!is_dir($moduleRecipiesDir)) {
+            file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '! isDir $moduleRecipiesDir : ' . "\n", FILE_APPEND);
             return null;
         }
 
@@ -121,17 +124,21 @@ class ManifestReader implements ManifestReaderInterface
             '%s/installer-manifest.json',
             $moduleVersion,
         );
+        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$filePath2  : ' . $filePath . "\n", FILE_APPEND);
 
         if (file_exists($filePath)) {
+            file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), 'file_exists $filePath2  : ' . $filePath . "\n", FILE_APPEND);
             return $filePath;
         }
 
         $nextSuitableVersion = $this->findNextSuitableVersion($moduleRecipiesDir, $moduleVersion);
 
         if (!$nextSuitableVersion) {
+            file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '!$nextSuitableVersion  : ' . "\n", FILE_APPEND);
             return null;
         }
 
+        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), 'end resolveManifestVersion  : ' . "\n", FILE_APPEND);
         return $moduleRecipiesDir . sprintf(
             '%s/installer-manifest.json',
             $nextSuitableVersion,
