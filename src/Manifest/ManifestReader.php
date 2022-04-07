@@ -103,7 +103,8 @@ class ManifestReader implements ManifestReaderInterface
     protected function resolveManifestVersion(ModuleTransfer $moduleTransfer, string $moduleVersion): ?string
     {
         $archiveDir = 'integrator-manifests-master/';
-        $moduleRecipiesDir = sprintf('%s%s%s/', $this->config->getManifestsDirectory(), $archiveDir, $moduleTransfer->getName());
+        $organization = $moduleTransfer->getOrganizationOrFail();
+        $moduleRecipiesDir = sprintf('%s%s%s/%s/', $this->config->getManifestsDirectory(), $archiveDir, $organization->getName(), $moduleTransfer->getName());
 
         if (!is_dir($moduleRecipiesDir)) {
             return null;

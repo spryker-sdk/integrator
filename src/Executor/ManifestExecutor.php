@@ -11,7 +11,6 @@ namespace SprykerSdk\Integrator\Executor;
 
 use RuntimeException;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
-use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
 use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
