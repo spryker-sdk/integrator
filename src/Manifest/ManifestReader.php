@@ -43,25 +43,32 @@ class ManifestReader implements ManifestReaderInterface
      */
     public function readManifests(array $moduleTransfers): array
     {
+        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), 'readManifests', FILE_APPEND);
         $this->updateRepositoryFolder();
         $manifests = [];
         $moduleComposerData = $this->composerLockReader->getModuleVersions();
 
         foreach ($moduleTransfers as $moduleTransfer) {
             $moduleFullName = $moduleTransfer->getOrganizationOrFail()->getNameOrFail() . '.' . $moduleTransfer->getNameOrFail();
+            file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$moduleFullName: ' . $moduleFullName, FILE_APPEND);
 
             if (!isset($moduleComposerData[$moduleFullName])) {
+                file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '!$moduleComposerData[$moduleFullName]: ', FILE_APPEND);
                 continue;
             }
 
             $filePath = $this->resolveManifestVersion($moduleTransfer, $moduleComposerData[$moduleFullName]);
 
             if (!$filePath) {
+                file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '!!$filePath : ', FILE_APPEND);
                 continue;
             }
+            file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$filePath : ' . $filePath, FILE_APPEND);
 
             $json = file_get_contents($filePath);
+            file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$json : ' . $json, FILE_APPEND);
             if (!$json) {
+                file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '!$json : ', FILE_APPEND);
                 continue;
             }
 
@@ -71,6 +78,7 @@ class ManifestReader implements ManifestReaderInterface
                 $manifests[$moduleFullName] = $manifest;
             }
         }
+        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$manifests : ' . json_encode($manifests), FILE_APPEND);
 
         return $manifests;
     }
