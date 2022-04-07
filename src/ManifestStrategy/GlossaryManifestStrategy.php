@@ -19,6 +19,16 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     protected const GLOSSARY_LINE_PARTS_COUNT = 3;
 
     /**
+     * @var int
+     */
+    protected const GLOSSARY_INDEX_KEY = 0;
+
+    /**
+     * @var int
+     */
+    protected const GLOSSARY_INDEX_LANGUAGE = 2;
+
+    /**
      * @return string
      */
     public function getType(): string
@@ -73,7 +83,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
         array $manifest,
         array $existingGlossaryFileLines
     ): array {
-        $indexGlossaryLinesByGlossaryKeysAndLanguages = $this->indexGlossaryLinesByGlossaryKeysAndLanguages(
+        $indexedGlossaryLinesByGlossaryKeysAndLanguages = $this->indexedGlossaryLinesByGlossaryKeysAndLanguages(
             $existingGlossaryFileLines,
         );
         $glossaryFileLinesForAdd = [];
@@ -81,7 +91,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
             $glossaryKeyFileLinesForAdd = $this->getGlossaryKeyFileLinesFromGlossaryKey(
                 $glossaryKey,
                 $glossaryValues,
-                $indexGlossaryLinesByGlossaryKeysAndLanguages,
+                $indexedGlossaryLinesByGlossaryKeysAndLanguages,
             );
             $glossaryFileLinesForAdd = array_merge($glossaryFileLinesForAdd, $glossaryKeyFileLinesForAdd);
         }
@@ -92,18 +102,18 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     /**
      * @param string $glossaryKey
      * @param array<string, string> $glossaryValues
-     * @param array<string, array<string, string>> $indexGlossaryLinesByGlossaryKeysAndLanguages
+     * @param array<string, array<string, bool>> $indexedGlossaryLinesByGlossaryKeysAndLanguages
      *
      * @return array<array-key, string>
      */
     protected function getGlossaryKeyFileLinesFromGlossaryKey(
         string $glossaryKey,
         array $glossaryValues,
-        array $indexGlossaryLinesByGlossaryKeysAndLanguages
+        array $indexedGlossaryLinesByGlossaryKeysAndLanguages
     ): array {
         $glossaryKeyFileLines = [];
         foreach ($glossaryValues as $glossaryKeyLanguage => $glossaryKeyValue) {
-            if (isset($indexGlossaryLinesByGlossaryKeysAndLanguages[$glossaryKey][$glossaryKeyLanguage])) {
+            if (isset($indexedGlossaryLinesByGlossaryKeysAndLanguages[$glossaryKey][$glossaryKeyLanguage])) {
                 continue;
             }
             $glossaryKeyFileLines[] = $this->createGlossaryFileLine(
@@ -135,20 +145,22 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     /**
      * @param array<array-key, string> $glossaryExistingFileLines
      *
-     * @return array<string, array<string, string>>
+     * @return array<string, array<string, bool>>
      */
-    protected function indexGlossaryLinesByGlossaryKeysAndLanguages(array $glossaryExistingFileLines): array
+    protected function indexedGlossaryLinesByGlossaryKeysAndLanguages(array $glossaryExistingFileLines): array
     {
-        $indexGlossaryLinesByGlossaryKeysAndLanguages = [];
+        $indexedGlossaryLinesByGlossaryKeysAndLanguages = [];
         foreach ($glossaryExistingFileLines as $glossaryLine) {
             $glossaryLineParts = explode(',', $glossaryLine);
             if (count($glossaryLineParts) !== static::GLOSSARY_LINE_PARTS_COUNT) {
                 continue;
             }
-            $indexGlossaryLinesByGlossaryKeysAndLanguages[$glossaryLineParts[0]][$glossaryLineParts[2]] = trim($glossaryLine);
+            $glossaryLineKey = $glossaryLineParts[static::GLOSSARY_INDEX_KEY];
+            $glossaryLineLanguage = $glossaryLineParts[static::GLOSSARY_INDEX_LANGUAGE];
+            $indexedGlossaryLinesByGlossaryKeysAndLanguages[$glossaryLineKey][$glossaryLineLanguage] = true;
         }
 
-        return $indexGlossaryLinesByGlossaryKeysAndLanguages;
+        return $indexedGlossaryLinesByGlossaryKeysAndLanguages;
     }
 
     /**
