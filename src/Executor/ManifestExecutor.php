@@ -66,13 +66,17 @@ class ManifestExecutor implements ManifestExecutorInterface
      */
     public function runModuleManifestExecution(array $moduleTransfers, InputOutputInterface $inputOutput, bool $isDry): int
     {
+        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), "runModuleManifestExecution\n", FILE_APPEND);
         $this->assertModuleData($moduleTransfers);
 
         $manifests = $this->manifestReader->readManifests($moduleTransfers);
+        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), json_encode($manifests) . "\n", FILE_APPEND);
 
         $lockedModules = $this->integratorLockReader->getLockFileData();
+        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), json_encode($lockedModules) . "\n", FILE_APPEND);
 
         $unappliedManifests = $this->findUnappliedManifests($manifests, $lockedModules);
+        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), json_encode($unappliedManifests) . "\n", FILE_APPEND);
 
         if (!$unappliedManifests) {
             return 0;
