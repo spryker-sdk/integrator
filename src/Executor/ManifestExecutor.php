@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\Executor;
 
 use RuntimeException;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
 use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
@@ -86,7 +87,9 @@ class ManifestExecutor implements ManifestExecutorInterface
                 $manifestExecutor = $this->resolveExecutor($manifestType);
 
                 foreach ($unappliedManifestByType as $manifestHash => $unappliedManifest) {
+                    file_put_contents(IntegratorConfig::getInstance()->getProjectRootDirectory() . 'data/import/common/common/test.csv', $moduleName . "\n", FILE_APPEND);
                     if ($manifestExecutor->apply($unappliedManifest, $moduleName, $inputOutput, $isDry)) {
+                        file_put_contents(IntegratorConfig::getInstance()->getProjectRootDirectory() . 'data/import/common/common/test.csv', $moduleName . ' applied' . "\n", FILE_APPEND);
                         $lockedModules[$moduleName][$manifestType][$manifestHash] = $unappliedManifest;
                     }
                 }
