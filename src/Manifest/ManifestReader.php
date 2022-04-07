@@ -77,7 +77,7 @@ class ManifestReader implements ManifestReaderInterface
                 $manifests[$moduleFullName] = $manifest;
             }
         }
-        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), $manifests . json_encode($manifests) . "\n", FILE_APPEND);
+        file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$manifests : ' . json_encode($manifests) . "\n", FILE_APPEND);
 
         return $manifests;
     }
