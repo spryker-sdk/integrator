@@ -50,12 +50,13 @@ class ManifestReader implements ManifestReaderInterface
 
         foreach ($moduleTransfers as $moduleTransfer) {
             $moduleFullName = $moduleTransfer->getOrganizationOrFail()->getNameOrFail() . '.' . $moduleTransfer->getNameOrFail();
-            file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), $moduleFullName . "\n", FILE_APPEND);
+            file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$moduleFullName : ' . $moduleFullName . "\n", FILE_APPEND);
 
             if (!isset($moduleComposerData[$moduleFullName])) {
                 file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), 'continue' . "\n", FILE_APPEND);
                 continue;
             }
+            file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$moduleComposerData[$moduleFullName] : ' . json_encode($moduleComposerData[$moduleFullName]) . "\n", FILE_APPEND);
 
             $filePath = $this->resolveManifestVersion($moduleTransfer, $moduleComposerData[$moduleFullName]);
             file_put_contents(IntegratorConfig::getInstance()->getGlossaryFilePath(), '$filePath : ' . $filePath . "\n", FILE_APPEND);
