@@ -49,8 +49,7 @@ class ManifestExecutor implements ManifestExecutorInterface
         ManifestReaderInterface $manifestReader,
         IntegratorLockWriterInterface $integratorLockWriter,
         array $manifestExecutors
-    )
-    {
+    ) {
         $this->integratorLockReader = $integratorLockReader;
         $this->manifestReader = $manifestReader;
         $this->manifestExecutors = $manifestExecutors;
@@ -134,9 +133,9 @@ class ManifestExecutor implements ManifestExecutorInterface
     /**
      * @param string $manifestType
      *
-     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      * @throws \RuntimeException
      *
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
     protected function resolveExecutor(string $manifestType): ManifestStrategyInterface
     {
