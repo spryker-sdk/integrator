@@ -83,7 +83,11 @@ class ManifestExecutor implements ManifestExecutorInterface
 
         foreach ($unappliedManifests as $moduleName => $moduleManifests) {
             foreach ($moduleManifests as $manifestType => $unappliedManifestByType) {
-                $manifestExecutor = $this->resolveExecutor($manifestType);
+                try {
+                    $manifestExecutor = $this->resolveExecutor($manifestType);
+                } catch (RuntimeException $runtimeException) {
+                    continue;
+                }
 
                 foreach ($unappliedManifestByType as $manifestHash => $unappliedManifest) {
                     if ($manifestExecutor->apply($unappliedManifest, $moduleName, $inputOutput, $isDry)) {
@@ -92,6 +96,7 @@ class ManifestExecutor implements ManifestExecutorInterface
                 }
             }
         }
+
         if ($isDry) {
             return 0;
         }
