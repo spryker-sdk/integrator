@@ -49,7 +49,8 @@ class ManifestExecutor implements ManifestExecutorInterface
         ManifestReaderInterface $manifestReader,
         IntegratorLockWriterInterface $integratorLockWriter,
         array $manifestExecutors
-    ) {
+    )
+    {
         $this->integratorLockReader = $integratorLockReader;
         $this->manifestReader = $manifestReader;
         $this->manifestExecutors = $manifestExecutors;
@@ -83,7 +84,11 @@ class ManifestExecutor implements ManifestExecutorInterface
 
         foreach ($unappliedManifests as $moduleName => $moduleManifests) {
             foreach ($moduleManifests as $manifestType => $unappliedManifestByType) {
-                $manifestExecutor = $this->resolveExecutor($manifestType);
+                try {
+                    $manifestExecutor = $this->resolveExecutor($manifestType);
+                } catch (RuntimeException $runtimeException) {
+                    continue;
+                }
 
                 foreach ($unappliedManifestByType as $manifestHash => $unappliedManifest) {
                     if ($manifestExecutor->apply($unappliedManifest, $moduleName, $inputOutput, $isDry)) {
@@ -92,6 +97,7 @@ class ManifestExecutor implements ManifestExecutorInterface
                 }
             }
         }
+
         if ($isDry) {
             return 0;
         }
@@ -128,9 +134,9 @@ class ManifestExecutor implements ManifestExecutorInterface
     /**
      * @param string $manifestType
      *
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      * @throws \RuntimeException
      *
-     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
     protected function resolveExecutor(string $manifestType): ManifestStrategyInterface
     {
