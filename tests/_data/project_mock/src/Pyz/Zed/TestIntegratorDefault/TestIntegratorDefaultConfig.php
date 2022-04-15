@@ -7,47 +7,111 @@
 
 namespace Pyz\Zed\TestIntegratorDefault;
 
-use Generated\Shared\Transfer\ItemTransfer;
-use Generated\Shared\Transfer\QuoteTransfer;
-
-class TestIntegratorDefaultConfig
+class TestIntegratorDefaultConfig extends BaseConfig
 {
-    public function getTestConfigurationValue(): string
+    public function testChange(): string
     {
-        return TestIntegratorConfigureModuleConfig::TEST_CONFIG_MODULE_TO_CHANGE;
+        return 'test';
     }
 
-    public function getTestConfigurationValue2(): string
-    {
-        return $this->getPathToRoot();
-    }
-
-    public function getTestConfigurationValue3(): string
-    {
-        return APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'phpcs_to_change.xml';
-    }
-
-    public function getTestConfigurationArray(): array
+    public function testChange2(): array
     {
         return [
-            TestIntegratorConfigureModuleConfig::TEST_CONFIG_MODULE_TO_CHANGE,
+            static::TEST_VARIABLE,
         ];
     }
 
-    public function getTestConfigurationArray2(): array
+    public function testChange3(): array
     {
         return [
-            TestIntegratorConfigureModuleConfig::TEST_CONFIG_MODULE_TO_CHANGE => true,
+            static::TEST_VARIABLE => static::ANOTHER_TEST_VARIABLE,
         ];
     }
 
-    public function getTestConfigurationIsLiteralExpression(): array
+    public function testChange4(): array
     {
-        return [];
+        return [
+            static::TEST_VARIABLE => [
+                static::ANOTHER_TEST_VARIABLE,
+            ],
+        ];
     }
 
-    public function getTestConfigurationIsLiteralExpression2(QuoteTransfer $quoteTransfer, ItemTransfer $itemTransfer): array
+    public function testChange5(): array
     {
-        return [];
+        return array_merge(
+            parent::isCartCartItemsViaAjaxLoadEnabled(),
+            parent::getSharedConfig(),
+            this->getSharedConfig2(),
+        );
+    }
+
+    public function testChange6(): array
+    {
+        $array = parent::isCartCartItemsViaAjaxLoadEnabledChanged();
+        $array = array_merge_recursive(
+            $array,
+            [
+                \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_VALUE_NOT_CHANGED,
+                \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_VALUE2_NOT_CHANGED
+            ]
+        );
+
+        return array_merge(
+            $array,
+            [
+                \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_VALUE_NOT_CHANGED => [
+                    \App\Manifest\Generator\ArrayConfigElementManifestStrategy::MANIFEST_KEY_NOT_CHANGED
+                ],
+                \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_VALUE2_NOT_CHANGED => [
+                    \App\Manifest\Generator\ArrayConfigElementManifestStrategy::MANIFEST_KEY22_NOT_CHANGED
+                ]
+            ]
+        );
+    }
+
+    public function testChange7(): array
+    {
+        return array_merge(
+            parent::isCartCartItemsViaAjaxLoadEnabled(),
+            [
+                static::BOOL_VALUE,
+            ]
+        );
+    }
+
+    public function testChange8(): array
+    {
+        return array_merge(
+            parent::isCartCartItemsViaAjaxLoadEnabled(),
+            [
+                ArrayConfigElementManifestStrategy::BOOL_VALUE => [
+                    ArrayConfigElementManifestStrategy::TEST_EXISTS_VALUE,
+                ],
+            ]
+        );
+    }
+
+    public function testNotChange(): array
+    {
+        return array_merge(
+            $array,
+            [
+                \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_NOT_CHANGE => [
+                    \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_NOT_CHANGE
+                ],
+                \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_NOT_CHANGE => [
+                    \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_NOT_CHANGE
+                ]
+            ]
+        );
+    }
+
+    public function testChangeArrayMerge(): array
+    {
+        return array_merge(
+            parent::isCartCartItemsViaAjaxLoadEnabled(),
+            parent::getSharedConfig(),
+        );
     }
 }

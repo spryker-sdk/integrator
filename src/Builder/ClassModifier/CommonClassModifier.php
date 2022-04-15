@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
+use Node\Stmt\Class_;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -19,24 +20,19 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
-use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
-use SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException;
+use SprykerSdk\Integrator\Builder\Creator\MethodBodyCreatorInterface;
+use SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
+use SprykerSdk\Integrator\Builder\Visitor\AddStatementToStatementListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\CloneNodeWithClearPositionVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodeStmtByNameVisitor;
-use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class CommonClassModifier implements CommonClassModifierInterface
 {
-    /**
-     * @var int
-     */
-    protected const TREE_RETURN_STATEMENT_COUNT_ELEMENTS = 1;
-
     /**
      * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
      */
@@ -48,15 +44,31 @@ class CommonClassModifier implements CommonClassModifierInterface
     protected $classMethodChecker;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\Creator\MethodBodyCreatorInterface
+     */
+    protected $methodBodyCreator;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface
+     */
+    protected $nodeTreeCreator;
+
+    /**
      * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface $classMethodChecker
+     * @param \SprykerSdk\Integrator\Builder\Creator\MethodBodyCreatorInterface $methodBodyCreator
+     * @param \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface $nodeTreeCreator
      */
     public function __construct(
         ClassNodeFinderInterface $classNodeFinder,
-        ClassMethodCheckerInterface $classMethodChecker
+        ClassMethodCheckerInterface $classMethodChecker,
+        MethodBodyCreatorInterface $methodBodyCreator,
+        NodeTreeCreatorInterface $nodeTreeCreator
     ) {
         $this->classNodeFinder = $classNodeFinder;
         $this->classMethodChecker = $classMethodChecker;
+        $this->methodBodyCreator = $methodBodyCreator;
+        $this->nodeTreeCreator = $nodeTreeCreator;
     }
 
     /**
@@ -139,7 +151,8 @@ class CommonClassModifier implements CommonClassModifierInterface
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new ReplaceNodeStmtByNameVisitor($targetMethodName, $methodAst));
-        $classInformationTransfer->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+        $classInformationTransfer
+            ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
 
         return $classInformationTransfer;
     }
@@ -154,7 +167,8 @@ class CommonClassModifier implements CommonClassModifierInterface
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new RemoveMethodVisitor($methodNameToRemove));
-        $classInformationTransfer->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+        $classInformationTransfer
+            ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
 
         return $classInformationTransfer;
     }
@@ -163,50 +177,73 @@ class CommonClassModifier implements CommonClassModifierInterface
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $methodName
      * @param array|string|float|int|bool|null $value
+     * @param bool $isLiteral
+     * @param mixed $previousValue
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function setMethodReturnValue(ClassInformationTransfer $classInformationTransfer, string $methodName, $value): ClassInformationTransfer
-    {
+    public function setMethodReturnValue(
+        ClassInformationTransfer $classInformationTransfer,
+        string $methodName,
+        $value,
+        bool $isLiteral,
+        $previousValue
+    ): ClassInformationTransfer {
         $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $methodName);
-        if (!$methodNode) {
-            $classInformationTransfer = $this->overrideMethodFromParent($classInformationTransfer, $methodName);
+
+        if (!$isLiteral && $methodNode && is_array($value)) {
+            return $this->appendNonLiteralArrayValueToMethodBody(
+                $classInformationTransfer,
+                $methodName,
+                $value,
+            );
         }
-        $methodBody = $this->createReturnBody($value);
+        if (!$methodNode) {
+            $classInformationTransfer = $this->createMethod($classInformationTransfer, $methodName);
+        }
+        if (!$this->classMethodChecker->isMethodNodeSameAsValue($methodNode, $previousValue)) {
+            return $classInformationTransfer;
+        }
+        $methodBody = $this->methodBodyCreator->createMethodBody($classInformationTransfer, $value);
 
         return $this->replaceMethodBody($classInformationTransfer, $methodName, $methodBody);
     }
 
     /**
-     * @param array|string|float|int|bool|null $value
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param string $methodName
      *
-     * @throws \SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException
-     *
-     * @return array<array-key, \PhpParser\Node\Stmt>
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    protected function createReturnBody($value): array
-    {
-        if (!is_array($value) || !isset($value[IntegratorConfig::MANIFEST_KEY_IS_LITERAL])) {
-            $preparedValue = sprintf('<?php %s;', $value);
-            $parserFactory = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-            $tree = $parserFactory->parse($preparedValue);
+    protected function createMethod(
+        ClassInformationTransfer $classInformationTransfer,
+        string $methodName
+    ): ClassInformationTransfer {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new AddMethodVisitor(new ClassMethod($methodName, ['flags' => Class_::MODIFIER_PUBLIC])));
 
-            return [new Return_($tree[0]->expr)];
-        }
+        return $classInformationTransfer
+            ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+    }
 
-        $parserFactory = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-        $preparedValue = sprintf('<?php %s;', $value[IntegratorConfig::MANIFEST_KEY_VALUE]);
-        $tree = $parserFactory->parse($preparedValue);
-        if ($tree && count($tree) != static::TREE_RETURN_STATEMENT_COUNT_ELEMENTS) {
-            return $tree;
-        }
-        /** @var \PhpParser\Node\Stmt\Expression|null $returnExpression */
-        $returnExpression = $tree[0] ?? null;
-        if (!$returnExpression) {
-            throw new LiteralValueParsingException(sprintf('Value is not valid PHP code: `%s`', $value['value']));
-        }
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param string $methodName
+     * @param mixed $value
+     *
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
+     */
+    protected function appendNonLiteralArrayValueToMethodBody(
+        ClassInformationTransfer $classInformationTransfer,
+        string $methodName,
+        $value
+    ): ClassInformationTransfer {
+        $arrayItems = $this->nodeTreeCreator->createNodeTreeFromValue($classInformationTransfer, $value);
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new AddStatementToStatementListVisitor($methodName, $arrayItems));
 
-        return [new Return_($returnExpression->expr)];
+        return $classInformationTransfer
+                ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
     }
 
     /**

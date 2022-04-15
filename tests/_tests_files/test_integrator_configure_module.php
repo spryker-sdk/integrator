@@ -7,59 +7,154 @@
 
 namespace Pyz\Zed\TestIntegratorDefault;
 
-use Generated\Shared\Transfer\ItemTransfer;
-use Generated\Shared\Transfer\QuoteTransfer;
-use Spryker\Zed\TestIntegratorConfigureModule\TestIntegratorConfigureModuleConfig;
+use App\Manifest\Generator\ArrayConfigElementManifestStrategy;
+use App\Manifest\Generator\ArrayConfigElementManifestStrategy2;
+use App\Manifest\Generator\ArrayConfigElementManifestStrategyTest;
 
-class TestIntegratorDefaultConfig
+class TestIntegratorDefaultConfig extends BaseConfig
 {
-    public function getTestConfigurationValue(): string
+    public const BOOL_VALUE = 'true';
+    public const ASSOC_ARRAY_VALUE = [
+        'key_1' => 'key_1_value',
+        'key_2' => 'key_2_value',
+    ];
+    public const ARRAY_VALUE = [
+        10,
+        1000,
+    ];
+    public function testChange(): string
     {
-        return TestIntegratorConfigureModuleConfig::TEST_CONFIG_MODULE;
+        return static::TEST_VALUE_CHANGE;
     }
 
-    public function getTestConfigurationValue2(): string
-    {
-        return $this->getPathToRoot() . 'vendor/spryker/spryker/Bundles/';
-    }
-
-    public function getTestConfigurationValue3(): string
-    {
-        return APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'phpcs.xml';
-    }
-
-    public function getTestConfigurationArray(): array
+    public function testChange2(): array
     {
         return [
-            TestIntegratorConfigureModuleConfig::TEST_CONFIG_MODULE_TO_CHANGE,
-            TestIntegratorConfigureModuleConfig::TEST_CONFIG_MODULE_ADD,
+            static::TEST_VARIABLE, static::TEST_VALUE4_CHANGE,
         ];
     }
 
-    public function getTestConfigurationArray2(): array
+    public function testChange3(): array
     {
         return [
-            TestIntegratorConfigureModuleConfig::TEST_CONFIG_MODULE_TO_CHANGE => true,
-            TestIntegratorConfigureModuleConfig::CONTENT_TYPE_PRICE => true,
+            static::TEST_VARIABLE => static::ANOTHER_TEST_VARIABLE, static::TEST_VALUE5_CHANGE => static::TEST_VALUE_CHANGE,
         ];
     }
 
-    public function getTestConfigurationIsLiteralExpression() : array
+    public function testChange4(): array
     {
-        $templateList = [
-            CmsBlockCategoryConnectorConfig::CATEGORY_TEMPLATE_ONLY_CMS_BLOCK => '@CatalogPage/views/simple-cms-block/simple-cms-block.twig',
-            CmsBlockCategoryConnectorConfig::CATEGORY_TEMPLATE_WITH_CMS_BLOCK => '@CatalogPage/views/catalog-with-cms-block/catalog-with-cms-block.twig',
+        return [
+            static::TEST_VARIABLE => [
+                static::ANOTHER_TEST_VARIABLE,
+            ], static::TEST_VALUE6 => [
+                ArrayConfigElementManifestStrategy::TEST_VALUE5,
+            ], static::TEST_VALUE7 => [
+                ArrayConfigElementManifestStrategy::MANIFEST_KEY => ArrayConfigElementManifestStrategy::TEST_VALUE3,
+                ArrayConfigElementManifestStrategy::MANIFEST_KEY => ArrayConfigElementManifestStrategy2::TEST_VALUE4,
+            ],
         ];
-        $templateList += parent::getTemplateList();
-        return $templateList;
     }
 
-    public function getTestConfigurationIsLiteralExpression2(QuoteTransfer $quoteTransfer, ItemTransfer $itemTransfer) : array
+    public function testChange5(): array
     {
-        $paymentMethodStatemachineMapping = $this->getPaymentMethodStatemachineMapping();
-        if (!array_key_exists($quoteTransfer->getPayment()->getPaymentSelection(), $paymentMethodStatemachineMapping)) {
-            return parent::determineProcessForOrderItem($quoteTransfer, $itemTransfer);
-        }
-        return $paymentMethodStatemachineMapping[$quoteTransfer->getPayment()->getPaymentSelection()];
+        return array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), parent::getSharedConfig(), this->getSharedConfig2());
+    }
+
+    public function testChange6(): array
+    {
+        $array = parent::isCartCartItemsViaAjaxLoadEnabledChanged();
+        $array = array_merge($array, [
+            \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_VALUE,
+            \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_VALUE2,
+        ]);
+
+        return array_merge($array, [
+            \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_VALUE => [
+                \App\Manifest\Generator\ArrayConfigElementManifestStrategy::MANIFEST_KEY,
+            ],
+            \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_VALUE2 => [
+                \App\Manifest\Generator\ArrayConfigElementManifestStrategy::MANIFEST_KEY22,
+            ],
+        ]);
+    }
+
+    public function testChange7(): array
+    {
+        return array_merge(
+            parent::isCartCartItemsViaAjaxLoadEnabled(),
+            [
+                static::BOOL_VALUE, ArrayConfigElementManifestStrategy::TEST_CHANGE7,
+            ]
+        );
+    }
+
+    public function testChange8(): array
+    {
+        return array_merge(
+            parent::isCartCartItemsViaAjaxLoadEnabled(),
+            [
+                ArrayConfigElementManifestStrategy::BOOL_VALUE => [
+                    ArrayConfigElementManifestStrategy::TEST_EXISTS_VALUE,
+                ], ArrayConfigElementManifestStrategy::NEW_VALUE => [
+                    ArrayConfigElementManifestStrategy::TEST_NEW_VALUE,
+                ],
+            ]
+        );
+    }
+
+    public function testNotChange(): array
+    {
+        return array_merge(
+            $array,
+            [
+                \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_NOT_CHANGE => [
+                    \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_NOT_CHANGE
+                ],
+                \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_NOT_CHANGE => [
+                    \App\Manifest\Generator\ArrayConfigElementManifestStrategy::TEST_NOT_CHANGE
+                ]
+            ]
+        );
+    }
+
+    public function testChangeArrayMerge(): array
+    {
+        return array_merge(
+            parent::isCartCartItemsViaAjaxLoadEnabled(),
+            parent::getSharedConfig(),
+            $this->getSharedConfig2(),
+            parent::getSharedConfig2(),
+        );
+    }
+    public function testNewMethod()
+    {
+        return array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), [
+            'sales' => '/sales/customer/customer-orders',
+            'notes' => '/customer-note-gui/index/index',
+        ]);
+    }
+    public function testNewMethod2()
+    {
+        return array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), parent::getSharedConfig());
+    }
+    public function testNewMethod3()
+    {
+        return ArrayConfigElementManifestStrategyTest::MANIFEST_KEY;
+    }
+    public function testNewMethod4()
+    {
+        return [
+            ArrayConfigElementManifestStrategy::MANIFEST_KEY,
+            ArrayConfigElementManifestStrategy::MANIFEST_KEY,
+            static::TEST_VALUE3,
+        ];
+    }
+    public function testNewMethod5()
+    {
+        return [
+            ArrayConfigElementManifestStrategy::TEST_VALUE2 => ArrayConfigElementManifestStrategy::MANIFEST_KEY,
+            static::TEST_VALUE3 => static::TEST_VALUE2,
+            static::TEST_VALUE5 => static::TEST_VALUE3,
+        ];
     }
 }

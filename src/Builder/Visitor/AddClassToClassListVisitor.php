@@ -104,7 +104,11 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
     protected function isClassAdded(Node $node): bool
     {
         foreach ($node->items as $item) {
-            $nodeClassName = $item->value->class->toString();
+            $itemClass = $item->value->class ?? $item->key->class ?? null;
+            if (!$itemClass) {
+                continue;
+            }
+            $nodeClassName = $itemClass->toString();
             if ($nodeClassName === $this->className) {
                 return true;
             }

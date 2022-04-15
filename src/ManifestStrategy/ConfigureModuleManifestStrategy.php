@@ -9,11 +9,8 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
-use ReflectionClassConstant;
-use ReflectionException;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
 {
@@ -37,10 +34,15 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
     {
         [$targetClassName, $targetPointName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
 
+        $previousValue = $manifest[IntegratorConfig::MANIFEST_KEY_PREVIOUS_VALUE] ?? null;
         $value = $manifest[IntegratorConfig::MANIFEST_KEY_VALUE] ?? null;
         $choices = $manifest[IntegratorConfig::MANIFEST_KEY_CHOICES] ?? [];
         $defaultValue = $manifest[IntegratorConfig::MANIFEST_KEY_DEFAULT_VALUE] ?? null;
-        $isLiteral = $manifest[IntegratorConfig::MANIFEST_KEY_IS_LITERAL] ?? false;
+        $isLiteral = false;
+        if ($this->isLiteralManifestValue($value)) {
+            $isLiteral = $manifest[IntegratorConfig::MANIFEST_KEY_VALUE][IntegratorConfig::MANIFEST_KEY_IS_LITERAL] ?? false;
+            $value = $value[IntegratorConfig::MANIFEST_KEY_VALUE];
+        }
 
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
@@ -59,19 +61,17 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
                 );
             }
 
-            if (method_exists($targetClassName, $targetPointName)) {
-                $classInformationTransfer = $this->adjustMethod($classInformationTransfer, $targetPointName, $value, $isLiteral);
-            } elseif ($this->constantExists($manifest[IntegratorConfig::MANIFEST_KEY_TARGET])) {
-                $classInformationTransfer = $this->createClassBuilderFacade()->setConstant($classInformationTransfer, $targetPointName, $value);
+            if ($this->isConstant($targetPointName)) {
+                $classInformationTransfer = $this->createClassBuilderFacade()
+                    ->setConstant($classInformationTransfer, $targetPointName, $value);
             } else {
-                $inputOutput->writeln(sprintf(
-                    'Your version of module %s/%s does not have target method or constant %s. Please, update it to use full functionality.',
-                    $this->classHelper->getOrganisationName($targetClassName),
-                    $this->classHelper->getModuleName($targetClassName),
+                $classInformationTransfer = $this->createClassBuilderFacade()->setMethodReturnValue(
+                    $classInformationTransfer,
                     $targetPointName,
-                ), InputOutputInterface::DEBUG);
-
-                continue;
+                    $value,
+                    $isLiteral,
+                    $previousValue,
+                );
             }
 
             if ($isDry) {
@@ -95,35 +95,13 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetPointName
      * @param mixed $value
-     * @param bool $isLiteral
      *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
+     * @return bool
      */
-    protected function adjustMethod(
-        ClassInformationTransfer $classInformationTransfer,
-        string $targetPointName,
-        $value,
-        bool $isLiteral
-    ): ClassInformationTransfer {
-        if ($this->isConstantValue($value, $isLiteral)) {
-            [$className, $constantName] = explode('::', $value);
-
-            return $this->createClassBuilderFacade()->wireClassConstant(
-                $classInformationTransfer,
-                $targetPointName,
-                $className,
-                $constantName,
-            );
-        }
-
-        return $this->createClassBuilderFacade()->setMethodReturnValue(
-            $classInformationTransfer,
-            $targetPointName,
-            $this->createClassBuilderFacadeMethodValue($value, $isLiteral),
-        );
+    protected function isLiteralManifestValue($value): bool
+    {
+        return is_array($value) && isset($value[IntegratorConfig::MANIFEST_KEY_IS_LITERAL]);
     }
 
     /**
@@ -138,51 +116,12 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
     }
 
     /**
-     * @param mixed $value
-     * @param bool $isLiteral
-     *
-     * @return mixed
-     */
-    protected function createClassBuilderFacadeMethodValue($value, bool $isLiteral)
-    {
-        if ($isLiteral) {
-            return [
-                IntegratorConfig::MANIFEST_KEY_VALUE => $value,
-                IntegratorConfig::MANIFEST_KEY_IS_LITERAL => $isLiteral,
-            ];
-        }
-
-        return $value;
-    }
-
-    /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $constantName
-     * @param mixed $value
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
-     */
-    protected function adjustConstant(ClassInformationTransfer $classInformationTransfer, string $constantName, $value): ClassInformationTransfer
-    {
-        return $this->createClassBuilderFacade()->setConstant($classInformationTransfer, $constantName, $value);
-    }
-
-    /**
-     * @param string $value
+     * @param string $targetPointName
      *
      * @return bool
      */
-    protected function constantExists(string $value): bool
+    protected function isConstant(string $targetPointName): bool
     {
-        [$className, $constantName] = explode('::', $value);
-
-        try {
-            new ReflectionClassConstant($className, $constantName);
-
-            return true;
-        } catch (ReflectionException $e) {
-        }
-
-        return false;
+        return (bool)preg_match('/^[A-Z\_]+$/', $targetPointName);
     }
 }
