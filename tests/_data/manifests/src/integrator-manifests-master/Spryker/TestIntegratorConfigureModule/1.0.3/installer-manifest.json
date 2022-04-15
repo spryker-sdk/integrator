@@ -100,7 +100,7 @@
         {
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testChange5",
             "value": {
-                "value": "array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), parent::getSharedConfig(), this->getSharedConfig2())",
+                "value": "array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), parent::getSharedConfig(), $this->getSharedConfig2())",
                 "is_literal": true
             }
         },

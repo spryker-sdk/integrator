@@ -57,7 +57,7 @@ class TestIntegratorDefaultConfig extends BaseConfig
 
     public function testChange5(): array
     {
-        return array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), parent::getSharedConfig(), this->getSharedConfig2());
+        return array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), parent::getSharedConfig(), $this->getSharedConfig2());
     }
 
     public function testChange6(): array
