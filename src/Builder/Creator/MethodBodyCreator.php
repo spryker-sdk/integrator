@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\Creator;
 
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
@@ -21,7 +22,7 @@ class MethodBodyCreator extends AbstractMethodCreator implements MethodBodyCreat
     /**
      * @var int
      */
-    protected const TREE_RETURN_STATEMENT_COUNT_ELEMENTS = 1;
+    protected const SINGLE_TREE_RETURN_STATEMENT_COUNT_ELEMENTS = 1;
 
     /**
      * @var \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface
@@ -56,7 +57,7 @@ class MethodBodyCreator extends AbstractMethodCreator implements MethodBodyCreat
             throw new LiteralValueParsingException(sprintf('Value is not valid PHP code: `%s`', $value));
         }
 
-        if (count($tree) !== static::TREE_RETURN_STATEMENT_COUNT_ELEMENTS) {
+        if (!$this->isSingleReturnStatement($tree)) {
             return $this->createMultiStatementMethodBody($tree);
         }
 
@@ -69,16 +70,6 @@ class MethodBodyCreator extends AbstractMethodCreator implements MethodBodyCreat
     protected function createParser(): Parser
     {
         return (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-    }
-
-    /**
-     * @param array $tree
-     *
-     * @return bool
-     */
-    public function isTreeSingleReturnStatement(array $tree): bool
-    {
-        return $tree && count($tree) === static::TREE_RETURN_STATEMENT_COUNT_ELEMENTS;
     }
 
     /**
@@ -101,7 +92,7 @@ class MethodBodyCreator extends AbstractMethodCreator implements MethodBodyCreat
      */
     protected function isSingleReturnStatement(array $tree): bool
     {
-        return $tree && count($tree) === static::TREE_RETURN_STATEMENT_COUNT_ELEMENTS;
+        return $tree && count($tree) === static::SINGLE_TREE_RETURN_STATEMENT_COUNT_ELEMENTS;
     }
 
     /**
@@ -136,24 +127,39 @@ class MethodBodyCreator extends AbstractMethodCreator implements MethodBodyCreat
             throw new LiteralValueParsingException(sprintf('Value is not valid PHP code: `%s`', $value));
         }
         if (property_exists($returnExpression->expr, 'class')) {
-            /** @var \PhpParser\Node\Expr\ClassConstFetch $returnExpressionStatement */
-            $returnExpressionStatement = $returnExpression->expr;
-            /** @var \PhpParser\Node\Identifier $returnExpressionName */
-            $returnExpressionName = $returnExpressionStatement->name;
-            $returnExpressionClass = $this->getShortClassNameAndAddToClassInformation(
-                $classInformationTransfer,
-                implode('\\', $returnExpression->expr->class->parts) . '::' . $returnExpressionName->name,
-            );
-            $returnExpressionClassParts = explode('::', $returnExpressionClass);
-            $returnExpression->expr->class->parts = [$returnExpressionClassParts[0]];
-            $returnClassConstExpression = $this->createClassConstantExpression(
-                $returnExpressionClassParts[0],
-                $returnExpressionClassParts[1],
-            );
-
-            return [new Return_($returnClassConstExpression)];
+            return $this->createClassConstantReturnStatement($classInformationTransfer, $returnExpression);
         }
 
         return [new Return_($returnExpression->expr)];
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \PhpParser\Node\Stmt\Expression $expression
+     *
+     * @return array
+     */
+    protected function createClassConstantReturnStatement(
+        ClassInformationTransfer $classInformationTransfer,
+        Expression $expression
+    ): array {
+        /** @var \PhpParser\Node\Expr\ClassConstFetch $expressionStatement */
+        $expressionStatement = $expression->expr;
+        /** @var \PhpParser\Node\Identifier $expressionName */
+        $expressionName = $expressionStatement->name;
+        /** @var \PhpParser\Node\Name\FullyQualified $expressionClass */
+        $expressionClass = $expressionStatement->class;
+        $returnExpressionClass = $this->getShortClassNameAndAddToClassInformation(
+            $classInformationTransfer,
+            implode('\\', $expressionClass->parts) . '::' . $expressionName->name,
+        );
+        $returnExpressionClassParts = explode('::', $returnExpressionClass);
+        $expressionClass->parts = [$returnExpressionClassParts[0]];
+        $returnClassConstExpression = $this->createClassConstantExpression(
+            $returnExpressionClassParts[0],
+            $returnExpressionClassParts[1],
+        );
+
+        return [new Return_($returnClassConstExpression)];
     }
 }

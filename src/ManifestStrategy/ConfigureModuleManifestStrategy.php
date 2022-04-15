@@ -105,17 +105,6 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
     }
 
     /**
-     * @param mixed $value
-     * @param bool $isLiteral
-     *
-     * @return bool
-     */
-    protected function isConstantValue($value, bool $isLiteral): bool
-    {
-        return !$isLiteral && is_string($value) && strpos($value, '::');
-    }
-
-    /**
      * @param string $targetPointName
      *
      * @return bool
