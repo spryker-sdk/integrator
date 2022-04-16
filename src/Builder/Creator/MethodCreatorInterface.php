@@ -11,7 +11,7 @@ namespace SprykerSdk\Integrator\Builder\Creator;
 
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-interface MethodBodyCreatorInterface
+interface MethodCreatorInterface
 {
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
@@ -20,4 +20,17 @@ interface MethodBodyCreatorInterface
      * @return array<array-key, \PhpParser\Node\Stmt>
      */
     public function createMethodBody(ClassInformationTransfer $classInformationTransfer, $value): array;
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param string $methodName
+     * @param mixed $value
+     *
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
+     */
+    public function createMethod(
+        ClassInformationTransfer $classInformationTransfer,
+        string $methodName,
+        $value
+    ): ClassInformationTransfer;
 }

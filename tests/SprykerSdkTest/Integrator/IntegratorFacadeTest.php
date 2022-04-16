@@ -84,6 +84,8 @@ class IntegratorFacadeTest extends BaseTestCase
         // Assert
         $testFilePath = './tests/_tests_files/test_integrator_configure_module.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorDefault/TestIntegratorDefaultConfig.php';
+        echo file_get_contents($classPath);
+//        die();
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);

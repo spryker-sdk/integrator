@@ -15,13 +15,12 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
-use SprykerSdk\Integrator\Builder\Creator\MethodBodyCreatorInterface;
+use SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface;
 use SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
@@ -44,7 +43,7 @@ class CommonClassModifier implements CommonClassModifierInterface
     protected $classMethodChecker;
 
     /**
-     * @var \SprykerSdk\Integrator\Builder\Creator\MethodBodyCreatorInterface
+     * @var \SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface
      */
     protected $methodBodyCreator;
 
@@ -56,13 +55,13 @@ class CommonClassModifier implements CommonClassModifierInterface
     /**
      * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface $classMethodChecker
-     * @param \SprykerSdk\Integrator\Builder\Creator\MethodBodyCreatorInterface $methodBodyCreator
+     * @param \SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface $methodBodyCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface $nodeTreeCreator
      */
     public function __construct(
         ClassNodeFinderInterface $classNodeFinder,
         ClassMethodCheckerInterface $classMethodChecker,
-        MethodBodyCreatorInterface $methodBodyCreator,
+        MethodCreatorInterface $methodBodyCreator,
         NodeTreeCreatorInterface $nodeTreeCreator
     ) {
         $this->classNodeFinder = $classNodeFinder;
@@ -182,7 +181,7 @@ class CommonClassModifier implements CommonClassModifierInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function setMethodReturnValue(
+    public function createClassMethod(
         ClassInformationTransfer $classInformationTransfer,
         string $methodName,
         $value,
@@ -199,7 +198,8 @@ class CommonClassModifier implements CommonClassModifierInterface
             );
         }
         if (!$methodNode) {
-            $classInformationTransfer = $this->createMethod($classInformationTransfer, $methodName);
+            $classInformationTransfer = $this->methodBodyCreator
+                ->createMethod($classInformationTransfer, $methodName, $value);
         }
         if (!$this->classMethodChecker->isMethodNodeSameAsValue($methodNode, $previousValue)) {
             return $classInformationTransfer;
@@ -207,23 +207,6 @@ class CommonClassModifier implements CommonClassModifierInterface
         $methodBody = $this->methodBodyCreator->createMethodBody($classInformationTransfer, $value);
 
         return $this->replaceMethodBody($classInformationTransfer, $methodName, $methodBody);
-    }
-
-    /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $methodName
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
-     */
-    protected function createMethod(
-        ClassInformationTransfer $classInformationTransfer,
-        string $methodName
-    ): ClassInformationTransfer {
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new AddMethodVisitor(new ClassMethod($methodName, ['flags' => Class_::MODIFIER_PUBLIC])));
-
-        return $classInformationTransfer
-            ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
     }
 
     /**

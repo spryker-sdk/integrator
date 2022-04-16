@@ -10,14 +10,18 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\Creator;
 
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException;
+use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class MethodBodyCreator extends AbstractMethodCreator implements MethodBodyCreatorInterface
+class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterface
 {
     /**
      * @var int
@@ -30,11 +34,28 @@ class MethodBodyCreator extends AbstractMethodCreator implements MethodBodyCreat
     protected $nodeTreeCreator;
 
     /**
-     * @param \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface $nodeTreeCreator
+     * @var \SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface
      */
-    public function __construct(NodeTreeCreatorInterface $nodeTreeCreator)
-    {
+    protected $methodDocBlockCreator;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface
+     */
+    protected $methodReturnTypeCreator;
+
+    /**
+     * @param \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface $nodeTreeCreator
+     * @param \SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface $methodDocBlockCreator
+     * @param \SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface $methodReturnTypeCreator
+     */
+    public function __construct(
+        NodeTreeCreatorInterface $nodeTreeCreator,
+        MethodDocBlockCreatorInterface $methodDocBlockCreator,
+        MethodReturnTypeCreatorInterface $methodReturnTypeCreator
+    ) {
         $this->nodeTreeCreator = $nodeTreeCreator;
+        $this->methodDocBlockCreator = $methodDocBlockCreator;
+        $this->methodReturnTypeCreator = $methodReturnTypeCreator;
     }
 
     /**
@@ -62,6 +83,31 @@ class MethodBodyCreator extends AbstractMethodCreator implements MethodBodyCreat
         }
 
         return $this->createSingleStatementMethodBody($classInformationTransfer, $tree, $value);
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param string $methodName
+     * @param mixed $value
+     *
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
+     */
+    public function createMethod(
+        ClassInformationTransfer $classInformationTransfer,
+        string $methodName,
+        $value
+    ): ClassInformationTransfer {
+        $nodeTraverser = new NodeTraverser();
+        $returnType = $this->methodReturnTypeCreator->createMethodReturnType($value);
+        $classMethod = new ClassMethod(
+            $methodName,
+            ['flags' => Class_::MODIFIER_PUBLIC, 'returnType' => $returnType],
+            ['comments' => [$this->methodDocBlockCreator->createMethodDocBlock($value)]],
+        );
+        $nodeTraverser->addVisitor(new AddMethodVisitor($classMethod));
+
+        return $classInformationTransfer
+            ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
     }
 
     /**

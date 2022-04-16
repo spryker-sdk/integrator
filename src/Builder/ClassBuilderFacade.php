@@ -168,7 +168,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function setMethodReturnValue(
+    public function createClassMethod(
         ClassInformationTransfer $classInformationTransfer,
         string $methodName,
         $value,
@@ -177,7 +177,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
     ): ClassInformationTransfer {
         return $this->getFactory()
             ->createCommonClassModifier()
-            ->setMethodReturnValue($classInformationTransfer, $methodName, $value, $isLiteral, $previousValue);
+            ->createClassMethod($classInformationTransfer, $methodName, $value, $isLiteral, $previousValue);
     }
 
     /**

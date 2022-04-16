@@ -28,7 +28,7 @@ class ClassModifierTest extends BaseTestCase
         $value = 'value_that_we_are_looking';
 
         //Act
-        $classModifier->setMethodReturnValue($classInformationTransfer, 'getScalarValue', $value, false, '');
+        $classModifier->createClassMethod($classInformationTransfer, 'getScalarValue', $value, false, '');
         $stmts = $finder->findMethodNode($classInformationTransfer, 'getScalarValue')->stmts;
 
         //Assert
@@ -52,7 +52,7 @@ class ClassModifierTest extends BaseTestCase
         $value = 'getenv(\'FOOBAR\')';
 
         //Act
-        $classModifier->setMethodReturnValue($classInformationTransfer, 'getLiteralValue', $value, true, '');
+        $classModifier->createClassMethod($classInformationTransfer, 'getLiteralValue', $value, true, '');
         $stmts = $finder->findMethodNode($classInformationTransfer, 'getLiteralValue')->stmts;
 
         //Assert

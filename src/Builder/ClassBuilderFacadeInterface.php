@@ -128,7 +128,9 @@ interface ClassBuilderFacadeInterface
 
     /**
      * Specification:
+     * - Creates or updates existing class method by value.
      * - Sets a return value of the method.
+     * - Sets doc block of new created method.
      *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $methodName
@@ -138,7 +140,7 @@ interface ClassBuilderFacadeInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function setMethodReturnValue(
+    public function createClassMethod(
         ClassInformationTransfer $classInformationTransfer,
         string $methodName,
         $value,

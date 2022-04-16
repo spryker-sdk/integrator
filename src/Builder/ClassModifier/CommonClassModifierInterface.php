@@ -47,7 +47,7 @@ interface CommonClassModifierInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function setMethodReturnValue(
+    public function createClassMethod(
         ClassInformationTransfer $classInformationTransfer,
         string $methodName,
         $value,

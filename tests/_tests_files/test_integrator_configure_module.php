@@ -22,11 +22,17 @@ class TestIntegratorDefaultConfig extends BaseConfig
         10,
         1000,
     ];
+    /**
+     * @return string
+     */
     public function testChange(): string
     {
         return static::TEST_VALUE_CHANGE;
     }
 
+    /**
+     * @return array
+     */
     public function testChange2(): array
     {
         return [
@@ -34,6 +40,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         ];
     }
 
+    /**
+     * @return array
+     */
     public function testChange3(): array
     {
         return [
@@ -41,6 +50,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         ];
     }
 
+    /**
+     * @return array
+     */
     public function testChange4(): array
     {
         return [
@@ -55,11 +67,17 @@ class TestIntegratorDefaultConfig extends BaseConfig
         ];
     }
 
+    /**
+     * @return array
+     */
     public function testChange5(): array
     {
         return array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), parent::getSharedConfig(), $this->getSharedConfig2());
     }
 
+    /**
+     * @return array
+     */
     public function testChange6(): array
     {
         $array = parent::isCartCartItemsViaAjaxLoadEnabledChanged();
@@ -78,6 +96,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         ]);
     }
 
+    /**
+     * @return array
+     */
     public function testChange7(): array
     {
         return array_merge(
@@ -88,6 +109,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         );
     }
 
+    /**
+     * @return array
+     */
     public function testChange8(): array
     {
         return array_merge(
@@ -102,6 +126,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         );
     }
 
+    /**
+     * @return array
+     */
     public function testNotChange(): array
     {
         return array_merge(
@@ -117,6 +144,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         );
     }
 
+    /**
+     * @return array
+     */
     public function testChangeArrayMerge(): array
     {
         return array_merge(
@@ -126,22 +156,34 @@ class TestIntegratorDefaultConfig extends BaseConfig
             parent::getSharedConfig2(),
         );
     }
-    public function testNewMethod()
+    /**
+     * @return array
+     */
+    public function testNewMethod() : array
     {
         return array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), [
             'sales' => '/sales/customer/customer-orders',
             'notes' => '/customer-note-gui/index/index',
         ]);
     }
-    public function testNewMethod2()
+    /**
+     * @return array
+     */
+    public function testNewMethod2() : array
     {
         return array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), parent::getSharedConfig());
     }
-    public function testNewMethod3()
+    /**
+     * @return string
+     */
+    public function testNewMethod3() : string
     {
         return ArrayConfigElementManifestStrategyTest::MANIFEST_KEY;
     }
-    public function testNewMethod4()
+    /**
+     * @return array
+     */
+    public function testNewMethod4() : array
     {
         return [
             ArrayConfigElementManifestStrategy::MANIFEST_KEY,
@@ -149,7 +191,10 @@ class TestIntegratorDefaultConfig extends BaseConfig
             static::TEST_VALUE3,
         ];
     }
-    public function testNewMethod5()
+    /**
+     * @return array
+     */
+    public function testNewMethod5() : array
     {
         return [
             ArrayConfigElementManifestStrategy::TEST_VALUE2 => ArrayConfigElementManifestStrategy::MANIFEST_KEY,

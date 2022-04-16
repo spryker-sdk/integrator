@@ -41,8 +41,12 @@ use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
 use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolverInterface;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriter;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriterInterface;
-use SprykerSdk\Integrator\Builder\Creator\MethodBodyCreator;
-use SprykerSdk\Integrator\Builder\Creator\MethodBodyCreatorInterface;
+use SprykerSdk\Integrator\Builder\Creator\MethodCreator;
+use SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface;
+use SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreator;
+use SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface;
+use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreator;
+use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface;
 use SprykerSdk\Integrator\Builder\Creator\NodeTreeCreator;
 use SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
@@ -325,13 +329,31 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\Creator\MethodBodyCreatorInterface
+     * @return \SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface
      */
-    public function createMethodBodyCreator(): MethodBodyCreatorInterface
+    public function createMethodBodyCreator(): MethodCreatorInterface
     {
-        return new MethodBodyCreator(
+        return new MethodCreator(
             $this->createNodeTreeCreator(),
+            $this->createMethodDocBlockCreator(),
+            $this->createMethodReturnTypeCreator(),
         );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface
+     */
+    public function createMethodDocBlockCreator(): MethodDocBlockCreatorInterface
+    {
+        return new MethodDocBlockCreator();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface
+     */
+    public function createMethodReturnTypeCreator(): MethodReturnTypeCreatorInterface
+    {
+        return new MethodReturnTypeCreator();
     }
 
     /**

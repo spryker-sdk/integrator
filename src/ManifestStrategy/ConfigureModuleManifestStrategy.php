@@ -65,7 +65,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
                 $classInformationTransfer = $this->createClassBuilderFacade()
                     ->setConstant($classInformationTransfer, $targetPointName, $value);
             } else {
-                $classInformationTransfer = $this->createClassBuilderFacade()->setMethodReturnValue(
+                $classInformationTransfer = $this->createClassBuilderFacade()->createClassMethod(
                     $classInformationTransfer,
                     $targetPointName,
                     $value,

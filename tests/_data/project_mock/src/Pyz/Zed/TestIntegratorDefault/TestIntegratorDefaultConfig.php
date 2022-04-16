@@ -9,11 +9,17 @@ namespace Pyz\Zed\TestIntegratorDefault;
 
 class TestIntegratorDefaultConfig extends BaseConfig
 {
+    /**
+     * @return string
+     */
     public function testChange(): string
     {
         return 'test';
     }
 
+    /**
+     * @return array
+     */
     public function testChange2(): array
     {
         return [
@@ -21,6 +27,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         ];
     }
 
+    /**
+     * @return array
+     */
     public function testChange3(): array
     {
         return [
@@ -28,6 +37,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         ];
     }
 
+    /**
+     * @return array
+     */
     public function testChange4(): array
     {
         return [
@@ -37,6 +49,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         ];
     }
 
+    /**
+     * @return array
+     */
     public function testChange5(): array
     {
         return array_merge(
@@ -46,6 +61,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         );
     }
 
+    /**
+     * @return array
+     */
     public function testChange6(): array
     {
         $array = parent::isCartCartItemsViaAjaxLoadEnabledChanged();
@@ -70,6 +88,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         );
     }
 
+    /**
+     * @return array
+     */
     public function testChange7(): array
     {
         return array_merge(
@@ -80,6 +101,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         );
     }
 
+    /**
+     * @return array
+     */
     public function testChange8(): array
     {
         return array_merge(
@@ -92,6 +116,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         );
     }
 
+    /**
+     * @return array
+     */
     public function testNotChange(): array
     {
         return array_merge(
@@ -107,6 +134,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
         );
     }
 
+    /**
+     * @return array
+     */
     public function testChangeArrayMerge(): array
     {
         return array_merge(
