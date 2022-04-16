@@ -45,7 +45,7 @@ class CommonClassModifier implements CommonClassModifierInterface
     /**
      * @var \SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface
      */
-    protected $methodBodyCreator;
+    protected $methodCreator;
 
     /**
      * @var \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface
@@ -55,18 +55,18 @@ class CommonClassModifier implements CommonClassModifierInterface
     /**
      * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface $classMethodChecker
-     * @param \SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface $methodBodyCreator
+     * @param \SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface $methodCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface $nodeTreeCreator
      */
     public function __construct(
         ClassNodeFinderInterface $classNodeFinder,
         ClassMethodCheckerInterface $classMethodChecker,
-        MethodCreatorInterface $methodBodyCreator,
+        MethodCreatorInterface $methodCreator,
         NodeTreeCreatorInterface $nodeTreeCreator
     ) {
         $this->classNodeFinder = $classNodeFinder;
         $this->classMethodChecker = $classMethodChecker;
-        $this->methodBodyCreator = $methodBodyCreator;
+        $this->methodCreator = $methodCreator;
         $this->nodeTreeCreator = $nodeTreeCreator;
     }
 
@@ -198,13 +198,13 @@ class CommonClassModifier implements CommonClassModifierInterface
             );
         }
         if (!$methodNode) {
-            $classInformationTransfer = $this->methodBodyCreator
+            $classInformationTransfer = $this->methodCreator
                 ->createMethod($classInformationTransfer, $methodName, $value);
         }
         if (!$this->classMethodChecker->isMethodNodeSameAsValue($methodNode, $previousValue)) {
             return $classInformationTransfer;
         }
-        $methodBody = $this->methodBodyCreator->createMethodBody($classInformationTransfer, $value);
+        $methodBody = $this->methodCreator->createMethodBody($classInformationTransfer, $value);
 
         return $this->replaceMethodBody($classInformationTransfer, $methodName, $methodBody);
     }
