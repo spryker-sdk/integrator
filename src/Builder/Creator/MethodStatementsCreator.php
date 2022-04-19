@@ -11,11 +11,14 @@ namespace SprykerSdk\Integrator\Builder\Creator;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class NodeTreeCreator extends AbstractMethodCreator implements NodeTreeCreatorInterface
+class MethodStatementsCreator extends AbstractMethodCreator implements MethodStatementsCreatorInterface
 {
     /**
      * @var int
@@ -28,7 +31,7 @@ class NodeTreeCreator extends AbstractMethodCreator implements NodeTreeCreatorIn
      *
      * @return array
      */
-    public function createNodeTreeFromValue(ClassInformationTransfer $classInformationTransfer, $value): array
+    public function createMethodStatementsFromValue(ClassInformationTransfer $classInformationTransfer, $value): array
     {
         if (is_array($value)) {
             return $this->createNodeTreeFromArrayValue($classInformationTransfer, $value);
@@ -68,15 +71,16 @@ class NodeTreeCreator extends AbstractMethodCreator implements NodeTreeCreatorIn
         $arrayItems = [];
         foreach ($value as $key => $item) {
             $insideArrayItems = [];
+            $itemParts = [];
 
             if (is_string($item)) {
                 $item = $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $item);
+                $itemParts = explode('::', $item);
             } else {
-                $insideArrayItems = $this->createNodeTreeFromValue($classInformationTransfer, $item);
+                $insideArrayItems = $this->createMethodStatementsFromValue($classInformationTransfer, $item);
             }
 
             if (is_int($key)) {
-                $itemParts = explode('::', $item);
                 $arrayItems[] = $this->createArrayItem($itemParts);
 
                 continue;
@@ -89,7 +93,7 @@ class NodeTreeCreator extends AbstractMethodCreator implements NodeTreeCreatorIn
 
                 continue;
             }
-            $itemParts = explode('::', $item);
+
             $arrayItems[] = $this->createArrayItem($itemParts, $keyParts);
         }
 
@@ -106,14 +110,7 @@ class NodeTreeCreator extends AbstractMethodCreator implements NodeTreeCreatorIn
     protected function createArrayItem(array $itemParts, array $keyParts = [], array $insideArrayItems = []): ArrayItem
     {
         if (count($itemParts) === static::SIMPLE_VARIABLE_SEMICOLON_COUNT) {
-            $singleItemParts = explode('->', trim($itemParts[0], '$()'));
-
-            return new ArrayItem(
-                (new BuilderFactory())->methodCall(
-                    new Variable($singleItemParts[0]),
-                    new Identifier($singleItemParts[1]),
-                ),
-            );
+            return $this->createSingleSemicolonVariableArrayItem($itemParts, $keyParts);
         }
 
         if ($insideArrayItems) {
@@ -132,6 +129,37 @@ class NodeTreeCreator extends AbstractMethodCreator implements NodeTreeCreatorIn
         return new ArrayItem(
             $this->createClassConstantExpression($keyParts[0], $keyParts[1]),
             $this->createClassConstantExpression($itemParts[0], $itemParts[1]),
+        );
+    }
+
+    /**
+     * @param array $itemParts
+     * @param array $keyParts
+     *
+     * @return \PhpParser\Node\Expr\ArrayItem
+     */
+    protected function createSingleSemicolonVariableArrayItem(array $itemParts, array $keyParts): ArrayItem
+    {
+        $singleItemParts = explode('->', trim($itemParts[0], '$()'));
+        if (count($singleItemParts) !== static::SIMPLE_VARIABLE_SEMICOLON_COUNT) {
+            return new ArrayItem(
+                (new BuilderFactory())->methodCall(
+                    new Variable($singleItemParts[0]),
+                    new Identifier($singleItemParts[1]),
+                ),
+            );
+        }
+
+        if (in_array($itemParts[0], ['true', 'false'])) {
+            return new ArrayItem(
+                new ConstFetch(new Name($itemParts[0])),
+                $this->createClassConstantExpression($keyParts[0], $keyParts[1]),
+            );
+        }
+
+        return new ArrayItem(
+            new String_($itemParts[0]),
+            $this->createClassConstantExpression($keyParts[0], $keyParts[1]),
         );
     }
 }

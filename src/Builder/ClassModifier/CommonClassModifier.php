@@ -21,7 +21,7 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface;
-use SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface;
+use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddStatementToStatementListVisitor;
@@ -48,26 +48,26 @@ class CommonClassModifier implements CommonClassModifierInterface
     protected $methodCreator;
 
     /**
-     * @var \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface
+     * @var \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface
      */
-    protected $nodeTreeCreator;
+    protected $methodStatementsCreator;
 
     /**
      * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface $classMethodChecker
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface $methodCreator
-     * @param \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface $nodeTreeCreator
+     * @param \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface $methodStatementsCreator
      */
     public function __construct(
         ClassNodeFinderInterface $classNodeFinder,
         ClassMethodCheckerInterface $classMethodChecker,
         MethodCreatorInterface $methodCreator,
-        NodeTreeCreatorInterface $nodeTreeCreator
+        MethodStatementsCreatorInterface $methodStatementsCreator
     ) {
         $this->classNodeFinder = $classNodeFinder;
         $this->classMethodChecker = $classMethodChecker;
         $this->methodCreator = $methodCreator;
-        $this->nodeTreeCreator = $nodeTreeCreator;
+        $this->methodStatementsCreator = $methodStatementsCreator;
     }
 
     /**
@@ -221,7 +221,7 @@ class CommonClassModifier implements CommonClassModifierInterface
         string $methodName,
         $value
     ): ClassInformationTransfer {
-        $arrayItems = $this->nodeTreeCreator->createNodeTreeFromValue($classInformationTransfer, $value);
+        $arrayItems = $this->methodStatementsCreator->createMethodStatementsFromValue($classInformationTransfer, $value);
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new AddStatementToStatementListVisitor($methodName, $arrayItems));
 

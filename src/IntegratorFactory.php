@@ -47,8 +47,8 @@ use SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface;
 use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface;
-use SprykerSdk\Integrator\Builder\Creator\NodeTreeCreator;
-use SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface;
+use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreator;
+use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
@@ -357,11 +357,11 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface
+     * @return \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface
      */
-    public function createNodeTreeCreator(): NodeTreeCreatorInterface
+    public function createNodeTreeCreator(): MethodStatementsCreatorInterface
     {
-        return new NodeTreeCreator();
+        return new MethodStatementsCreator();
     }
 
     /**

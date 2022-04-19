@@ -119,6 +119,16 @@ class TestIntegratorDefaultConfig extends BaseConfig
     /**
      * @return array
      */
+    public function testChangeMethod9() : array
+    {
+        return [
+            static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED => false,
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function testNotChange(): array
     {
         return array_merge(

@@ -29,9 +29,9 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     protected const SINGLE_TREE_RETURN_STATEMENT_COUNT_ELEMENTS = 1;
 
     /**
-     * @var \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface
+     * @var \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface
      */
-    protected $nodeTreeCreator;
+    protected $methodStatementsCreator;
 
     /**
      * @var \SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface
@@ -44,16 +44,16 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     protected $methodReturnTypeCreator;
 
     /**
-     * @param \SprykerSdk\Integrator\Builder\Creator\NodeTreeCreatorInterface $nodeTreeCreator
+     * @param \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface $methodStatementsCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface $methodDocBlockCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface $methodReturnTypeCreator
      */
     public function __construct(
-        NodeTreeCreatorInterface $nodeTreeCreator,
+        MethodStatementsCreatorInterface $methodStatementsCreator,
         MethodDocBlockCreatorInterface $methodDocBlockCreator,
         MethodReturnTypeCreatorInterface $methodReturnTypeCreator
     ) {
-        $this->nodeTreeCreator = $nodeTreeCreator;
+        $this->methodStatementsCreator = $methodStatementsCreator;
         $this->methodDocBlockCreator = $methodDocBlockCreator;
         $this->methodReturnTypeCreator = $methodReturnTypeCreator;
     }
@@ -126,7 +126,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      */
     protected function createReturnArrayStatement(ClassInformationTransfer $classInformationTransfer, $value): array
     {
-        $tree = $this->nodeTreeCreator->createNodeTreeFromValue($classInformationTransfer, $value);
+        $tree = $this->methodStatementsCreator->createMethodStatementsFromValue($classInformationTransfer, $value);
 
         return [new Return_(new Array_($tree))];
     }

@@ -129,6 +129,16 @@ class TestIntegratorDefaultConfig extends BaseConfig
     /**
      * @return array
      */
+    public function testChangeMethod9() : array
+    {
+        return [
+            static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED => false, static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED_CHANGED => true,
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function testNotChange(): array
     {
         return array_merge(
@@ -201,5 +211,21 @@ class TestIntegratorDefaultConfig extends BaseConfig
             static::TEST_VALUE3 => static::TEST_VALUE2,
             static::TEST_VALUE5 => static::TEST_VALUE3,
         ];
+    }
+    /**
+     * @return array
+     */
+    public function testNewMethod8() : array
+    {
+        return [
+            static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED => false,
+        ];
+    }
+    /**
+     * @return bool
+     */
+    public function testNewMethod9() : bool
+    {
+        return false;
     }
 }

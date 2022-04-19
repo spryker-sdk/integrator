@@ -11,7 +11,7 @@ namespace SprykerSdk\Integrator\Builder\Creator;
 
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-interface NodeTreeCreatorInterface
+interface MethodStatementsCreatorInterface
 {
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
@@ -19,5 +19,5 @@ interface NodeTreeCreatorInterface
      *
      * @return array
      */
-    public function createNodeTreeFromValue(ClassInformationTransfer $classInformationTransfer, $value): array;
+    public function createMethodStatementsFromValue(ClassInformationTransfer $classInformationTransfer, $value): array;
 }

@@ -68,6 +68,19 @@
             }
         },
         {
+            "previousValue": [],
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testNewMethod8",
+            "value":
+            {
+                "static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED": "false"
+            }
+        },
+        {
+            "previousValue": "",
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testNewMethod9",
+            "value": "false"
+        },
+        {
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testChange",
             "value": "static::TEST_VALUE_CHANGE"
         },
@@ -124,6 +137,16 @@
             "value": {
                 "value": "$array = parent::isCartCartItemsViaAjaxLoadEnabledChanged(); $array = array_merge($array, [\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE, \\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE2]); array_merge($array, [\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE => [\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY], \\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE2 => [\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY22]])",
                 "is_literal": true
+            }
+        },
+        {
+            "previousValue": {
+                "static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED": "false"
+            },
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testChangeMethod9",
+            "value":
+            {
+                "static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED_CHANGED": "true"
             }
         }
     ]

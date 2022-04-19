@@ -24,6 +24,9 @@ class MethodReturnTypeCreator extends AbstractReflectionClass implements MethodR
         if ($this->isValueReturnArray($value)) {
             $returnType = static::RETURN_TYPE_ARRAY;
         }
+        if ($this->isValueReturnBool($value)) {
+            $returnType = static::RETURN_TYPE_BOOL;
+        }
 
         return new Identifier($returnType);
     }
