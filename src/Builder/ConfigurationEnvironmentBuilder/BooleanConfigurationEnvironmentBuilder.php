@@ -18,7 +18,7 @@ class BooleanConfigurationEnvironmentBuilder implements ConfigurationEnvironment
      */
     public function isApplicable($value): bool
     {
-        if (!is_bool($value)) {
+        if (!in_array($value, ['true', 'false'])) {
             return false;
         }
 
@@ -32,7 +32,7 @@ class BooleanConfigurationEnvironmentBuilder implements ConfigurationEnvironment
      */
     public function getFormattedExpression($value): string
     {
-        if ($value) {
+        if ($value === 'true') {
             return 'true';
         }
 

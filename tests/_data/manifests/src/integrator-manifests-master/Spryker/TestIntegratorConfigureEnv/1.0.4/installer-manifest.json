@@ -30,11 +30,11 @@
         },
         {
             "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::RESOLVABLE_CLASS_NAMES_CACHE_ENABLED_TRUE",
-            "value": true
+            "value": "true"
         },
         {
             "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::RESOLVABLE_CLASS_NAMES_CACHE_ENABLED_FALSE",
-            "value": false
+            "value": "false"
         },
         {
             "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::PROJECT_NAMESPACE",
@@ -120,7 +120,7 @@
             "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::STORAGE_REDIS_CONNECTION_OPTIONS",
             "value":
             {
-                "value": "json_decode(getenv('SPRYKER_KEY_VALUE_STORE_CONNECTION_OPTIONS') ?: '[]', 1) ?: []",
+                "value": "json_decode(getenv('SPRYKER_KEY_VALUE_STORE_CONNECTION_OPTIONS') ?: '[]', true) ?: []",
                 "is_literal": true
             }
         },
