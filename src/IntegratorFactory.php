@@ -36,6 +36,13 @@ use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
 use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolverInterface;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriter;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriterInterface;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ArrayConfigurationEnvironmentBuilder;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\BooleanConfigurationEnvironmentBuilder;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ClassConfigurationEnvironmentBuilder;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\DefaultConfigurationEnvironmentBuilder;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\LiteralConfigurationEnvironmentBuilder;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\StringConfigurationEnvironmentBuilder;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
@@ -196,7 +203,71 @@ class IntegratorFactory
         return new ConfigureEnvManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
+            $this->getConfigurationEnvironmentBuilders(),
         );
+    }
+
+    /**
+     * @return array<\SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface>
+     */
+    public function getConfigurationEnvironmentBuilders(): array
+    {
+        return [
+            $this->createStringConfigurationEnvironmentBuilder(),
+            $this->createBooleanConfigurationEnvironmentBuilder(),
+            $this->createArrayConfigurationEnvironmentBuilder(),
+            $this->createClassConfigurationEnvironmentBuilder(),
+            $this->createLiteralConfigurationEnvironmentBuilder(),
+            $this->createDefaultConfigurationEnvironmentBuilder(),
+        ];
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface
+     */
+    public function createBooleanConfigurationEnvironmentBuilder(): ConfigurationEnvironmentBuilderInterface
+    {
+        return new BooleanConfigurationEnvironmentBuilder();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface
+     */
+    public function createClassConfigurationEnvironmentBuilder(): ConfigurationEnvironmentBuilderInterface
+    {
+        return new ClassConfigurationEnvironmentBuilder();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface
+     */
+    public function createLiteralConfigurationEnvironmentBuilder(): ConfigurationEnvironmentBuilderInterface
+    {
+        return new LiteralConfigurationEnvironmentBuilder();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface
+     */
+    public function createDefaultConfigurationEnvironmentBuilder(): ConfigurationEnvironmentBuilderInterface
+    {
+        return new DefaultConfigurationEnvironmentBuilder();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface
+     */
+    public function createStringConfigurationEnvironmentBuilder(): ConfigurationEnvironmentBuilderInterface
+    {
+        return new StringConfigurationEnvironmentBuilder();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface
+     */
+    public function createArrayConfigurationEnvironmentBuilder(): ConfigurationEnvironmentBuilderInterface
+    {
+        return new ArrayConfigurationEnvironmentBuilder();
     }
 
     /**

@@ -10,10 +10,31 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
 {
+    /**
+     * @var array<array-key, \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface>
+     */
+    protected $configurationEnvironmentBuilders;
+
+    /**
+     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @param \SprykerSdk\Integrator\Helper\ClassHelperInterface $classHelper
+     * @param array<array-key, \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface> $configurationEnvironmentBuilders
+     */
+    public function __construct(
+        IntegratorConfig $config,
+        ClassHelperInterface $classHelper,
+        array $configurationEnvironmentBuilders
+    ) {
+        parent::__construct($config, $classHelper);
+
+        $this->configurationEnvironmentBuilders = $configurationEnvironmentBuilders;
+    }
+
     /**
      * @return string
      */
@@ -92,8 +113,10 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
      */
     protected function prepareValue($value)
     {
-        if (is_array($value) && isset($value['is_literal'])) {
-            return $value['value'];
+        foreach ($this->configurationEnvironmentBuilders as $configurationEnvironmentBuilder) {
+            if ($configurationEnvironmentBuilder->isApplicable($value)) {
+                return $configurationEnvironmentBuilder->getFormattedExpression($value);
+            }
         }
 
         return var_export($value, true);
