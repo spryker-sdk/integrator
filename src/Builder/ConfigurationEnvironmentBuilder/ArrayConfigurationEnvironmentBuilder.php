@@ -46,12 +46,36 @@ class ArrayConfigurationEnvironmentBuilder implements ConfigurationEnvironmentBu
 
                 continue;
             }
-            $formattedKeyValue = sprintf('\'%s\'', trim($keyValueItem, '\''));
-            $formattedValue = sprintf('\'%s\'', trim($valueItem, '\''));
+            $formattedKeyValue = $this->getFormattedValueExpression($keyValueItem);
+            $formattedValue = $this->getFormattedValueExpression($valueItem);
             $result[] = sprintf('%s => %s,', $formattedKeyValue, $formattedValue);
         }
         $result[] = ']';
 
         return implode("\n", $result);
+    }
+
+    /**
+     * @param string $expression
+     *
+     * @return bool
+     */
+    protected function isComplicatedExpression(string $expression): bool
+    {
+        return (bool)preg_match('/[\(\)\?]/', $expression);
+    }
+
+    /**
+     * @param string $expression
+     *
+     * @return string
+     */
+    protected function getFormattedValueExpression(string $expression): string
+    {
+        if ($this->isComplicatedExpression($expression)) {
+            return $expression;
+        }
+
+        return sprintf('\'%s\'', trim($expression, '\''));
     }
 }

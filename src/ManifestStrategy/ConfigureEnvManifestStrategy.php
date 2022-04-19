@@ -58,7 +58,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
         $choices = $manifest[IntegratorConfig::MANIFEST_KEY_CHOICES] ?? [];
         $defaultValue = $manifest[IntegratorConfig::MANIFEST_KEY_DEFAULT_VALUE] ?? null;
 
-        if (!$value) {
+        if (!is_bool($value) && !$value) {
             $value = $this->askValue(
                 "'Provide value for $target global configuration.'",
                 $choices,
