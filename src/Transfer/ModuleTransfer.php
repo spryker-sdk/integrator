@@ -380,8 +380,6 @@ class ModuleTransfer extends AbstractTransfer
         return $this;
     }
 
-
-
     /**
      * @module Integrator|SprykGui|Development|ModuleFinder
      *
@@ -389,7 +387,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setVersion($version)
+    public function setVersion(?string $version)
     {
         $this->version = $version;
         $this->modifiedProperties[static::NAME] = true;
@@ -402,7 +400,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return string|null
      */
-    public function getVersion()
+    public function getVersion(): ?string
     {
         return $this->version;
     }
@@ -412,7 +410,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return string
      */
-    public function getVersionOrFail()
+    public function getVersionOrFail(): string
     {
         if ($this->version === null) {
             $this->throwNullValueException(static::VERSION);

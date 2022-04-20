@@ -86,6 +86,8 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
     }
 
     /**
+     * @throws \SprykerSdk\Integrator\Exception\UnexpectedNavigationXmlStructureException
+     *
      * @return array<string|int, array<string, mixed>>
      */
     protected function getNavigation(): array
@@ -146,7 +148,7 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
     {
         $resultNewNavigations = [];
         $navigationDataReplacingMap = [
-            self::NAVIGATION_DATA_KEY_MODULE => self::NAVIGATION_DATA_KEY_BUNDLE,
+            static::NAVIGATION_DATA_KEY_MODULE => static::NAVIGATION_DATA_KEY_BUNDLE,
         ];
 
         foreach ($newNavigations as $navigationKey => $navigationData) {
@@ -164,12 +166,12 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
 
             $resultNewNavigations[$navigationKey] = $newNavigationData;
 
-            if (!isset($resultNewNavigations[$navigationKey][self::NAVIGATION_DATA_KEY_PAGES])) {
+            if (!isset($resultNewNavigations[$navigationKey][static::NAVIGATION_DATA_KEY_PAGES])) {
                 continue;
             }
 
-            $resultNewNavigations[$navigationKey][self::NAVIGATION_DATA_KEY_PAGES] = $this->prepareNewNavigationsToApplying(
-                $resultNewNavigations[$navigationKey][self::NAVIGATION_DATA_KEY_PAGES]
+            $resultNewNavigations[$navigationKey][static::NAVIGATION_DATA_KEY_PAGES] = $this->prepareNewNavigationsToApplying(
+                $resultNewNavigations[$navigationKey][static::NAVIGATION_DATA_KEY_PAGES],
             );
         }
 
@@ -251,20 +253,20 @@ class WireNavigationManifestStrategy extends AbstractManifestStrategy
     {
         return $this->transformNavigationToXmlElement(
             $navigation,
-            new SimpleXMLElement('<config/>')
+            new SimpleXMLElement('<config/>'),
         );
     }
 
     /**
      * @param array<string|int, array<string, mixed>|string> $navigation
-     * @param SimpleXMLElement $parentXmlElement
+     * @param \SimpleXMLElement $parentXmlElement
      *
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      */
     protected function transformNavigationToXmlElement(array $navigation, SimpleXMLElement $parentXmlElement): SimpleXMLElement
     {
         foreach ($navigation as $navigationName => $navigationData) {
-            if (is_int($navigationName) || (is_array($navigationData) && empty($navigationData))) {
+            if (is_int($navigationName) || (is_array($navigationData) && !$navigationData)) {
                 continue;
             }
 

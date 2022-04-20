@@ -150,7 +150,7 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param Node $node
+     * @param \PhpParser\Node $node
      *
      * @return array
      */
@@ -160,7 +160,7 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
         $itemAdded = false;
 
         foreach ($node->items as $item) {
-            $nodeValue = sprintf("%s::%s", $item->value->class->toString(), $item->value->name->toString());
+            $nodeValue = sprintf('%s::%s', $item->value->class->toString(), $item->value->name->toString());
             if ($nodeValue === $this->before && !$itemAdded) {
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $items[] = $item;

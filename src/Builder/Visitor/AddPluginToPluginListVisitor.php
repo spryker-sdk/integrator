@@ -186,7 +186,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
             return new ClassConstFetch(
                 new Name('static'),
-                $indexParts[1]
+                $indexParts[1],
             );
         }
 
@@ -196,7 +196,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
             return new ClassConstFetch(
                 new Name(end($classNamespaceChain)),
-                $indexParts[1]
+                $indexParts[1],
             );
         }
 

@@ -147,7 +147,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
                 $classNameToAdd,
                 $constantName,
                 $before,
-                $after
+                $after,
             );
     }
 

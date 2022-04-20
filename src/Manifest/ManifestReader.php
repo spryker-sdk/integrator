@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Manifest;
 
-use Composer\InstalledVersions;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
