@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder;
 
-class BooleanConfigurationEnvironmentBuilder implements ConfigurationEnvironmentBuilderInterface
+use SprykerSdk\Integrator\IntegratorConfig;
+
+class LiteralConfigurationEnvironmentStrategy implements ConfigurationEnvironmentStrategyInterface
 {
     /**
      * @param mixed $value
@@ -18,7 +20,7 @@ class BooleanConfigurationEnvironmentBuilder implements ConfigurationEnvironment
      */
     public function isApplicable($value): bool
     {
-        if (!in_array($value, ['true', 'false'])) {
+        if (!is_array($value) || empty($value[IntegratorConfig::MANIFEST_KEY_IS_LITERAL])) {
             return false;
         }
 
@@ -32,10 +34,6 @@ class BooleanConfigurationEnvironmentBuilder implements ConfigurationEnvironment
      */
     public function getFormattedExpression($value): string
     {
-        if ($value === 'true') {
-            return 'true';
-        }
-
-        return 'false';
+        return $value[IntegratorConfig::MANIFEST_KEY_VALUE];
     }
 }

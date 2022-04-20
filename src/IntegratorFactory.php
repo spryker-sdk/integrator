@@ -36,13 +36,13 @@ use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
 use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolverInterface;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriter;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriterInterface;
-use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ArrayConfigurationEnvironmentBuilder;
-use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\BooleanConfigurationEnvironmentBuilder;
-use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ClassConfigurationEnvironmentBuilder;
-use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface;
-use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\DefaultConfigurationEnvironmentBuilder;
-use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\LiteralConfigurationEnvironmentBuilder;
-use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\StringConfigurationEnvironmentBuilder;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ArrayConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\BooleanConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ClassConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\DefaultConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\LiteralConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\StringConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
@@ -203,71 +203,71 @@ class IntegratorFactory
         return new ConfigureEnvManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
-            $this->getConfigurationEnvironmentBuilders(),
+            $this->getConfigurationEnvironmentStrategies(),
         );
     }
 
     /**
-     * @return array<\SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface>
+     * @return array<\SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface>
      */
-    public function getConfigurationEnvironmentBuilders(): array
+    public function getConfigurationEnvironmentStrategies(): array
     {
         return [
-            $this->createStringConfigurationEnvironmentBuilder(),
-            $this->createBooleanConfigurationEnvironmentBuilder(),
-            $this->createArrayConfigurationEnvironmentBuilder(),
-            $this->createClassConfigurationEnvironmentBuilder(),
-            $this->createLiteralConfigurationEnvironmentBuilder(),
-            $this->createDefaultConfigurationEnvironmentBuilder(),
+            $this->createStringConfigurationEnvironmentStrategy(),
+            $this->createBooleanConfigurationEnvironmentStrategy(),
+            $this->createArrayConfigurationEnvironmentStrategy(),
+            $this->createClassConfigurationEnvironmentStrategy(),
+            $this->createLiteralConfigurationEnvironmentStrategy(),
+            $this->createDefaultConfigurationEnvironmentStrategy(),
         ];
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
      */
-    public function createBooleanConfigurationEnvironmentBuilder(): ConfigurationEnvironmentBuilderInterface
+    public function createBooleanConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
     {
-        return new BooleanConfigurationEnvironmentBuilder();
+        return new BooleanConfigurationEnvironmentStrategy();
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
      */
-    public function createClassConfigurationEnvironmentBuilder(): ConfigurationEnvironmentBuilderInterface
+    public function createClassConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
     {
-        return new ClassConfigurationEnvironmentBuilder();
+        return new ClassConfigurationEnvironmentStrategy();
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
      */
-    public function createLiteralConfigurationEnvironmentBuilder(): ConfigurationEnvironmentBuilderInterface
+    public function createLiteralConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
     {
-        return new LiteralConfigurationEnvironmentBuilder();
+        return new LiteralConfigurationEnvironmentStrategy();
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
      */
-    public function createDefaultConfigurationEnvironmentBuilder(): ConfigurationEnvironmentBuilderInterface
+    public function createDefaultConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
     {
-        return new DefaultConfigurationEnvironmentBuilder();
+        return new DefaultConfigurationEnvironmentStrategy();
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
      */
-    public function createStringConfigurationEnvironmentBuilder(): ConfigurationEnvironmentBuilderInterface
+    public function createStringConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
     {
-        return new StringConfigurationEnvironmentBuilder();
+        return new StringConfigurationEnvironmentStrategy();
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
      */
-    public function createArrayConfigurationEnvironmentBuilder(): ConfigurationEnvironmentBuilderInterface
+    public function createArrayConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
     {
-        return new ArrayConfigurationEnvironmentBuilder();
+        return new ArrayConfigurationEnvironmentStrategy();
     }
 
     /**

@@ -11,7 +11,7 @@ namespace SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder;
 
 use SprykerSdk\Integrator\IntegratorConfig;
 
-class ArrayConfigurationEnvironmentBuilder implements ConfigurationEnvironmentBuilderInterface
+class ArrayConfigurationEnvironmentStrategy implements ConfigurationEnvironmentStrategyInterface
 {
     /**
      * @param mixed $value

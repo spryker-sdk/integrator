@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder;
 
-class StringConfigurationEnvironmentBuilder implements ConfigurationEnvironmentBuilderInterface
+class DefaultConfigurationEnvironmentStrategy implements ConfigurationEnvironmentStrategyInterface
 {
     /**
      * @param mixed $value
@@ -18,10 +18,6 @@ class StringConfigurationEnvironmentBuilder implements ConfigurationEnvironmentB
      */
     public function isApplicable($value): bool
     {
-        if (!is_string($value) || !preg_match('/^\'.*\'$/', $value)) {
-            return false;
-        }
-
         return true;
     }
 
@@ -32,6 +28,6 @@ class StringConfigurationEnvironmentBuilder implements ConfigurationEnvironmentB
      */
     public function getFormattedExpression($value): string
     {
-        return sprintf('\'%s\'', trim($value, '\''));
+        return var_export($value, true);
     }
 }

@@ -16,14 +16,14 @@ use SprykerSdk\Integrator\IntegratorConfig;
 class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
 {
     /**
-     * @var array<array-key, \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface>
+     * @var array<array-key, \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface>
      */
-    protected $configurationEnvironmentBuilders;
+    protected $configurationEnvironmentStrategies;
 
     /**
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
      * @param \SprykerSdk\Integrator\Helper\ClassHelperInterface $classHelper
-     * @param array<array-key, \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentBuilderInterface> $configurationEnvironmentBuilders
+     * @param array<array-key, \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface> $configurationEnvironmentBuilders
      */
     public function __construct(
         IntegratorConfig $config,
@@ -32,7 +32,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
     ) {
         parent::__construct($config, $classHelper);
 
-        $this->configurationEnvironmentBuilders = $configurationEnvironmentBuilders;
+        $this->configurationEnvironmentStrategies = $configurationEnvironmentBuilders;
     }
 
     /**
@@ -113,9 +113,9 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
      */
     protected function prepareValue($value)
     {
-        foreach ($this->configurationEnvironmentBuilders as $configurationEnvironmentBuilder) {
-            if ($configurationEnvironmentBuilder->isApplicable($value)) {
-                return $configurationEnvironmentBuilder->getFormattedExpression($value);
+        foreach ($this->configurationEnvironmentStrategies as $configurationEnvironmentStrategy) {
+            if ($configurationEnvironmentStrategy->isApplicable($value)) {
+                return $configurationEnvironmentStrategy->getFormattedExpression($value);
             }
         }
 
