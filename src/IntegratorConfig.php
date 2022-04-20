@@ -72,6 +72,11 @@ class IntegratorConfig
     protected const MANIFESTS_URL = 'https://github.com/spryker-sdk/integrator-manifests/archive/master.zip';
 
     /**
+     * @var string
+     */
+    protected const PATH_GLOSSARY = 'data/import/common/common/glossary.csv';
+
+    /**
      * @var array<string, mixed>|null
      */
     protected $config;
@@ -294,6 +299,14 @@ class IntegratorConfig
     public function getManifestsDirectory(): string
     {
         return $this->getProjectRootDirectory() . static::MANIFESTS_DIRECTORY;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGlossaryFilePath(): string
+    {
+        return $this->getProjectRootDirectory() . static::PATH_GLOSSARY;
     }
 
     /**

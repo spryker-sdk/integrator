@@ -253,6 +253,29 @@ class IntegratorFacadeTest extends BaseTestCase
     }
 
     /**
+     * @return void
+     */
+    public function testRunInstallationGlossary(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()
+            ->runInstallation($this->getModuleList('TestIntegratorGlossary'), $ioAdapter, false);
+
+        // Assert
+        $projectGlossaryFilePath = './tests/_data/project_mock/data/import/common/common/glossary.csv';
+        $testFilePath = './tests/_tests_files/test_integrator_glossary.csv';
+        $testResultFile = './tests/tmp/data/import/common/common/glossary.csv';
+
+        $this->assertFileExists($testFilePath);
+        $this->assertFileExists($testResultFile);
+        $this->assertStringContainsString(trim(file_get_contents($projectGlossaryFilePath)), trim(file_get_contents($testResultFile)));
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($testResultFile)));
+    }
+
+    /**
      * @return \SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter
      */
     private function buildSymfonyConsoleInputOutputAdapter(): SymfonyConsoleInputOutputAdapter
