@@ -29,9 +29,9 @@ $config[\Spryker\Shared\Kernel\KernelConstants::FUNC_VALUE] = getenv('SOMEKEY');
 $config[\Spryker\Shared\Kernel\KernelConstants::PRIVATE_KEY_PATH] = str_replace('__LINE__', PHP_EOL, getenv('SPRYKER_OAUTH_KEY_PRIVATE') ?: '') ?: null;
 
 $config[\Spryker\Shared\Kernel\KernelConstants::AUTH_DEFAULT_CREDENTIALS] = [
-'yves_system' => [
-'token' => getenv('SPRYKER_ZED_REQUEST_TOKEN') ?: '',
-],
+    'yves_system' => [
+        'token' => getenv('SPRYKER_ZED_REQUEST_TOKEN') ?: '',
+    ],
 ];
 
 $config[\Spryker\Shared\Kernel\KernelConstants::PRIVATE_NAME] = APPLICATION_SOURCE_DIR . '/Generated/Glue/Specification/spryker_rest_api.schema.yml';
@@ -41,18 +41,18 @@ $config[\Spryker\Shared\Kernel\KernelConstants::ENCRYPTION_KEY] = getenv('SPRYKE
 $config[\Spryker\Shared\Kernel\KernelConstants::ENCRYPTION_KEY_OTHER] = getenv('SPRYKER_OAUTH_ENCRYPTION_KEY') ? 'test' : 'other_test';
 
 $config[\Spryker\Shared\Kernel\KernelConstants::ACL_DEFAULT_RULES] = [
-[
-'bundle' => 'security-gui',
-'controller' => '*',
-'action' => '*',
-'type' => 'allow',
-],
-[
-'bundle' => 'acl',
-'controller' => 'index',
-'action' => 'denied',
-'type' => 'allow',
-],
+    [
+        'bundle' => 'security-gui',
+        'controller' => '*',
+        'action' => '*',
+        'type' => 'allow',
+    ],
+    [
+        'bundle' => 'acl',
+        'controller' => 'index',
+        'action' => 'denied',
+        'type' => 'allow',
+    ],
 ];
 
 $config[\Spryker\Shared\Kernel\KernelConstants::STORAGE_REDIS_CONNECTION_OPTIONS] = json_decode(getenv('SPRYKER_KEY_VALUE_STORE_CONNECTION_OPTIONS') ?: '[]', true) ?: [];

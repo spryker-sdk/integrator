@@ -34,25 +34,47 @@ class ArrayConfigurationEnvironmentBuilder implements ConfigurationEnvironmentBu
      */
     public function getFormattedExpression($value): string
     {
+        return $this->createExpressionStringFromValue($value);
+    }
+
+    /**
+     * @param mixed $value
+     * @param int $level
+     *
+     * @return string
+     */
+    protected function createExpressionStringFromValue($value, int $level = 0): string
+    {
+        $level++;
         $result = ['['];
         foreach ($value as $keyValueItem => $valueItem) {
             $outputFormat = '\'%s\',';
             if (is_array($valueItem)) {
-                $valueItem = $this->getFormattedExpression($valueItem);
+                $valueItem = $this->createExpressionStringFromValue($valueItem, $level);
                 $outputFormat = '%s,';
             }
             if (is_int($keyValueItem)) {
-                $result[] = sprintf($outputFormat, trim($valueItem, '\''));
+                $result[] = $this->createIndent($level) . sprintf($outputFormat, trim($valueItem, '\''));
 
                 continue;
             }
             $formattedKeyValue = $this->getFormattedValueExpression($keyValueItem);
             $formattedValue = $this->getFormattedValueExpression($valueItem);
-            $result[] = sprintf('%s => %s,', $formattedKeyValue, $formattedValue);
+            $result[] = $this->createIndent($level) . sprintf('%s => %s,', $formattedKeyValue, $formattedValue);
         }
-        $result[] = ']';
+        $result[] = $this->createIndent($level - 1) . ']';
 
         return implode("\n", $result);
+    }
+
+    /**
+     * @param int $level
+     *
+     * @return string
+     */
+    protected function createIndent(int $level): string
+    {
+        return str_repeat(' ', ($level) * 4);
     }
 
     /**
