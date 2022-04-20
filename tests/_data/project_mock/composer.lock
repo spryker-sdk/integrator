@@ -41,6 +41,10 @@
             "version": "1.0.1"
         },
         {
+            "name": "spryker/test-integrator-glossary",
+            "version": "1.0.3"
+        },
+        {
             "name": "spryker/test-integrator-add-config-array-element",
             "version": "1.0.0"
         }

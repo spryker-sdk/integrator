@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
+use RuntimeException;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
@@ -62,6 +63,8 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
      * @param string $after
      * @param string|null $index
      *
+     * @throws \RuntimeException
+     *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function wireClassInstance(
@@ -76,6 +79,10 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
         if (!$methodNode) {
             $classInformationTransfer = $this->commonClassModifier->overrideMethodFromParent($classInformationTransfer, $targetMethodName);
             $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
+        }
+
+        if ($methodNode === null) {
+            throw new RuntimeException('Method node not found');
         }
 
         if ($this->classMethodChecker->isMethodReturnArray($methodNode)) {

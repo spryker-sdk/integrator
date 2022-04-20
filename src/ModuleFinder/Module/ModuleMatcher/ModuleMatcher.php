@@ -25,7 +25,7 @@ class ModuleMatcher implements ModuleMatcherInterface
     {
         $accepted = true;
 
-        if (!$this->matchesOrganization($moduleFilterTransfer, $moduleTransfer->getOrganization())) {
+        if (!$this->matchesOrganization($moduleFilterTransfer, $moduleTransfer->getOrganizationOrFail())) {
             $accepted = false;
         }
         if (!$this->matchesApplication($moduleFilterTransfer, $moduleTransfer)) {
@@ -50,7 +50,7 @@ class ModuleMatcher implements ModuleMatcherInterface
             return true;
         }
 
-        return $this->match($moduleFilterTransfer->getOrganization()->getName(), $organizationTransfer->getName());
+        return $this->match($moduleFilterTransfer->getOrganization()->getNameOrFail(), $organizationTransfer->getNameOrFail());
     }
 
     /**
@@ -70,7 +70,7 @@ class ModuleMatcher implements ModuleMatcherInterface
 
         $applicationMatches = false;
         foreach ($moduleTransfer->getApplications() as $applicationTransfer) {
-            if ($this->match($moduleFilterTransfer->getApplication()->getName(), $applicationTransfer->getName())) {
+            if ($this->match($moduleFilterTransfer->getApplication()->getNameOrFail(), $applicationTransfer->getNameOrFail())) {
                 $applicationMatches = true;
             }
         }
@@ -90,7 +90,7 @@ class ModuleMatcher implements ModuleMatcherInterface
             return true;
         }
 
-        return $this->match($moduleFilterTransfer->getModule()->getName(), $moduleTransfer->getName());
+        return $this->match($moduleFilterTransfer->getModule()->getNameOrFail(), $moduleTransfer->getNameOrFail());
     }
 
     /**

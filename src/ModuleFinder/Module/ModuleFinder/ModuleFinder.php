@@ -146,7 +146,7 @@ class ModuleFinder implements ModuleFinderInterface
      */
     protected function isModule(ModuleTransfer $moduleTransfer): bool
     {
-        $composerJsonAsArray = $this->getComposerJsonAsArray($moduleTransfer->getPath());
+        $composerJsonAsArray = $this->getComposerJsonAsArray($moduleTransfer->getPathOrFail());
 
         if (!isset($composerJsonAsArray['description'])) {
             return false;
@@ -217,7 +217,7 @@ class ModuleFinder implements ModuleFinderInterface
      */
     protected function buildCollectionKey(ModuleTransfer $moduleTransfer): string
     {
-        return sprintf('%s.%s', $moduleTransfer->getOrganization()->getName(), $moduleTransfer->getName());
+        return sprintf('%s.%s', $moduleTransfer->getOrganizationOrFail()->getNameOrFail(), $moduleTransfer->getNameOrFail());
     }
 
     /**
@@ -289,7 +289,7 @@ class ModuleFinder implements ModuleFinderInterface
      */
     protected function addApplications(ModuleTransfer $moduleTransfer): ModuleTransfer
     {
-        $lookupDirectory = sprintf('%s/src/%s/', $moduleTransfer->getPath(), $moduleTransfer->getOrganization()->getName());
+        $lookupDirectory = sprintf('%s/src/%s/', $moduleTransfer->getPathOrFail(), $moduleTransfer->getOrganizationOrFail()->getNameOrFail());
         if (!is_dir($lookupDirectory)) {
             return $moduleTransfer;
         }

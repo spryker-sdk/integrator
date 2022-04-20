@@ -239,6 +239,6 @@ class ProjectModuleFinder implements ProjectModuleFinderInterface
      */
     protected function buildOrganizationModuleKey(ModuleTransfer $moduleTransfer): string
     {
-        return sprintf('%s.%s', $moduleTransfer->getOrganization()->getName(), $moduleTransfer->getName());
+        return sprintf('%s.%s', $moduleTransfer->getOrganizationOrFail()->getNameOrFail(), $moduleTransfer->getNameOrFail());
     }
 }

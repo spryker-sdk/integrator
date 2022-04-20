@@ -76,7 +76,7 @@ interface InputOutputInterface
      *
      * @return bool
      */
-    public function confirm(string $question, bool $default = true);
+    public function confirm(string $question, bool $default = true): bool;
 
     /**
      * Asks a choice question.

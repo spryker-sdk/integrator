@@ -7,11 +7,15 @@
 
 namespace SprykerSdkTest\Integrator;
 
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\CloningVisitor;
+use PhpParser\NodeVisitor\NameResolver;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use Symfony\Component\Filesystem\Filesystem;
 use ZipArchive;
 
@@ -95,5 +99,42 @@ class BaseTestCase extends PHPUnitTestCase
         }
 
         $zip->close();
+    }
+
+    /**
+     * @param string $className
+     * @param string $filePath
+     *
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
+     */
+    protected function createClassInformationTransfer(string $className, string $filePath): ClassInformationTransfer
+    {
+        $parser = $this->getFactory()->createPhpParserParser();
+
+        $classInformationTransfer = (new ClassInformationTransfer())
+            ->setClassName($className)
+            ->setFullyQualifiedClassName($className);
+
+        $originalSyntaxTree = $parser->parse(file_get_contents($filePath));
+        $syntaxTree = $this->traverseOriginalSyntaxTree($originalSyntaxTree);
+
+        $classInformationTransfer->setClassTokenTree($syntaxTree)
+            ->setOriginalClassTokenTree($originalSyntaxTree);
+
+        return $classInformationTransfer;
+    }
+
+    /**
+     * @param array<\PhpParser\Node\Stmt>|null $originalSyntaxTree
+     *
+     * @return array<\PhpParser\Node>
+     */
+    protected function traverseOriginalSyntaxTree(?array $originalSyntaxTree): array
+    {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new CloningVisitor());
+        $nodeTraverser->addVisitor(new NameResolver());
+
+        return $nodeTraverser->traverse($originalSyntaxTree);
     }
 }

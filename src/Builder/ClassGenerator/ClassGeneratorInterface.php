@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassGenerator;
 
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
+
 interface ClassGeneratorInterface
 {
     /**
@@ -17,5 +19,5 @@ interface ClassGeneratorInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
-    public function generateClass(string $className, ?string $parentClass = null);
+    public function generateClass(string $className, ?string $parentClass = null): ?ClassInformationTransfer;
 }

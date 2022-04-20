@@ -1,5 +1,5 @@
 parameters:
-    level: 7
+    level: 8
     paths:
         - src/
     bootstrapFiles:
@@ -7,6 +7,11 @@ parameters:
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
     treatPhpDocTypesAsCertain: false
+
+    earlyTerminatingMethodCalls:
+        SprykerSdk\Integrator\Transfer\AbstractTransfer:
+            - throwNullValueException
+
     ignoreErrors:
         - '#Call to an undefined method object::fromArray\(\)#'
         - '#Call to an undefined method [a-zA-Z0-9\|\\_]+::toString\(\)#'

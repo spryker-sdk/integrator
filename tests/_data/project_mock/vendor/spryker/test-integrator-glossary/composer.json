@@ -1,0 +1,9 @@
+{
+    "name": "spryker/test-integrator-glossary",
+    "type": "composer-plugin",
+    "description": "test-integrator-glossary module",
+    "license": "proprietary",
+    "require": {
+        "php": ">=7.4"
+    }
+}

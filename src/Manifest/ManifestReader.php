@@ -53,7 +53,7 @@ class ManifestReader implements ManifestReaderInterface
         $moduleComposerData = $this->composerLockReader->getModuleVersions();
 
         foreach ($moduleTransfers as $moduleTransfer) {
-            $moduleFullName = $moduleTransfer->getOrganization()->getName() . '.' . $moduleTransfer->getName();
+            $moduleFullName = $moduleTransfer->getOrganizationOrFail()->getNameOrFail() . '.' . $moduleTransfer->getNameOrFail();
 
             // Get the version from installed packages or the CLI passed one (e.g. Spryker.Acl:3.6.0).
             $version = $moduleComposerData[$moduleFullName] ?? $moduleTransfer->getVersion();
@@ -88,17 +88,17 @@ class ManifestReader implements ManifestReaderInterface
      */
     protected function updateRepositoryFolder(): void
     {
-        $recipesArchive = $this->config->getRecipesDirectory() . 'archive.zip';
+        $manifestsArchive = $this->config->getManifestsDirectory() . 'archive.zip';
 
-        if (!is_dir($this->config->getRecipesDirectory())) {
-            mkdir($this->config->getRecipesDirectory(), 0700, true);
+        if (!is_dir($this->config->getManifestsDirectory())) {
+            mkdir($this->config->getManifestsDirectory(), 0700, true);
         }
 
-        file_put_contents($recipesArchive, fopen($this->config->getRecipesRepository(), 'r'));
+        file_put_contents($manifestsArchive, fopen($this->config->getManifestsRepository(), 'r'));
 
         $zip = new ZipArchive();
-        $zip->open($recipesArchive);
-        $zip->extractTo($this->config->getRecipesDirectory());
+        $zip->open($manifestsArchive);
+        $zip->extractTo($this->config->getManifestsDirectory());
         $zip->close();
     }
 
@@ -108,10 +108,11 @@ class ManifestReader implements ManifestReaderInterface
      *
      * @return string|null
      */
-    protected function resolveManifestVersion(ModuleTransfer $moduleTransfer, string $moduleVersion)
+    protected function resolveManifestVersion(ModuleTransfer $moduleTransfer, string $moduleVersion): ?string
     {
-        $archiveDir = 'integrator-recipes-master/';
-        $moduleRecipesDir = sprintf('%s%s%s/', $this->config->getRecipesDirectory(), $archiveDir, $moduleTransfer->getName());
+        $archiveDir = 'integrator-manifests-master/';
+        $organization = $moduleTransfer->getOrganizationOrFail();
+        $moduleRecipesDir = sprintf('%s%s%s/%s/', $this->config->getManifestsDirectory(), $archiveDir, $organization->getName(), $moduleTransfer->getName());
 
         // When the recipes installed for local development use those instead of the one from the archive.
         if (is_dir($this->config->getLocalRecipesDirectory())) {
@@ -146,16 +147,16 @@ class ManifestReader implements ManifestReaderInterface
     }
 
     /**
-     * @param string $moduleRecipesDir
+     * @param string $moduleManifestsDir
      * @param string $moduleVersion
      *
      * @return string|null
      */
-    protected function findNextSuitableVersion(string $moduleRecipesDir, string $moduleVersion): ?string
+    protected function findNextSuitableVersion(string $moduleManifestsDir, string $moduleVersion): ?string
     {
         $versions = [];
 
-        foreach ($this->getValidModuleVersions($moduleRecipesDir) as $version) {
+        foreach ($this->getValidModuleVersions($moduleManifestsDir) as $version) {
             if (version_compare($version, $moduleVersion, 'gt')) {
                 continue;
             }
@@ -174,18 +175,18 @@ class ManifestReader implements ManifestReaderInterface
     }
 
     /**
-     * @param string $moduleRecipesDir
+     * @param string $moduleManifestsDir
      *
      * @return array<string>
      */
-    protected function getValidModuleVersions(string $moduleRecipesDir): array
+    protected function getValidModuleVersions(string $moduleManifestsDir): array
     {
         $validModuleVersions = [];
-        $moduleVersionDirectories = scandir($moduleRecipesDir);
+        $moduleVersionDirectories = scandir($moduleManifestsDir);
         $moduleVersionDirectories = !$moduleVersionDirectories ? [] : array_diff($moduleVersionDirectories, ['.', '..']);
 
         foreach ($moduleVersionDirectories as $moduleVersionDirectory) {
-            if (!is_dir($moduleRecipesDir . $moduleVersionDirectory)) {
+            if (!is_dir($moduleManifestsDir . $moduleVersionDirectory)) {
                 continue;
             }
 

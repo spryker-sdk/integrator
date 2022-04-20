@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\Transfer;
 
 use ArrayObject;
 use InvalidArgumentException;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer as TransferModuleTransfer;
 
 class ModuleTransfer extends AbstractTransfer
 {
@@ -110,7 +111,7 @@ class ModuleTransfer extends AbstractTransfer
     protected $options;
 
     /**
-     * @var \SprykerSdk\Integrator\Transfer\ModuleTransfer|null
+     * @var static|null
      */
     protected $dependentModule;
 
@@ -294,13 +295,11 @@ class ModuleTransfer extends AbstractTransfer
     ];
 
     /**
-     * @module Integrator|SprykGui|Development|ModuleFinder
-     *
      * @param string|null $name
      *
      * @return $this
      */
-    public function setName($name)
+    public function setName(?string $name)
     {
         $this->name = $name;
         $this->modifiedProperties[static::NAME] = true;
@@ -309,21 +308,17 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|SprykGui|Development|ModuleFinder
-     *
      * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
     /**
-     * @module Integrator|SprykGui|Development|ModuleFinder
-     *
      * @return string
      */
-    public function getNameOrFail()
+    public function getNameOrFail(): string
     {
         if ($this->name === null) {
             $this->throwNullValueException(static::NAME);
@@ -333,8 +328,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|SprykGui|Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireName()
@@ -345,13 +338,11 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Development|ModuleFinder
-     *
      * @param string|null $nameDashed
      *
      * @return $this
      */
-    public function setNameDashed($nameDashed)
+    public function setNameDashed(?string $nameDashed)
     {
         $this->nameDashed = $nameDashed;
         $this->modifiedProperties[static::NAME_DASHED] = true;
@@ -360,21 +351,17 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Development|ModuleFinder
-     *
      * @return string|null
      */
-    public function getNameDashed()
+    public function getNameDashed(): ?string
     {
         return $this->nameDashed;
     }
 
     /**
-     * @module Integrator|Development|ModuleFinder
-     *
      * @return string
      */
-    public function getNameDashedOrFail()
+    public function getNameDashedOrFail(): string
     {
         if ($this->nameDashed === null) {
             $this->throwNullValueException(static::NAME_DASHED);
@@ -384,8 +371,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireNameDashed()
@@ -449,8 +434,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|SprykGui|Development|ModuleFinder
-     *
      * @param \SprykerSdk\Integrator\Transfer\OrganizationTransfer|null $organization
      *
      * @return $this
@@ -464,21 +447,17 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|SprykGui|Development|ModuleFinder
-     *
      * @return \SprykerSdk\Integrator\Transfer\OrganizationTransfer|null
      */
-    public function getOrganization()
+    public function getOrganization(): ?OrganizationTransfer
     {
         return $this->organization;
     }
 
     /**
-     * @module Integrator|SprykGui|Development|ModuleFinder
-     *
      * @return \SprykerSdk\Integrator\Transfer\OrganizationTransfer
      */
-    public function getOrganizationOrFail()
+    public function getOrganizationOrFail(): OrganizationTransfer
     {
         if ($this->organization === null) {
             $this->throwNullValueException(static::ORGANIZATION);
@@ -488,8 +467,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|SprykGui|Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireOrganization()
@@ -500,8 +477,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @param \SprykerSdk\Integrator\Transfer\ApplicationTransfer|null $application
      *
      * @return $this
@@ -515,21 +490,17 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return \SprykerSdk\Integrator\Transfer\ApplicationTransfer|null
      */
-    public function getApplication()
+    public function getApplication(): ?ApplicationTransfer
     {
         return $this->application;
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return \SprykerSdk\Integrator\Transfer\ApplicationTransfer
      */
-    public function getApplicationOrFail()
+    public function getApplicationOrFail(): ApplicationTransfer
     {
         if ($this->application === null) {
             $this->throwNullValueException(static::APPLICATION);
@@ -539,8 +510,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireApplication()
@@ -551,8 +520,6 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
      * @param \SprykerSdk\Integrator\Transfer\AbstractTransfer|null $layer
      *
      * @return $this
@@ -566,11 +533,9 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
      * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer|null
      */
-    public function getLayer()
+    public function getLayer(): ?AbstractTransfer
     {
         return $this->layer;
     }
@@ -578,7 +543,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer
      */
-    public function getLayerOrFail()
+    public function getLayerOrFail(): AbstractTransfer
     {
         if ($this->layer === null) {
             $this->throwNullValueException(static::LAYER);
@@ -602,7 +567,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setPath($path)
+    public function setPath(?string $path)
     {
         $this->path = $path;
         $this->modifiedProperties[static::PATH] = true;
@@ -611,11 +576,9 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui|Development|ModuleFinder
-     *
      * @return string|null
      */
-    public function getPath()
+    public function getPath(): ?string
     {
         return $this->path;
     }
@@ -623,7 +586,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return string
      */
-    public function getPathOrFail()
+    public function getPathOrFail(): string
     {
         if ($this->path === null) {
             $this->throwNullValueException(static::PATH);
@@ -658,7 +621,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer|null
      */
-    public function getOptions()
+    public function getOptions(): ?AbstractTransfer
     {
         return $this->options;
     }
@@ -666,7 +629,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer
      */
-    public function getOptionsOrFail()
+    public function getOptionsOrFail(): AbstractTransfer
     {
         if ($this->options === null) {
             $this->throwNullValueException(static::OPTIONS);
@@ -686,7 +649,7 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer|null $dependentModule
+     * @param static|null $dependentModule
      *
      * @return $this
      */
@@ -701,13 +664,13 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer|null
      */
-    public function getDependentModule()
+    public function getDependentModule(): ?TransferModuleTransfer
     {
         return $this->dependentModule;
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer
+     * @return static
      */
     public function getDependentModuleOrFail()
     {
@@ -777,7 +740,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setIsStandalone($isStandalone)
+    public function setIsStandalone(?bool $isStandalone)
     {
         $this->isStandalone = $isStandalone;
         $this->modifiedProperties[static::IS_STANDALONE] = true;
@@ -788,7 +751,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return bool|null
      */
-    public function getIsStandalone()
+    public function getIsStandalone(): ?bool
     {
         return $this->isStandalone;
     }
@@ -796,7 +759,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return bool
      */
-    public function getIsStandaloneOrFail()
+    public function getIsStandaloneOrFail(): bool
     {
         if ($this->isStandalone === null) {
             $this->throwNullValueException(static::IS_STANDALONE);
@@ -826,7 +789,7 @@ class ModuleTransfer extends AbstractTransfer
     public function fromArray(array $data, bool $ignoreMissingProperty = false)
     {
         foreach ($data as $property => $value) {
-            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? null;
+            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? '';
 
             switch ($normalizedPropertyName) {
                 case 'name':
@@ -876,7 +839,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false): array
+    public function modifiedToArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayRecursiveNotCamelCased();
@@ -900,7 +863,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function toArray($isRecursive = true, $camelCasedKeys = false)
+    public function toArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->toArrayRecursiveNotCamelCased();
@@ -925,7 +888,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return array
      */
-    protected function addValuesToCollectionModified($value, $isRecursive, $camelCasedKeys)
+    protected function addValuesToCollectionModified($value, bool $isRecursive, bool $camelCasedKeys): array
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
@@ -947,7 +910,7 @@ class ModuleTransfer extends AbstractTransfer
      *
      * @return array
      */
-    protected function addValuesToCollection($value, $isRecursive, $camelCasedKeys)
+    protected function addValuesToCollection($value, bool $isRecursive, bool $camelCasedKeys): array
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
@@ -1043,7 +1006,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayNotRecursiveNotCamelCased()
+    public function modifiedToArrayNotRecursiveNotCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -1060,7 +1023,7 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayNotRecursiveCamelCased()
+    public function modifiedToArrayNotRecursiveCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {

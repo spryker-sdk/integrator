@@ -69,7 +69,12 @@ class IntegratorConfig
     /**
      * @var string
      */
-    protected const RECIPES_DIRECTORY = 'vendor/spryker-sdk/integrator/data/recipes/';
+    protected const MANIFESTS_DIRECTORY = 'vendor/spryker-sdk/integrator/data/manifests/';
+
+    /**
+     * @var string
+     */
+    protected const MANIFESTS_URL = 'https://github.com/spryker-sdk/integrator-manifests/archive/master.zip';
 
     /**
      * @var string
@@ -79,10 +84,10 @@ class IntegratorConfig
     /**
      * @var string
      */
-    protected const RECIPES_URL = 'https://github.com/spryker-sdk/integrator-recipes/archive/master.zip';
+    protected const PATH_GLOSSARY = 'data/import/common/common/glossary.csv';
 
     /**
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     protected $config;
 
@@ -98,7 +103,7 @@ class IntegratorConfig
     ];
 
     /**
-     * @var self|null
+     * @var static|null
      */
     protected static $instance;
 
@@ -109,7 +114,7 @@ class IntegratorConfig
     /**
      * @api
      *
-     * @return \SprykerSdk\Integrator\IntegratorConfig
+     * @return static
      */
     public static function getInstance()
     {
@@ -179,7 +184,10 @@ class IntegratorConfig
      */
     public function getProjectNamespaces(): array
     {
-        return $this->config[static::PROJECT_NAMESPACES];
+        /** @var array<string, mixed> $config */
+        $config = $this->config;
+
+        return $config[static::PROJECT_NAMESPACES];
     }
 
     /**
@@ -187,7 +195,10 @@ class IntegratorConfig
      */
     public function getCoreNamespaces(): array
     {
-        return $this->config[static::CORE_NAMESPACES];
+        /** @var array<string, mixed> $config */
+        $config = $this->config;
+
+        return $config[static::CORE_NAMESPACES];
     }
 
     /**
@@ -295,9 +306,9 @@ class IntegratorConfig
     /**
      * @return string
      */
-    public function getRecipesDirectory(): string
+    public function getManifestsDirectory(): string
     {
-        return $this->getProjectRootDirectory() . static::RECIPES_DIRECTORY;
+        return $this->getProjectRootDirectory() . static::MANIFESTS_DIRECTORY;
     }
 
     /**
@@ -313,19 +324,27 @@ class IntegratorConfig
     /**
      * @return string
      */
-    public function getRecipesRepository(): string
+    public function getGlossaryFilePath(): string
+    {
+        return $this->getProjectRootDirectory() . static::PATH_GLOSSARY;
+    }
+
+    /**
+     * @return string
+     */
+    public function getManifestsRepository(): string
     {
         if (defined('TEST_INTEGRATOR_MODE')) {
-            return 'tests/_data/recipes/archive.zip';
+            return 'tests/_data/manifests/archive.zip';
         }
 
-        return static::RECIPES_URL;
+        return static::MANIFESTS_URL;
     }
 
     /**
      * @return array
      */
-    public function getApplications()
+    public function getApplications(): array
     {
         return [
             'Client',

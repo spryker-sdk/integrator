@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\Transfer;
 
 use ArrayObject;
 use InvalidArgumentException;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer as TransferClassInformationTransfer;
 
 class ClassInformationTransfer extends AbstractTransfer
 {
@@ -70,7 +71,7 @@ class ClassInformationTransfer extends AbstractTransfer
     protected $filePath;
 
     /**
-     * @var \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
+     * @var static|null
      */
     protected $parent;
 
@@ -224,13 +225,11 @@ class ClassInformationTransfer extends AbstractTransfer
     ];
 
     /**
-     * @module Integrator|SprykGui|Product
-     *
      * @param string|null $fullyQualifiedClassName
      *
      * @return $this
      */
-    public function setFullyQualifiedClassName($fullyQualifiedClassName)
+    public function setFullyQualifiedClassName(?string $fullyQualifiedClassName)
     {
         $this->fullyQualifiedClassName = $fullyQualifiedClassName;
         $this->modifiedProperties[static::FULLY_QUALIFIED_CLASS_NAME] = true;
@@ -239,21 +238,17 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|SprykGui|Product
-     *
      * @return string|null
      */
-    public function getFullyQualifiedClassName()
+    public function getFullyQualifiedClassName(): ?string
     {
         return $this->fullyQualifiedClassName;
     }
 
     /**
-     * @module Integrator|SprykGui|Product
-     *
      * @return string
      */
-    public function getFullyQualifiedClassNameOrFail()
+    public function getFullyQualifiedClassNameOrFail(): string
     {
         if ($this->fullyQualifiedClassName === null) {
             $this->throwNullValueException(static::FULLY_QUALIFIED_CLASS_NAME);
@@ -263,8 +258,6 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|SprykGui|Product
-     *
      * @return $this
      */
     public function requireFullyQualifiedClassName()
@@ -275,13 +268,11 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|SprykGui|Product
-     *
      * @param string|null $className
      *
      * @return $this
      */
-    public function setClassName($className)
+    public function setClassName(?string $className)
     {
         $this->className = $className;
         $this->modifiedProperties[static::CLASS_NAME] = true;
@@ -290,21 +281,17 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|SprykGui|Product
-     *
      * @return string|null
      */
-    public function getClassName()
+    public function getClassName(): ?string
     {
         return $this->className;
     }
 
     /**
-     * @module Integrator|SprykGui|Product
-     *
      * @return string
      */
-    public function getClassNameOrFail()
+    public function getClassNameOrFail(): string
     {
         if ($this->className === null) {
             $this->throwNullValueException(static::CLASS_NAME);
@@ -314,8 +301,6 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|SprykGui|Product
-     *
      * @return $this
      */
     public function requireClassName()
@@ -326,13 +311,11 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @param string|null $filePath
      *
      * @return $this
      */
-    public function setFilePath($filePath)
+    public function setFilePath(?string $filePath)
     {
         $this->filePath = $filePath;
         $this->modifiedProperties[static::FILE_PATH] = true;
@@ -341,21 +324,17 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @return string|null
      */
-    public function getFilePath()
+    public function getFilePath(): ?string
     {
         return $this->filePath;
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @return string
      */
-    public function getFilePathOrFail()
+    public function getFilePathOrFail(): string
     {
         if ($this->filePath === null) {
             $this->throwNullValueException(static::FILE_PATH);
@@ -365,8 +344,6 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @return $this
      */
     public function requireFilePath()
@@ -377,9 +354,7 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null $parent
+     * @param static|null $parent
      *
      * @return $this
      */
@@ -392,19 +367,15 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
-    public function getParent()
+    public function getParent(): ?TransferClassInformationTransfer
     {
         return $this->parent;
     }
 
     /**
-     * @module Integrator|Product
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
+     * @return static
      */
     public function getParentOrFail()
     {
@@ -416,8 +387,6 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @return $this
      */
     public function requireParent()
@@ -428,8 +397,6 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @param array|null $classTokenTree
      *
      * @return $this
@@ -447,18 +414,14 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @return array
      */
-    public function getClassTokenTree()
+    public function getClassTokenTree(): array
     {
         return $this->classTokenTree;
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @param mixed $astData
      *
      * @return $this
@@ -472,8 +435,6 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @return $this
      */
     public function requireClassTokenTree()
@@ -484,8 +445,6 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @param array|null $originalClassTokenTree
      *
      * @return $this
@@ -503,18 +462,14 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @return array
      */
-    public function getOriginalClassTokenTree()
+    public function getOriginalClassTokenTree(): array
     {
         return $this->originalClassTokenTree;
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @param mixed $originalAstData
      *
      * @return $this
@@ -528,8 +483,6 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @return $this
      */
     public function requireOriginalClassTokenTree()
@@ -540,8 +493,6 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @param array|null $tokens
      *
      * @return $this
@@ -559,18 +510,14 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @return array
      */
-    public function getTokens()
+    public function getTokens(): array
     {
         return $this->tokens;
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @param mixed $token
      *
      * @return $this
@@ -584,8 +531,6 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Integrator|Product
-     *
      * @return $this
      */
     public function requireTokens()
@@ -611,14 +556,12 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @return \ArrayObject
      */
-    public function getMethods()
+    public function getMethods(): ArrayObject
     {
         return $this->methods;
     }
 
     /**
-     * @module SprykGui
-     *
      * @param \SprykerSdk\Integrator\Transfer\MethodInformationTransfer $method
      *
      * @return $this
@@ -632,8 +575,6 @@ class ClassInformationTransfer extends AbstractTransfer
     }
 
     /**
-     * @module SprykGui
-     *
      * @return $this
      */
     public function requireMethods()
@@ -651,10 +592,10 @@ class ClassInformationTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function fromArray(array $data, $ignoreMissingProperty = false)
+    public function fromArray(array $data, bool $ignoreMissingProperty = false)
     {
         foreach ($data as $property => $value) {
-            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? null;
+            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? '';
 
             switch ($normalizedPropertyName) {
                 case 'fullyQualifiedClassName':
@@ -702,7 +643,7 @@ class ClassInformationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false): array
+    public function modifiedToArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayRecursiveNotCamelCased();
@@ -726,7 +667,7 @@ class ClassInformationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function toArray($isRecursive = true, $camelCasedKeys = false): array
+    public function toArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->toArrayRecursiveNotCamelCased();
@@ -751,7 +692,7 @@ class ClassInformationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    protected function addValuesToCollectionModified($value, $isRecursive, $camelCasedKeys)
+    protected function addValuesToCollectionModified($value, bool $isRecursive, bool $camelCasedKeys): array
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
@@ -773,7 +714,7 @@ class ClassInformationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    protected function addValuesToCollection($value, $isRecursive, $camelCasedKeys)
+    protected function addValuesToCollection($value, bool $isRecursive, bool $camelCasedKeys): array
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
@@ -791,7 +732,7 @@ class ClassInformationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayRecursiveCamelCased()
+    public function modifiedToArrayRecursiveCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {

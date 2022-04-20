@@ -96,7 +96,7 @@ class ClassHelperTest extends BaseTestCase
     /**
      * @return void
      */
-    public function testGetLayerName()
+    public function testGetLayerName(): void
     {
         $layerName = $this->createClassHelper()->getLayerName(ClassHelper::class);
         $this->assertEquals('Integrator', $layerName);
@@ -105,7 +105,7 @@ class ClassHelperTest extends BaseTestCase
     /**
      * @return void
      */
-    public function testGetLayerNameByOneLevelClassName()
+    public function testGetLayerNameByOneLevelClassName(): void
     {
         $layerName = $this->createClassHelper()->getLayerName('ClassHelper');
         $this->assertEquals('', $layerName);
@@ -114,7 +114,7 @@ class ClassHelperTest extends BaseTestCase
     /**
      * @return void
      */
-    public function testGetLayerNameByEmptyClassName()
+    public function testGetLayerNameByEmptyClassName(): void
     {
         $layerName = $this->createClassHelper()->getLayerName('');
         $this->assertEquals('', $layerName);

@@ -54,9 +54,15 @@ class UnwireWidgetManifestStrategy extends AbstractManifestStrategy
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 static::TARGET_METHOD_NAME,
             );
+            if (!$classInformationTransfer) {
+                continue;
+            }
 
             if ($isDry) {
-                $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
+                $diff = $this->createClassBuilderFacade()->printDiff($classInformationTransfer);
+                if ($diff) {
+                    $inputOutput->writeln($diff);
+                }
             } else {
                 $applied = $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }

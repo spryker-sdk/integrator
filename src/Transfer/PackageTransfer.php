@@ -175,13 +175,11 @@ class PackageTransfer extends AbstractTransfer
     ];
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @param string|null $composerName
      *
      * @return $this
      */
-    public function setComposerName($composerName)
+    public function setComposerName(?string $composerName)
     {
         $this->composerName = $composerName;
         $this->modifiedProperties[static::COMPOSER_NAME] = true;
@@ -190,21 +188,17 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return string|null
      */
-    public function getComposerName()
+    public function getComposerName(): ?string
     {
         return $this->composerName;
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return string
      */
-    public function getComposerNameOrFail()
+    public function getComposerNameOrFail(): string
     {
         if ($this->composerName === null) {
             $this->throwNullValueException(static::COMPOSER_NAME);
@@ -214,8 +208,6 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireComposerName()
@@ -226,13 +218,11 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @param string|null $organizationName
      *
      * @return $this
      */
-    public function setOrganizationName($organizationName)
+    public function setOrganizationName(?string $organizationName)
     {
         $this->organizationName = $organizationName;
         $this->modifiedProperties[static::ORGANIZATION_NAME] = true;
@@ -241,21 +231,17 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return string|null
      */
-    public function getOrganizationName()
+    public function getOrganizationName(): ?string
     {
         return $this->organizationName;
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return string
      */
-    public function getOrganizationNameOrFail()
+    public function getOrganizationNameOrFail(): string
     {
         if ($this->organizationName === null) {
             $this->throwNullValueException(static::ORGANIZATION_NAME);
@@ -265,8 +251,6 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireOrganizationName()
@@ -277,13 +261,11 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @param string|null $organizationNameDashed
      *
      * @return $this
      */
-    public function setOrganizationNameDashed($organizationNameDashed)
+    public function setOrganizationNameDashed(?string $organizationNameDashed)
     {
         $this->organizationNameDashed = $organizationNameDashed;
         $this->modifiedProperties[static::ORGANIZATION_NAME_DASHED] = true;
@@ -292,21 +274,17 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return string|null
      */
-    public function getOrganizationNameDashed()
+    public function getOrganizationNameDashed(): ?string
     {
         return $this->organizationNameDashed;
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return string
      */
-    public function getOrganizationNameDashedOrFail()
+    public function getOrganizationNameDashedOrFail(): string
     {
         if ($this->organizationNameDashed === null) {
             $this->throwNullValueException(static::ORGANIZATION_NAME_DASHED);
@@ -316,8 +294,6 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return $this
      */
     public function requireOrganizationNameDashed()
@@ -328,13 +304,11 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @param string|null $packageName
      *
      * @return $this
      */
-    public function setPackageName($packageName)
+    public function setPackageName(?string $packageName)
     {
         $this->packageName = $packageName;
         $this->modifiedProperties[static::PACKAGE_NAME] = true;
@@ -343,21 +317,17 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return string|null
      */
-    public function getPackageName()
+    public function getPackageName(): ?string
     {
         return $this->packageName;
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return string
      */
-    public function getPackageNameOrFail()
+    public function getPackageNameOrFail(): string
     {
         if ($this->packageName === null) {
             $this->throwNullValueException(static::PACKAGE_NAME);
@@ -367,8 +337,6 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return $this
      */
     public function requirePackageName()
@@ -379,13 +347,11 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @param string|null $packageNameDashed
      *
      * @return $this
      */
-    public function setPackageNameDashed($packageNameDashed)
+    public function setPackageNameDashed(?string $packageNameDashed)
     {
         $this->packageNameDashed = $packageNameDashed;
         $this->modifiedProperties[static::PACKAGE_NAME_DASHED] = true;
@@ -394,21 +360,17 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return string|null
      */
-    public function getPackageNameDashed()
+    public function getPackageNameDashed(): ?string
     {
         return $this->packageNameDashed;
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return string
      */
-    public function getPackageNameDashedOrFail()
+    public function getPackageNameDashedOrFail(): string
     {
         if ($this->packageNameDashed === null) {
             $this->throwNullValueException(static::PACKAGE_NAME_DASHED);
@@ -418,8 +380,6 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return $this
      */
     public function requirePackageNameDashed()
@@ -430,13 +390,11 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @param string|null $path
      *
      * @return $this
      */
-    public function setPath($path)
+    public function setPath(?string $path)
     {
         $this->path = $path;
         $this->modifiedProperties[static::PATH] = true;
@@ -445,21 +403,17 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return string|null
      */
-    public function getPath()
+    public function getPath(): ?string
     {
         return $this->path;
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return string
      */
-    public function getPathOrFail()
+    public function getPathOrFail(): string
     {
         if ($this->path === null) {
             $this->throwNullValueException(static::PATH);
@@ -469,8 +423,6 @@ class PackageTransfer extends AbstractTransfer
     }
 
     /**
-     * @module Development|ModuleFinder
-     *
      * @return $this
      */
     public function requirePath()
@@ -488,10 +440,10 @@ class PackageTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function fromArray(array $data, $ignoreMissingProperty = false)
+    public function fromArray(array $data, bool $ignoreMissingProperty = false)
     {
         foreach ($data as $property => $value) {
-            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? null;
+            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? '';
 
             switch ($normalizedPropertyName) {
                 case 'composerName':
@@ -520,7 +472,7 @@ class PackageTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false): array
+    public function modifiedToArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayRecursiveNotCamelCased();
@@ -544,7 +496,7 @@ class PackageTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function toArray($isRecursive = true, $camelCasedKeys = false): array
+    public function toArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->toArrayRecursiveNotCamelCased();
@@ -569,7 +521,7 @@ class PackageTransfer extends AbstractTransfer
      *
      * @return array
      */
-    protected function addValuesToCollectionModified($value, $isRecursive, $camelCasedKeys)
+    protected function addValuesToCollectionModified($value, bool $isRecursive, bool $camelCasedKeys): array
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
@@ -591,7 +543,7 @@ class PackageTransfer extends AbstractTransfer
      *
      * @return array
      */
-    protected function addValuesToCollection($value, $isRecursive, $camelCasedKeys)
+    protected function addValuesToCollection($value, bool $isRecursive, bool $camelCasedKeys): array
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
@@ -609,7 +561,7 @@ class PackageTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayRecursiveCamelCased()
+    public function modifiedToArrayRecursiveCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -641,7 +593,7 @@ class PackageTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayRecursiveNotCamelCased()
+    public function modifiedToArrayRecursiveNotCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -673,7 +625,7 @@ class PackageTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayNotRecursiveNotCamelCased()
+    public function modifiedToArrayNotRecursiveNotCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -690,7 +642,7 @@ class PackageTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayNotRecursiveCamelCased()
+    public function modifiedToArrayNotRecursiveCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -707,14 +659,14 @@ class PackageTransfer extends AbstractTransfer
     /**
      * @return void
      */
-    protected function initCollectionProperties()
+    protected function initCollectionProperties(): void
     {
     }
 
     /**
      * @return array
      */
-    public function toArrayNotRecursiveCamelCased()
+    public function toArrayNotRecursiveCamelCased(): array
     {
         return [
             'composerName' => $this->composerName,
@@ -729,7 +681,7 @@ class PackageTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayNotRecursiveNotCamelCased()
+    public function toArrayNotRecursiveNotCamelCased(): array
     {
         return [
             'composer_name' => $this->composerName,
@@ -744,7 +696,7 @@ class PackageTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayRecursiveNotCamelCased()
+    public function toArrayRecursiveNotCamelCased(): array
     {
         return [
             'composer_name' => $this->composerName,
@@ -759,7 +711,7 @@ class PackageTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function toArrayRecursiveCamelCased()
+    public function toArrayRecursiveCamelCased(): array
     {
         return [
             'composerName' => $this->composerName,
