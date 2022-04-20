@@ -80,7 +80,7 @@ class AddConfigArrayElementManifestStrategy extends AbstractManifestStrategy
             );
 
             if ($isDry) {
-                $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
+                $inputOutput->writeln((string)$this->createClassBuilderFacade()->printDiff($classInformationTransfer));
             } else {
                 $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }
