@@ -18,11 +18,7 @@ class BooleanConfigurationEnvironmentStrategy implements ConfigurationEnvironmen
      */
     public function isApplicable($value): bool
     {
-        if (!in_array($value, ['true', 'false'])) {
-            return false;
-        }
-
-        return true;
+        return is_bool($value);
     }
 
     /**
@@ -32,7 +28,7 @@ class BooleanConfigurationEnvironmentStrategy implements ConfigurationEnvironmen
      */
     public function getFormattedExpression($value): string
     {
-        if ($value === 'true') {
+        if ($value) {
             return 'true';
         }
 

@@ -30,11 +30,11 @@
         },
         {
             "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::RESOLVABLE_CLASS_NAMES_CACHE_ENABLED_TRUE",
-            "value": "true"
+            "value": true
         },
         {
             "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::RESOLVABLE_CLASS_NAMES_CACHE_ENABLED_FALSE",
-            "value": "false"
+            "value": false
         },
         {
             "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::PROJECT_NAMESPACE",
