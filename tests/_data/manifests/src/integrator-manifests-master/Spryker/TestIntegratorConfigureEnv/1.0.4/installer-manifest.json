@@ -29,25 +29,104 @@
             ]
         },
         {
-            "target": "\\Spryker\\Shared\\TestIntegratorConfigureEnv\\TestIntegratorConfigureEnvConstants::TEST_COMPLEX_VALUE",
-            "value": {
-                "is_literal": true,
-                "value": "str_replace(\n    '__LINE__',\n    PHP_EOL,\n    getenv('SPRYKER_OAUTH_KEY_PRIVATE') ?: '',\n) ?: null"
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::RESOLVABLE_CLASS_NAMES_CACHE_ENABLED_TRUE",
+            "value": "true"
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::RESOLVABLE_CLASS_NAMES_CACHE_ENABLED_FALSE",
+            "value": "false"
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::PROJECT_NAMESPACE",
+            "value": "Pyz"
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::VAR_BOOL_CAST_VALUE",
+            "value":
+            {
+                "value": "(bool)$config[\\Spryker\\Shared\\Kernel\\KernelConstants::PROJECT_NAMESPACE]",
+                "is_literal": true
             }
         },
         {
-            "target": "\\Spryker\\Shared\\TestIntegratorConfigureEnv\\TestIntegratorConfigureEnvConstants::TEST_CONCATENATION_VALUE",
-            "value": {
-                "is_literal": true,
-                "value": "APPLICATION_SOURCE_DIR . '/Generated/Glue/Specification/spryker_rest_api.schema.yml'"
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::FUNC_VALUE",
+            "value":
+            {
+                "value": "getenv('SOMEKEY')",
+                "is_literal": true
             }
         },
         {
-            "target": "\\Spryker\\Shared\\TestIntegratorConfigureEnv\\TestIntegratorConfigureEnvConstants::TEST_CONCATENATION_VALUE",
-            "value": {
-                "is_literal": true,
-                "value": "getenv('SPRYKER_OAUTH_ENCRYPTION_KEY') ?: null"
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::PRIVATE_KEY_PATH",
+            "value":
+            {
+                "value": "str_replace('__LINE__', PHP_EOL, getenv('SPRYKER_OAUTH_KEY_PRIVATE') ?: '') ?: null",
+                "is_literal": true
             }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::AUTH_DEFAULT_CREDENTIALS",
+            "value":
+            {
+                "yves_system":
+                {
+                    "token": "getenv('SPRYKER_ZED_REQUEST_TOKEN') ?: ''"
+                }
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::PRIVATE_NAME",
+            "value":
+            {
+                "value": "APPLICATION_SOURCE_DIR . '/Generated/Glue/Specification/spryker_rest_api.schema.yml'",
+                "is_literal": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::ENCRYPTION_KEY",
+            "value":
+            {
+                "value": "getenv('SPRYKER_OAUTH_ENCRYPTION_KEY') ?: null",
+                "is_literal": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::ENCRYPTION_KEY_OTHER",
+            "value":
+            {
+                "value": "getenv('SPRYKER_OAUTH_ENCRYPTION_KEY') ? 'test' : 'other_test'",
+                "is_literal": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::ACL_DEFAULT_RULES",
+            "value":
+            [
+                {
+                    "bundle": "security-gui",
+                    "controller": "*",
+                    "action": "*",
+                    "type": "allow"
+                },
+                {
+                    "bundle": "acl",
+                    "controller": "index",
+                    "action": "denied",
+                    "type": "allow"
+                }
+            ]
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::STORAGE_REDIS_CONNECTION_OPTIONS",
+            "value":
+            {
+                "value": "json_decode(getenv('SPRYKER_KEY_VALUE_STORE_CONNECTION_OPTIONS') ?: '[]', true) ?: []",
+                "is_literal": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::LOGGER_CONFIG_GLUE",
+            "value": "\\Spryker\\Shared\\Kernel\\KernelConstants::class"
         }
     ]
 }
