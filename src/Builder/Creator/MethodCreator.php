@@ -72,7 +72,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
             return $this->createReturnArrayStatement($classInformationTransfer, $value);
         }
 
-        $preparedValue = sprintf('<?php %s;', $value);
+        $preparedValue = $this->createPreparedValueForParser($value);
         $tree = $this->createParser()->parse($preparedValue);
         if (!$tree) {
             throw new LiteralValueParsingException(sprintf('Value is not valid PHP code: `%s`', $value));
@@ -83,6 +83,20 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         }
 
         return $this->createSingleStatementMethodBody($classInformationTransfer, $tree, $value);
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function createPreparedValueForParser($value): string
+    {
+        if (is_bool($value)) {
+            $value = var_export($value, true);
+        }
+
+        return sprintf('<?php %s;', $value);
     }
 
     /**

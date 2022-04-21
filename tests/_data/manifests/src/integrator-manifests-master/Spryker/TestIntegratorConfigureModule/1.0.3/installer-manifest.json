@@ -78,7 +78,7 @@
         {
             "previousValue": "",
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testNewMethod9",
-            "value": "false"
+            "value": false
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testChange",

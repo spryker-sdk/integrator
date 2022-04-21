@@ -52,7 +52,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
                 continue;
             }
 
-            if (!$value) {
+            if (!is_bool($value) && !$value) {
                 $value = $this->askValue(
                     'Provide value for ' . $classInformationTransfer->getClassName() . "::$targetPointName() configuration.",
                     $choices,

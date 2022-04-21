@@ -38,7 +38,8 @@ class AbstractReflectionClass
      */
     protected function isValueReturnArray($value): bool
     {
-        return is_array($value) || preg_match('/' . static::ARRAY_MERGE_FUNCTION . '/', $value);
+        return !is_bool($value)
+            && (is_array($value) || preg_match('/' . static::ARRAY_MERGE_FUNCTION . '/', $value));
     }
 
     /**
@@ -48,6 +49,6 @@ class AbstractReflectionClass
      */
     protected function isValueReturnBool($value): bool
     {
-        return in_array($value, ['true', 'false']);
+        return is_bool($value);
     }
 }
