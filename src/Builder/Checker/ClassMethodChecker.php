@@ -139,7 +139,7 @@ class ClassMethodChecker extends AbstractMethodChecker implements ClassMethodChe
             return true;
         }
         $parser = $this->parserFactory->create(ParserFactory::PREFER_PHP7);
-        $previousValue = $parser->parse('<?php ' . $value);
+        $previousValue = $parser->parse('<?php ' . $value . ';');
         if (!$previousValue) {
             return false;
         }
