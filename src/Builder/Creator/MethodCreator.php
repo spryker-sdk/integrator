@@ -44,18 +44,26 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     protected $methodReturnTypeCreator;
 
     /**
+     * @var \PhpParser\ParserFactory
+     */
+    protected $parserFactory;
+
+    /**
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface $methodStatementsCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface $methodDocBlockCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface $methodReturnTypeCreator
+     * @param \PhpParser\ParserFactory $parserFactory
      */
     public function __construct(
         MethodStatementsCreatorInterface $methodStatementsCreator,
         MethodDocBlockCreatorInterface $methodDocBlockCreator,
-        MethodReturnTypeCreatorInterface $methodReturnTypeCreator
+        MethodReturnTypeCreatorInterface $methodReturnTypeCreator,
+        ParserFactory $parserFactory
     ) {
         $this->methodStatementsCreator = $methodStatementsCreator;
         $this->methodDocBlockCreator = $methodDocBlockCreator;
         $this->methodReturnTypeCreator = $methodReturnTypeCreator;
+        $this->parserFactory = $parserFactory;
     }
 
     /**
@@ -73,7 +81,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         }
 
         $preparedValue = $this->createPreparedValueForParser($value);
-        $tree = $this->createParser()->parse($preparedValue);
+        $tree = $this->parserFactory->create(ParserFactory::PREFER_PHP7)->parse($preparedValue);
         if (!$tree) {
             throw new LiteralValueParsingException(sprintf('Value is not valid PHP code: `%s`', $value));
         }

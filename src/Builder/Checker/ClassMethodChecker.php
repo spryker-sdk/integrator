@@ -20,7 +20,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use PhpParser\ParserFactory;
 
-class ClassMethodChecker implements ClassMethodCheckerInterface
+class ClassMethodChecker extends AbstractMethodChecker implements ClassMethodCheckerInterface
 {
     /**
      * @var string
@@ -58,16 +58,31 @@ class ClassMethodChecker implements ClassMethodCheckerInterface
     public const METHOD_FIELD_PARTS = 'parts';
 
     /**
+     * @var array
+     */
+    protected const SINGLE_STATEMENT_EXPRESSION_FIELDS = [
+        self::METHOD_FIELD_VAR,
+        self::METHOD_FIELD_EXPR,
+    ];
+
+    /**
      * @var array<array-key, \SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\MethodStatementCheckerInterface>
      */
     protected $methodStatementCheckers;
 
     /**
-     * @param array<array-key, \SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\MethodStatementCheckerInterface> $methodStatementCheckers
+     * @var \PhpParser\ParserFactory
      */
-    public function __construct(array $methodStatementCheckers)
+    protected $parserFactory;
+
+    /**
+     * @param array<array-key, \SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\MethodStatementCheckerInterface> $methodStatementCheckers
+     * @param \PhpParser\ParserFactory $parserFactory
+     */
+    public function __construct(array $methodStatementCheckers, ParserFactory $parserFactory)
     {
         $this->methodStatementCheckers = $methodStatementCheckers;
+        $this->parserFactory = $parserFactory;
     }
 
     /**
@@ -117,18 +132,18 @@ class ClassMethodChecker implements ClassMethodCheckerInterface
      */
     public function isMethodNodeSameAsValue(?ClassMethod $methodNode, $value): bool
     {
-        if (!$value) {
+        if (!is_bool($value) && !$value) {
             return true;
         }
         if (!$methodNode || !$methodNode->stmts) {
             return true;
         }
-        $parser = (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
+        $parser = $this->parserFactory->create(ParserFactory::PREFER_PHP7);
         $previousValue = $parser->parse('<?php ' . $value);
         if (!$previousValue) {
             return false;
         }
-        if (count($previousValue) != count($methodNode->stmts)) {
+        if (count($previousValue) !== count($methodNode->stmts)) {
             return false;
         }
         if (!$this->isSameMethodsBody($previousValue, $methodNode->stmts)) {
@@ -144,7 +159,7 @@ class ClassMethodChecker implements ClassMethodCheckerInterface
      *
      * @return bool
      */
-    public function isSameMethodsBody($previousValue, $currentValue): bool
+    protected function isSameMethodsBody($previousValue, $currentValue): bool
     {
         if (is_array($previousValue) && is_array($currentValue)) {
             foreach ($previousValue as $keyPreviousValue => $valuePreviousValue) {
@@ -165,7 +180,7 @@ class ClassMethodChecker implements ClassMethodCheckerInterface
             }
         }
 
-        return $this->getIsSameForRecursiveFields($previousValue, $currentValue);
+        return $this->isSameForRecursiveFields($previousValue, $currentValue);
     }
 
     /**
@@ -174,7 +189,20 @@ class ClassMethodChecker implements ClassMethodCheckerInterface
      *
      * @return bool
      */
-    protected function getIsSameForRecursiveFields($previousValue, $currentValue): bool
+    protected function isSameForRecursiveFields($previousValue, $currentValue): bool
+    {
+        $isSame = $this->isSameArrayStatementsFields($previousValue, $currentValue);
+
+        return $isSame && $this->isSameSingleStatementsFields($previousValue, $currentValue);
+    }
+
+    /**
+     * @param mixed $previousValue
+     * @param mixed $currentValue
+     *
+     * @return bool
+     */
+    protected function isSameArrayStatementsFields($previousValue, $currentValue): bool
     {
         $isSame = true;
         if ($this->isExistsStatementsField($previousValue, $currentValue, static::METHOD_FIELD_ARGS)) {
@@ -185,12 +213,6 @@ class ClassMethodChecker implements ClassMethodCheckerInterface
                 $isSame = $this->isSameMethodsBody($argument->value, $currentValue->args[$keyArgument]->value);
             }
         }
-        if ($isSame && $this->isExistsStatementsField($previousValue, $currentValue, static::METHOD_FIELD_VAR)) {
-            $isSame = $this->isSameMethodsBody($previousValue->var, $currentValue->var);
-        }
-        if ($isSame && $this->isExistsStatementsField($previousValue, $currentValue, static::METHOD_FIELD_EXPR)) {
-            $isSame = $this->isSameMethodsBody($previousValue->expr, $currentValue->expr);
-        }
 
         return $isSame;
     }
@@ -198,12 +220,18 @@ class ClassMethodChecker implements ClassMethodCheckerInterface
     /**
      * @param mixed $previousValue
      * @param mixed $currentValue
-     * @param string $field
      *
      * @return bool
      */
-    protected function isExistsStatementsField($previousValue, $currentValue, string $field): bool
+    protected function isSameSingleStatementsFields($previousValue, $currentValue): bool
     {
-        return property_exists($previousValue, $field) && property_exists($currentValue, $field);
+        $isSame = true;
+        foreach (static::SINGLE_STATEMENT_EXPRESSION_FIELDS as $field) {
+            if ($isSame && $this->isExistsStatementsField($previousValue, $currentValue, $field)) {
+                $isSame = $this->isSameMethodsBody($previousValue->{$field}, $currentValue->{$field});
+            }
+        }
+
+        return $isSame;
     }
 }

@@ -104,7 +104,49 @@ This manifest adds a constant to specified target class. To set value you can sp
             "value": [
                 10,
                 1000
-            ],
+            ]
+        }
+    ]
+}
+```
+
+This manifest set expression to specified method of target class. To set value you can specify value field. It can be everything supported by PHP.
+
+```json
+{
+    "configure-module": [
+        {
+            "target": "\\Spryker\\Client\\Catalog\\CatalogConfig::targetMethod",
+            "value": 10
+        }
+    ]
+}
+```
+
+This manifest adds expression to specified method of target class. To set value you can specify value field. It can be everything supported by PHP.
+
+```json
+{
+    "configure-module": [
+        {
+            "target": "\\Spryker\\Client\\Catalog\\CatalogConfig::targetMethod",
+            "value": [
+                10
+            ]
+        }
+    ]
+}
+```
+
+This manifest substitutes expression of specified method target class in case if not exists any changes in according target method, checked by `previousValue` parameter. To set value you can specify value field. It can be everything supported by PHP.
+
+```json
+{
+    "configure-module": [
+        {
+            "previousValue": "$variable = 5 + 10; return $variable",
+            "target": "\\Spryker\\Client\\Catalog\\CatalogConfig::targetMethod",
+            "value": "$variable = 10 + 20; $variable",
             "is_literal": true
         }
     ]

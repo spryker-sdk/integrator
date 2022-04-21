@@ -16,6 +16,7 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\Parser\Php7;
+use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\ArgsMethodStatementChecker;
@@ -337,6 +338,7 @@ class IntegratorFactory
             $this->createNodeTreeCreator(),
             $this->createMethodDocBlockCreator(),
             $this->createMethodReturnTypeCreator(),
+            $this->createParserFactory(),
         );
     }
 
@@ -424,7 +426,16 @@ class IntegratorFactory
     {
         return new ClassMethodChecker(
             $this->getMethodStatementCheckers(),
+            $this->createParserFactory(),
         );
+    }
+
+    /**
+     * @return \PhpParser\ParserFactory
+     */
+    public function createParserFactory(): ParserFactory
+    {
+        return new ParserFactory();
     }
 
     /**

@@ -9,9 +9,10 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker;
 
+use SprykerSdk\Integrator\Builder\Checker\AbstractMethodChecker;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
 
-class PartsMethodStatementChecker extends AbstractMethodStatementChecker implements MethodStatementCheckerInterface
+class PartsMethodStatementChecker extends AbstractMethodChecker implements MethodStatementCheckerInterface
 {
     /**
      * @param mixed $previousValue
