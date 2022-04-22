@@ -228,4 +228,15 @@ class TestIntegratorDefaultConfig extends BaseConfig
     {
         return false;
     }
+    /**
+     * @return string
+     */
+    public function testNewMethod10() : string
+    {
+        return $this->getSharedConfig($this->testChange(), [
+            \Pyz\Yves\CartPage\CartPageConfig::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED => [
+                \Pyz\Yves\CartPage\CartPageConfig::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED => 'test',
+            ],
+        ]);
+    }
 }

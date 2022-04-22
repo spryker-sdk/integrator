@@ -81,6 +81,14 @@
             "value": false
         },
         {
+            "previousValue": "",
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testNewMethod10",
+            "value": {
+                "value": "$this->getSharedConfig($this->testChange(), [\\Pyz\\Yves\\CartPage\\CartPageConfig::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED => [\\Pyz\\Yves\\CartPage\\CartPageConfig::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED => 'test']])",
+                "is_literal": true
+            }
+        },
+        {
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testChange",
             "value": "static::TEST_VALUE_CHANGE"
         },
