@@ -34,7 +34,7 @@ class IntegratorConfig
     /**
      * @var string
      */
-    public const MANIFEST_KEY_DEFAULT_VALUE = 'default';
+    public const MANIFEST_KEY_DEFAULT_VALUE = 'defaultValue';
 
     /**
      * @var string
@@ -80,6 +80,11 @@ class IntegratorConfig
      * @var string
      */
     protected const MANIFESTS_URL = 'https://github.com/spryker-sdk/integrator-manifests/archive/master.zip';
+
+    /**
+     * @var string
+     */
+    protected const PATH_GLOSSARY = 'data/import/common/common/glossary.csv';
 
     /**
      * @var array<string, mixed>|null
@@ -304,6 +309,14 @@ class IntegratorConfig
     public function getManifestsDirectory(): string
     {
         return $this->getProjectRootDirectory() . static::MANIFESTS_DIRECTORY;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGlossaryFilePath(): string
+    {
+        return $this->getProjectRootDirectory() . static::PATH_GLOSSARY;
     }
 
     /**

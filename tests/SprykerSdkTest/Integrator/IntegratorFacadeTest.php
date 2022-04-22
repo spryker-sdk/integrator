@@ -213,6 +213,51 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
+    public function testRunInstallationConfigureEnvChoices(): void
+    {
+        // Arrange
+        $fileSystem = $this->createFilesystem();
+        if ($fileSystem->exists($this->getTempDirectoryPath())) {
+            $fileSystem->copy('./tests/_data/project_mock/config/Shared/config_default.php', './tests/tmp/config/Shared/config_default.php');
+            $fileSystem->copy('./tests/_data/project_mock/composer.json', './tests/tmp/composer.json');
+            $fileSystem->copy('./tests/_data/project_mock/composer.lock', './tests/tmp/composer.lock');
+        }
+
+        $ioAdapter = $this->createMockSymfonyConsoleChoiceInputOutput('Value choice 1');
+
+        // Act
+        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorConfigureEnv'), $ioAdapter, false);
+
+        // Assert
+        $testFilePath = './tests/_tests_files/test_integrator_configure_env_choices.php';
+        $classPath = './tests/tmp/config/Shared/config_default.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface
+     */
+    public function createMockSymfonyConsoleChoiceInputOutput(string $value): InputOutputInterface
+    {
+        $ioAdapterMock = $this->createMock(SymfonyConsoleInputOutputAdapter::class);
+
+        $ioAdapterMock->method('choice')
+            ->willReturn($value);
+        $ioAdapterMock->method('confirm')
+            ->willReturn(true);
+
+        return $ioAdapterMock;
+    }
+
+    /**
+     * @return void
+     */
     public function testRunInstallationWireGlueRelaitonship(): void
     {
         // Arrange
@@ -250,6 +295,29 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->assertFileExists($testFilePath);
 
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunInstallationGlossary(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()
+            ->runInstallation($this->getModuleList('TestIntegratorGlossary'), $ioAdapter, false);
+
+        // Assert
+        $projectGlossaryFilePath = './tests/_data/project_mock/data/import/common/common/glossary.csv';
+        $testFilePath = './tests/_tests_files/test_integrator_glossary.csv';
+        $testResultFile = './tests/tmp/data/import/common/common/glossary.csv';
+
+        $this->assertFileExists($testFilePath);
+        $this->assertFileExists($testResultFile);
+        $this->assertStringContainsString(trim(file_get_contents($projectGlossaryFilePath)), trim(file_get_contents($testResultFile)));
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($testResultFile)));
     }
 
     /**

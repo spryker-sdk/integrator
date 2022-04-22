@@ -9,6 +9,124 @@
                 "Value 2",
                 "Value 3"
             ]
+        },
+        {
+            "target": "\\Spryker\\Shared\\TestIntegratorConfigureEnv\\TestIntegratorConfigureEnvConstants::TEST_VALUE_DEFAULT",
+            "defaultValue": "Value 1",
+            "choices": [
+                "Value 1",
+                "Value 2",
+                "Value 3"
+            ]
+        },
+        {
+            "target": "\\Spryker\\Shared\\TestIntegratorConfigureEnv\\TestIntegratorConfigureEnvConstants::TEST_VALUE_CHOICE",
+            "defaultValue": "Value 1",
+            "choices": [
+                "Value choice 1",
+                "Value choice 2",
+                "Value choice 3"
+            ]
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::RESOLVABLE_CLASS_NAMES_CACHE_ENABLED_TRUE",
+            "value": true
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::RESOLVABLE_CLASS_NAMES_CACHE_ENABLED_FALSE",
+            "value": false
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::PROJECT_NAMESPACE",
+            "value": "Pyz"
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::VAR_BOOL_CAST_VALUE",
+            "value":
+            {
+                "value": "(bool)$config[\\Spryker\\Shared\\Kernel\\KernelConstants::PROJECT_NAMESPACE]",
+                "is_literal": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::FUNC_VALUE",
+            "value":
+            {
+                "value": "getenv('SOMEKEY')",
+                "is_literal": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::PRIVATE_KEY_PATH",
+            "value":
+            {
+                "value": "str_replace('__LINE__', PHP_EOL, getenv('SPRYKER_OAUTH_KEY_PRIVATE') ?: '') ?: null",
+                "is_literal": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::AUTH_DEFAULT_CREDENTIALS",
+            "value":
+            {
+                "yves_system":
+                {
+                    "token": "getenv('SPRYKER_ZED_REQUEST_TOKEN') ?: ''"
+                }
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::PRIVATE_NAME",
+            "value":
+            {
+                "value": "APPLICATION_SOURCE_DIR . '/Generated/Glue/Specification/spryker_rest_api.schema.yml'",
+                "is_literal": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::ENCRYPTION_KEY",
+            "value":
+            {
+                "value": "getenv('SPRYKER_OAUTH_ENCRYPTION_KEY') ?: null",
+                "is_literal": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::ENCRYPTION_KEY_OTHER",
+            "value":
+            {
+                "value": "getenv('SPRYKER_OAUTH_ENCRYPTION_KEY') ? 'test' : 'other_test'",
+                "is_literal": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::ACL_DEFAULT_RULES",
+            "value":
+            [
+                {
+                    "bundle": "security-gui",
+                    "controller": "*",
+                    "action": "*",
+                    "type": "allow"
+                },
+                {
+                    "bundle": "acl",
+                    "controller": "index",
+                    "action": "denied",
+                    "type": "allow"
+                }
+            ]
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::STORAGE_REDIS_CONNECTION_OPTIONS",
+            "value":
+            {
+                "value": "json_decode(getenv('SPRYKER_KEY_VALUE_STORE_CONNECTION_OPTIONS') ?: '[]', true) ?: []",
+                "is_literal": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::LOGGER_CONFIG_GLUE",
+            "value": "\\Spryker\\Shared\\Kernel\\KernelConstants::class"
         }
     ]
 }

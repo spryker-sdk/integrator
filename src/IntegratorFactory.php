@@ -42,6 +42,13 @@ use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
 use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolverInterface;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriter;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriterInterface;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ArrayConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\BooleanConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ClassConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\DefaultConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\LiteralConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\StringConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\Creator\MethodCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface;
 use SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreator;
@@ -71,6 +78,7 @@ use SprykerSdk\Integrator\ManifestStrategy\ConfigureEnvManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureModuleManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\CopyModuleFileManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ExecuteConsoleManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\GlossaryManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface;
 use SprykerSdk\Integrator\ManifestStrategy\UnwireGlueRelationshipManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\UnwirePluginManifestStrategy;
@@ -208,6 +216,81 @@ class IntegratorFactory
     public function createConfigureEnvManifestStrategy(): ManifestStrategyInterface
     {
         return new ConfigureEnvManifestStrategy(
+            $this->getConfig(),
+            $this->createClassHelper(),
+            $this->getConfigurationEnvironmentStrategies(),
+        );
+    }
+
+    /**
+     * @return array<\SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface>
+     */
+    public function getConfigurationEnvironmentStrategies(): array
+    {
+        return [
+            $this->createStringConfigurationEnvironmentStrategy(),
+            $this->createBooleanConfigurationEnvironmentStrategy(),
+            $this->createArrayConfigurationEnvironmentStrategy(),
+            $this->createClassConfigurationEnvironmentStrategy(),
+            $this->createLiteralConfigurationEnvironmentStrategy(),
+            $this->createDefaultConfigurationEnvironmentStrategy(),
+        ];
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
+     */
+    public function createBooleanConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
+    {
+        return new BooleanConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
+     */
+    public function createClassConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
+    {
+        return new ClassConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
+     */
+    public function createLiteralConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
+    {
+        return new LiteralConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
+     */
+    public function createDefaultConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
+    {
+        return new DefaultConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
+     */
+    public function createStringConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
+    {
+        return new StringConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
+     */
+    public function createArrayConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
+    {
+        return new ArrayConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
+     */
+    public function createGlossaryManifestStrategy(): ManifestStrategyInterface
+    {
+        return new GlossaryManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
         );
@@ -528,6 +611,7 @@ class IntegratorFactory
             $this->createWireGlueRelationshipManifestStrategy(),
             $this->createUnwireGlueRelationshipManifestStrategy(),
             $this->createExecuteConsoleManifestStrategy(),
+            $this->createGlossaryManifestStrategy(),
         ];
     }
 }

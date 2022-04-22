@@ -35,6 +35,10 @@
         {
             "name": "spryker/test-integrator-unwire-glue-relationship",
             "version": "1.0.1"
+        },
+        {
+            "name": "spryker/test-integrator-glossary",
+            "version": "1.0.3"
         }
     ]
 }

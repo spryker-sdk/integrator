@@ -1,0 +1,14 @@
+{
+    "glossary-key": {
+        "new": {
+            "shopping_list.pre.check.test_key_new": {
+                "en_US": "new value",
+                "de_DE": "new value"
+            },
+            "shopping_list.pre.check.test_key_existing": {
+                "en_US": "other value",
+                "de_DE": "other value"
+            }
+        }
+    }
+}
