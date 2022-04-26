@@ -36,6 +36,13 @@ use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
 use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolverInterface;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriter;
 use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriterInterface;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ArrayConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\BooleanConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ClassConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\DefaultConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\LiteralConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\StringConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
@@ -210,7 +217,71 @@ class IntegratorFactory
         return new ConfigureEnvManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
+            $this->getConfigurationEnvironmentStrategies(),
         );
+    }
+
+    /**
+     * @return array<\SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface>
+     */
+    public function getConfigurationEnvironmentStrategies(): array
+    {
+        return [
+            $this->createStringConfigurationEnvironmentStrategy(),
+            $this->createBooleanConfigurationEnvironmentStrategy(),
+            $this->createArrayConfigurationEnvironmentStrategy(),
+            $this->createClassConfigurationEnvironmentStrategy(),
+            $this->createLiteralConfigurationEnvironmentStrategy(),
+            $this->createDefaultConfigurationEnvironmentStrategy(),
+        ];
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
+     */
+    public function createBooleanConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
+    {
+        return new BooleanConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
+     */
+    public function createClassConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
+    {
+        return new ClassConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
+     */
+    public function createLiteralConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
+    {
+        return new LiteralConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
+     */
+    public function createDefaultConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
+    {
+        return new DefaultConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
+     */
+    public function createStringConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
+    {
+        return new StringConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface
+     */
+    public function createArrayConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
+    {
+        return new ArrayConfigurationEnvironmentStrategy();
     }
 
     /**
