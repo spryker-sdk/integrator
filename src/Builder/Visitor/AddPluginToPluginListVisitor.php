@@ -18,6 +18,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -232,12 +233,47 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
                 continue;
             }
             $nodeClassName = $item->value->class->toString();
-            if ($nodeClassName === $this->className) {
+
+            if ($this->isKeyEqualsToCurrentOne($item) && $nodeClassName === $this->className) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\ArrayItem $node
+     *
+     * @return bool
+     */
+    protected function isKeyEqualsToCurrentOne(ArrayItem $node): bool
+    {
+        $nodeKey = $this->getArrayItemNodeKey($node);
+
+        return ltrim((string)$nodeKey, '\\') === ltrim((string)$this->index, '\\');
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\ArrayItem $node
+     *
+     * @return string|null
+     */
+    protected function getArrayItemNodeKey(ArrayItem $node): ?string
+    {
+        if ($node->key === null) {
+            return null;
+        }
+
+        if ($node->key instanceof ClassConstFetch && $node->key->class instanceof Name && $node->key->name instanceof Identifier) {
+            return sprintf('%s::%s', $node->key->class, $node->key->name);
+        }
+
+        if ($node->key instanceof String_) {
+            return $node->key->value;
+        }
+
+        return null;
     }
 
     /**
