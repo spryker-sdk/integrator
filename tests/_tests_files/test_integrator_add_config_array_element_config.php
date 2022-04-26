@@ -17,6 +17,13 @@ class TestIntegratorAddConfigArrayElementConfig extends SprykerTestIntegratorAdd
             TestIntegratorAddConfigArrayElement::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST,
         ];
     }
+
+    protected function getTestArrayMergeConfiguration(): array
+    {
+        return array_merge(['SomeConf'], [
+            TestIntegratorAddConfigArrayElement::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST,
+        ]);
+    }
     protected function getNotExistOnProjectLevelTestConfiguration() : array
     {
         return [

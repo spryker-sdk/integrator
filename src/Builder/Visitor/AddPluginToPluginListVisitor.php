@@ -16,12 +16,24 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name as NodeName;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Arg;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Helper\ClassHelper;
+use PhpParser\Node\Expr\ArrayItem as ArrayItemNode;
+use PhpParser\Node\Expr\Array_ as ArrayNode;
+use PhpParser\Node\Expr\FuncCall as FuncCallNode;
+use PhpParser\Node\Stmt\ClassMethod as ClassMethodNode;
+use PhpParser\NodeTraverser;
 
 class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 {
+    /**
+     * @var string
+     */
+    protected const ARRAY_MERGE_FUNCTION = 'array_merge';
+
     /**
      * @var string
      */
@@ -81,30 +93,95 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return \PhpParser\Node
+     * @return \PhpParser\Node|int
      */
-    public function enterNode(Node $node): Node
+    public function enterNode(Node $node)
     {
-        if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() === $this->methodName) {
+        if ($node instanceof ClassMethodNode && $node->name->toString() === $this->methodName) {
             $this->methodFound = true;
 
             return $node;
         }
 
-        if ($this->methodFound && $node->getType() === static::STATEMENT_ARRAY) {
-            $this->addNewPlugin($node);
-            $this->methodFound = false;
+        if ($this->methodFound) {
+            if ($node instanceof FuncCallNode && $this->isArrayMergeFuncCallNode($node)) {
+                $this->addNewPluginIntoArrayMergeFuncNode($node);
+
+                return $this->successfullyProcessed();
+            }
+
+            if ($node instanceof ArrayNode) {
+                $this->addNewPlugin($node);
+
+                return $this->successfullyProcessed();
+            }
         }
 
         return $node;
     }
 
     /**
-     * @param \PhpParser\Node $node
+     * @param FuncCallNode $node
+     *
+     * @return bool
+     */
+    protected function isArrayMergeFuncCallNode(FuncCallNode $node): bool
+    {
+        return $node->name instanceof NodeName && $node->name->parts[0] === static::ARRAY_MERGE_FUNCTION;
+    }
+
+    /**
+     * @param FuncCallNode $node
+     *
+     * @return Node
+     */
+    protected function addNewPluginIntoArrayMergeFuncNode(FuncCallNode $node): Node
+    {
+        if ($this->isPluginAddedInArrayMerge($node)) {
+            return $node;
+        }
+
+        $node->args[] = new Arg($this->createArrayWithInstanceOf());
+
+        return $node;
+    }
+
+    /**
+     * @param FuncCallNode $node
+     *
+     * @return bool
+     */
+    protected function isPluginAddedInArrayMerge(FuncCallNode $node): bool
+    {
+        foreach ($node->getArgs() as $arg) {
+            if (!$arg->value instanceof ArrayNode) {
+                continue;
+            }
+
+            if ($this->isPluginAdded($arg->value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return ArrayNode
+     */
+    protected function createArrayWithInstanceOf(): ArrayNode
+    {
+        return new ArrayNode(
+            [$this->createArrayItemWithInstanceOf()]
+        );
+    }
+
+    /**
+     * @param ArrayNode $node
      *
      * @return \PhpParser\Node
      */
-    protected function addNewPlugin(Node $node): Node
+    protected function addNewPlugin(ArrayNode $node): Node
     {
         if ($this->isPluginAdded($node)) {
             return $node;
@@ -113,6 +190,10 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         $items = [];
         $itemAdded = false;
         foreach ($node->items as $item) {
+            if ($item === null || !($item->value instanceof New_)) {
+                continue;
+            }
+
             $nodeClassName = $item->value->class->toString();
             if ($nodeClassName === $this->before) {
                 $items[] = $this->createArrayItemWithInstanceOf();
@@ -142,14 +223,14 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param \PhpParser\Node $node
+     * @param ArrayNode $node
      *
      * @return bool
      */
-    protected function isPluginAdded(Node $node): bool
+    protected function isPluginAdded(ArrayNode $node): bool
     {
         foreach ($node->items as $item) {
-            if (!($item->value instanceof New_)) {
+            if ($item === null || !($item->value instanceof New_)) {
                 continue;
             }
             $nodeClassName = $item->value->class->toString();
@@ -162,11 +243,11 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return \PhpParser\Node\Expr\ArrayItem
+     * @return ArrayItemNode
      */
-    protected function createArrayItemWithInstanceOf(): ArrayItem
+    protected function createArrayItemWithInstanceOf(): ArrayItemNode
     {
-        return new ArrayItem(
+        return new ArrayItemNode(
             (new BuilderFactory())->new(
                 (new ClassHelper())->getShortClassName($this->className),
             ),
@@ -201,5 +282,14 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         }
 
         return new String_($index);
+    }
+
+    /**
+     * @return int
+     */
+    protected function successfullyProcessed(): int
+    {
+        $this->methodFound = false;
+        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
     }
 }

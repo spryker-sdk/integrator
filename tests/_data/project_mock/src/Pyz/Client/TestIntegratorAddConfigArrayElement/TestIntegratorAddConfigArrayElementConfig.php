@@ -10,4 +10,9 @@ class TestIntegratorAddConfigArrayElementConfig extends SprykerTestIntegratorAdd
     {
         return [];
     }
+
+    protected function getTestArrayMergeConfiguration(): array
+    {
+        return array_merge(['SomeConf']);
+    }
 }

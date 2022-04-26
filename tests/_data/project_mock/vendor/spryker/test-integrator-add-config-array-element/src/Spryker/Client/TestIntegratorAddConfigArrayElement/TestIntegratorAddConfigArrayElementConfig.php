@@ -13,4 +13,9 @@ class TestIntegratorAddConfigArrayElementConfig
     {
         return [];
     }
+
+    protected function getTestArrayMergeConfiguration(): array
+    {
+        return [];
+    }
 }
