@@ -58,9 +58,9 @@ class MethodBodyExtendVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return \PhpParser\Node<\PhpParser\Node>
+     * @return \PhpParser\Node|array<\PhpParser\Node>
      */
-    public function leaveNode(Node $node): Node
+    public function leaveNode(Node $node)
     {
         if (!$this->methodFound || !($node instanceof Return_)) {
             return $node;

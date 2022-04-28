@@ -615,7 +615,7 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @param \ArrayObject<\SprykerSdk\Integrator\Transfer\ApplicationTransfer> $applications
+     * @param \ArrayObject $applications
      *
      * @return $this
      */

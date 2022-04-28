@@ -101,7 +101,7 @@ class ModuleFinder implements ModuleFinderInterface
     }
 
     /**
-     * @return \Symfony\Component\Finder\Finder<\Symfony\Component\Finder\SplFileInfo>
+     * @return \Symfony\Component\Finder\Finder
      */
     protected function getStandaloneModuleFinder(): Finder
     {
@@ -174,7 +174,7 @@ class ModuleFinder implements ModuleFinderInterface
     }
 
     /**
-     * @return \Symfony\Component\Finder\Finder<\Symfony\Component\Finder\SplFileInfo>
+     * @return \Symfony\Component\Finder\Finder
      */
     protected function getModuleFinder(): Finder
     {
