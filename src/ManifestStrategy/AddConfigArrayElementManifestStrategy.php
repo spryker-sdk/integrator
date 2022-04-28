@@ -13,14 +13,18 @@ use ReflectionClass;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
-class WirePluginManifestStrategy extends AbstractManifestStrategy
+/**
+ * Currently, this strategy only supports adding constants to the array.
+ * String support may be added in the future.
+ */
+class AddConfigArrayElementManifestStrategy extends AbstractManifestStrategy
 {
     /**
      * @return string
      */
     public function getType(): string
     {
-        return 'wire-plugin';
+        return 'add-config-array-element';
     }
 
     /**
@@ -37,7 +41,7 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
 
         if (!class_exists($targetClassName)) {
             $inputOutput->writeln(sprintf(
-                'Target module %s/%s does not exists in your system.',
+                'Target module `%s.%s` does not exists in your system.',
                 $this->classHelper->getOrganisationName($targetClassName),
                 $this->classHelper->getModuleName($targetClassName),
             ), InputOutputInterface::DEBUG);
@@ -49,9 +53,10 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
 
         if (!$targetClassInfo->hasMethod($targetMethodName)) {
             $inputOutput->writeln(sprintf(
-                'Your version of module %s/%s does not support needed plugin stack. Please, update it to use full functionality.',
+                'Your version of module `%s.%s` does not contain required configuration method `%s()`. Please, update it to use full functionality.',
                 $this->classHelper->getOrganisationName($targetClassName),
                 $this->classHelper->getModuleName($targetClassName),
+                $targetMethodName,
             ), InputOutputInterface::DEBUG);
 
             return false;
@@ -63,27 +68,26 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
                 continue;
             }
 
-            $classInformationTransfer = $this->createClassBuilderFacade()->wireClassInstance(
+            [$valueClassName, $valueConstName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_VALUE]);
+
+            $classInformationTransfer = $this->createClassBuilderFacade()->wireClassConstant(
                 $classInformationTransfer,
                 $targetMethodName,
-                $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
+                $valueClassName,
+                $valueConstName,
                 $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] ?? '',
                 $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '',
-                $manifest[IntegratorConfig::MANIFEST_KEY_INDEX] ?? null,
             );
 
             if ($isDry) {
-                $diff = $this->createClassBuilderFacade()->printDiff($classInformationTransfer);
-                if ($diff) {
-                    $inputOutput->writeln($diff);
-                }
+                $inputOutput->writeln((string)$this->createClassBuilderFacade()->printDiff($classInformationTransfer));
             } else {
                 $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }
 
             $inputOutput->writeln(sprintf(
-                'Plugin %s was added to %s::%s',
-                $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
+                'Element `%s` was added to `%s::%s`',
+                $manifest[IntegratorConfig::MANIFEST_KEY_VALUE],
                 $classInformationTransfer->getClassName(),
                 $targetMethodName,
             ), InputOutputInterface::DEBUG);
