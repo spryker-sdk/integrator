@@ -111,20 +111,20 @@ class ManifestReader implements ManifestReaderInterface
     {
         $archiveDir = 'integrator-manifests-master/';
         $organization = $moduleTransfer->getOrganizationOrFail();
-        $moduleRecipesDir = sprintf('%s%s%s/%s/', $this->config->getManifestsDirectory(), $archiveDir, $organization->getName(), $moduleTransfer->getName());
+        $moduleManifestsDir = sprintf('%s%s%s/%s/', $this->config->getManifestsDirectory(), $archiveDir, $organization->getName(), $moduleTransfer->getName());
 
         // When the recipes installed for local development use those instead of the one from the archive.
         if (is_dir($this->config->getLocalRecipesDirectory())) {
-            $moduleRecipesDir = sprintf('%s%s/', $this->config->getLocalRecipesDirectory(), $moduleTransfer->getName());
+            $moduleManifestsDir = sprintf('%s%s/', $this->config->getLocalRecipesDirectory(), $moduleTransfer->getName());
         }
 
         // Check if module has any recipes
-        if (!is_dir($moduleRecipesDir)) {
+        if (!is_dir($moduleManifestsDir)) {
             return null;
         }
 
         // Recipe path with module name and expected version
-        $filePath = $moduleRecipesDir . sprintf(
+        $filePath = $moduleManifestsDir . sprintf(
             '%s/installer-manifest.json',
             $moduleVersion,
         );
@@ -133,13 +133,13 @@ class ManifestReader implements ManifestReaderInterface
             return $filePath;
         }
 
-        $nextSuitableVersion = $this->findNextSuitableVersion($moduleRecipesDir, $moduleVersion);
+        $nextSuitableVersion = $this->findNextSuitableVersion($moduleManifestsDir, $moduleVersion);
 
         if (!$nextSuitableVersion) {
             return null;
         }
 
-        return $moduleRecipesDir . sprintf(
+        return $moduleManifestsDir . sprintf(
             '%s/installer-manifest.json',
             $nextSuitableVersion,
         );
