@@ -13,4 +13,9 @@ class TestIntegratorWirePluginDependencyProvider
     {
         return [];
     }
+
+    public function getTestArrayMergePlugins(): array
+    {
+        return array_merge([\ArrayObject::class]);
+    }
 }

@@ -104,9 +104,18 @@ class ModuleInstallerConsole extends Command
             return $moduleFilterTransfer;
         }
 
-        if (strpos($moduleArgument, '.') === false) {
+        if (!preg_match('/[a-zA-Z]+\.[a-zA-z]+/', $moduleArgument)) {
+            $moduleName = $moduleArgument;
+            $version = null;
+
+            if (strpos($moduleArgument, ':') !== false) {
+                [$moduleName, $version] = explode(':', $moduleArgument);
+            }
+
             $moduleTransfer = new ModuleTransfer();
-            $moduleTransfer->setName($moduleArgument);
+            $moduleTransfer->setName($moduleName)
+                ->setVersion($version);
+
             $moduleFilterTransfer->setModule($moduleTransfer);
 
             return $moduleFilterTransfer;
@@ -125,11 +134,18 @@ class ModuleInstallerConsole extends Command
      */
     protected function addModuleFilterDetails(string $moduleArgument, ModuleFilterTransfer $moduleFilterTransfer): ModuleFilterTransfer
     {
+        $version = null;
+
+        if (strpos($moduleArgument, ':') !== false) {
+            [$moduleArgument, $version] = explode(':', $moduleArgument);
+        }
+
         [$organization, $module] = explode('.', $moduleArgument);
 
         if ($module !== '*' && $module !== 'all') {
             $moduleTransfer = new ModuleTransfer();
-            $moduleTransfer->setName($module);
+            $moduleTransfer->setName($module)
+                ->setVersion($version);
 
             $moduleFilterTransfer->setModule($moduleTransfer);
         }

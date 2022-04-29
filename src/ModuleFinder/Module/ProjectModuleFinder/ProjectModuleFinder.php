@@ -93,7 +93,7 @@ class ProjectModuleFinder implements ProjectModuleFinderInterface
     /**
      * @param array $projectOrganizationModuleDirectories
      *
-     * @return \Symfony\Component\Finder\Finder
+     * @return \Symfony\Component\Finder\Finder<\Symfony\Component\Finder\SplFileInfo>
      */
     protected function getProjectModuleFinder(array $projectOrganizationModuleDirectories): Finder
     {

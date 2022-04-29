@@ -60,6 +60,7 @@ use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriter;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
 use SprykerSdk\Integrator\Manifest\ManifestReader;
 use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
+use SprykerSdk\Integrator\ManifestStrategy\AddConfigArrayElementManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureEnvManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureModuleManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\CopyModuleFileManifestStrategy;
@@ -70,6 +71,7 @@ use SprykerSdk\Integrator\ManifestStrategy\UnwireGlueRelationshipManifestStrateg
 use SprykerSdk\Integrator\ManifestStrategy\UnwirePluginManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\UnwireWidgetManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireGlueRelationshipManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\WireNavigationManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WirePluginManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireWidgetManifestStrategy;
 use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacade;
@@ -147,6 +149,17 @@ class IntegratorFactory
     public function createUnwirePluginManifestStrategy(): ManifestStrategyInterface
     {
         return new UnwirePluginManifestStrategy(
+            $this->getConfig(),
+            $this->createClassHelper(),
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
+     */
+    public function createAddConfigArrayElementManifestStrategy(): ManifestStrategyInterface
+    {
+        return new AddConfigArrayElementManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
         );
@@ -310,6 +323,17 @@ class IntegratorFactory
     public function createExecuteConsoleManifestStrategy(): ManifestStrategyInterface
     {
         return new ExecuteConsoleManifestStrategy(
+            $this->getConfig(),
+            $this->createClassHelper(),
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
+     */
+    public function createNavigationManifestStrategy(): ManifestStrategyInterface
+    {
+        return new WireNavigationManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
         );
@@ -527,12 +551,14 @@ class IntegratorFactory
             $this->createUnwirePluginManifestStrategy(),
             $this->createWireWidgetManifestStrategy(),
             $this->createUnwireWidgetManifestStrategy(),
+            $this->createAddConfigArrayElementManifestStrategy(),
             $this->createConfigureModuleManifestStrategy(),
             $this->createCopyFileManifestStrategy(),
             $this->createConfigureEnvManifestStrategy(),
             $this->createWireGlueRelationshipManifestStrategy(),
             $this->createUnwireGlueRelationshipManifestStrategy(),
             $this->createExecuteConsoleManifestStrategy(),
+            $this->createNavigationManifestStrategy(),
             $this->createGlossaryManifestStrategy(),
         ];
     }

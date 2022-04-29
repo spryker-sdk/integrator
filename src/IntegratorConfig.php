@@ -29,6 +29,11 @@ class IntegratorConfig
     /**
      * @var string
      */
+    public const MANIFEST_KEY_INDEX = 'index';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_IS_LITERAL = 'is_literal';
 
     /**
@@ -75,6 +80,11 @@ class IntegratorConfig
      * @var string
      */
     protected const MANIFESTS_URL = 'https://github.com/spryker-sdk/integrator-manifests/archive/master.zip';
+
+    /**
+     * @var string
+     */
+    protected const LOCAL_RECIPES_DIRECTORY = 'vendor/spryker-sdk/integrator-recipes/';
 
     /**
      * @var string
@@ -304,6 +314,16 @@ class IntegratorConfig
     public function getManifestsDirectory(): string
     {
         return $this->getProjectRootDirectory() . static::MANIFESTS_DIRECTORY;
+    }
+
+    /**
+     * This is used for local development purposes only.
+     *
+     * @return string
+     */
+    public function getLocalRecipesDirectory(): string
+    {
+        return $this->getProjectRootDirectory() . static::LOCAL_RECIPES_DIRECTORY;
     }
 
     /**

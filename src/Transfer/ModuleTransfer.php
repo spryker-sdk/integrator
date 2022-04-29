@@ -28,6 +28,11 @@ class ModuleTransfer extends AbstractTransfer
     /**
      * @var string
      */
+    public const VERSION = 'version';
+
+    /**
+     * @var string
+     */
     public const ORGANIZATION = 'organization';
 
     /**
@@ -74,6 +79,11 @@ class ModuleTransfer extends AbstractTransfer
      * @var string|null
      */
     protected $nameDashed;
+
+    /**
+     * @var string|null
+     */
+    protected $version;
 
     /**
      * @var \SprykerSdk\Integrator\Transfer\OrganizationTransfer|null
@@ -124,6 +134,8 @@ class ModuleTransfer extends AbstractTransfer
         'name_dashed' => 'nameDashed',
         'nameDashed' => 'nameDashed',
         'NameDashed' => 'nameDashed',
+        'version' => 'version',
+        'Version' => 'version',
         'organization' => 'organization',
         'Organization' => 'organization',
         'application' => 'application',
@@ -164,6 +176,18 @@ class ModuleTransfer extends AbstractTransfer
             'type' => 'string',
             'type_shim' => null,
             'name_underscore' => 'name_dashed',
+            'is_collection' => false,
+            'is_transfer' => false,
+            'is_value_object' => false,
+            'rest_request_parameter' => 'no',
+            'is_associative' => false,
+            'is_nullable' => false,
+            'is_strict' => false,
+        ],
+        self::VERSION => [
+            'type' => 'string',
+            'type_shim' => null,
+            'name_underscore' => 'version',
             'is_collection' => false,
             'is_transfer' => false,
             'is_value_object' => false,
@@ -352,6 +376,57 @@ class ModuleTransfer extends AbstractTransfer
     public function requireNameDashed()
     {
         $this->assertPropertyIsSet(static::NAME_DASHED);
+
+        return $this;
+    }
+
+    /**
+     * @module Integrator|SprykGui|Development|ModuleFinder
+     *
+     * @param string|null $version
+     *
+     * @return $this
+     */
+    public function setVersion(?string $version)
+    {
+        $this->version = $version;
+        $this->modifiedProperties[static::NAME] = true;
+
+        return $this;
+    }
+
+    /**
+     * @module Integrator|SprykGui|Development|ModuleFinder
+     *
+     * @return string|null
+     */
+    public function getVersion(): ?string
+    {
+        return $this->version;
+    }
+
+    /**
+     * @module Integrator|SprykGui|Development|ModuleFinder
+     *
+     * @return string
+     */
+    public function getVersionOrFail(): string
+    {
+        if ($this->version === null) {
+            $this->throwNullValueException(static::VERSION);
+        }
+
+        return $this->version;
+    }
+
+    /**
+     * @module Integrator|SprykGui|Development|ModuleFinder
+     *
+     * @return $this
+     */
+    public function requireVersion()
+    {
+        $this->assertPropertyIsSet(static::VERSION);
 
         return $this;
     }
@@ -615,7 +690,7 @@ class ModuleTransfer extends AbstractTransfer
     }
 
     /**
-     * @param \ArrayObject $applications
+     * @param \ArrayObject<\SprykerSdk\Integrator\Transfer\ApplicationTransfer> $applications
      *
      * @return $this
      */
