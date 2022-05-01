@@ -65,6 +65,7 @@ interface ClassBuilderFacadeInterface
      * @param string $classNameToAdd
      * @param string $before
      * @param string $after
+     * @param string|null $index
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -73,7 +74,8 @@ interface ClassBuilderFacadeInterface
         string $targetMethodName,
         string $classNameToAdd,
         string $before = '',
-        string $after = ''
+        string $after = '',
+        ?string $index = null
     ): ClassInformationTransfer;
 
     /**
@@ -100,6 +102,8 @@ interface ClassBuilderFacadeInterface
      * @param string $targetMethodName
      * @param string $classNameToAdd
      * @param string $constantName
+     * @param string $before
+     * @param string $after
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -107,7 +111,9 @@ interface ClassBuilderFacadeInterface
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
         string $classNameToAdd,
-        string $constantName
+        string $constantName,
+        string $before = '',
+        string $after = ''
     ): ClassInformationTransfer;
 
     /**

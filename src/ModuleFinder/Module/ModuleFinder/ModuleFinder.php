@@ -101,7 +101,7 @@ class ModuleFinder implements ModuleFinderInterface
     }
 
     /**
-     * @return \Symfony\Component\Finder\SplFileInfo[]|\Symfony\Component\Finder\Finder
+     * @return \Symfony\Component\Finder\Finder<\Symfony\Component\Finder\SplFileInfo>
      */
     protected function getStandaloneModuleFinder(): Finder
     {
@@ -125,6 +125,10 @@ class ModuleFinder implements ModuleFinderInterface
     ): array {
         if ($moduleFilterTransfer !== null && !$this->moduleMatcher->matches($moduleTransfer, $moduleFilterTransfer)) {
             return $moduleTransferCollection;
+        }
+
+        if ($moduleFilterTransfer && $moduleFilterTransfer->getModule() !== null) {
+            $moduleTransfer->setVersion($moduleFilterTransfer->getModule()->getVersion());
         }
 
         $moduleTransferCollection[$this->buildCollectionKey($moduleTransfer)] = $moduleTransfer;
@@ -174,7 +178,7 @@ class ModuleFinder implements ModuleFinderInterface
     }
 
     /**
-     * @return \Symfony\Component\Finder\SplFileInfo[]|\Symfony\Component\Finder\Finder
+     * @return \Symfony\Component\Finder\Finder<\Symfony\Component\Finder\SplFileInfo>
      */
     protected function getModuleFinder(): Finder
     {

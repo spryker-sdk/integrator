@@ -1,0 +1,9 @@
+{
+    "name": "spryker/test-integrator-add-config-array-element",
+    "type": "composer-plugin",
+    "description": "test-integrator-add-config-array-element module",
+    "license": "proprietary",
+    "require": {
+        "php": ">=7.4"
+    }
+}

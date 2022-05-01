@@ -83,6 +83,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
      * @param string $classNameToAdd
      * @param string $before
      * @param string $after
+     * @param string|null $index
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -91,11 +92,12 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         string $targetMethodName,
         string $classNameToAdd,
         string $before = '',
-        string $after = ''
+        string $after = '',
+        ?string $index = null
     ): ClassInformationTransfer {
         return $this->getFactory()
             ->createClassInstanceClassModifier()
-            ->wireClassInstance($classInformationTransfer, $targetMethodName, $classNameToAdd, $before, $after);
+            ->wireClassInstance($classInformationTransfer, $targetMethodName, $classNameToAdd, $before, $after, $index);
     }
 
     /**
@@ -124,6 +126,8 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
      * @param string $targetMethodName
      * @param string $classNameToAdd
      * @param string $constantName
+     * @param string $before
+     * @param string $after
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -131,11 +135,20 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
         string $classNameToAdd,
-        string $constantName
+        string $constantName,
+        string $before = '',
+        string $after = ''
     ): ClassInformationTransfer {
         return $this->getFactory()
             ->createClassListModifier()
-            ->wireClassConstant($classInformationTransfer, $targetMethodName, $classNameToAdd, $constantName);
+            ->wireClassConstant(
+                $classInformationTransfer,
+                $targetMethodName,
+                $classNameToAdd,
+                $constantName,
+                $before,
+                $after,
+            );
     }
 
     /**

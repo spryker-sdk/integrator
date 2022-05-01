@@ -61,6 +61,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
      * @param string $classNameToAdd
      * @param string $before
      * @param string $after
+     * @param string|null $index
      *
      * @throws \RuntimeException
      *
@@ -71,7 +72,8 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
         string $targetMethodName,
         string $classNameToAdd,
         string $before = '',
-        string $after = ''
+        string $after = '',
+        ?string $index = null
     ): ClassInformationTransfer {
         $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         if (!$methodNode) {
@@ -91,8 +93,13 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
                     $classNameToAdd,
                     $before,
                     $after,
+                    $index,
                 ),
             ];
+
+            if ($index !== null && $this->isIndexFullyQualifiedClassName($index)) {
+                $visitors[] = new AddUseVisitor($this->getFullyQualifiedClassNameFromIndex($index));
+            }
 
             return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
         }
@@ -107,6 +114,26 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
         $this->commonClassModifier->replaceMethodBody($classInformationTransfer, $targetMethodName, $methodBody);
 
         return $classInformationTransfer;
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return bool
+     */
+    protected function isIndexFullyQualifiedClassName(string $index): bool
+    {
+        return strpos($index, '::') !== false && strpos($index, 'static::') === false;
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return string
+     */
+    protected function getFullyQualifiedClassNameFromIndex(string $index): string
+    {
+        return explode('::', $index)[0];
     }
 
     /**

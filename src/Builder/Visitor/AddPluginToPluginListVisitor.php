@@ -11,13 +11,28 @@ namespace SprykerSdk\Integrator\Builder\Visitor;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 
 class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 {
+    /**
+     * @var string
+     */
+    protected const ARRAY_MERGE_FUNCTION = 'array_merge';
+
     /**
      * @var string
      */
@@ -49,6 +64,11 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $after;
 
     /**
+     * @var string|null
+     */
+    protected $index;
+
+    /**
      * @var bool
      */
     protected $methodFound = false;
@@ -58,42 +78,109 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      * @param string $className
      * @param string $before
      * @param string $after
+     * @param string|null $index
      */
-    public function __construct(string $methodName, string $className, string $before = '', string $after = '')
+    public function __construct(string $methodName, string $className, string $before = '', string $after = '', ?string $index = null)
     {
         $this->methodName = $methodName;
         $this->className = ltrim($className, '\\');
         $this->before = ltrim($before, '\\');
         $this->after = ltrim($after, '\\');
+        $this->index = $index;
     }
 
     /**
      * @param \PhpParser\Node $node
      *
-     * @return \PhpParser\Node
+     * @return \PhpParser\Node|int
      */
-    public function enterNode(Node $node): Node
+    public function enterNode(Node $node)
     {
-        if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() === $this->methodName) {
+        if ($node instanceof ClassMethod && $node->name->toString() === $this->methodName) {
             $this->methodFound = true;
 
             return $node;
         }
 
-        if ($this->methodFound && $node->getType() === static::STATEMENT_ARRAY) {
-            $this->addNewPlugin($node);
-            $this->methodFound = false;
+        if ($this->methodFound) {
+            if ($node instanceof FuncCall && $this->isArrayMergeFuncCallNode($node)) {
+                $this->addNewPluginIntoArrayMergeFuncNode($node);
+
+                return $this->successfullyProcessed();
+            }
+
+            if ($node instanceof Array_) {
+                $this->addNewPlugin($node);
+
+                return $this->successfullyProcessed();
+            }
         }
 
         return $node;
     }
 
     /**
-     * @param \PhpParser\Node $node
+     * @param \PhpParser\Node\Expr\FuncCall $node
+     *
+     * @return bool
+     */
+    protected function isArrayMergeFuncCallNode(FuncCall $node): bool
+    {
+        return $node->name instanceof Name && $node->name->parts[0] === static::ARRAY_MERGE_FUNCTION;
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall $node
      *
      * @return \PhpParser\Node
      */
-    protected function addNewPlugin(Node $node): Node
+    protected function addNewPluginIntoArrayMergeFuncNode(FuncCall $node): Node
+    {
+        if ($this->isPluginAddedInArrayMerge($node)) {
+            return $node;
+        }
+
+        $node->args[] = new Arg($this->createArrayWithInstanceOf());
+
+        return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall $node
+     *
+     * @return bool
+     */
+    protected function isPluginAddedInArrayMerge(FuncCall $node): bool
+    {
+        foreach ($node->getArgs() as $arg) {
+            if (!$arg->value instanceof Array_) {
+                continue;
+            }
+
+            if ($this->isPluginAdded($arg->value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return \PhpParser\Node\Expr\Array_
+     */
+    protected function createArrayWithInstanceOf(): Array_
+    {
+        return new Array_(
+            [$this->createArrayItemWithInstanceOf()],
+        );
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\Array_ $node
+     *
+     * @return \PhpParser\Node
+     */
+    protected function addNewPlugin(Array_ $node): Node
     {
         if ($this->isPluginAdded($node)) {
             return $node;
@@ -102,6 +189,10 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         $items = [];
         $itemAdded = false;
         foreach ($node->items as $item) {
+            if ($item === null || !($item->value instanceof New_)) {
+                continue;
+            }
+
             $nodeClassName = $item->value->class->toString();
             if ($nodeClassName === $this->before) {
                 $items[] = $this->createArrayItemWithInstanceOf();
@@ -131,23 +222,58 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param \PhpParser\Node $node
+     * @param \PhpParser\Node\Expr\Array_ $node
      *
      * @return bool
      */
-    protected function isPluginAdded(Node $node): bool
+    protected function isPluginAdded(Array_ $node): bool
     {
         foreach ($node->items as $item) {
-            if (!($item->value instanceof New_)) {
+            if ($item === null || !($item->value instanceof New_)) {
                 continue;
             }
             $nodeClassName = $item->value->class->toString();
-            if ($nodeClassName === $this->className) {
+
+            if ($this->isKeyEqualsToCurrentOne($item) && $nodeClassName === $this->className) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\ArrayItem $node
+     *
+     * @return bool
+     */
+    protected function isKeyEqualsToCurrentOne(ArrayItem $node): bool
+    {
+        $nodeKey = $this->getArrayItemNodeKey($node);
+
+        return ltrim((string)$nodeKey, '\\') === ltrim((string)$this->index, '\\');
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\ArrayItem $node
+     *
+     * @return string|null
+     */
+    protected function getArrayItemNodeKey(ArrayItem $node): ?string
+    {
+        if ($node->key === null) {
+            return null;
+        }
+
+        if ($node->key instanceof ClassConstFetch && $node->key->class instanceof Name && $node->key->name instanceof Identifier) {
+            return sprintf('%s::%s', $node->key->class, $node->key->name);
+        }
+
+        if ($node->key instanceof String_) {
+            return $node->key->value;
+        }
+
+        return null;
     }
 
     /**
@@ -159,6 +285,46 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             (new BuilderFactory())->new(
                 (new ClassHelper())->getShortClassName($this->className),
             ),
+            $this->index ? $this->createIndexExpr($this->index) : null,
         );
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return \PhpParser\Node\Expr
+     */
+    protected function createIndexExpr(string $index): Expr
+    {
+        if (strpos($index, 'static::') === 0) {
+            $indexParts = explode('::', $index);
+
+            return new ClassConstFetch(
+                new Name('static'),
+                $indexParts[1],
+            );
+        }
+
+        if (strpos($index, '::') !== false) {
+            $indexParts = explode('::', $index);
+            $classNamespaceChain = explode('\\', $indexParts[0]);
+
+            return new ClassConstFetch(
+                new Name(end($classNamespaceChain)),
+                $indexParts[1],
+            );
+        }
+
+        return new String_($index);
+    }
+
+    /**
+     * @return int
+     */
+    protected function successfullyProcessed(): int
+    {
+        $this->methodFound = false;
+
+        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
     }
 }
