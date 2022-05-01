@@ -70,14 +70,11 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
     {
         $arrayItems = [];
         foreach ($value as $key => $item) {
-            $insideArrayItems = [];
             $itemParts = [];
 
             if (is_string($item)) {
                 $item = $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $item);
                 $itemParts = explode('::', $item);
-            } else {
-                $insideArrayItems = $this->createMethodStatementsFromValue($classInformationTransfer, $item);
             }
 
             if (is_int($key)) {
@@ -89,6 +86,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
             $key = $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $key);
             $keyParts = explode('::', $key);
             if (is_array($item)) {
+                $insideArrayItems = $this->createMethodStatementsFromValue($classInformationTransfer, $item);
                 $arrayItems[] = $this->createArrayItem([], $keyParts, $insideArrayItems);
 
                 continue;
@@ -150,7 +148,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
             );
         }
 
-        if (in_array($itemParts[0], ['true', 'false'])) {
+        if (in_array($itemParts[0], ['true', 'false'], true)) {
             return new ArrayItem(
                 new ConstFetch(new Name($itemParts[0])),
                 $this->createClassConstantExpression($keyParts[0], $keyParts[1]),

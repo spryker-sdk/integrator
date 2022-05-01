@@ -139,7 +139,7 @@ class ClassMethodChecker extends AbstractMethodChecker implements ClassMethodChe
             return true;
         }
         $parser = $this->parserFactory->create(ParserFactory::PREFER_PHP7);
-        $previousValue = $parser->parse('<?php ' . $value . ';');
+        $previousValue = $parser->parse(sprintf('<?php %s;', $value));
         if (!$previousValue) {
             return false;
         }
@@ -176,7 +176,7 @@ class ClassMethodChecker extends AbstractMethodChecker implements ClassMethodChe
 
         foreach ($this->methodStatementCheckers as $methodStatementChecker) {
             if ($methodStatementChecker->isApplicable($previousValue, $currentValue)) {
-                return $methodStatementChecker->isSameStatements($previousValue, $currentValue);
+                return $methodStatementChecker->isSameStatement($previousValue, $currentValue);
             }
         }
 
@@ -191,9 +191,11 @@ class ClassMethodChecker extends AbstractMethodChecker implements ClassMethodChe
      */
     protected function isSameForRecursiveFields($previousValue, $currentValue): bool
     {
-        $isSame = $this->isSameArrayStatementsFields($previousValue, $currentValue);
+        if (!$this->isSameArrayStatementsFields($previousValue, $currentValue)) {
+            return false;
+        }
 
-        return $isSame && $this->isSameSingleStatementsFields($previousValue, $currentValue);
+        return $this->isSameSingleStatementsFields($previousValue, $currentValue);
     }
 
     /**
@@ -205,7 +207,7 @@ class ClassMethodChecker extends AbstractMethodChecker implements ClassMethodChe
     protected function isSameArrayStatementsFields($previousValue, $currentValue): bool
     {
         $isSame = true;
-        if ($this->isExistsStatementsField($previousValue, $currentValue, static::METHOD_FIELD_ARGS)) {
+        if ($this->isExistsStatementField($previousValue, $currentValue, static::METHOD_FIELD_ARGS)) {
             foreach ($previousValue->args as $keyArgument => $argument) {
                 if (!$isSame) {
                     break;
@@ -225,13 +227,15 @@ class ClassMethodChecker extends AbstractMethodChecker implements ClassMethodChe
      */
     protected function isSameSingleStatementsFields($previousValue, $currentValue): bool
     {
-        $isSame = true;
         foreach (static::SINGLE_STATEMENT_EXPRESSION_FIELDS as $field) {
-            if ($isSame && $this->isExistsStatementsField($previousValue, $currentValue, $field)) {
-                $isSame = $this->isSameMethodsBody($previousValue->{$field}, $currentValue->{$field});
+            if (!$this->isExistsStatementField($previousValue, $currentValue, $field)) {
+                continue;
+            }
+            if (!$this->isSameMethodsBody($previousValue->{$field}, $currentValue->{$field})) {
+                return false;
             }
         }
 
-        return $isSame;
+        return true;
     }
 }

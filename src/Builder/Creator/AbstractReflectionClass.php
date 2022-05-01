@@ -39,7 +39,7 @@ class AbstractReflectionClass
     protected function isValueReturnArray($value): bool
     {
         return !is_bool($value)
-            && (is_array($value) || preg_match('/' . static::ARRAY_MERGE_FUNCTION . '/', $value));
+            && (is_array($value) || strpos($value, static::ARRAY_MERGE_FUNCTION) !== false);
     }
 
     /**

@@ -25,5 +25,5 @@ interface MethodStatementCheckerInterface
      *
      * @return bool
      */
-    public function isSameStatements($previousValue, $currentValue): bool;
+    public function isSameStatement($previousValue, $currentValue): bool;
 }

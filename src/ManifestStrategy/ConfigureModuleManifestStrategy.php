@@ -40,8 +40,8 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
         $defaultValue = $manifest[IntegratorConfig::MANIFEST_KEY_DEFAULT_VALUE] ?? null;
         $isLiteral = false;
         if ($this->isLiteralManifestValue($value)) {
-            $isLiteral = $manifest[IntegratorConfig::MANIFEST_KEY_VALUE][IntegratorConfig::MANIFEST_KEY_IS_LITERAL] ?? false;
             $value = $value[IntegratorConfig::MANIFEST_KEY_VALUE];
+            $isLiteral = $value[IntegratorConfig::MANIFEST_KEY_IS_LITERAL] ?? false;
         }
 
         $applied = false;

@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
-use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
@@ -133,14 +132,6 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     }
 
     /**
-     * @return \PhpParser\Parser
-     */
-    protected function createParser(): Parser
-    {
-        return (new ParserFactory())->create(ParserFactory::PREFER_PHP7);
-    }
-
-    /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param mixed $value
      *
@@ -166,13 +157,14 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     /**
      * @param array<\PhpParser\Node\Stmt> $tree
      *
-     * @return array
+     * @return array<\PhpParser\Node\Stmt>
      */
     protected function createMultiStatementMethodBody(array $tree): array
     {
-        $lastElement = $tree[count($tree) - 1];
+        $lastElementKey = array_key_last($tree);
+        $lastElement = $tree[$lastElementKey];
         if (!$lastElement instanceof Return_ && property_exists($lastElement, 'expr')) {
-            $tree[count($tree) - 1] = new Return_($lastElement->expr);
+            $tree[$lastElementKey] = new Return_($lastElement->expr);
         }
 
         return $tree;
@@ -180,12 +172,12 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param array $tree
+     * @param array<\PhpParser\Node\Stmt> $tree
      * @param mixed $value
      *
      * @throws \SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException
      *
-     * @return array
+     * @return array<\PhpParser\Node\Stmt\Return_>
      */
     protected function createSingleStatementMethodBody(ClassInformationTransfer $classInformationTransfer, array $tree, $value): array
     {
@@ -205,7 +197,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param \PhpParser\Node\Stmt\Expression $expression
      *
-     * @return array
+     * @return array<\PhpParser\Node\Stmt\Return_>
      */
     protected function createClassConstantReturnStatement(
         ClassInformationTransfer $classInformationTransfer,
@@ -219,7 +211,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         $expressionClass = $expressionStatement->class;
         $returnExpressionClass = $this->getShortClassNameAndAddToClassInformation(
             $classInformationTransfer,
-            implode('\\', $expressionClass->parts) . '::' . $expressionName->name,
+            $expressionClass->toString() . '::' . $expressionName->name,
         );
         $returnExpressionClassParts = explode('::', $returnExpressionClass);
         $expressionClass->parts = [$returnExpressionClassParts[0]];

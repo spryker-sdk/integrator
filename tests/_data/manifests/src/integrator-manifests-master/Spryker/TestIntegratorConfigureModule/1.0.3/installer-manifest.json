@@ -149,7 +149,7 @@
         },
         {
             "previousValue": {
-                "static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED": "false"
+                "static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED": false
             },
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testChangeMethod9",
             "value":

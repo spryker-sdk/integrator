@@ -34,6 +34,14 @@ class AbstractMethodCreator
     protected const PARENT_CONST_PREPOSITION = 'parent';
 
     /**
+     * @var array
+     */
+    protected const CONST_PREPOSITIONS = [
+        self::STATIC_CONST_PREPOSITION,
+        self::PARENT_CONST_PREPOSITION,
+    ];
+
+    /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $value
      *
@@ -49,7 +57,7 @@ class AbstractMethodCreator
         }
 
         $classValueParts = explode('\\', $valueParts[0]);
-        if ($valueParts[0] != static::STATIC_CONST_PREPOSITION && $valueParts[0] != static::PARENT_CONST_PREPOSITION) {
+        if (!in_array($valueParts[0], static::CONST_PREPOSITIONS, true)) {
             $nodeTraverser = new NodeTraverser();
             $nodeTraverser->addVisitor(new AddUseVisitor($valueParts[0]));
             $classInformationTransfer->setClassTokenTree(

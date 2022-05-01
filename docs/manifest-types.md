@@ -110,7 +110,7 @@ This manifest adds a constant to specified target class. To set value you can sp
 }
 ```
 
-This manifest set expression to specified method of target class. To set value you can specify value field. It can be everything supported by PHP.
+This manifest sets expression to specified method of a target class. To set a value you can specify a value field. It can be everything supported by PHP.
 
 ```json
 {
@@ -146,8 +146,10 @@ This manifest substitutes expression of specified method target class in case if
         {
             "previousValue": "$variable = 5 + 10; return $variable",
             "target": "\\Spryker\\Client\\Catalog\\CatalogConfig::targetMethod",
-            "value": "$variable = 10 + 20; $variable",
-            "is_literal": true
+            "value": {
+                "value": "$variable = 10 + 20; $variable",
+                "is_literal": true
+            }
         }
     ]
 }

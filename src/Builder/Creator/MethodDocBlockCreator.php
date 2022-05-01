@@ -32,6 +32,6 @@ class MethodDocBlockCreator extends AbstractReflectionClass implements MethodDoc
         $docBlockReturnItems[] = ' * @return ' . $docBlockReturnType;
         $docBlockReturnItems[] = ' */';
 
-        return new Doc(implode("\n", $docBlockReturnItems));
+        return new Doc(implode(PHP_EOL, $docBlockReturnItems));
     }
 }

@@ -18,9 +18,11 @@ class AbstractMethodChecker
      *
      * @return bool
      */
-    protected function isExistsStatementsField($previousValue, $currentValue, string $field): bool
+    protected function isExistsStatementField($previousValue, $currentValue, string $field): bool
     {
-        return property_exists($previousValue, $field) && property_exists($currentValue, $field);
+        return is_object($previousValue)
+            && is_object($currentValue)
+            && property_exists($previousValue, $field) && property_exists($currentValue, $field);
     }
 
     /**

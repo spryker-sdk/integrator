@@ -22,7 +22,7 @@ class ItemsMethodStatementChecker extends AbstractMethodChecker implements Metho
      */
     public function isApplicable($previousValue, $currentValue): bool
     {
-        return $this->isExistsStatementsField($previousValue, $currentValue, ClassMethodChecker::METHOD_FIELD_ITEMS);
+        return $this->isExistsStatementField($previousValue, $currentValue, ClassMethodChecker::METHOD_FIELD_ITEMS);
     }
 
     /**
@@ -31,7 +31,7 @@ class ItemsMethodStatementChecker extends AbstractMethodChecker implements Metho
      *
      * @return bool
      */
-    public function isSameStatements($previousValue, $currentValue): bool
+    public function isSameStatement($previousValue, $currentValue): bool
     {
         return count($previousValue->items) === count($currentValue->items);
     }

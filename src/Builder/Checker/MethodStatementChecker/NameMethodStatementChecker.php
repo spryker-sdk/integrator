@@ -22,7 +22,7 @@ class NameMethodStatementChecker extends AbstractMethodChecker implements Method
      */
     public function isApplicable($previousValue, $currentValue): bool
     {
-        return $this->isExistsStatementsField($previousValue, $currentValue, ClassMethodChecker::METHOD_FIELD_NAME);
+        return $this->isExistsStatementField($previousValue, $currentValue, ClassMethodChecker::METHOD_FIELD_NAME);
     }
 
     /**
@@ -31,13 +31,13 @@ class NameMethodStatementChecker extends AbstractMethodChecker implements Method
      *
      * @return bool
      */
-    public function isSameStatements($previousValue, $currentValue): bool
+    public function isSameStatement($previousValue, $currentValue): bool
     {
         if (is_string($previousValue->name) && is_string($currentValue->name) && $previousValue->name !== $currentValue->name) {
             return false;
         }
         if (
-            $this->isExistsStatementsField($previousValue->name, $currentValue->name, 'parts')
+            $this->isExistsStatementField($previousValue->name, $currentValue->name, 'parts')
             && $previousValue->name->parts !== $currentValue->name->parts
         ) {
             return false;
