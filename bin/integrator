@@ -12,7 +12,10 @@ defined('APPLICATION_VENDOR_DIR')
 ||  define('APPLICATION_VENDOR_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor');
 
 require APPLICATION_VENDOR_DIR . DIRECTORY_SEPARATOR . 'autoload.php';
-require INTEGRATOR_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+
+if(strpos(INTEGRATOR_ROOT_DIR, '.composer') !== false){
+    require INTEGRATOR_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+}
 
 use SprykerSdk\Integrator\Console\ModuleInstallerConsole;
 use Symfony\Component\Console\Application;
