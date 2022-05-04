@@ -138,7 +138,7 @@ This manifest adds expression to specified method of target class. To set value 
 }
 ```
 
-This manifest substitutes expression of specified method target class in case if not exists any changes in according target method, checked by `previousValue` parameter. To set value you can specify value field. It can be everything supported by PHP.
+This manifest substitutes expression of specified method of target class in case if statements of target class method the same as in `previousValue` parameter. To set value you can specify value field. It can be everything supported by PHP.
 
 ```json
 {
@@ -147,7 +147,7 @@ This manifest substitutes expression of specified method target class in case if
             "previousValue": "$variable = 5 + 10; return $variable",
             "target": "\\Spryker\\Client\\Catalog\\CatalogConfig::targetMethod",
             "value": {
-                "value": "$variable = 10 + 20; $variable",
+                "value": "$variable = 10 + 20; return $variable",
                 "is_literal": true
             }
         }

@@ -36,14 +36,14 @@
         {
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testNewMethod",
             "value": {
-                "value": "array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), ['sales' => '/sales/customer/customer-orders', 'notes' => '/customer-note-gui/index/index'])",
+                "value": "return array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), ['sales' => '/sales/customer/customer-orders', 'notes' => '/customer-note-gui/index/index'])",
                 "is_literal": true
             }
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testNewMethod2",
             "value": {
-                "value": "array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), parent::getSharedConfig())",
+                "value": "return array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), parent::getSharedConfig())",
                 "is_literal": true
             }
         },
@@ -84,7 +84,7 @@
             "previousValue": "",
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testNewMethod10",
             "value": {
-                "value": "$this->getSharedConfig($this->testChange(), [\\Pyz\\Yves\\CartPage\\CartPageConfig::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED => [\\Pyz\\Yves\\CartPage\\CartPageConfig::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED => 'test']])",
+                "value": "return $this->getSharedConfig($this->testChange(), [\\Pyz\\Yves\\CartPage\\CartPageConfig::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED => [\\Pyz\\Yves\\CartPage\\CartPageConfig::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED => 'test']])",
                 "is_literal": true
             }
         },
@@ -121,7 +121,7 @@
         {
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testChange5",
             "value": {
-                "value": "array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), parent::getSharedConfig(), $this->getSharedConfig2())",
+                "value": "return array_merge(parent::isCartCartItemsViaAjaxLoadEnabled(), parent::getSharedConfig(), $this->getSharedConfig2())",
                 "is_literal": true
             }
         },
@@ -143,7 +143,7 @@
             "previousValue": "$array = parent::isCartCartItemsViaAjaxLoadEnabledChanged();\n        $array = array_merge_recursive(\n            $array,\n            [\n                \\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE_NOT_CHANGED,\n                \\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE2_NOT_CHANGED\n            ]\n        );\n\n        return array_merge(\n            $array,\n            [\n                \\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE_NOT_CHANGED => [\n                    \\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY_NOT_CHANGED\n                ],\n                \\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE2_NOT_CHANGED => [\n                    \\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY22_NOT_CHANGED\n                ]\n            ]\n        );",
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testChange6",
             "value": {
-                "value": "$array = parent::isCartCartItemsViaAjaxLoadEnabledChanged(); $array = array_merge($array, [\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE, \\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE2]); array_merge($array, [\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE => [\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY], \\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE2 => [\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY22]])",
+                "value": "$array = parent::isCartCartItemsViaAjaxLoadEnabledChanged(); $array = array_merge($array, [\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE, \\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE2]); return array_merge($array, [\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE => [\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY], \\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE2 => [\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY22]])",
                 "is_literal": true
             }
         },
@@ -154,7 +154,7 @@
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testChangeMethod9",
             "value":
             {
-                "static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED_CHANGED": "true"
+                "static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED_CHANGED": true
             }
         }
     ]

@@ -27,16 +27,6 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
     /**
      * @var string
      */
-    protected const STATEMENT_ARRAY = 'Expr_Array';
-
-    /**
-     * @var string
-     */
-    protected const STATEMENT_CLASS_METHOD = 'Stmt_ClassMethod';
-
-    /**
-     * @var string
-     */
     protected const ARRAY_MERGE_FUNCTION = 'array_merge';
 
     /**

@@ -41,14 +41,4 @@ class AbstractReflectionClass
         return !is_bool($value)
             && (is_array($value) || strpos($value, static::ARRAY_MERGE_FUNCTION) !== false);
     }
-
-    /**
-     * @param mixed $value
-     *
-     * @return bool
-     */
-    protected function isValueReturnBool($value): bool
-    {
-        return is_bool($value);
-    }
 }

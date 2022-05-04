@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException;
+use SprykerSdk\Integrator\Builder\Exception\NotFoundReturnExpressionException;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -85,11 +86,11 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
             throw new LiteralValueParsingException(sprintf('Value is not valid PHP code: `%s`', $value));
         }
 
-        if (!$this->isSingleReturnStatement($tree)) {
-            return $this->createMultiStatementMethodBody($tree);
+        if ($this->isSingleReturnStatement($tree)) {
+            return $this->createSingleStatementMethodBody($classInformationTransfer, $tree, $value);
         }
 
-        return $this->createSingleStatementMethodBody($classInformationTransfer, $tree, $value);
+        return $tree;
     }
 
     /**
@@ -155,27 +156,11 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     }
 
     /**
-     * @param array<\PhpParser\Node\Stmt> $tree
-     *
-     * @return array<\PhpParser\Node\Stmt>
-     */
-    protected function createMultiStatementMethodBody(array $tree): array
-    {
-        $lastElementKey = array_key_last($tree);
-        $lastElement = $tree[$lastElementKey];
-        if (!$lastElement instanceof Return_ && property_exists($lastElement, 'expr')) {
-            $tree[$lastElementKey] = new Return_($lastElement->expr);
-        }
-
-        return $tree;
-    }
-
-    /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param array<\PhpParser\Node\Stmt> $tree
      * @param mixed $value
      *
-     * @throws \SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException
+     * @throws \SprykerSdk\Integrator\Builder\Exception\NotFoundReturnExpressionException
      *
      * @return array<\PhpParser\Node\Stmt\Return_>
      */
@@ -184,7 +169,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         /** @var \PhpParser\Node\Stmt\Expression|null $returnExpression */
         $returnExpression = $tree[0] ?? null;
         if (!$returnExpression) {
-            throw new LiteralValueParsingException(sprintf('Value is not valid PHP code: `%s`', $value));
+            throw new NotFoundReturnExpressionException(sprintf('Not found any statements in value: `%s`', $value));
         }
         if (property_exists($returnExpression->expr, 'class')) {
             return $this->createClassConstantReturnStatement($classInformationTransfer, $returnExpression);
