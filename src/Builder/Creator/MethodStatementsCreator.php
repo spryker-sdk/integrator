@@ -28,12 +28,12 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
     /**
      * @var int
      */
-    protected const CONSTANT_TYPE_INDEX = 0;
+    protected const PREFIX_CONSTANT_INDEX = 0;
 
     /**
      * @var int
      */
-    protected const CONSTANT_VALUE_INDEX = 1;
+    protected const POSTFIX_CONSTANT_INDEX = 1;
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
@@ -86,6 +86,9 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
                 $item = $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $item);
                 $itemParts = explode('::', $item);
             }
+            if (is_bool($item)) {
+                $itemParts = [$item];
+            }
 
             if (is_int($key)) {
                 $arrayItems[] = $this->createArrayItem($itemParts);
@@ -124,31 +127,19 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
         if ($insideArrayItems) {
             return new ArrayItem(
                 (new BuilderFactory())->val($insideArrayItems),
-                $this->createClassConstantExpression(
-                    $keyParts[static::CONSTANT_TYPE_INDEX],
-                    $keyParts[static::CONSTANT_VALUE_INDEX]
-                ),
+                $this->createClassConstantExpression($keyParts[static::PREFIX_CONSTANT_INDEX], $keyParts[static::POSTFIX_CONSTANT_INDEX]),
             );
         }
 
         if (!$keyParts) {
             return new ArrayItem(
-                $this->createClassConstantExpression(
-                    $itemParts[static::CONSTANT_TYPE_INDEX],
-                    $itemParts[static::CONSTANT_VALUE_INDEX]
-                ),
+                $this->createClassConstantExpression($itemParts[static::PREFIX_CONSTANT_INDEX], $itemParts[static::POSTFIX_CONSTANT_INDEX]),
             );
         }
 
         return new ArrayItem(
-            $this->createClassConstantExpression(
-                $keyParts[static::CONSTANT_TYPE_INDEX],
-                $keyParts[static::CONSTANT_VALUE_INDEX]
-            ),
-            $this->createClassConstantExpression(
-                $itemParts[static::CONSTANT_TYPE_INDEX],
-                $itemParts[static::CONSTANT_VALUE_INDEX]
-            ),
+            $this->createClassConstantExpression($keyParts[static::PREFIX_CONSTANT_INDEX], $keyParts[static::POSTFIX_CONSTANT_INDEX]),
+            $this->createClassConstantExpression($itemParts[static::PREFIX_CONSTANT_INDEX], $itemParts[static::POSTFIX_CONSTANT_INDEX]),
         );
     }
 
@@ -160,6 +151,13 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
      */
     protected function createSingleSemicolonVariableArrayItem(array $itemParts, array $keyParts): ArrayItem
     {
+        if (in_array($itemParts[0], [true, false], true)) {
+            return new ArrayItem(
+                new ConstFetch(new Name($itemParts[0] ? 'true' : 'false')),
+                $this->createClassConstantExpression($keyParts[static::PREFIX_CONSTANT_INDEX], $keyParts[static::POSTFIX_CONSTANT_INDEX]),
+            );
+        }
+
         $singleItemParts = explode('->', trim($itemParts[0], '$()'));
         if (count($singleItemParts) !== static::SIMPLE_VARIABLE_SEMICOLON_COUNT) {
             return new ArrayItem(
@@ -170,22 +168,9 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
             );
         }
 
-        if (in_array($itemParts[0], ['true', 'false'], true)) {
-            return new ArrayItem(
-                new ConstFetch(new Name($itemParts[0])),
-                $this->createClassConstantExpression(
-                    $keyParts[static::CONSTANT_TYPE_INDEX],
-                    $keyParts[static::CONSTANT_VALUE_INDEX]
-                ),
-            );
-        }
-
         return new ArrayItem(
             new String_($itemParts[0]),
-            $this->createClassConstantExpression(
-                $keyParts[static::CONSTANT_TYPE_INDEX],
-                $keyParts[static::CONSTANT_VALUE_INDEX]
-            ),
+            $this->createClassConstantExpression($keyParts[static::PREFIX_CONSTANT_INDEX], $keyParts[static::POSTFIX_CONSTANT_INDEX]),
         );
     }
 }

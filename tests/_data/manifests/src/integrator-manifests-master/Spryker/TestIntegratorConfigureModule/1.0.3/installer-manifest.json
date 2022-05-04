@@ -72,7 +72,7 @@
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testNewMethod8",
             "value":
             {
-                "static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED": "false"
+                "static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED": false
             }
         },
         {

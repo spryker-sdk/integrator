@@ -138,7 +138,7 @@ This manifest adds expression to specified method of target class. To set value 
 }
 ```
 
-This manifest substitutes expression of specified method of target class in case if statements of target class method the same as in `previousValue` parameter. To set value you can specify value field. It can be everything supported by PHP.
+This manifest compares the statements of the target class method and the  previousValue parameter. If they are the same, the manifest substitutes the expression of the specified method with the value of the value field. If they are not the same, the manifest does nothing.
 
 ```json
 {
