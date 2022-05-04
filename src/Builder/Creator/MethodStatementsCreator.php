@@ -36,16 +36,6 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
     protected const CONSTANT_VALUE_INDEX = 1;
 
     /**
-     * @var int
-     */
-    protected const FUNCTION_TYPE_INDEX = 0;
-
-    /**
-     * @var int
-     */
-    protected const FUNCTION_NAME_INDEX = 1;
-
-    /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param mixed $value
      *
@@ -136,7 +126,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
                 (new BuilderFactory())->val($insideArrayItems),
                 $this->createClassConstantExpression(
                     $keyParts[static::CONSTANT_TYPE_INDEX],
-                    $keyParts[static::CONSTANT_VALUE_INDEX],
+                    $keyParts[static::CONSTANT_VALUE_INDEX]
                 ),
             );
         }
@@ -145,7 +135,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
             return new ArrayItem(
                 $this->createClassConstantExpression(
                     $itemParts[static::CONSTANT_TYPE_INDEX],
-                    $itemParts[static::CONSTANT_VALUE_INDEX],
+                    $itemParts[static::CONSTANT_VALUE_INDEX]
                 ),
             );
         }
@@ -153,11 +143,11 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
         return new ArrayItem(
             $this->createClassConstantExpression(
                 $keyParts[static::CONSTANT_TYPE_INDEX],
-                $keyParts[static::CONSTANT_VALUE_INDEX],
+                $keyParts[static::CONSTANT_VALUE_INDEX]
             ),
             $this->createClassConstantExpression(
                 $itemParts[static::CONSTANT_TYPE_INDEX],
-                $itemParts[static::CONSTANT_VALUE_INDEX],
+                $itemParts[static::CONSTANT_VALUE_INDEX]
             ),
         );
     }
@@ -174,8 +164,8 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
         if (count($singleItemParts) !== static::SIMPLE_VARIABLE_SEMICOLON_COUNT) {
             return new ArrayItem(
                 (new BuilderFactory())->methodCall(
-                    new Variable($singleItemParts[static::FUNCTION_TYPE_INDEX]),
-                    new Identifier($singleItemParts[static::FUNCTION_NAME_INDEX]),
+                    new Variable($singleItemParts[0]),
+                    new Identifier($singleItemParts[1]),
                 ),
             );
         }
@@ -185,7 +175,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
                 new ConstFetch(new Name($itemParts[0])),
                 $this->createClassConstantExpression(
                     $keyParts[static::CONSTANT_TYPE_INDEX],
-                    $keyParts[static::CONSTANT_VALUE_INDEX],
+                    $keyParts[static::CONSTANT_VALUE_INDEX]
                 ),
             );
         }
@@ -194,7 +184,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
             new String_($itemParts[0]),
             $this->createClassConstantExpression(
                 $keyParts[static::CONSTANT_TYPE_INDEX],
-                $keyParts[static::CONSTANT_VALUE_INDEX],
+                $keyParts[static::CONSTANT_VALUE_INDEX]
             ),
         );
     }
