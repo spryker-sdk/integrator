@@ -44,6 +44,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
      * @var int
      */
     protected const METHOD_NAME_INDEX = 1;
+
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param mixed $value
