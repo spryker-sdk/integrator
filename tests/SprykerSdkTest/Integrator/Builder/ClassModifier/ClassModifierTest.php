@@ -28,13 +28,13 @@ class ClassModifierTest extends BaseTestCase
         $value = 'value_that_we_are_looking';
 
         //Act
-        $classModifier->setMethodReturnValue($classInformationTransfer, 'getScalarValue', $value);
+        $classModifier->createClassMethod($classInformationTransfer, 'getScalarValue', $value, false, '');
         $stmts = $finder->findMethodNode($classInformationTransfer, 'getScalarValue')->stmts;
 
         //Assert
         $this->assertTrue(isset($stmts[0]));
         $this->assertTrue(get_class($stmts[0]) === Return_::class);
-        $this->assertSame($stmts[0]->expr->value, $value);
+        $this->assertSame($stmts[0]->expr->name->parts[0], $value);
     }
 
     /**
@@ -49,13 +49,10 @@ class ClassModifierTest extends BaseTestCase
         );
         $classModifier = $this->getFactory()->createCommonClassModifier();
         $finder = $this->getFactory()->createClassNodeFinder();
-        $value = [
-            'value' => 'getenv(\'FOOBAR\')',
-            'is_literal' => true,
-        ];
+        $value = 'getenv(\'FOOBAR\')';
 
         //Act
-        $classModifier->setMethodReturnValue($classInformationTransfer, 'getLiteralValue', $value);
+        $classModifier->createClassMethod($classInformationTransfer, 'getLiteralValue', $value, true, '');
         $stmts = $finder->findMethodNode($classInformationTransfer, 'getLiteralValue')->stmts;
 
         //Assert

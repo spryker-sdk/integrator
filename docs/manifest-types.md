@@ -110,6 +110,51 @@ This manifest adds a constant to specified target class. To set value you can sp
 }
 ```
 
+This manifest sets expression to specified method of a target class. To set a value you can specify a value field. It can be everything supported by PHP.
+
+```json
+{
+    "configure-module": [
+        {
+            "target": "\\Spryker\\Client\\Catalog\\CatalogConfig::targetMethod",
+            "value": 10
+        }
+    ]
+}
+```
+
+This manifest adds expression to specified method of target class. To set value you can specify value field. It can be everything supported by PHP.
+
+```json
+{
+    "configure-module": [
+        {
+            "target": "\\Spryker\\Client\\Catalog\\CatalogConfig::targetMethod",
+            "value": [
+                10
+            ]
+        }
+    ]
+}
+```
+
+This manifest compares the statements of the target class method and the  previousValue parameter. If they are the same, the manifest substitutes the expression of the specified method with the value of the value field. If they are not the same, the manifest does nothing.
+
+```json
+{
+    "configure-module": [
+        {
+            "previousValue": "$variable = 5 + 10; return $variable",
+            "target": "\\Spryker\\Client\\Catalog\\CatalogConfig::targetMethod",
+            "value": {
+                "value": "$variable = 10 + 20; return $variable",
+                "is_literal": true
+            }
+        }
+    ]
+}
+```
+
 ### Configure Env Manifest
 
 This manifest adds global constants to configuration file of the project.
