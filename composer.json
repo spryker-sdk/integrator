@@ -54,8 +54,7 @@
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
-        },
-        "class": "SprykerSdk\\Integrator\\Plugin\\Composer\\InstallerComposerPlugin"
+        }
     },
     "config": {
         "sort-packages": true,
