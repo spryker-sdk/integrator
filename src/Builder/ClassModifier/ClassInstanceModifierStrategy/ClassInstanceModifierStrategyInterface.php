@@ -5,15 +5,21 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-declare(strict_types=1);
+namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy;
 
-namespace SprykerSdk\Integrator\Builder\ClassModifier;
-
+use PhpParser\Node\Stmt\ClassMethod;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
-interface ClassInstanceClassModifierInterface
+interface ClassInstanceModifierStrategyInterface
 {
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $node
+     *
+     * @return bool
+     */
+    public function isApplicable(ClassMethod $node): bool;
+
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
@@ -32,11 +38,11 @@ interface ClassInstanceClassModifierInterface
      * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function unwireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
-    ): ?ClassInformationTransfer;
+    ): ClassInformationTransfer;
 }

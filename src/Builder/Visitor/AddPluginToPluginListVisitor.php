@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\New_;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Helper\ClassHelper;
+use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 {
@@ -34,19 +35,9 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $methodName;
 
     /**
-     * @var string
+     * @var \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer
      */
-    protected $className;
-
-    /**
-     * @var string
-     */
-    protected $before;
-
-    /**
-     * @var string
-     */
-    protected $after;
+    protected $classMetadataTransfer;
 
     /**
      * @var bool
@@ -55,16 +46,12 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
     /**
      * @param string $methodName
-     * @param string $className
-     * @param string $before
-     * @param string $after
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      */
-    public function __construct(string $methodName, string $className, string $before = '', string $after = '')
+    public function __construct(string $methodName, ClassMetadataTransfer $classMetadataTransfer)
     {
         $this->methodName = $methodName;
-        $this->className = ltrim($className, '\\');
-        $this->before = ltrim($before, '\\');
-        $this->after = ltrim($after, '\\');
+        $this->classMetadataTransfer = $classMetadataTransfer;
     }
 
     /**
@@ -103,14 +90,14 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         $itemAdded = false;
         foreach ($node->items as $item) {
             $nodeClassName = $item->value->class->toString();
-            if ($nodeClassName === $this->before) {
+            if ($nodeClassName === $this->classMetadataTransfer->getBeforeOrFail()) {
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $items[] = $item;
                 $itemAdded = true;
 
                 continue;
             }
-            if ($nodeClassName === $this->after) {
+            if ($nodeClassName === $this->classMetadataTransfer->getAfterOrFail()) {
                 $items[] = $item;
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $itemAdded = true;
@@ -142,7 +129,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
                 continue;
             }
             $nodeClassName = $item->value->class->toString();
-            if ($nodeClassName === $this->className) {
+            if ($nodeClassName === $this->classMetadataTransfer->getSourceOrFail()) {
                 return true;
             }
         }
@@ -157,7 +144,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     {
         return new ArrayItem(
             (new BuilderFactory())->new(
-                (new ClassHelper())->getShortClassName($this->className),
+                (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
             ),
         );
     }

@@ -9,17 +9,11 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
-use PhpParser\BuilderFactory;
-use PhpParser\Node\Stmt\Return_;
 use RuntimeException;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
-use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\RemovePluginFromPluginListVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\RemoveUseVisitor;
-use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
 {
@@ -41,26 +35,32 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
     protected $classMethodChecker;
 
     /**
+     * @var array<\SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceModifierStrategyInterface>
+     */
+    protected $classInstanceModifierStrategies;
+
+    /**
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface $commonClassModifier
      * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface $classMethodChecker
+     * @param array<\SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceModifierStrategyInterface> $classInstanceModifierStrategies
      */
     public function __construct(
         CommonClassModifierInterface $commonClassModifier,
         ClassNodeFinderInterface $classNodeFinder,
-        ClassMethodCheckerInterface $classMethodChecker
+        ClassMethodCheckerInterface $classMethodChecker,
+        array $classInstanceModifierStrategies
     ) {
         $this->commonClassModifier = $commonClassModifier;
         $this->classNodeFinder = $classNodeFinder;
         $this->classMethodChecker = $classMethodChecker;
+        $this->classInstanceModifierStrategies = $classInstanceModifierStrategies;
     }
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
-     * @param string $classNameToAdd
-     * @param string $before
-     * @param string $after
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @throws \RuntimeException
      *
@@ -69,9 +69,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
     public function wireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
-        string $classNameToAdd,
-        string $before = '',
-        string $after = ''
+        ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
         $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         if (!$methodNode) {
@@ -83,58 +81,38 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
             throw new RuntimeException('Method node not found');
         }
 
-        if ($this->classMethodChecker->isMethodReturnArray($methodNode)) {
-            $visitors = [
-                new AddUseVisitor($classNameToAdd),
-                new AddPluginToPluginListVisitor(
-                    $targetMethodName,
-                    $classNameToAdd,
-                    $before,
-                    $after,
-                ),
-            ];
-
-            return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
+        foreach ($this->classInstanceModifierStrategies as $classInstanceModifierStrategy) {
+            if ($classInstanceModifierStrategy->isApplicable($methodNode)) {
+                return $classInstanceModifierStrategy->wireClassInstance($classInformationTransfer, $targetMethodName, $classMetadataTransfer);
+            }
         }
-
-        $visitors = [
-            new AddUseVisitor($classNameToAdd),
-        ];
-        $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
-
-        $classHelper = new ClassHelper();
-        $methodBody = [new Return_((new BuilderFactory())->new($classHelper->getShortClassName($classNameToAdd)))];
-        $this->commonClassModifier->replaceMethodBody($classInformationTransfer, $targetMethodName, $methodBody);
 
         return $classInformationTransfer;
     }
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $classNameToRemove
      * @param string $targetMethodName
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
     public function unwireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $classNameToRemove,
-        string $targetMethodName
+        string $targetMethodName,
+        ClassMetadataTransfer $classMetadataTransfer
     ): ?ClassInformationTransfer {
         $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         if (!$methodNode) {
             return null;
         }
 
-        if (!$this->classMethodChecker->isMethodReturnArray($methodNode)) {
-            return $this->commonClassModifier->removeClassMethod($classInformationTransfer, $targetMethodName);
+        foreach ($this->classInstanceModifierStrategies as $classInstanceModifierStrategy) {
+            if ($classInstanceModifierStrategy->isApplicable($methodNode)) {
+                return $classInstanceModifierStrategy->unwireClassInstance($classInformationTransfer, $targetMethodName, $classMetadataTransfer);
+            }
         }
 
-        $visitors = [
-            new RemoveUseVisitor($classNameToRemove),
-            new RemovePluginFromPluginListVisitor($targetMethodName, $classNameToRemove),
-        ];
-
-        return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
+        return $classInformationTransfer;
     }
 }

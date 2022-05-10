@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\Builder;
 
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class ClassBuilderFacade implements ClassBuilderFacadeInterface
 {
@@ -80,41 +81,37 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
      *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
-     * @param string $classNameToAdd
-     * @param string $before
-     * @param string $after
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function wireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
-        string $classNameToAdd,
-        string $before = '',
-        string $after = ''
+        ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
         return $this->getFactory()
             ->createClassInstanceClassModifier()
-            ->wireClassInstance($classInformationTransfer, $targetMethodName, $classNameToAdd, $before, $after);
+            ->wireClassInstance($classInformationTransfer, $targetMethodName, $classMetadataTransfer);
     }
 
     /**
      * {@inheritDoc}
      *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $classNameToRemove
      * @param string $targetMethodName
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
     public function unwireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $classNameToRemove,
-        string $targetMethodName
+        string $targetMethodName,
+        ClassMetadataTransfer $classMetadataTransfer
     ): ?ClassInformationTransfer {
         return $this->getFactory()
             ->createClassInstanceClassModifier()
-            ->unwireClassInstance($classInformationTransfer, $classNameToRemove, $targetMethodName);
+            ->unwireClassInstance($classInformationTransfer, $targetMethodName, $classMetadataTransfer);
     }
 
     /**

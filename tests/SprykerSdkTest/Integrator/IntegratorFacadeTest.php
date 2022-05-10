@@ -87,7 +87,7 @@ class IntegratorFacadeTest extends BaseTestCase
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
-        $this->assertSame(trim(file_get_contents($classPath)), trim(file_get_contents($testFilePath)));
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
     }
 
     /**
@@ -213,7 +213,7 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
-    public function testRunInstallationWireGlueRelaitonship(): void
+    public function testRunInstallationWireGlueRelationship(): void
     {
         // Arrange
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
@@ -234,7 +234,7 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
-    public function testRunInstallationUnwireGlueRelaitonship(): void
+    public function testRunInstallationUnwireGlueRelationship(): void
     {
         // Arrange
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();

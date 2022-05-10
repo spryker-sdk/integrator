@@ -44,6 +44,26 @@ class IntegratorConfig
     /**
      * @var string
      */
+    public const MANIFEST_KEY_ARGUMENTS = 'arguments';
+
+    /**
+     * @var string
+     */
+    public const MANIFEST_KEY_ARGUMENTS_PREPEND = 'prepend-arguments';
+
+    /**
+     * @var string
+     */
+    public const MANIFEST_KEY_ARGUMENTS_APPEND = 'append-arguments';
+
+    /**
+     * @var string
+     */
+    public const MANIFEST_KEY_ARGUMENTS_CONSTRUCTOR = 'constructor-arguments';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_POSITION_BEFORE = 'before';
 
     /**

@@ -41,10 +41,12 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
                 continue;
             }
 
+            $classMetadataTransfer = $this->createClassMetadataTransfer($manifest);
+
             $classInformationTransfer = $this->createClassBuilderFacade()->unwireClassInstance(
                 $classInformationTransfer,
-                $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $targetMethodName,
+                $classMetadataTransfer,
             );
 
             if ($classInformationTransfer) {

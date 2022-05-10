@@ -63,12 +63,12 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
                 continue;
             }
 
+            $classMetadataTransfer = $this->createClassMetadataTransfer($manifest);
+
             $classInformationTransfer = $this->createClassBuilderFacade()->wireClassInstance(
                 $classInformationTransfer,
                 $targetMethodName,
-                $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
-                $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] ?? '',
-                $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '',
+                $classMetadataTransfer,
             );
 
             if ($isDry) {

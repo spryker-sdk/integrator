@@ -9,10 +9,13 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
+use ArrayObject;
 use SprykerSdk\Integrator\Builder\ClassBuilderFacade;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer;
+use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 abstract class AbstractManifestStrategy implements ManifestStrategyInterface
 {
@@ -73,5 +76,60 @@ abstract class AbstractManifestStrategy implements ManifestStrategyInterface
         }
 
         return $value;
+    }
+
+    /**
+     * @param array $manifest
+     *
+     * @return \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer
+     */
+    protected function createClassMetadataTransfer(array $manifest): ClassMetadataTransfer
+    {
+        $transfer = (new ClassMetadataTransfer())
+            ->setSource(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_SOURCE], '\\'))
+            ->setTarget(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_TARGET], '\\'));
+
+        if (isset($manifest[IntegratorConfig::MANIFEST_KEY_ARGUMENTS])) {
+            if (isset($manifest[IntegratorConfig::MANIFEST_KEY_ARGUMENTS][IntegratorConfig::MANIFEST_KEY_ARGUMENTS_PREPEND])) {
+                $prependArguments = new ArrayObject();
+                foreach ($manifest[IntegratorConfig::MANIFEST_KEY_ARGUMENTS][IntegratorConfig::MANIFEST_KEY_ARGUMENTS_PREPEND] as $argumentData) {
+                    $prependArguments->append($this->createClassArgumentMetadataTransfer($argumentData));
+                }
+                $transfer->setPrependArguments($prependArguments);
+            }
+
+            if (isset($manifest[IntegratorConfig::MANIFEST_KEY_ARGUMENTS][IntegratorConfig::MANIFEST_KEY_ARGUMENTS_APPEND])) {
+                $appendArguments = new ArrayObject();
+                foreach ($manifest[IntegratorConfig::MANIFEST_KEY_ARGUMENTS][IntegratorConfig::MANIFEST_KEY_ARGUMENTS_APPEND] as $argumentData) {
+                    $appendArguments->append($this->createClassArgumentMetadataTransfer($argumentData));
+                }
+                $transfer->setAppendArguments($appendArguments);
+            }
+
+            if (isset($manifest[IntegratorConfig::MANIFEST_KEY_ARGUMENTS][IntegratorConfig::MANIFEST_KEY_ARGUMENTS_CONSTRUCTOR])) {
+                $constructorArguments = new ArrayObject();
+                foreach ($manifest[IntegratorConfig::MANIFEST_KEY_ARGUMENTS][IntegratorConfig::MANIFEST_KEY_ARGUMENTS_CONSTRUCTOR] as $argumentData) {
+                    $constructorArguments->append($this->createClassArgumentMetadataTransfer($argumentData));
+                }
+                $transfer->setConstructorArguments($constructorArguments);
+            }
+        }
+
+        $transfer->setBefore(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] ?? '', '\\'));
+        $transfer->setAfter(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '', '\\'));
+
+        return $transfer;
+    }
+
+    /**
+     * @param array<string> $argumentData
+     *
+     * @return \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer
+     */
+    protected function createClassArgumentMetadataTransfer(array $argumentData): ClassArgumentMetadataTransfer
+    {
+        return (new ClassArgumentMetadataTransfer())
+            ->setValue($argumentData['value'])
+            ->setIsLiteral((bool)$argumentData['is_literal']);
     }
 }

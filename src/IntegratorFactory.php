@@ -16,6 +16,8 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\Parser\Php7;
+use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilder;
+use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGenerator;
@@ -26,6 +28,12 @@ use SprykerSdk\Integrator\Builder\ClassModifier\ClassConstantModifier;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassConstantModifierInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceClassModifier;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceClassModifierInterface;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceModifierStrategyInterface;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceReturnArrayModifierStrategy;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceReturnChainedCollectionModifierStrategy;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceReturnClassModifierStrategy;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceReturnCollectionModifierStrategy;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceReturnExtendContainerModifierStrategy;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassListModifier;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassListModifierInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifier;
@@ -311,6 +319,7 @@ class IntegratorFactory
             $this->createCommonClassModifier(),
             $this->createClassNodeFinder(),
             $this->createClassMethodChecker(),
+            $this->getClassInstanceModifierStrategies(),
         );
     }
 
@@ -464,5 +473,67 @@ class IntegratorFactory
             $this->createExecuteConsoleManifestStrategy(),
             $this->createGlossaryManifestStrategy(),
         ];
+    }
+
+    /**
+     * @return array<\SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceModifierStrategyInterface>
+     */
+    public function getClassInstanceModifierStrategies(): array
+    {
+        return [
+            $this->createClassInstanceReturnArrayModifierStrategy(),
+            $this->createClassInstanceReturnClassModifierStrategy(),
+            $this->createClassInstanceReturnChainedCollectionModifierStrategy(),
+            $this->createClassInstanceReturnCollectionModifierStrategy(),
+            $this->createClassInstanceReturnExtendContainerModifierStrategy(),
+        ];
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceModifierStrategyInterface
+     */
+    public function createClassInstanceReturnArrayModifierStrategy(): ClassInstanceModifierStrategyInterface
+    {
+        return new ClassInstanceReturnArrayModifierStrategy($this->createCommonClassModifier());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceModifierStrategyInterface
+     */
+    public function createClassInstanceReturnCollectionModifierStrategy(): ClassInstanceModifierStrategyInterface
+    {
+        return new ClassInstanceReturnCollectionModifierStrategy($this->createCommonClassModifier(), $this->createArgumentBuider());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceModifierStrategyInterface
+     */
+    public function createClassInstanceReturnExtendContainerModifierStrategy(): ClassInstanceModifierStrategyInterface
+    {
+        return new ClassInstanceReturnExtendContainerModifierStrategy($this->createCommonClassModifier(), $this->createArgumentBuider());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceModifierStrategyInterface
+     */
+    public function createClassInstanceReturnChainedCollectionModifierStrategy(): ClassInstanceModifierStrategyInterface
+    {
+        return new ClassInstanceReturnChainedCollectionModifierStrategy($this->createCommonClassModifier(), $this->createArgumentBuider());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceModifierStrategyInterface
+     */
+    public function createClassInstanceReturnClassModifierStrategy(): ClassInstanceModifierStrategyInterface
+    {
+        return new ClassInstanceReturnClassModifierStrategy($this->createCommonClassModifier());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
+     */
+    public function createArgumentBuider(): ArgumentBuilderInterface
+    {
+        return new ArgumentBuilder($this->createClassBuilderFactory(), $this->createPhpParserParser());
     }
 }
