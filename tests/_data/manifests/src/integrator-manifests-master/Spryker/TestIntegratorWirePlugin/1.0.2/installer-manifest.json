@@ -53,7 +53,7 @@
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::extendConditionPlugins",
-            "source": "\\Pyz\\Zed\\DependencyCollectionTest\\TestBarConditionPlugin"
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestBarConditionPlugin"
         }
     ]
 }
