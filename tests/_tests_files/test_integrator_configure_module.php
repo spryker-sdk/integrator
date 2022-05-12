@@ -31,6 +31,14 @@ class TestIntegratorDefaultConfig extends BaseConfig
     }
 
     /**
+     * @return string
+     */
+    public function testChangeMissingValue(): string
+    {
+        return 'test';
+    }
+
+    /**
      * @return array
      */
     public function testChange2(): array
