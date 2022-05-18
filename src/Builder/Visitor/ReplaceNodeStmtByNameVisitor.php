@@ -43,13 +43,44 @@ class ReplaceNodeStmtByNameVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if (
-            property_exists($node, 'stmts') && property_exists($node, 'name')
-            && (($node->name instanceof Name && $node->name->toString() === $this->name) || ($node->name instanceof Identifier && $node->name->name === $this->name) || $node->name === $this->name)
-        ) {
-            $node->stmts = $this->stmt;
+        if (!$this->isNecessaryNode($node)) {
+            return $node;
         }
 
+        $node->stmts = $this->stmt;
+
         return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node $node
+     *
+     * @return bool
+     */
+    protected function isNecessaryNode(Node $node): bool
+    {
+        return $this->isExistsNodeStmtsAndNameFields($node) && $this->isNodeNameCorrect($node);
+    }
+
+    /**
+     * @param \PhpParser\Node $node
+     *
+     * @return bool
+     */
+    protected function isNodeNameCorrect(Node $node): bool
+    {
+        return ($node->name instanceof Name && $node->name->toString() === $this->name)
+            || ($node->name instanceof Identifier && $node->name->name === $this->name)
+            || $node->name === $this->name;
+    }
+
+    /**
+     * @param \PhpParser\Node $node
+     *
+     * @return bool
+     */
+    protected function isExistsNodeStmtsAndNameFields(Node $node): bool
+    {
+        return property_exists($node, 'stmts') && property_exists($node, 'name');
     }
 }

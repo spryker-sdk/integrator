@@ -67,7 +67,7 @@ class AddConstantVisitor extends NodeVisitorAbstract
             }
         }
 
-        $node->stmts[] = $this->createConst();
+        array_unshift($node->stmts, $this->createConst());
 
         return $node;
     }

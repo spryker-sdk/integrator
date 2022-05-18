@@ -39,6 +39,11 @@ class IntegratorConfig
     /**
      * @var string
      */
+    public const MANIFEST_KEY_PREVIOUS_VALUE = 'previousValue';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_DEFAULT_VALUE = 'defaultValue';
 
     /**

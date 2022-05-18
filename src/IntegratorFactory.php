@@ -16,8 +16,14 @@ use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\Parser\Php7;
+use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
+use SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\ArgsMethodStatementChecker;
+use SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\ClassMethodStatementChecker;
+use SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\ItemsMethodStatementChecker;
+use SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\NameMethodStatementChecker;
+use SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\PartsMethodStatementChecker;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGenerator;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
@@ -43,6 +49,14 @@ use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationE
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\DefaultConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\LiteralConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\StringConfigurationEnvironmentStrategy;
+use SprykerSdk\Integrator\Builder\Creator\MethodCreator;
+use SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface;
+use SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreator;
+use SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface;
+use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreator;
+use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface;
+use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreator;
+use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
@@ -417,7 +431,46 @@ class IntegratorFactory
         return new CommonClassModifier(
             $this->createClassNodeFinder(),
             $this->createClassMethodChecker(),
+            $this->createMethodBodyCreator(),
+            $this->createNodeTreeCreator(),
         );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface
+     */
+    public function createMethodBodyCreator(): MethodCreatorInterface
+    {
+        return new MethodCreator(
+            $this->createNodeTreeCreator(),
+            $this->createMethodDocBlockCreator(),
+            $this->createMethodReturnTypeCreator(),
+            $this->createParserFactory(),
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface
+     */
+    public function createMethodDocBlockCreator(): MethodDocBlockCreatorInterface
+    {
+        return new MethodDocBlockCreator();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface
+     */
+    public function createMethodReturnTypeCreator(): MethodReturnTypeCreatorInterface
+    {
+        return new MethodReturnTypeCreator();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface
+     */
+    public function createNodeTreeCreator(): MethodStatementsCreatorInterface
+    {
+        return new MethodStatementsCreator();
     }
 
     /**
@@ -478,7 +531,32 @@ class IntegratorFactory
      */
     public function createClassMethodChecker(): ClassMethodCheckerInterface
     {
-        return new ClassMethodChecker();
+        return new ClassMethodChecker(
+            $this->getMethodStatementCheckers(),
+            $this->createParserFactory(),
+        );
+    }
+
+    /**
+     * @return \PhpParser\ParserFactory
+     */
+    public function createParserFactory(): ParserFactory
+    {
+        return new ParserFactory();
+    }
+
+    /**
+     * @return array<int, \SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\ArgsMethodStatementChecker|\SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\ClassMethodStatementChecker|\SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\ItemsMethodStatementChecker|\SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\NameMethodStatementChecker|\SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\PartsMethodStatementChecker>
+     */
+    public function getMethodStatementCheckers(): array
+    {
+        return [
+            new NameMethodStatementChecker(),
+            new PartsMethodStatementChecker(),
+            new ClassMethodStatementChecker(),
+            new ItemsMethodStatementChecker(),
+            new ArgsMethodStatementChecker(),
+        ];
     }
 
     /**
