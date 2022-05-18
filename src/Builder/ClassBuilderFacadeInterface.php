@@ -97,6 +97,8 @@ interface ClassBuilderFacadeInterface
      * @param string $targetMethodName
      * @param string $classNameToAdd
      * @param string $constantName
+     * @param string $before
+     * @param string $after
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -104,7 +106,9 @@ interface ClassBuilderFacadeInterface
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
         string $classNameToAdd,
-        string $constantName
+        string $constantName,
+        string $before = '',
+        string $after = ''
     ): ClassInformationTransfer;
 
     /**
@@ -125,13 +129,23 @@ interface ClassBuilderFacadeInterface
 
     /**
      * Specification:
+     * - Creates or updates existing class method by value.
      * - Sets a return value of the method.
+     * - Sets doc block of new created method.
      *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $methodName
      * @param array|string|float|int|bool|null $value
+     * @param bool $isLiteral
+     * @param mixed $previousValue
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function setMethodReturnValue(ClassInformationTransfer $classInformationTransfer, string $methodName, $value): ClassInformationTransfer;
+    public function createClassMethod(
+        ClassInformationTransfer $classInformationTransfer,
+        string $methodName,
+        $value,
+        bool $isLiteral,
+        $previousValue
+    ): ClassInformationTransfer;
 }

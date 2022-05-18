@@ -48,6 +48,11 @@ class ClassMetadataTransfer extends AbstractTransfer
     public const AFTER = 'after';
 
     /**
+     * @var string
+     */
+    public const INDEX = 'index';
+
+    /**
      * @var string|null
      */
     protected $target;
@@ -83,6 +88,11 @@ class ClassMetadataTransfer extends AbstractTransfer
     protected $after;
 
     /**
+     * @var string|null
+     */
+    protected $index;
+
+    /**
      * @var array<string, string>
      */
     protected $transferPropertyNameMap = [
@@ -103,6 +113,8 @@ class ClassMetadataTransfer extends AbstractTransfer
         'Before' => 'before',
         'after' => 'after',
         'After' => 'after',
+        'index' => 'index',
+        'Index' => 'index',
     ];
 
     /**
@@ -185,6 +197,18 @@ class ClassMetadataTransfer extends AbstractTransfer
             'type' => 'string',
             'type_shim' => null,
             'name_underscore' => 'after',
+            'is_collection' => false,
+            'is_transfer' => false,
+            'is_value_object' => false,
+            'rest_request_parameter' => 'no',
+            'is_associative' => false,
+            'is_nullable' => false,
+            'is_strict' => false,
+        ],
+        self::INDEX => [
+            'type' => 'string',
+            'type_shim' => null,
+            'name_underscore' => 'index',
             'is_collection' => false,
             'is_transfer' => false,
             'is_value_object' => false,
@@ -502,6 +526,49 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
+     * @param string|null $index
+     *
+     * @return $this
+     */
+    public function setIndex(?string $index)
+    {
+        $this->index = $index;
+        $this->modifiedProperties[static::INDEX] = true;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIndex(): ?string
+    {
+        return $this->index;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIndexOrFail(): string
+    {
+        if ($this->index === null) {
+            $this->throwNullValueException(static::INDEX);
+        }
+
+        return $this->index;
+    }
+
+    /**
+     * @return $this
+     */
+    public function requireIndex()
+    {
+        $this->assertPropertyIsSet(static::INDEX);
+
+        return $this;
+    }
+
+    /**
      * @param array<string, mixed> $data
      * @param bool $ignoreMissingProperty
      *
@@ -519,6 +586,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                 case 'source':
                 case 'before':
                 case 'after':
+                case 'index':
                     $this->$normalizedPropertyName = $value;
                     $this->modifiedProperties[$normalizedPropertyName] = true;
 
@@ -650,6 +718,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                 case 'source':
                 case 'before':
                 case 'after':
+                case 'index':
                     $values[$arrayKey] = $value;
 
                     break;
@@ -686,6 +755,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                 case 'source':
                 case 'before':
                 case 'after':
+                case 'index':
                     $values[$arrayKey] = $value;
 
                     break;
@@ -755,6 +825,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'source' => $this->source,
             'before' => $this->before,
             'after' => $this->after,
+            'index' => $this->index,
             'prependArguments' => $this->prependArguments,
             'appendArguments' => $this->appendArguments,
             'constructorArguments' => $this->constructorArguments,
@@ -771,6 +842,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'source' => $this->source,
             'before' => $this->before,
             'after' => $this->after,
+            'index' => $this->index,
             'prepend_arguments' => $this->prependArguments,
             'append_arguments' => $this->appendArguments,
             'constructor_arguments' => $this->constructorArguments,
@@ -787,6 +859,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'source' => $this->source instanceof AbstractTransfer ? $this->source->toArray(true, false) : $this->source,
             'before' => $this->before instanceof AbstractTransfer ? $this->before->toArray(true, false) : $this->before,
             'after' => $this->after instanceof AbstractTransfer ? $this->after->toArray(true, false) : $this->after,
+            'index' => $this->index instanceof AbstractTransfer ? $this->index->toArray(true, false) : $this->index,
             'prepend_arguments' => $this->prependArguments instanceof AbstractTransfer ? $this->prependArguments->toArray(true, false) : $this->addValuesToCollection($this->prependArguments, true, false),
             'append_arguments' => $this->appendArguments instanceof AbstractTransfer ? $this->appendArguments->toArray(true, false) : $this->addValuesToCollection($this->appendArguments, true, false),
             'constructor_arguments' => $this->constructorArguments instanceof AbstractTransfer ? $this->constructorArguments->toArray(true, false) : $this->addValuesToCollection($this->constructorArguments, true, false),
@@ -803,6 +876,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'source' => $this->source instanceof AbstractTransfer ? $this->source->toArray(true, true) : $this->source,
             'before' => $this->before instanceof AbstractTransfer ? $this->before->toArray(true, true) : $this->before,
             'after' => $this->after instanceof AbstractTransfer ? $this->after->toArray(true, true) : $this->after,
+            'index' => $this->index instanceof AbstractTransfer ? $this->index->toArray(true, true) : $this->index,
             'prependArguments' => $this->prependArguments instanceof AbstractTransfer ? $this->prependArguments->toArray(true, true) : $this->addValuesToCollection($this->prependArguments, true, true),
             'appendArguments' => $this->appendArguments instanceof AbstractTransfer ? $this->appendArguments->toArray(true, true) : $this->addValuesToCollection($this->appendArguments, true, true),
             'constructorArguments' => $this->constructorArguments instanceof AbstractTransfer ? $this->constructorArguments->toArray(true, true) : $this->addValuesToCollection($this->constructorArguments, true, true),

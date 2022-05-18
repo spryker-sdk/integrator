@@ -121,6 +121,8 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
      * @param string $targetMethodName
      * @param string $classNameToAdd
      * @param string $constantName
+     * @param string $before
+     * @param string $after
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -128,11 +130,20 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
         string $classNameToAdd,
-        string $constantName
+        string $constantName,
+        string $before = '',
+        string $after = ''
     ): ClassInformationTransfer {
         return $this->getFactory()
             ->createClassListModifier()
-            ->wireClassConstant($classInformationTransfer, $targetMethodName, $classNameToAdd, $constantName);
+            ->wireClassConstant(
+                $classInformationTransfer,
+                $targetMethodName,
+                $classNameToAdd,
+                $constantName,
+                $before,
+                $after,
+            );
     }
 
     /**
@@ -160,14 +171,21 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $methodName
      * @param array|string|float|int|bool|null $value
+     * @param bool $isLiteral
+     * @param mixed $previousValue
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function setMethodReturnValue(ClassInformationTransfer $classInformationTransfer, string $methodName, $value): ClassInformationTransfer
-    {
+    public function createClassMethod(
+        ClassInformationTransfer $classInformationTransfer,
+        string $methodName,
+        $value,
+        bool $isLiteral,
+        $previousValue
+    ): ClassInformationTransfer {
         return $this->getFactory()
             ->createCommonClassModifier()
-            ->setMethodReturnValue($classInformationTransfer, $methodName, $value);
+            ->createClassMethod($classInformationTransfer, $methodName, $value, $isLiteral, $previousValue);
     }
 
     /**

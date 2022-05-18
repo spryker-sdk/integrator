@@ -14,7 +14,11 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SecondPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestBarConditionPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestFooConditionPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePlugin;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginIndex;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginStaticIndex;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginStringIndex;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\UrlStorageEventSubscriber;
+use Spryker\Zed\TestIntegratorWirePlugin\TestIntegratorWirePluginConfig;
 
 class TestIntegratorWirePluginDependencyProvider
 {
@@ -22,6 +26,9 @@ class TestIntegratorWirePluginDependencyProvider
     {
         return [
             new TestIntegratorWirePlugin(),
+            TestIntegratorWirePluginConfig::TEST_INTEGRATOR_WIRE_PLUGIN => new TestIntegratorWirePluginIndex(),
+            static::TEST_INTEGRATOR_WIRE_PLUGIN_STATIC_INDEX => new TestIntegratorWirePluginStaticIndex(),
+            'TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX' => new TestIntegratorWirePluginStringIndex(),
         ];
     }
 
@@ -109,5 +116,18 @@ class TestIntegratorWirePluginDependencyProvider
         });
 
         return $container;
+    }
+
+    public function getTestArrayMergePlugins(): array
+    {
+        return array_merge([\ArrayObject::class], [
+            new TestIntegratorWirePlugin(),
+        ], [
+            TestIntegratorWirePluginConfig::TEST_INTEGRATOR_WIRE_PLUGIN => new TestIntegratorWirePluginIndex(),
+        ], [
+            static::TEST_INTEGRATOR_WIRE_PLUGIN_STATIC_INDEX => new TestIntegratorWirePluginStaticIndex(),
+        ], [
+            'TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX' => new TestIntegratorWirePluginStringIndex(),
+        ]);
     }
 }

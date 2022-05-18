@@ -19,4 +19,12 @@ interface ClassMethodCheckerInterface
      * @return bool
      */
     public function isMethodReturnArray(ClassMethod $node): bool;
+
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|null $methodNode
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public function isMethodNodeSameAsValue(?ClassMethod $methodNode, $value): bool;
 }

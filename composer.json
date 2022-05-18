@@ -39,7 +39,8 @@
             "Spryker\\Glue\\TestIntegratorWireGlueRelationship\\": "tests/tmp/vendor/spryker/test-integrator-wire-glue-relationship/src/Spryker/Glue/TestIntegratorWireGlueRelationship/",
             "Spryker\\Glue\\TestIntegratorUnwireGlueRelationship\\": "tests/tmp/vendor/spryker/test-integrator-unwire-glue-relationship/src/Spryker/Glue/TestIntegratorUnwireGlueRelationship/",
             "Spryker\\Glue\\GlueApplication\\": "tests/tmp/vendor/spryker/glue-application/src/Spryker/Glue/GlueApplication/",
-            "SprykerShop\\Yves\\ShopApplication\\": "tests/tmp/vendor/spryker-shop/shop-application/src/SprykerShop/Yves/ShopApplication/"
+            "SprykerShop\\Yves\\ShopApplication\\": "tests/tmp/vendor/spryker-shop/shop-application/src/SprykerShop/Yves/ShopApplication/",
+            "Spryker\\Client\\TestIntegratorAddConfigArrayElement\\": "tests/tmp/vendor/spryker/test-integrator-add-config-array-element/src/Spryker/Client/TestIntegratorAddConfigArrayElement/"
         }
     },
     "minimum-stability": "dev",

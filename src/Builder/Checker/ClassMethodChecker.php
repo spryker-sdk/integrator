@@ -18,9 +18,73 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
+use PhpParser\ParserFactory;
 
-class ClassMethodChecker implements ClassMethodCheckerInterface
+class ClassMethodChecker extends AbstractMethodChecker implements ClassMethodCheckerInterface
 {
+    /**
+     * @var string
+     */
+    public const METHOD_FIELD_ARGS = 'args';
+
+    /**
+     * @var string
+     */
+    public const METHOD_FIELD_VAR = 'var';
+
+    /**
+     * @var string
+     */
+    public const METHOD_FIELD_EXPR = 'expr';
+
+    /**
+     * @var string
+     */
+    public const METHOD_FIELD_CLASS = 'class';
+
+    /**
+     * @var string
+     */
+    public const METHOD_FIELD_ITEMS = 'items';
+
+    /**
+     * @var string
+     */
+    public const METHOD_FIELD_NAME = 'name';
+
+    /**
+     * @var string
+     */
+    public const METHOD_FIELD_PARTS = 'parts';
+
+    /**
+     * @var array
+     */
+    protected const SINGLE_STATEMENT_EXPRESSION_FIELDS = [
+        self::METHOD_FIELD_VAR,
+        self::METHOD_FIELD_EXPR,
+    ];
+
+    /**
+     * @var array<array-key, \SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\MethodStatementCheckerInterface>
+     */
+    protected $methodStatementCheckers;
+
+    /**
+     * @var \PhpParser\ParserFactory
+     */
+    protected $parserFactory;
+
+    /**
+     * @param array<array-key, \SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\MethodStatementCheckerInterface> $methodStatementCheckers
+     * @param \PhpParser\ParserFactory $parserFactory
+     */
+    public function __construct(array $methodStatementCheckers, ParserFactory $parserFactory)
+    {
+        $this->methodStatementCheckers = $methodStatementCheckers;
+        $this->parserFactory = $parserFactory;
+    }
+
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod $node
      *
@@ -58,5 +122,120 @@ class ClassMethodChecker implements ClassMethodCheckerInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|null $methodNode
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    public function isMethodNodeSameAsValue(?ClassMethod $methodNode, $value): bool
+    {
+        if (!is_bool($value) && !$value) {
+            return true;
+        }
+        if (!$methodNode || !$methodNode->stmts) {
+            return true;
+        }
+        $parser = $this->parserFactory->create(ParserFactory::PREFER_PHP7);
+        $previousValue = $parser->parse(sprintf('<?php %s;', $value));
+        if (!$previousValue) {
+            return false;
+        }
+        if (count($previousValue) !== count($methodNode->stmts)) {
+            return false;
+        }
+        if (!$this->isSameMethodsBody($previousValue, $methodNode->stmts)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param mixed $previousValue
+     * @param mixed $currentValue
+     *
+     * @return bool
+     */
+    protected function isSameMethodsBody($previousValue, $currentValue): bool
+    {
+        if (is_array($previousValue) && is_array($currentValue)) {
+            foreach ($previousValue as $keyPreviousValue => $valuePreviousValue) {
+                if (!isset($currentValue[$keyPreviousValue])) {
+                    return false;
+                }
+                if (!$this->isSameMethodsBody($valuePreviousValue, $currentValue[$keyPreviousValue])) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        foreach ($this->methodStatementCheckers as $methodStatementChecker) {
+            if ($methodStatementChecker->isApplicable($previousValue, $currentValue)) {
+                return $methodStatementChecker->isSameStatement($previousValue, $currentValue);
+            }
+        }
+
+        return $this->isSameForRecursiveFields($previousValue, $currentValue);
+    }
+
+    /**
+     * @param mixed $previousValue
+     * @param mixed $currentValue
+     *
+     * @return bool
+     */
+    protected function isSameForRecursiveFields($previousValue, $currentValue): bool
+    {
+        if (!$this->isSameArrayStatementsFields($previousValue, $currentValue)) {
+            return false;
+        }
+
+        return $this->isSameSingleStatementsFields($previousValue, $currentValue);
+    }
+
+    /**
+     * @param mixed $previousValue
+     * @param mixed $currentValue
+     *
+     * @return bool
+     */
+    protected function isSameArrayStatementsFields($previousValue, $currentValue): bool
+    {
+        $isSame = true;
+        if ($this->isExistsStatementField($previousValue, $currentValue, static::METHOD_FIELD_ARGS)) {
+            foreach ($previousValue->args as $keyArgument => $argument) {
+                if (!$isSame) {
+                    break;
+                }
+                $isSame = $this->isSameMethodsBody($argument->value, $currentValue->args[$keyArgument]->value);
+            }
+        }
+
+        return $isSame;
+    }
+
+    /**
+     * @param mixed $previousValue
+     * @param mixed $currentValue
+     *
+     * @return bool
+     */
+    protected function isSameSingleStatementsFields($previousValue, $currentValue): bool
+    {
+        foreach (static::SINGLE_STATEMENT_EXPRESSION_FIELDS as $field) {
+            if (!$this->isExistsStatementField($previousValue, $currentValue, $field)) {
+                continue;
+            }
+            if (!$this->isSameMethodsBody($previousValue->{$field}, $currentValue->{$field})) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -105,7 +105,32 @@ class ClassInstanceReturnArrayModifierStrategy implements ClassInstanceModifierS
     ): ClassInformationTransfer {
         $visitors = $this->getWireVisitors($targetMethodName, $classMetadataTransfer);
 
+        if ($classMetadataTransfer->getIndex() !== null && $this->isIndexFullyQualifiedClassName($classMetadataTransfer->getIndex())) {
+            $visitors[] = new AddUseVisitor($this->getFullyQualifiedClassNameFromIndex($classMetadataTransfer->getIndex()));
+        }
+
+
         return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return bool
+     */
+    protected function isIndexFullyQualifiedClassName(string $index): bool
+    {
+        return strpos($index, '::') !== false && strpos($index, 'static::') === false;
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return string
+     */
+    protected function getFullyQualifiedClassNameFromIndex(string $index): string
+    {
+        return explode('::', $index)[0];
     }
 
     /**
@@ -120,10 +145,7 @@ class ClassInstanceReturnArrayModifierStrategy implements ClassInstanceModifierS
         string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
-        $visitors = [
-            new RemoveUseVisitor($classMetadataTransfer->getSourceOrFail()),
-            new RemovePluginFromPluginListVisitor($targetMethodName, $classMetadataTransfer->getSourceOrFail()),
-        ];
+        $visitors = $this->getUnwireVisitors($targetMethodName, $classMetadataTransfer);
 
         return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
     }

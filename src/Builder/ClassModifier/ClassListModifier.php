@@ -69,6 +69,8 @@ class ClassListModifier implements ClassListModifierInterface
      * @param string $targetMethodName
      * @param string $classNameToAdd
      * @param string $constantName
+     * @param string $before
+     * @param string $after
      *
      * @throws \RuntimeException
      *
@@ -78,11 +80,14 @@ class ClassListModifier implements ClassListModifierInterface
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
         string $classNameToAdd,
-        string $constantName
+        string $constantName,
+        string $before = '',
+        string $after = ''
     ): ClassInformationTransfer {
         $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         if (!$methodNode) {
-            $classInformationTransfer = $this->commonClassModifier->overrideMethodFromParent($classInformationTransfer, $targetMethodName);
+            $classInformationTransfer = $this->commonClassModifier
+                ->overrideMethodFromParent($classInformationTransfer, $targetMethodName);
             $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         }
 
@@ -97,6 +102,8 @@ class ClassListModifier implements ClassListModifierInterface
                     $targetMethodName,
                     $classNameToAdd,
                     $constantName,
+                    $before,
+                    $after,
                 ),
             ];
 

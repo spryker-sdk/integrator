@@ -117,6 +117,7 @@ abstract class AbstractManifestStrategy implements ManifestStrategyInterface
 
         $transfer->setBefore(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] ?? '', '\\'));
         $transfer->setAfter(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '', '\\'));
+        $transfer->setIndex($manifest[IntegratorConfig::MANIFEST_KEY_INDEX] ?? null);
 
         return $transfer;
     }
