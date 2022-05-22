@@ -34,6 +34,11 @@ class IntegratorConfig
     /**
      * @var string
      */
+    public const MANIFEST_KEY_CONDITION = 'condition';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_IS_LITERAL = 'is_literal';
 
     /**

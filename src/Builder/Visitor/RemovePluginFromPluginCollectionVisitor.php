@@ -69,7 +69,7 @@ class RemovePluginFromPluginCollectionVisitor extends NodeVisitorAbstract
                 }
             }
 
-            if ($pluginToRemoveIndex) {
+            if ($pluginToRemoveIndex !== null) {
                 array_splice($node->stmts, $pluginToRemoveIndex, 1);
             }
 

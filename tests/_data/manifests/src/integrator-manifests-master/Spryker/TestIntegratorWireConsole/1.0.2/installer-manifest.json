@@ -1,0 +1,18 @@
+{
+    "wire-plugin": [
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorConsoleCommands\\ConsoleDependencyProvider::getConsoleCommands",
+            "source": "\\Spryker\\Zed\\TestIntegratorConsoleCommands\\Console\\TestNewConsole"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorConsoleCommands\\ConsoleDependencyProvider::getConsoleCommands",
+            "source": "\\Spryker\\Zed\\TestIntegratorConsoleCommands\\Console\\TestNewConsoleWithCondition",
+            "condition": "$this->getConfig()->isDevelopmentConsoleCommandsEnabled()"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorConsoleCommands\\ConsoleDependencyProvider::getConsoleCommands",
+            "source": "\\Spryker\\Zed\\TestIntegratorConsoleCommands\\Console\\TestNewConsoleWithMissingCondition",
+            "condition": "class_exists(\\Spryker\\Zed\\TestIntegratorConsoleCommands\\Console\\TestNewConsoleWithMissingCondition::class)"
+        }
+    ]
+}

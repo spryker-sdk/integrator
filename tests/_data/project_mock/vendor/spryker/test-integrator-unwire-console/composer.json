@@ -1,0 +1,9 @@
+{
+    "name": "spryker/test-integrator-unwire-console",
+    "type": "composer-plugin",
+    "description": "test-integrator-unwire-console module",
+    "license": "proprietary",
+    "require": {
+        "php": ">=7.4"
+    }
+}

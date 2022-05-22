@@ -23,7 +23,6 @@ use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemovePluginFromPluginListVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\RemoveUseVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -108,7 +107,6 @@ class ClassInstanceReturnArrayModifierStrategy implements ClassInstanceModifierS
         if ($classMetadataTransfer->getIndex() !== null && $this->isIndexFullyQualifiedClassName($classMetadataTransfer->getIndex())) {
             $visitors[] = new AddUseVisitor($this->getFullyQualifiedClassNameFromIndex($classMetadataTransfer->getIndex()));
         }
-
 
         return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
     }

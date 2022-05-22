@@ -12,7 +12,6 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier;
 use RuntimeException;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
-use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 

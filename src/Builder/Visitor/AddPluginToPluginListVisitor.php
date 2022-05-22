@@ -15,6 +15,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
@@ -22,8 +23,11 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
+use PhpParser\PrettyPrinter\Standard;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -62,9 +66,8 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     /**
      * @param string $methodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
-     * @param string|null $index
      */
-    public function __construct(string $methodName, ClassMetadataTransfer $classMetadataTransfer, ?string $index = null)
+    public function __construct(string $methodName, ClassMetadataTransfer $classMetadataTransfer)
     {
         $this->methodName = $methodName;
         $this->classMetadataTransfer = $classMetadataTransfer;
@@ -90,7 +93,13 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
                 return $this->successfullyProcessed();
             }
 
-            if ($node instanceof Array_) {
+            if ($node instanceof If_ && $this->classMetadataTransfer->getCondition() !== null) {
+                $this->addNewPluginIntoIfCondition($node);
+
+                return $this->successfullyProcessed();
+            }
+
+            if ($node instanceof Array_ && $this->classMetadataTransfer->getCondition() === null) {
                 $this->addNewPlugin($node);
 
                 return $this->successfullyProcessed();
@@ -98,6 +107,18 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         }
 
         return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\If_ $ifCondition
+     *
+     * @return string
+     */
+    protected function getIfClausePrettyPrint(If_ $ifCondition): string
+    {
+        $prettyPrinter = new Standard();
+
+        return $prettyPrinter->prettyPrintExpr($ifCondition->cond);
     }
 
     /**
@@ -124,6 +145,56 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         $node->args[] = new Arg($this->createArrayWithInstanceOf());
 
         return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\If_ $node
+     *
+     * @return \PhpParser\Node
+     */
+    protected function addNewPluginIntoIfCondition(If_ $node): Node
+    {
+        if ($this->getIfClausePrettyPrint($node) === $this->classMetadataTransfer->getCondition()) {
+            $this->addNewPluginInstance($node);
+
+            return $node;
+        }
+
+        foreach ($node->stmts as $stmt) {
+            if ($stmt instanceof If_) {
+                return $this->addNewPluginIntoIfCondition($stmt);
+            }
+        }
+
+        return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\If_ $statement
+     *
+     * @return void
+     */
+    protected function addNewPluginInstance(If_ $statement): void
+    {
+        foreach ($statement->stmts as $stmt) {
+            if ($stmt instanceof Expression && $stmt->expr instanceof Assign) {
+                array_unshift($statement->stmts, $this->createNewAssignStatement($stmt->expr));
+
+                break;
+            }
+        }
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\Assign $reference
+     *
+     * @return \PhpParser\Node\Stmt\Expression
+     */
+    protected function createNewAssignStatement(Assign $reference): Expression
+    {
+        return new Expression(new Assign($reference->var, (new BuilderFactory())->new(
+            (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
+        )));
     }
 
     /**

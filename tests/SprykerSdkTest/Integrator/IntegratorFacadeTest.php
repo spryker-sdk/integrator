@@ -134,6 +134,46 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
+    public function testRunInstallationWireConsole(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWireConsole'), $ioAdapter, false);
+
+        // Assert
+        $testFilePath = './tests/_tests_files/test_integrator_wire_console.php';
+        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorConsoleCommands/ConsoleDependencyProvider.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunInstallationUnwireConsole(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwireConsole'), $ioAdapter, false);
+
+        // Assert
+        $testFilePath = './tests/_tests_files/test_integrator_unwire_console.php';
+        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorConsoleCommands/ConsoleDependencyProvider.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+    }
+
+    /**
+     * @return void
+     */
     public function testRunInstallationCopyModuleFile(): void
     {
         // Arrange
