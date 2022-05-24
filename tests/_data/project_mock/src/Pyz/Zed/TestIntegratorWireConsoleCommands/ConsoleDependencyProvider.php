@@ -5,20 +5,23 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Pyz\Zed\TestIntegratorUnwireConsoleCommands;
+namespace Pyz\Zed\TestIntegratorWireConsoleCommands;
 
-use Spryker\Zed\TestIntegratorUnwireConsoleCommands\Console\TestPlainConsole;
-use Spryker\Zed\TestIntegratorUnwireConsoleCommands\Console\TestDevConsole;
-use Spryker\Zed\TestIntegratorUnwireConsoleCommands\Console\TestClassExistsConsole;
+use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestPlainConsole;
+use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestDevConsole;
+use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestClassExistsConsole;
 
 class ConsoleDependencyProvider
 {
     protected function getConsoleCommands(Container $container): array
     {
         $commands = [];
+        $commands[] = new TestPlainConsole();
 
         if ($this->getConfig()->isDevelopmentConsoleCommandsEnabled()) {
+            $commands[] = new TestDevConsole();
             if (class_exists(TestClassExistsConsole::class)) {
+                $commands[] = new TestClassExistsConsole();
             }
         }
 

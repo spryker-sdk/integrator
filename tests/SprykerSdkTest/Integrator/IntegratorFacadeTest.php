@@ -144,7 +144,7 @@ class IntegratorFacadeTest extends BaseTestCase
 
         // Assert
         $testFilePath = './tests/_tests_files/test_integrator_wire_console.php';
-        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorConsoleCommands/ConsoleDependencyProvider.php';
+        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorWireConsoleCommands/ConsoleDependencyProvider.php';
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -164,7 +164,7 @@ class IntegratorFacadeTest extends BaseTestCase
 
         // Assert
         $testFilePath = './tests/_tests_files/test_integrator_unwire_console.php';
-        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorConsoleCommands/ConsoleDependencyProvider.php';
+        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorUnwireConsoleCommands/ConsoleDependencyProvider.php';
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -542,6 +542,9 @@ class IntegratorFacadeTest extends BaseTestCase
      */
     private function clearTestEnv(): void
     {
-        //$this->removeTmpDirectory();
+        $this->removeTmpDirectory();
+        $this->createTmpDirectory();
+        $this->createTmpStandaloneModulesDirectory();
+        $this->copyProjectMockToTmpDirectory();
     }
 }

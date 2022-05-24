@@ -5,14 +5,14 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace Pyz\Zed\TestIntegratorConsoleCommands;
+namespace Pyz\Zed\TestIntegratorWireConsoleCommands;
 
-use Spryker\Zed\TestIntegratorConsoleCommands\Console\TestClassExistsConsole;
-use Spryker\Zed\TestIntegratorConsoleCommands\Console\TestDevConsole;
-use Spryker\Zed\TestIntegratorConsoleCommands\Console\TestNewConsole;
-use Spryker\Zed\TestIntegratorConsoleCommands\Console\TestNewConsoleWithCondition;
-use Spryker\Zed\TestIntegratorConsoleCommands\Console\TestNewConsoleWithMissingCondition;
-use Spryker\Zed\TestIntegratorConsoleCommands\Console\TestPlainConsole;
+use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestClassExistsConsole;
+use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestDevConsole;
+use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestNewConsole;
+use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestNewConsoleWithCondition;
+use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestNewConsoleWithMissingCondition;
+use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestPlainConsole;
 
 class ConsoleDependencyProvider
 {
