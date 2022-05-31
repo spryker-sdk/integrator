@@ -156,6 +156,12 @@
             {
                 "static::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED_CHANGED": true
             }
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::BOOL_VALUE_MISSING"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testChangeMissingValue"
         }
     ]
 }
