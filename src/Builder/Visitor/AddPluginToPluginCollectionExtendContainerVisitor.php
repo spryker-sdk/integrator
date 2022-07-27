@@ -105,7 +105,8 @@ class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstr
             if ($stmt instanceof Expression === false) {
                 continue;
             }
-            if ($stmt->expr instanceof MethodCall === false
+            if (
+                $stmt->expr instanceof MethodCall === false
                 || strpos(strtolower($stmt->expr->name->toString()), 'add') === false
             ) {
                 continue;
