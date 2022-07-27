@@ -143,7 +143,7 @@ class CommonClassModifier implements CommonClassModifierInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
-     * @param array<string, \PhpParser\Node> $methodNodeProperties
+     * @param array<string, mixed> $methodNodeProperties
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */

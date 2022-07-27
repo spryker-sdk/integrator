@@ -18,7 +18,7 @@ class ShopApplicationDependencyProvider
     protected function getGlobalWidgets(): array
     {
         return [
-            TestUnwireWidget::class, TestWidget::class,
+            TestWidget::class,
         ];
     }
 }

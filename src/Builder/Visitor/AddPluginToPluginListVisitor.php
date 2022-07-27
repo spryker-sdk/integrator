@@ -62,9 +62,8 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     /**
      * @param string $methodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
-     * @param string|null $index
      */
-    public function __construct(string $methodName, ClassMetadataTransfer $classMetadataTransfer, ?string $index = null)
+    public function __construct(string $methodName, ClassMetadataTransfer $classMetadataTransfer)
     {
         $this->methodName = $methodName;
         $this->classMetadataTransfer = $classMetadataTransfer;

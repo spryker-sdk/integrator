@@ -38,7 +38,7 @@ class ReplaceNodePropertiesByNameVisitor extends NodeVisitorAbstract
 
     /**
      * @param string $name
-     * @param array<string, \PhpParser\Node> $properties
+     * @param array<string, mixed> $properties
      */
     public function __construct(string $name, array $properties = [])
     {
