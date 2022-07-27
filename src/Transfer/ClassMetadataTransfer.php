@@ -63,17 +63,17 @@ class ClassMetadataTransfer extends AbstractTransfer
     protected $source;
 
     /**
-     * @var \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer>
+     * @var \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject
      */
     protected $prependArguments;
 
     /**
-     * @var \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer>
+     * @var \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject
      */
     protected $appendArguments;
 
     /**
-     * @var \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer>
+     * @var \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject
      */
     protected $constructorArguments;
 
@@ -306,7 +306,7 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @param \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $prependArguments
+     * @param \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject $prependArguments
      *
      * @return $this
      */
@@ -319,9 +319,9 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @return \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer>
+     * @return \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject
      */
-    public function getPrependArguments(): ArrayObject
+    public function getPrependArguments()
     {
         return $this->prependArguments;
     }
@@ -350,7 +350,7 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @param \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $appendArguments
+     * @param \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject $appendArguments
      *
      * @return $this
      */
@@ -365,9 +365,9 @@ class ClassMetadataTransfer extends AbstractTransfer
     /**
      * @module App
      *
-     * @return \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer>
+     * @return \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject
      */
-    public function getAppendArguments(): ArrayObject
+    public function getAppendArguments()
     {
         return $this->appendArguments;
     }
@@ -396,7 +396,7 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @param \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $constructorArguments
+     * @param \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject $constructorArguments
      *
      * @return $this
      */
@@ -409,9 +409,9 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @return \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer>
+     * @return \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject
      */
-    public function getConstructorArguments(): ArrayObject
+    public function getConstructorArguments()
     {
         return $this->constructorArguments;
     }
@@ -873,14 +873,14 @@ class ClassMetadataTransfer extends AbstractTransfer
     public function toArrayRecursiveNotCamelCased(): array
     {
         return [
-            'target' => $this->target,
+            'target' =>  $this->target,
             'source' => $this->source,
             'before' => $this->before,
             'after' => $this->after,
             'index' => $this->index,
             'prepend_arguments' => $this->addValuesToCollection($this->prependArguments, true, false),
             'append_arguments' => $this->addValuesToCollection($this->appendArguments, true, false),
-            'constructor_arguments' => $this->addValuesToCollection($this->constructorArguments, true, false),
+            'constructor_arguments' =>  $this->addValuesToCollection($this->constructorArguments, true, false),
         ];
     }
 
