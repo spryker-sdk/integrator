@@ -29,11 +29,6 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
     protected const STATEMENT_CLASS_METHOD = 'Stmt_ClassMethod';
 
     /**
-     * @var string
-     */
-    protected $methodName;
-
-    /**
      * @var \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer
      */
     protected $classMetadataTransfer;
@@ -44,13 +39,11 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
     protected $argumentBuilder;
 
     /**
-     * @param string $methodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
      */
-    public function __construct(string $methodName, ClassMetadataTransfer $classMetadataTransfer, ArgumentBuilderInterface $argumentBuilder)
+    public function __construct(ClassMetadataTransfer $classMetadataTransfer, ArgumentBuilderInterface $argumentBuilder)
     {
-        $this->methodName = $methodName;
         $this->classMetadataTransfer = $classMetadataTransfer;
         $this->argumentBuilder = $argumentBuilder;
     }
@@ -62,7 +55,10 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node): Node
     {
-        if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() === $this->methodName) {
+        if (
+            $node->getType() === static::STATEMENT_CLASS_METHOD
+            && $node->name->toString() === $this->classMetadataTransfer->getTargetMethodNameOrFail()
+        ) {
             /** @var array<\PhpParser\Node\Expr\MethodCall> $addPluginCalls */
             $addPluginCalls = (new NodeFinder())->find($node->stmts, function (Node $node) {
                 return $node instanceof MethodCall

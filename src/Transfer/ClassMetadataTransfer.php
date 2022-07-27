@@ -58,6 +58,11 @@ class ClassMetadataTransfer extends AbstractTransfer
     public const CONDITION = 'condition';
 
     /**
+     * @var string
+     */
+    public const TARGET_METHOD_NAME = 'targetMethodName';
+
+    /**
      * @var string|null
      */
     protected $target;
@@ -68,17 +73,17 @@ class ClassMetadataTransfer extends AbstractTransfer
     protected $source;
 
     /**
-     * @var \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject
+     * @var \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer>
      */
     protected $prependArguments;
 
     /**
-     * @var \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject
+     * @var \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer>
      */
     protected $appendArguments;
 
     /**
-     * @var \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject
+     * @var \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer>
      */
     protected $constructorArguments;
 
@@ -101,6 +106,11 @@ class ClassMetadataTransfer extends AbstractTransfer
      * @var string|null
      */
     protected $condition;
+
+    /**
+     * @var string|null
+     */
+    protected $targetMethodName;
 
     /**
      * @var array<string, string>
@@ -127,6 +137,9 @@ class ClassMetadataTransfer extends AbstractTransfer
         'Index' => 'index',
         'condition' => 'condition',
         'Condition' => 'condition',
+        'targetMethodName' => 'targetMethodName',
+        'TargetMethodName' => 'targetMethodName',
+        'target_methodName' => 'targetMethodName',
     ];
 
     /**
@@ -241,6 +254,18 @@ class ClassMetadataTransfer extends AbstractTransfer
             'is_nullable' => false,
             'is_strict' => false,
         ],
+        self::TARGET_METHOD_NAME => [
+            'type' => 'string',
+            'type_shim' => null,
+            'name_underscore' => 'target_method_name',
+            'is_collection' => false,
+            'is_transfer' => false,
+            'is_value_object' => false,
+            'rest_request_parameter' => 'no',
+            'is_associative' => false,
+            'is_nullable' => false,
+            'is_strict' => false,
+        ],
     ];
 
     /**
@@ -330,7 +355,7 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject $prependArguments
+     * @param \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $prependArguments
      *
      * @return $this
      */
@@ -343,9 +368,9 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject
+     * @return \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer>
      */
-    public function getPrependArguments()
+    public function getPrependArguments(): ArrayObject
     {
         return $this->prependArguments;
     }
@@ -374,7 +399,7 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject $appendArguments
+     * @param \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $appendArguments
      *
      * @return $this
      */
@@ -389,9 +414,9 @@ class ClassMetadataTransfer extends AbstractTransfer
     /**
      * @module App
      *
-     * @return \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject
+     * @return \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer>
      */
-    public function getAppendArguments()
+    public function getAppendArguments(): ArrayObject
     {
         return $this->appendArguments;
     }
@@ -420,7 +445,7 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject $constructorArguments
+     * @param \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $constructorArguments
      *
      * @return $this
      */
@@ -433,9 +458,9 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer[]|\ArrayObject
+     * @return \ArrayObject<\SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer>
      */
-    public function getConstructorArguments()
+    public function getConstructorArguments(): ArrayObject
     {
         return $this->constructorArguments;
     }
@@ -636,6 +661,49 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
+     * @param string|null $targetMethodName
+     *
+     * @return $this
+     */
+    public function setTargetMethodName(?string $targetMethodName)
+    {
+        $this->targetMethodName = $targetMethodName;
+        $this->modifiedProperties[static::TARGET_METHOD_NAME] = true;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTargetMethodName(): ?string
+    {
+        return $this->targetMethodName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTargetMethodNameOrFail(): string
+    {
+        if ($this->targetMethodName === null) {
+            $this->throwNullValueException(static::TARGET_METHOD_NAME);
+        }
+
+        return $this->targetMethodName;
+    }
+
+    /**
+     * @return $this
+     */
+    public function requireTargetMethodName()
+    {
+        $this->assertPropertyIsSet(static::TARGET_METHOD_NAME);
+
+        return $this;
+    }
+
+    /**
      * @param array<string, mixed> $data
      * @param bool $ignoreMissingProperty
      *
@@ -655,6 +723,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                 case 'after':
                 case 'index':
                 case 'condition':
+                case 'targetMethodName':
                     $this->$normalizedPropertyName = $value;
                     $this->modifiedProperties[$normalizedPropertyName] = true;
 
@@ -697,6 +766,8 @@ class ClassMetadataTransfer extends AbstractTransfer
         if (!$isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayNotRecursiveNotCamelCased();
         }
+
+        return [];
     }
 
     /**
@@ -719,6 +790,8 @@ class ClassMetadataTransfer extends AbstractTransfer
         if (!$isRecursive && $camelCasedKeys) {
             return $this->toArrayNotRecursiveCamelCased();
         }
+
+        return [];
     }
 
     /**
@@ -774,6 +847,7 @@ class ClassMetadataTransfer extends AbstractTransfer
         foreach ($this->modifiedProperties as $property => $_) {
             $value = $this->$property;
 
+            /** @var string $arrayKey */
             $arrayKey = $property;
 
             if ($value instanceof AbstractTransfer) {
@@ -788,6 +862,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                 case 'after':
                 case 'index':
                 case 'condition':
+                case 'targetMethodName':
                     $values[$arrayKey] = $value;
 
                     break;
@@ -812,6 +887,7 @@ class ClassMetadataTransfer extends AbstractTransfer
         foreach ($this->modifiedProperties as $property => $_) {
             $value = $this->$property;
 
+            /** @var string $arrayKey */
             $arrayKey = $this->transferMetadata[$property]['name_underscore'];
 
             if ($value instanceof AbstractTransfer) {
@@ -826,6 +902,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                 case 'after':
                 case 'index':
                 case 'condition':
+                case 'targetMethodName':
                     $values[$arrayKey] = $value;
 
                     break;
@@ -850,6 +927,7 @@ class ClassMetadataTransfer extends AbstractTransfer
         foreach ($this->modifiedProperties as $property => $_) {
             $value = $this->$property;
 
+            /** @var string $arrayKey */
             $arrayKey = $this->transferMetadata[$property]['name_underscore'];
 
             $values[$arrayKey] = $value;
@@ -880,8 +958,19 @@ class ClassMetadataTransfer extends AbstractTransfer
      */
     protected function initCollectionProperties(): void
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->prependArguments = $this->prependArguments ?: new ArrayObject();
+
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->appendArguments = $this->appendArguments ?: new ArrayObject();
+
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->constructorArguments = $this->constructorArguments ?: new ArrayObject();
     }
 
@@ -897,6 +986,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'after' => $this->after,
             'index' => $this->index,
             'condition' => $this->condition,
+            'targetMethodName' => $this->targetMethodName,
             'prependArguments' => $this->prependArguments,
             'appendArguments' => $this->appendArguments,
             'constructorArguments' => $this->constructorArguments,
@@ -915,6 +1005,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'after' => $this->after,
             'index' => $this->index,
             'condition' => $this->condition,
+            'targetMethodName' => $this->targetMethodName,
             'prepend_arguments' => $this->prependArguments,
             'append_arguments' => $this->appendArguments,
             'constructor_arguments' => $this->constructorArguments,

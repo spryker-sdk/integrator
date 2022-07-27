@@ -7,6 +7,7 @@
 
 namespace Pyz\Zed\TestIntegratorWirePlugin;
 
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SinglePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FirstPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SecondPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\UrlStorageEventSubscriber;
@@ -15,6 +16,11 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestFooConditionPl
 
 class TestIntegratorWirePluginDependencyProvider
 {
+    public function getSinglePlugin(): SinglePlugin
+    {
+        return new SinglePlugin();
+    }
+
     public function getTestPlugins(): array
     {
         return [];
@@ -94,6 +100,17 @@ class TestIntegratorWirePluginDependencyProvider
     {
         $container->extend('TEST_PLUGINS', function (ConditionCollectionInterface $conditionCollection) {
             $conditionCollection->add(new TestFooConditionPlugin());
+
+            return $conditionCollection;
+        });
+
+        return $container;
+    }
+
+    protected function extendConditionKeyValuePlugins(Container $container): Container
+    {
+        $container->extend('TEST_PLUGINS', function (ConditionCollectionInterface $conditionCollection) {
+            $conditionCollection->add('Oms/SendOrderShipped', new FirstPlugin());
 
             return $conditionCollection;
         });

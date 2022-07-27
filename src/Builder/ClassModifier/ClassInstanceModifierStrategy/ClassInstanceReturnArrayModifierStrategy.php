@@ -92,17 +92,15 @@ class ClassInstanceReturnArrayModifierStrategy implements ClassInstanceModifierS
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function wireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
-        $visitors = $this->getWireVisitors($targetMethodName, $classMetadataTransfer);
+        $visitors = $this->getWireVisitors($classMetadataTransfer);
 
         if ($classMetadataTransfer->getIndex() !== null && $this->isIndexFullyQualifiedClassName($classMetadataTransfer->getIndex())) {
             $visitors[] = new AddUseVisitor($this->getFullyQualifiedClassNameFromIndex($classMetadataTransfer->getIndex()));
@@ -133,49 +131,46 @@ class ClassInstanceReturnArrayModifierStrategy implements ClassInstanceModifierS
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function unwireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
-        $visitors = $this->getUnwireVisitors($targetMethodName, $classMetadataTransfer);
+        $visitors = $this->getUnwireVisitors($classMetadataTransfer);
 
         return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
     }
 
     /**
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return array<\PhpParser\NodeVisitorAbstract>
      */
-    protected function getWireVisitors(string $targetMethodName, ClassMetadataTransfer $classMetadataTransfer): array
+    protected function getWireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
     {
         return [
             new AddUseVisitor($classMetadataTransfer->getSourceOrFail()),
             new AddPluginToPluginListVisitor(
-                $targetMethodName,
                 $classMetadataTransfer,
             ),
         ];
     }
 
     /**
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return array<\PhpParser\NodeVisitorAbstract>
      */
-    protected function getUnwireVisitors(string $targetMethodName, ClassMetadataTransfer $classMetadataTransfer): array
+    protected function getUnwireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
     {
         return [
-//            new RemoveUseVisitor($classMetadataTransfer->getSourceOrFail()),
-            new RemovePluginFromPluginListVisitor($targetMethodName, $classMetadataTransfer->getSourceOrFail()),
+            new RemovePluginFromPluginListVisitor(
+                $classMetadataTransfer->getTargetMethodNameOrFail(),
+                $classMetadataTransfer->getSourceOrFail(),
+            ),
         ];
     }
 }

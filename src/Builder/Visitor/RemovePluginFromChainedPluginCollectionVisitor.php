@@ -26,11 +26,6 @@ class RemovePluginFromChainedPluginCollectionVisitor extends NodeVisitorAbstract
     protected const STATEMENT_CLASS_METHOD = 'Stmt_ClassMethod';
 
     /**
-     * @var string
-     */
-    protected $methodName;
-
-    /**
      * @var \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer
      */
     protected $classMetadataTransfer;
@@ -41,12 +36,10 @@ class RemovePluginFromChainedPluginCollectionVisitor extends NodeVisitorAbstract
     protected $pluginRemoved = false;
 
     /**
-     * @param string $methodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      */
-    public function __construct(string $methodName, ClassMetadataTransfer $classMetadataTransfer)
+    public function __construct(ClassMetadataTransfer $classMetadataTransfer)
     {
-        $this->methodName = $methodName;
         $this->classMetadataTransfer = $classMetadataTransfer;
     }
 
@@ -57,7 +50,10 @@ class RemovePluginFromChainedPluginCollectionVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node): Node
     {
-        if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() === $this->methodName) {
+        if (
+            $node->getType() === static::STATEMENT_CLASS_METHOD
+            && $node->name->toString() === $this->classMetadataTransfer->getTargetMethodNameOrFail()
+        ) {
             $addPluginCalls = (new NodeFinder())->find($node->stmts, function (Node $node) {
                 return $node instanceof MethodCall
                     && strpos(strtolower($node->name->toString()), 'add') !== false;

@@ -11,8 +11,10 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AvailabilityStorag
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FirstPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FooStorageEventSubscriber;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SecondPlugin;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SinglePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestBarConditionPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestFooConditionPlugin;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorSingleWirePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginIndex;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginStaticIndex;
@@ -22,6 +24,11 @@ use Spryker\Zed\TestIntegratorWirePlugin\TestIntegratorWirePluginConfig;
 
 class TestIntegratorWirePluginDependencyProvider
 {
+    public function getSinglePlugin(): TestIntegratorSingleWirePlugin
+    {
+        return new TestIntegratorSingleWirePlugin();
+    }
+
     public function getTestPlugins(): array
     {
         return [
@@ -111,6 +118,19 @@ class TestIntegratorWirePluginDependencyProvider
         $container->extend('TEST_PLUGINS', function (ConditionCollectionInterface $conditionCollection) {
             $conditionCollection->add(new TestFooConditionPlugin());
             $conditionCollection->add(new TestBarConditionPlugin());
+
+            return $conditionCollection;
+        });
+
+        return $container;
+    }
+
+    protected function extendConditionKeyValuePlugins(Container $container): Container
+    {
+        $container->extend('TEST_PLUGINS', function (ConditionCollectionInterface $conditionCollection) {
+            $conditionCollection->add('Oms/SendOrderShipped', new FirstPlugin());
+            $conditionCollection->add(new TestBarConditionPlugin(), 'Oms/SendOrderShipped');
+            $conditionCollection->add('Oms/SendOrderShipped', new TestFooConditionPlugin());
 
             return $conditionCollection;
         });

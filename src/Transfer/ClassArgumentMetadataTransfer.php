@@ -224,6 +224,8 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
         if (!$isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayNotRecursiveNotCamelCased();
         }
+
+        return [];
     }
 
     /**
@@ -246,6 +248,8 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
         if (!$isRecursive && $camelCasedKeys) {
             return $this->toArrayNotRecursiveCamelCased();
         }
+
+        return [];
     }
 
     /**
@@ -329,6 +333,7 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
         foreach ($this->modifiedProperties as $property => $_) {
             $value = $this->$property;
 
+            /** @var string $arrayKey */
             $arrayKey = $this->transferMetadata[$property]['name_underscore'];
 
             if ($value instanceof AbstractTransfer) {
@@ -357,6 +362,7 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
         foreach ($this->modifiedProperties as $property => $_) {
             $value = $this->$property;
 
+            /** @var string $arrayKey */
             $arrayKey = $this->transferMetadata[$property]['name_underscore'];
 
             $values[$arrayKey] = $value;
@@ -417,8 +423,8 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
     public function toArrayRecursiveNotCamelCased(): array
     {
         return [
-            'value' => $this->value instanceof AbstractTransfer ? $this->value->toArray(true, false) : $this->value,
-            'is_literal' => $this->isLiteral instanceof AbstractTransfer ? $this->isLiteral->toArray(true, false) : $this->isLiteral,
+            'value' => $this->value,
+            'is_literal' => $this->isLiteral,
         ];
     }
 
@@ -428,8 +434,8 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
     public function toArrayRecursiveCamelCased(): array
     {
         return [
-            'value' => $this->value instanceof AbstractTransfer ? $this->value->toArray(true, true) : $this->value,
-            'isLiteral' => $this->isLiteral instanceof AbstractTransfer ? $this->isLiteral->toArray(true, true) : $this->isLiteral,
+            'value' => $this->value,
+            'isLiteral' => $this->isLiteral,
         ];
     }
 }

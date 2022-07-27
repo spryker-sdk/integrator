@@ -89,17 +89,15 @@ class ClassInstanceReturnChainedCollectionModifierStrategy implements ClassInsta
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function wireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
-        $visitors = $this->getWireVisitors($targetMethodName, $classMetadataTransfer);
+        $visitors = $this->getWireVisitors($classMetadataTransfer);
 
         $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
 
@@ -108,17 +106,15 @@ class ClassInstanceReturnChainedCollectionModifierStrategy implements ClassInsta
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function unwireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
-        $visitors = $this->getUnwireVisitors($targetMethodName, $classMetadataTransfer);
+        $visitors = $this->getUnwireVisitors($classMetadataTransfer);
 
         $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
 
@@ -126,17 +122,15 @@ class ClassInstanceReturnChainedCollectionModifierStrategy implements ClassInsta
     }
 
     /**
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return array<\PhpParser\NodeVisitorAbstract>
      */
-    protected function getWireVisitors(string $targetMethodName, ClassMetadataTransfer $classMetadataTransfer): array
+    protected function getWireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
     {
         return [
             new AddUseVisitor($classMetadataTransfer->getSourceOrFail()),
             new AddPluginToChainedPluginCollectionVisitor(
-                $targetMethodName,
                 $classMetadataTransfer,
                 $this->argumentBuilder,
             ),
@@ -144,19 +138,14 @@ class ClassInstanceReturnChainedCollectionModifierStrategy implements ClassInsta
     }
 
     /**
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return array<\PhpParser\NodeVisitorAbstract>
      */
-    protected function getUnwireVisitors(string $targetMethodName, ClassMetadataTransfer $classMetadataTransfer): array
+    protected function getUnwireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
     {
         return [
-//            new RemoveUseVisitor($classMetadataTransfer->getSourceOrFail()),
-            new RemovePluginFromChainedPluginCollectionVisitor(
-                $targetMethodName,
-                $classMetadataTransfer,
-            ),
+            new RemovePluginFromChainedPluginCollectionVisitor($classMetadataTransfer),
         ];
     }
 }

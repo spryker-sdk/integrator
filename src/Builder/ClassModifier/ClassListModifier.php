@@ -19,6 +19,7 @@ use SprykerSdk\Integrator\Builder\Visitor\AddClassToClassListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveClassFromClassListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveUseVisitor;
+use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodePropertiesByNameVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -118,7 +119,8 @@ class ClassListModifier implements ClassListModifierInterface
         $classHelper = new ClassHelper();
         $methodBody = [new Return_((new BuilderFactory())->classConstFetch($classHelper->getShortClassName($classNameToAdd), $constantName))];
 
-        $this->commonClassModifier->replaceMethodBody($classInformationTransfer, $targetMethodName, $methodBody);
+        $methodNodeProperties = [ReplaceNodePropertiesByNameVisitor::STMTS => $methodBody];
+        $this->commonClassModifier->replaceMethodBody($classInformationTransfer, $targetMethodName, $methodNodeProperties);
 
         return $classInformationTransfer;
     }

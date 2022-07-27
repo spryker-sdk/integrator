@@ -45,7 +45,6 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
 
             $classInformationTransfer = $this->createClassBuilderFacade()->unwireClassInstance(
                 $classInformationTransfer,
-                $targetMethodName,
                 $classMetadataTransfer,
             );
 

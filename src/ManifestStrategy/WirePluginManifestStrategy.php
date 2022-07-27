@@ -67,7 +67,6 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
 
             $classInformationTransfer = $this->createClassBuilderFacade()->wireClassInstance(
                 $classInformationTransfer,
-                $targetMethodName,
                 $classMetadataTransfer,
             );
 

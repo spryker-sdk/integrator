@@ -59,7 +59,6 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @throws \RuntimeException
@@ -68,9 +67,9 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
      */
     public function wireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
+        $targetMethodName = $classMetadataTransfer->getTargetMethodNameOrFail();
         $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         if (!$methodNode) {
             $classInformationTransfer = $this->commonClassModifier->overrideMethodFromParent($classInformationTransfer, $targetMethodName);
@@ -83,7 +82,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
 
         foreach ($this->classInstanceModifierStrategies as $classInstanceModifierStrategy) {
             if ($classInstanceModifierStrategy->isApplicable($methodNode)) {
-                return $classInstanceModifierStrategy->wireClassInstance($classInformationTransfer, $targetMethodName, $classMetadataTransfer);
+                return $classInstanceModifierStrategy->wireClassInstance($classInformationTransfer, $classMetadataTransfer);
             }
         }
 
@@ -92,16 +91,15 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
     public function unwireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ?ClassInformationTransfer {
+        $targetMethodName = $classMetadataTransfer->getTargetMethodNameOrFail();
         $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         if (!$methodNode) {
             return null;
@@ -109,7 +107,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
 
         foreach ($this->classInstanceModifierStrategies as $classInstanceModifierStrategy) {
             if ($classInstanceModifierStrategy->isApplicable($methodNode)) {
-                return $classInstanceModifierStrategy->unwireClassInstance($classInformationTransfer, $targetMethodName, $classMetadataTransfer);
+                return $classInstanceModifierStrategy->unwireClassInstance($classInformationTransfer, $classMetadataTransfer);
             }
         }
 

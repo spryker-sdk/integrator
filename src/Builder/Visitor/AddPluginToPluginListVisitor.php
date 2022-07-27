@@ -15,7 +15,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
@@ -23,11 +22,8 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
-use PhpParser\PrettyPrinter\Standard;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -49,11 +45,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected const STATEMENT_CLASS_METHOD = 'Stmt_ClassMethod';
 
     /**
-     * @var string
-     */
-    protected $methodName;
-
-    /**
      * @var \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer
      */
     protected $classMetadataTransfer;
@@ -64,12 +55,10 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $methodFound = false;
 
     /**
-     * @param string $methodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      */
-    public function __construct(string $methodName, ClassMetadataTransfer $classMetadataTransfer)
+    public function __construct(ClassMetadataTransfer $classMetadataTransfer)
     {
-        $this->methodName = $methodName;
         $this->classMetadataTransfer = $classMetadataTransfer;
     }
 
@@ -80,7 +69,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($node instanceof ClassMethod && $node->name->toString() === $this->methodName) {
+        if ($node instanceof ClassMethod && $node->name->toString() === $this->classMetadataTransfer->getTargetMethodNameOrFail()) {
             $this->methodFound = true;
 
             return $node;

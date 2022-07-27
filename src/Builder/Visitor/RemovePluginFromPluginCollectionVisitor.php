@@ -23,22 +23,15 @@ class RemovePluginFromPluginCollectionVisitor extends NodeVisitorAbstract
     protected const STATEMENT_CLASS_METHOD = 'Stmt_ClassMethod';
 
     /**
-     * @var string
-     */
-    protected $methodName;
-
-    /**
      * @var \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer
      */
     protected $classMetadataTransfer;
 
     /**
-     * @param string $methodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      */
-    public function __construct(string $methodName, ClassMetadataTransfer $classMetadataTransfer)
+    public function __construct(ClassMetadataTransfer $classMetadataTransfer)
     {
-        $this->methodName = $methodName;
         $this->classMetadataTransfer = $classMetadataTransfer;
     }
 
@@ -49,7 +42,10 @@ class RemovePluginFromPluginCollectionVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node): Node
     {
-        if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() === $this->methodName) {
+        if (
+            $node->getType() === static::STATEMENT_CLASS_METHOD
+            && $node->name->toString() === $this->classMetadataTransfer->getTargetMethodNameOrFail()
+        ) {
             $pluginToRemoveIndex = null;
             foreach ($node->stmts as $index => $stmt) {
                 if (
