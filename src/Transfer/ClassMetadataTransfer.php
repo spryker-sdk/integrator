@@ -1018,14 +1018,16 @@ class ClassMetadataTransfer extends AbstractTransfer
     public function toArrayRecursiveNotCamelCased(): array
     {
         return [
-            'target' => $this->target instanceof AbstractTransfer ? $this->target->toArray(true, false) : $this->target,
-            'source' => $this->source instanceof AbstractTransfer ? $this->source->toArray(true, false) : $this->source,
-            'before' => $this->before instanceof AbstractTransfer ? $this->before->toArray(true, false) : $this->before,
-            'after' => $this->after instanceof AbstractTransfer ? $this->after->toArray(true, false) : $this->after,
-            'condition' => $this->condition instanceof AbstractTransfer ? $this->condition->toArray(true, false) : $this->index,
-            'prepend_arguments' => $this->prependArguments instanceof AbstractTransfer ? $this->prependArguments->toArray(true, false) : $this->addValuesToCollection($this->prependArguments, true, false),
-            'append_arguments' => $this->appendArguments instanceof AbstractTransfer ? $this->appendArguments->toArray(true, false) : $this->addValuesToCollection($this->appendArguments, true, false),
-            'constructor_arguments' => $this->constructorArguments instanceof AbstractTransfer ? $this->constructorArguments->toArray(true, false) : $this->addValuesToCollection($this->constructorArguments, true, false),
+            'target' => $this->target,
+            'source' => $this->source,
+            'before' => $this->before,
+            'after' => $this->after,
+            'index' => $this->index,
+            'condition' => $this->condition,
+            'targetMethodName' => $this->targetMethodName,
+            'prepend_arguments' => $this->addValuesToCollection($this->prependArguments, true, false),
+            'append_arguments' => $this->addValuesToCollection($this->appendArguments, true, false),
+            'constructor_arguments' => $this->addValuesToCollection($this->constructorArguments, true, false),
         ];
     }
 
@@ -1035,14 +1037,16 @@ class ClassMetadataTransfer extends AbstractTransfer
     public function toArrayRecursiveCamelCased(): array
     {
         return [
-            'target' => $this->target instanceof AbstractTransfer ? $this->target->toArray(true, true) : $this->target,
-            'source' => $this->source instanceof AbstractTransfer ? $this->source->toArray(true, true) : $this->source,
-            'before' => $this->before instanceof AbstractTransfer ? $this->before->toArray(true, true) : $this->before,
-            'after' => $this->after instanceof AbstractTransfer ? $this->after->toArray(true, true) : $this->after,
-            'condition' => $this->condition instanceof AbstractTransfer ? $this->condition->toArray(true, true) : $this->index,
-            'prependArguments' => $this->prependArguments instanceof AbstractTransfer ? $this->prependArguments->toArray(true, true) : $this->addValuesToCollection($this->prependArguments, true, true),
-            'appendArguments' => $this->appendArguments instanceof AbstractTransfer ? $this->appendArguments->toArray(true, true) : $this->addValuesToCollection($this->appendArguments, true, true),
-            'constructorArguments' => $this->constructorArguments instanceof AbstractTransfer ? $this->constructorArguments->toArray(true, true) : $this->addValuesToCollection($this->constructorArguments, true, true),
+            'target' => $this->target,
+            'source' => $this->source,
+            'before' => $this->before,
+            'after' => $this->after,
+            'index' => $this->index,
+            'condition' => $this->index,
+            'targetMethodName' => $this->targetMethodName,
+            'prependArguments' => $this->addValuesToCollection($this->prependArguments, true, true),
+            'appendArguments' => $this->addValuesToCollection($this->appendArguments, true, true),
+            'constructorArguments' => $this->addValuesToCollection($this->constructorArguments, true, true),
         ];
     }
 }
