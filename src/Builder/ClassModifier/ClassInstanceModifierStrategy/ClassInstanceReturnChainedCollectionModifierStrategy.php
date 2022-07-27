@@ -152,7 +152,6 @@ class ClassInstanceReturnChainedCollectionModifierStrategy implements ClassInsta
     protected function getUnwireVisitors(string $targetMethodName, ClassMetadataTransfer $classMetadataTransfer): array
     {
         return [
-//            new RemoveUseVisitor($classMetadataTransfer->getSourceOrFail()),
             new RemovePluginFromChainedPluginCollectionVisitor(
                 $targetMethodName,
                 $classMetadataTransfer,

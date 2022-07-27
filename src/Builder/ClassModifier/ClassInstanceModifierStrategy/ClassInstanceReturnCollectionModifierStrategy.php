@@ -157,7 +157,6 @@ class ClassInstanceReturnCollectionModifierStrategy implements ClassInstanceModi
     protected function getUnwireVisitors(string $targetMethodName, ClassMetadataTransfer $classMetadataTransfer): array
     {
         return [
-//            new RemoveUseVisitor($classMetadataTransfer->getSourceOrFail()),
             new RemovePluginFromPluginCollectionVisitor(
                 $targetMethodName,
                 $classMetadataTransfer,

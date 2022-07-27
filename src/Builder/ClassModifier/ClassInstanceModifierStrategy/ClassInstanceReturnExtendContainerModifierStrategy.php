@@ -161,7 +161,6 @@ class ClassInstanceReturnExtendContainerModifierStrategy implements ClassInstanc
     protected function getUnwireVisitors(string $targetMethodName, ClassMetadataTransfer $classMetadataTransfer): array
     {
         return [
-//            new RemoveUseVisitor($classMetadataTransfer->getSourceOrFail()),
             new RemovePluginFromPluginCollectionExtendContainerVisitor(
                 $targetMethodName,
                 $classMetadataTransfer,

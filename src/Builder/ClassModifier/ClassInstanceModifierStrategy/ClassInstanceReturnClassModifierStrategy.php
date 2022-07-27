@@ -10,11 +10,14 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy;
 
 use PhpParser\BuilderFactory;
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
+use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodePropertiesByNameVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
@@ -22,6 +25,16 @@ use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 class ClassInstanceReturnClassModifierStrategy implements ClassInstanceModifierStrategyInterface
 {
     use AddVisitorsTrait;
+
+    /**
+     * @var array<string>
+     */
+    protected const AVAILABLE_NODE_SUFFIXES = ['plugin', 'subscriber', 'widget'];
+
+    /**
+     * @var array<string>
+     */
+    protected const FORBIDDEN_NODE_SUFFIXES = ['\container', 'collection'];
 
     /**
      * @var \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface
@@ -43,7 +56,26 @@ class ClassInstanceReturnClassModifierStrategy implements ClassInstanceModifierS
      */
     public function isApplicable(ClassMethod $node): bool
     {
-        //TODO: determine usecases; add tests
+        if (
+            !$node->getReturnType() instanceof Node
+        ) {
+            return false;
+        }
+
+        $returnType = $node->getReturnType()->toString();
+
+        foreach (static::FORBIDDEN_NODE_SUFFIXES as $pattern) {
+            if (strpos(strtolower($returnType), $pattern)) {
+                return false;
+            }
+        }
+
+        foreach (static::AVAILABLE_NODE_SUFFIXES as $pattern) {
+            if (strpos(strtolower($returnType), $pattern)) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -64,8 +96,15 @@ class ClassInstanceReturnClassModifierStrategy implements ClassInstanceModifierS
         $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
 
         $classHelper = new ClassHelper();
-        $methodBody = [new Return_((new BuilderFactory())->new($classHelper->getShortClassName($classMetadataTransfer->getSourceOrFail())))];
-        $this->commonClassModifier->replaceMethodBody($classInformationTransfer, $targetMethodName, $methodBody);
+        $shortClassName = $classHelper->getShortClassName($classMetadataTransfer->getSourceOrFail());
+
+        $methodBody = [new Return_((new BuilderFactory())->new($shortClassName))];
+
+        $methodNodeProperties = [
+            ReplaceNodePropertiesByNameVisitor::STMTS => $methodBody,
+            ReplaceNodePropertiesByNameVisitor::RETURN_TYPE => new Identifier($shortClassName),
+        ];
+        $this->commonClassModifier->replaceMethodBody($classInformationTransfer, $targetMethodName, $methodNodeProperties);
 
         return $classInformationTransfer;
     }

@@ -27,7 +27,7 @@ use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddStatementToStatementListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\CloneNodeWithClearPositionVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveMethodVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodeStmtByNameVisitor;
+use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodePropertiesByNameVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class CommonClassModifier implements CommonClassModifierInterface
@@ -104,7 +104,8 @@ class CommonClassModifier implements CommonClassModifierInterface
         }
 
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new ReplaceNodeStmtByNameVisitor($targetMethodName, $methodBody));
+        $properties = [ReplaceNodePropertiesByNameVisitor::STMTS => $methodBody];
+        $nodeTraverser->addVisitor(new ReplaceNodePropertiesByNameVisitor($targetMethodName, $properties));
         $methodSyntaxTree = $nodeTraverser->traverse([$methodSyntaxTree])[0];
 
         $nodeTraverser = new NodeTraverser();
@@ -142,14 +143,17 @@ class CommonClassModifier implements CommonClassModifierInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
-     * @param array<\PhpParser\Node> $methodAst
+     * @param array<string, \PhpParser\Node> $methodNodeProperties
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function replaceMethodBody(ClassInformationTransfer $classInformationTransfer, string $targetMethodName, array $methodAst): ClassInformationTransfer
-    {
+    public function replaceMethodBody(
+        ClassInformationTransfer $classInformationTransfer,
+        string $targetMethodName,
+        array $methodNodeProperties = []
+    ): ClassInformationTransfer {
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new ReplaceNodeStmtByNameVisitor($targetMethodName, $methodAst));
+        $nodeTraverser->addVisitor(new ReplaceNodePropertiesByNameVisitor($targetMethodName, $methodNodeProperties));
         $classInformationTransfer
             ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
 
@@ -206,7 +210,9 @@ class CommonClassModifier implements CommonClassModifierInterface
         }
         $methodBody = $this->methodCreator->createMethodBody($classInformationTransfer, $value);
 
-        return $this->replaceMethodBody($classInformationTransfer, $methodName, $methodBody);
+        $methodNodeProperties = [ReplaceNodePropertiesByNameVisitor::STMTS => $methodBody];
+
+        return $this->replaceMethodBody($classInformationTransfer, $methodName, $methodNodeProperties);
     }
 
     /**

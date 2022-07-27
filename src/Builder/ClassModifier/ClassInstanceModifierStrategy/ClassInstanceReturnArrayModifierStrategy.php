@@ -23,7 +23,6 @@ use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\RemovePluginFromPluginListVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\RemoveUseVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -109,7 +108,6 @@ class ClassInstanceReturnArrayModifierStrategy implements ClassInstanceModifierS
             $visitors[] = new AddUseVisitor($this->getFullyQualifiedClassNameFromIndex($classMetadataTransfer->getIndex()));
         }
 
-
         return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
     }
 
@@ -176,7 +174,6 @@ class ClassInstanceReturnArrayModifierStrategy implements ClassInstanceModifierS
     protected function getUnwireVisitors(string $targetMethodName, ClassMetadataTransfer $classMetadataTransfer): array
     {
         return [
-//            new RemoveUseVisitor($classMetadataTransfer->getSourceOrFail()),
             new RemovePluginFromPluginListVisitor($targetMethodName, $classMetadataTransfer->getSourceOrFail()),
         ];
     }

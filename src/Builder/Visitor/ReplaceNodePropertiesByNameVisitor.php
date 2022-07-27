@@ -14,26 +14,36 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\NodeVisitorAbstract;
 
-class ReplaceNodeStmtByNameVisitor extends NodeVisitorAbstract
+class ReplaceNodePropertiesByNameVisitor extends NodeVisitorAbstract
 {
+    /**
+     * @var string
+     */
+    public const STMTS = 'stmts';
+
+    /**
+     * @var string
+     */
+    public const RETURN_TYPE = 'returnType';
+
     /**
      * @var string
      */
     protected $name;
 
     /**
-     * @var array<\PhpParser\Node>
+     * @var array<string, \PhpParser\Node>
      */
-    protected $stmt;
+    protected array $properties;
 
     /**
      * @param string $name
-     * @param array<\PhpParser\Node> $stmts
+     * @param array<string, \PhpParser\Node> $properties
      */
-    public function __construct(string $name, array $stmts)
+    public function __construct(string $name, array $properties = [])
     {
         $this->name = $name;
-        $this->stmt = $stmts;
+        $this->properties = $properties;
     }
 
     /**
@@ -46,8 +56,11 @@ class ReplaceNodeStmtByNameVisitor extends NodeVisitorAbstract
         if (!$this->isNecessaryNode($node)) {
             return $node;
         }
-
-        $node->stmts = $this->stmt;
+        foreach ($this->properties as $key => $value) {
+            if (property_exists($node, $key)) {
+                $node->$key = $value;
+            }
+        }
 
         return $node;
     }
