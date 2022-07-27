@@ -45,11 +45,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected const STATEMENT_CLASS_METHOD = 'Stmt_ClassMethod';
 
     /**
-     * @var string
-     */
-    protected $methodName;
-
-    /**
      * @var \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer
      */
     protected $classMetadataTransfer;
@@ -60,12 +55,10 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $methodFound = false;
 
     /**
-     * @param string $methodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      */
-    public function __construct(string $methodName, ClassMetadataTransfer $classMetadataTransfer)
+    public function __construct(ClassMetadataTransfer $classMetadataTransfer)
     {
-        $this->methodName = $methodName;
         $this->classMetadataTransfer = $classMetadataTransfer;
     }
 
@@ -76,7 +69,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($node instanceof ClassMethod && $node->name->toString() === $this->methodName) {
+        if ($node instanceof ClassMethod && $node->name->toString() === $this->classMetadataTransfer->getTargetMethodNameOrFail()) {
             $this->methodFound = true;
 
             return $node;

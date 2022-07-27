@@ -80,38 +80,34 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
      * {@inheritDoc}
      *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function wireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
         return $this->getFactory()
             ->createClassInstanceClassModifier()
-            ->wireClassInstance($classInformationTransfer, $targetMethodName, $classMetadataTransfer);
+            ->wireClassInstance($classInformationTransfer, $classMetadataTransfer);
     }
 
     /**
      * {@inheritDoc}
      *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
     public function unwireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ?ClassInformationTransfer {
         return $this->getFactory()
             ->createClassInstanceClassModifier()
-            ->unwireClassInstance($classInformationTransfer, $targetMethodName, $classMetadataTransfer);
+            ->unwireClassInstance($classInformationTransfer, $classMetadataTransfer);
     }
 
     /**

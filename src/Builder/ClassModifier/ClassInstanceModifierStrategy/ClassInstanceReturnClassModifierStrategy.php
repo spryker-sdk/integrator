@@ -81,17 +81,15 @@ class ClassInstanceReturnClassModifierStrategy implements ClassInstanceModifierS
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function wireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
-        $visitors = $this->getWireVisitors($targetMethodName, $classMetadataTransfer);
+        $visitors = $this->getWireVisitors($classMetadataTransfer);
 
         $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
 
@@ -104,33 +102,37 @@ class ClassInstanceReturnClassModifierStrategy implements ClassInstanceModifierS
             ReplaceNodePropertiesByNameVisitor::STMTS => $methodBody,
             ReplaceNodePropertiesByNameVisitor::RETURN_TYPE => new Identifier($shortClassName),
         ];
-        $this->commonClassModifier->replaceMethodBody($classInformationTransfer, $targetMethodName, $methodNodeProperties);
+        $this->commonClassModifier->replaceMethodBody(
+            $classInformationTransfer,
+            $classMetadataTransfer->getTargetMethodNameOrFail(),
+            $methodNodeProperties,
+        );
 
         return $classInformationTransfer;
     }
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function unwireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
-        return $this->commonClassModifier->removeClassMethod($classInformationTransfer, $targetMethodName);
+        return $this->commonClassModifier->removeClassMethod(
+            $classInformationTransfer,
+            $classMetadataTransfer->getTargetMethodNameOrFail(),
+        );
     }
 
     /**
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return array<\PhpParser\NodeVisitorAbstract>
      */
-    protected function getWireVisitors(string $targetMethodName, ClassMetadataTransfer $classMetadataTransfer): array
+    protected function getWireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
     {
         return [
             new AddUseVisitor($classMetadataTransfer->getSourceOrFail()),

@@ -85,9 +85,12 @@ abstract class AbstractManifestStrategy implements ManifestStrategyInterface
      */
     protected function createClassMetadataTransfer(array $manifest): ClassMetadataTransfer
     {
+        $targets = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
+
         $transfer = (new ClassMetadataTransfer())
             ->setSource(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_SOURCE], '\\'))
-            ->setTarget(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_TARGET], '\\'));
+            ->setTarget(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_TARGET], '\\'))
+            ->setTargetMethodName(end($targets));
 
         if (isset($manifest[IntegratorConfig::MANIFEST_KEY_ARGUMENTS])) {
             if (isset($manifest[IntegratorConfig::MANIFEST_KEY_ARGUMENTS][IntegratorConfig::MANIFEST_KEY_ARGUMENTS_PREPEND])) {

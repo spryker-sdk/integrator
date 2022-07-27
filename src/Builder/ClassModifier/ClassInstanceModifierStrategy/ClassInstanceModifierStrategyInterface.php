@@ -22,27 +22,23 @@ interface ClassInstanceModifierStrategyInterface
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function wireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer;
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function unwireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer;
 }

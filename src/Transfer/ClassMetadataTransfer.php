@@ -53,6 +53,11 @@ class ClassMetadataTransfer extends AbstractTransfer
     public const INDEX = 'index';
 
     /**
+     * @var string
+     */
+    public const TARGET_METHOD_NAME = 'targetMethodName';
+
+    /**
      * @var string|null
      */
     protected $target;
@@ -93,6 +98,11 @@ class ClassMetadataTransfer extends AbstractTransfer
     protected $index;
 
     /**
+     * @var string|null
+     */
+    protected $targetMethodName;
+
+    /**
      * @var array<string, string>
      */
     protected $transferPropertyNameMap = [
@@ -115,6 +125,9 @@ class ClassMetadataTransfer extends AbstractTransfer
         'After' => 'after',
         'index' => 'index',
         'Index' => 'index',
+        'targetMethodName' => 'targetMethodName',
+        'TargetMethodName' => 'targetMethodName',
+        'target_methodName' => 'targetMethodName',
     ];
 
     /**
@@ -209,6 +222,18 @@ class ClassMetadataTransfer extends AbstractTransfer
             'type' => 'string',
             'type_shim' => null,
             'name_underscore' => 'index',
+            'is_collection' => false,
+            'is_transfer' => false,
+            'is_value_object' => false,
+            'rest_request_parameter' => 'no',
+            'is_associative' => false,
+            'is_nullable' => false,
+            'is_strict' => false,
+        ],
+        self::TARGET_METHOD_NAME => [
+            'type' => 'string',
+            'type_shim' => null,
+            'name_underscore' => 'target_method_name',
             'is_collection' => false,
             'is_transfer' => false,
             'is_value_object' => false,
@@ -569,6 +594,49 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
+     * @param string|null $targetMethodName
+     *
+     * @return $this
+     */
+    public function setTargetMethodName(?string $targetMethodName)
+    {
+        $this->targetMethodName = $targetMethodName;
+        $this->modifiedProperties[static::TARGET_METHOD_NAME] = true;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTargetMethodName(): ?string
+    {
+        return $this->targetMethodName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTargetMethodNameOrFail(): string
+    {
+        if ($this->targetMethodName === null) {
+            $this->throwNullValueException(static::TARGET_METHOD_NAME);
+        }
+
+        return $this->targetMethodName;
+    }
+
+    /**
+     * @return $this
+     */
+    public function requireTargetMethodName()
+    {
+        $this->assertPropertyIsSet(static::TARGET_METHOD_NAME);
+
+        return $this;
+    }
+
+    /**
      * @param array<string, mixed> $data
      * @param bool $ignoreMissingProperty
      *
@@ -587,6 +655,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                 case 'before':
                 case 'after':
                 case 'index':
+                case 'targetMethodName':
                     $this->$normalizedPropertyName = $value;
                     $this->modifiedProperties[$normalizedPropertyName] = true;
 
@@ -724,6 +793,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                 case 'before':
                 case 'after':
                 case 'index':
+                case 'targetMethodName':
                     $values[$arrayKey] = $value;
 
                     break;
@@ -762,6 +832,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                 case 'before':
                 case 'after':
                 case 'index':
+                case 'targetMethodName':
                     $values[$arrayKey] = $value;
 
                     break;
@@ -844,6 +915,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'before' => $this->before,
             'after' => $this->after,
             'index' => $this->index,
+            'targetMethodName' => $this->targetMethodName,
             'prependArguments' => $this->prependArguments,
             'appendArguments' => $this->appendArguments,
             'constructorArguments' => $this->constructorArguments,
@@ -860,7 +932,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'source' => $this->source,
             'before' => $this->before,
             'after' => $this->after,
-            'index' => $this->index,
+            'targetMethodName' => $this->targetMethodName,
             'prepend_arguments' => $this->prependArguments,
             'append_arguments' => $this->appendArguments,
             'constructor_arguments' => $this->constructorArguments,
@@ -878,6 +950,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'before' => $this->before,
             'after' => $this->after,
             'index' => $this->index,
+            'targetMethodName' => $this->targetMethodName,
             'prepend_arguments' => $this->addValuesToCollection($this->prependArguments, true, false),
             'append_arguments' => $this->addValuesToCollection($this->appendArguments, true, false),
             'constructor_arguments' => $this->addValuesToCollection($this->constructorArguments, true, false),
@@ -894,7 +967,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'source' => $this->source,
             'before' => $this->before,
             'after' => $this->after,
-            'index' => $this->index,
+            'targetMethodName' => $this->targetMethodName,
             'prependArguments' => $this->addValuesToCollection($this->prependArguments, true, true),
             'appendArguments' => $this->addValuesToCollection($this->appendArguments, true, true),
             'constructorArguments' => $this->addValuesToCollection($this->constructorArguments, true, true),
