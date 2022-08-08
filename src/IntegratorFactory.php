@@ -17,8 +17,6 @@ use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\Parser\Php7;
 use PhpParser\ParserFactory;
-use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilder;
-use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\ArgsMethodStatementChecker;
@@ -70,6 +68,8 @@ use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinterInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
+use SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder\ArgumentBuilder;
+use SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
@@ -705,10 +705,10 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
+     * @return \SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder\ArgumentBuilderInterface
      */
     public function createArgumentBuider(): ArgumentBuilderInterface
     {
-        return new ArgumentBuilder($this->createClassBuilderFactory(), $this->createPhpParserParser());
+        return new ArgumentBuilder($this->createClassBuilderFactory());
     }
 }

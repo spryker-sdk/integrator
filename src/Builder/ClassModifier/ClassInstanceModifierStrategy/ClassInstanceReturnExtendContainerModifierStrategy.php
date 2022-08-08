@@ -16,11 +16,11 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
-use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginCollectionExtendContainerVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
+use SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\RemovePluginFromPluginCollectionExtendContainerVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
@@ -35,13 +35,13 @@ class ClassInstanceReturnExtendContainerModifierStrategy implements ClassInstanc
     protected $commonClassModifier;
 
     /**
-     * @var \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
+     * @var \SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder\ArgumentBuilderInterface
      */
     protected $argumentBuilder;
 
     /**
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface $commonClassModifier
-     * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
+     * @param \SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
      */
     public function __construct(CommonClassModifierInterface $commonClassModifier, ArgumentBuilderInterface $argumentBuilder)
     {

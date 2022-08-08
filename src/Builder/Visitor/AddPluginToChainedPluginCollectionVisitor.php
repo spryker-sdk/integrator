@@ -11,15 +11,13 @@ namespace SprykerSdk\Integrator\Builder\Visitor;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use PhpParser\NodeVisitorAbstract;
-use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
-use SprykerSdk\Integrator\Helper\ClassHelper;
+use SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
@@ -35,7 +33,7 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
     protected $classMetadataTransfer;
 
     /**
-     * @var \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
+     * @var \SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder\ArgumentBuilderInterface
      */
     protected $argumentBuilder;
 
@@ -46,7 +44,7 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
-     * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
+     * @param \SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
      */
     public function __construct(ClassMetadataTransfer $classMetadataTransfer, ArgumentBuilderInterface $argumentBuilder)
     {
@@ -95,7 +93,7 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
                     continue;
                 }
 
-                $arguments = $this->createAddPluginArguments();
+                $arguments = $this->argumentBuilder->createAddPluginArguments($this->classMetadataTransfer);
                 $newMethodCall = (new BuilderFactory())
                     ->methodCall($stmt->expr, $stmt->expr->name, $arguments);
                 $stmt->expr = $newMethodCall;
@@ -120,7 +118,7 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
         /** @var \PhpParser\Node\Arg $arg */
         foreach ($methodCall->args as $arg) {
             if ($arg->value instanceof New_ && $arg->value->class->toString() === $this->classMetadataTransfer->getBefore()) {
-                $arguments = $this->createAddPluginArguments();
+                $arguments = $this->argumentBuilder->createAddPluginArguments($this->classMetadataTransfer);
                 $newMethodCall = (new BuilderFactory())
                     ->methodCall($methodCall->var, $methodCall->name, $arguments);
                 $methodCall->var = $newMethodCall;
@@ -131,7 +129,7 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
             }
 
             if ($arg->value instanceof New_ && $arg->value->class->toString() === $this->classMetadataTransfer->getAfter()) {
-                $arguments = $this->createAddPluginArguments();
+                $arguments = $this->argumentBuilder->createAddPluginArguments($this->classMetadataTransfer);
                 $newMethodCall = (new BuilderFactory())
                     ->methodCall($methodCall, $methodCall->name, $arguments);
 
@@ -172,47 +170,5 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
         }
 
         return true;
-    }
-
-    /**
-     * @return array<\PhpParser\Node\Arg>
-     */
-    protected function createAddPluginArguments(): array
-    {
-        $args = [];
-        $builderFactory = new BuilderFactory();
-
-        $constructorArgumentValues = [];
-        if ($this->classMetadataTransfer->getConstructorArguments()->count()) {
-            $constructorArgumentValues = $this->argumentBuilder->getArguments(
-                $this->classMetadataTransfer->getConstructorArguments()->getArrayCopy(),
-            );
-        }
-
-        if ($this->classMetadataTransfer->getPrependArguments()->count()) {
-            $prependArgumentValues = $this->argumentBuilder->getArguments(
-                $this->classMetadataTransfer->getPrependArguments()->getArrayCopy(),
-            );
-
-            $args = array_merge($args, $prependArgumentValues);
-        }
-
-        $mainArgument = new Arg(
-            $builderFactory->new(
-                (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
-                $builderFactory->args($constructorArgumentValues),
-            ),
-        );
-        $args = array_merge($args, $builderFactory->args([$mainArgument]));
-
-        if ($this->classMetadataTransfer->getAppendArguments()->count()) {
-            $appendArgumentValues = $this->argumentBuilder->getArguments(
-                $this->classMetadataTransfer->getAppendArguments()->getArrayCopy(),
-            );
-
-            $args = array_merge($args, $appendArgumentValues);
-        }
-
-        return $args;
     }
 }

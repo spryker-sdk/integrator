@@ -7,14 +7,16 @@ declare(strict_types=1);
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\Builder\ArgumentBuilder;
+namespace SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder;
+
+use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 interface ArgumentBuilderInterface
 {
     /**
-     * @param array<int, \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $classArgumentMetadataTransfers
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return array<\PhpParser\Node\Arg>
      */
-    public function getArguments(array $classArgumentMetadataTransfers): array;
+    public function createAddPluginArguments(ClassMetadataTransfer $classMetadataTransfer): array;
 }
