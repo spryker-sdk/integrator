@@ -17,6 +17,8 @@ use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\Parser\Php7;
 use PhpParser\ParserFactory;
+use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilder;
+use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodChecker;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Checker\MethodStatementChecker\ArgsMethodStatementChecker;
@@ -28,6 +30,12 @@ use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGenerator;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
+use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilder;
+use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface;
+use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\Plugin\ArgumentBuilderPlugin;
+use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\Plugin\IndexBuilderPlugin;
+use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\Plugin\PositionBuilderPlugin;
+use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\Plugin\SourceAndTargetBuilderPlugin;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassConstantModifier;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassConstantModifierInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceClassModifier;
@@ -68,8 +76,6 @@ use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinterInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
-use SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder\ArgumentBuilder;
-use SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
@@ -162,6 +168,7 @@ class IntegratorFactory
         return new WirePluginManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
+            $this->createClassMetadataBuilder(),
         );
     }
 
@@ -173,6 +180,7 @@ class IntegratorFactory
         return new UnwirePluginManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
+            $this->createClassMetadataBuilder(),
         );
     }
 
@@ -359,6 +367,19 @@ class IntegratorFactory
             $this->getConfig(),
             $this->createClassHelper(),
         );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface
+     */
+    public function createClassMetadataBuilder(): ClassMetadataBuilderInterface
+    {
+        return new ClassMetadataBuilder([
+            new SourceAndTargetBuilderPlugin(),
+            new ArgumentBuilderPlugin(),
+            new PositionBuilderPlugin(),
+            new IndexBuilderPlugin(),
+        ]);
     }
 
     /**
@@ -705,7 +726,7 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder\ArgumentBuilderInterface
+     * @return \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
      */
     public function createArgumentBuider(): ArgumentBuilderInterface
     {

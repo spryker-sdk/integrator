@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\Builder\Visitor\ArgumentBuilder;
+namespace SprykerSdk\Integrator\Builder\ArgumentBuilder;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
