@@ -9,13 +9,12 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
-use RuntimeException;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
-class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
+class UnwireClassInstanceModifier implements UnwireClassInstanceModifierInterface
 {
     use AddVisitorsTrait;
 
@@ -35,7 +34,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
     protected $classMethodChecker;
 
     /**
-     * @var array<\SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceModifierStrategyInterface>
+     * @var array<\SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Unwire\UnwireClassInstanceModifierStrategyInterfaceCheck>
      */
     protected $classInstanceModifierStrategies;
 
@@ -43,7 +42,7 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface $commonClassModifier
      * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface $classMethodChecker
-     * @param array<\SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ClassInstanceModifierStrategyInterface> $classInstanceModifierStrategies
+     * @param array<\SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Unwire\UnwireClassInstanceModifierStrategyInterfaceCheck> $classInstanceModifierStrategies
      */
     public function __construct(
         CommonClassModifierInterface $commonClassModifier,
@@ -55,38 +54,6 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
         $this->classNodeFinder = $classNodeFinder;
         $this->classMethodChecker = $classMethodChecker;
         $this->classInstanceModifierStrategies = $classInstanceModifierStrategies;
-    }
-
-    /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
-     *
-     * @throws \RuntimeException
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
-     */
-    public function wireClassInstance(
-        ClassInformationTransfer $classInformationTransfer,
-        ClassMetadataTransfer $classMetadataTransfer
-    ): ClassInformationTransfer {
-        $targetMethodName = $classMetadataTransfer->getTargetMethodNameOrFail();
-        $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
-        if (!$methodNode) {
-            $classInformationTransfer = $this->commonClassModifier->overrideMethodFromParent($classInformationTransfer, $targetMethodName);
-            $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
-        }
-
-        if ($methodNode === null) {
-            throw new RuntimeException('Method node not found');
-        }
-
-        foreach ($this->classInstanceModifierStrategies as $classInstanceModifierStrategy) {
-            if ($classInstanceModifierStrategy->isApplicable($methodNode)) {
-                return $classInstanceModifierStrategy->wireClassInstance($classInformationTransfer, $classMetadataTransfer);
-            }
-        }
-
-        return $classInformationTransfer;
     }
 
     /**

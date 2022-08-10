@@ -7,14 +7,14 @@ declare(strict_types=1);
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy;
+namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Wire;
 
 use PhpParser\BuilderFactory;
-use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
+use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ApplicableCheck\CheckApplicableInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodePropertiesByNameVisitor;
@@ -22,31 +22,28 @@ use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
-class ClassInstanceReturnClassModifierStrategy implements ClassInstanceModifierStrategyInterface
+class WireClassInstanceReturnClassModifierStrategy implements WireClassInstanceModifierStrategyInterfaceCheck
 {
     use AddVisitorsTrait;
 
     /**
-     * @var array<string>
-     */
-    protected const AVAILABLE_NODE_SUFFIXES = ['plugin', 'subscriber', 'widget'];
-
-    /**
-     * @var array<string>
-     */
-    protected const FORBIDDEN_NODE_SUFFIXES = ['\container', 'collection'];
-
-    /**
      * @var \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface
      */
-    protected $commonClassModifier;
+    protected CommonClassModifierInterface $commonClassModifier;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ApplicableCheck\CheckApplicableInterface
+     */
+    protected CheckApplicableInterface $applicableCheck;
 
     /**
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface $commonClassModifier
+     * @param \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\ApplicableCheck\CheckApplicableInterface $applicableCheck
      */
-    public function __construct(CommonClassModifierInterface $commonClassModifier)
+    public function __construct(CommonClassModifierInterface $commonClassModifier, CheckApplicableInterface $applicableCheck)
     {
         $this->commonClassModifier = $commonClassModifier;
+        $this->applicableCheck = $applicableCheck;
     }
 
     /**
@@ -56,27 +53,7 @@ class ClassInstanceReturnClassModifierStrategy implements ClassInstanceModifierS
      */
     public function isApplicable(ClassMethod $node): bool
     {
-        if (
-            !$node->getReturnType() instanceof Node
-        ) {
-            return false;
-        }
-
-        $returnType = $node->getReturnType()->toString();
-
-        foreach (static::FORBIDDEN_NODE_SUFFIXES as $pattern) {
-            if (strpos(strtolower($returnType), $pattern)) {
-                return false;
-            }
-        }
-
-        foreach (static::AVAILABLE_NODE_SUFFIXES as $pattern) {
-            if (strpos(strtolower($returnType), $pattern)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->applicableCheck->isApplicable($node);
     }
 
     /**
@@ -109,22 +86,6 @@ class ClassInstanceReturnClassModifierStrategy implements ClassInstanceModifierS
         );
 
         return $classInformationTransfer;
-    }
-
-    /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
-     */
-    public function unwireClassInstance(
-        ClassInformationTransfer $classInformationTransfer,
-        ClassMetadataTransfer $classMetadataTransfer
-    ): ClassInformationTransfer {
-        return $this->commonClassModifier->removeClassMethod(
-            $classInformationTransfer,
-            $classMetadataTransfer->getTargetMethodNameOrFail(),
-        );
     }
 
     /**

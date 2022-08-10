@@ -11,26 +11,18 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\NodeTraverser;
 use RuntimeException;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddClassToClassListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\RemoveClassFromClassListVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\RemoveUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodePropertiesByNameVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassListModifier implements ClassListModifierInterface
+class WireClassConstantModifier implements WireClassConstantModifierInterface
 {
     use AddVisitorsTrait;
-
-    /**
-     * @var \PhpParser\NodeTraverser
-     */
-    protected $nodeTraverser;
 
     /**
      * @var \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface
@@ -48,18 +40,15 @@ class ClassListModifier implements ClassListModifierInterface
     protected $classMethodChecker;
 
     /**
-     * @param \PhpParser\NodeTraverser $nodeTraverser
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\CommonClassModifierInterface $commonClassModifier
      * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface $classMethodChecker
      */
     public function __construct(
-        NodeTraverser $nodeTraverser,
         CommonClassModifierInterface $commonClassModifier,
         ClassNodeFinderInterface $classNodeFinder,
         ClassMethodCheckerInterface $classMethodChecker
     ) {
-        $this->nodeTraverser = $nodeTraverser;
         $this->commonClassModifier = $commonClassModifier;
         $this->classNodeFinder = $classNodeFinder;
         $this->classMethodChecker = $classMethodChecker;
@@ -123,34 +112,5 @@ class ClassListModifier implements ClassListModifierInterface
         $this->commonClassModifier->replaceMethodBody($classInformationTransfer, $targetMethodName, $methodNodeProperties);
 
         return $classInformationTransfer;
-    }
-
-    /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $classNameToRemove
-     * @param string $targetMethodName
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
-     */
-    public function unwireClassConstant(
-        ClassInformationTransfer $classInformationTransfer,
-        string $classNameToRemove,
-        string $targetMethodName
-    ): ?ClassInformationTransfer {
-        $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
-        if (!$methodNode) {
-            return null;
-        }
-
-        if (!$this->classMethodChecker->isMethodReturnArray($methodNode)) {
-            return $this->commonClassModifier->removeClassMethod($classInformationTransfer, $targetMethodName);
-        }
-
-        $visitors = [
-            new RemoveUseVisitor($classNameToRemove),
-            new RemoveClassFromClassListVisitor($targetMethodName, $classNameToRemove),
-        ];
-
-        return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
     }
 }

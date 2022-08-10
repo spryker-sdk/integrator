@@ -89,7 +89,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
         return $this->getFactory()
-            ->createClassInstanceClassModifier()
+            ->createWireClassInstanceModifier()
             ->wireClassInstance($classInformationTransfer, $classMetadataTransfer);
     }
 
@@ -106,7 +106,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         ClassMetadataTransfer $classMetadataTransfer
     ): ?ClassInformationTransfer {
         return $this->getFactory()
-            ->createClassInstanceClassModifier()
+            ->createUnwireClassInstanceModifier()
             ->unwireClassInstance($classInformationTransfer, $classMetadataTransfer);
     }
 
@@ -131,7 +131,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         string $after = ''
     ): ClassInformationTransfer {
         return $this->getFactory()
-            ->createClassListModifier()
+            ->createWireClassConstantModifier()
             ->wireClassConstant(
                 $classInformationTransfer,
                 $targetMethodName,
@@ -157,7 +157,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         string $targetMethodName
     ): ?ClassInformationTransfer {
         return $this->getFactory()
-            ->createClassListModifier()
+            ->createUnwireClassConstantModifier()
             ->unwireClassConstant($classInformationTransfer, $classNameToRemove, $targetMethodName);
     }
 
@@ -199,7 +199,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         string $classNameToAdd
     ): ClassInformationTransfer {
         return $this->getFactory()
-            ->createGlueRelationshipModifier()
+            ->createWireGlueRelationshipModifier()
             ->wireGlueRelationship($classInformationTransfer, $targetMethodName, $key, $classNameToAdd);
     }
 
@@ -218,7 +218,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         string $classNameToAdd
     ): ClassInformationTransfer {
         return $this->getFactory()
-            ->createGlueRelationshipModifier()
+            ->createUnwireGlueRelationshipModifier()
             ->unwireGlueRelationship($classInformationTransfer, $targetMethodName, $key, $classNameToAdd);
     }
 }

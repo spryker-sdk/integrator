@@ -11,25 +11,8 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-interface GlueRelationshipModifierInterface
+interface UnwireGlueRelationshipModifierInterface
 {
-    /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
-     * @param string $key
-     * @param string $classNameToAdd
-     *
-     * @throws \RuntimeException
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
-     */
-    public function wireGlueRelationship(
-        ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
-        string $key,
-        string $classNameToAdd
-    ): ClassInformationTransfer;
-
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
