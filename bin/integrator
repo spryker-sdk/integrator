@@ -1,7 +1,9 @@
 #!/usr/bin/env php
 <?php
 
-defined('APPLICATION_ROOT_DIR') || define('APPLICATION_ROOT_DIR', dirname(__DIR__, 4) );
+defined('APPLICATION_ROOT_DIR') || define('APPLICATION_ROOT_DIR', getcwd() );
+
+defined('INTEGRATOR_ROOT_DIR') || define('INTEGRATOR_ROOT_DIR', dirname(__DIR__, 4) );
 
 defined('APPLICATION_SOURCE_DIR')
 || define('APPLICATION_SOURCE_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'src');
@@ -10,6 +12,10 @@ defined('APPLICATION_VENDOR_DIR')
 ||  define('APPLICATION_VENDOR_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor');
 
 require APPLICATION_VENDOR_DIR . DIRECTORY_SEPARATOR . 'autoload.php';
+
+if (APPLICATION_VENDOR_DIR !== INTEGRATOR_ROOT_DIR) {
+    require INTEGRATOR_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+}
 
 use SprykerSdk\Integrator\Console\ModuleInstallerConsole;
 use Symfony\Component\Console\Application;
