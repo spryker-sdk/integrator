@@ -23,7 +23,7 @@ interface WireModifierInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function wireGlueRelationship(
+    public function wire(
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
         string $key,

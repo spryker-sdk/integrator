@@ -141,7 +141,7 @@ class IntegratorFactory
             $this->createIntegratorLockReader(),
             $this->createManifestReader(),
             $this->createIntegratorLockWriter(),
-            $this->getManifestExecutorStrategies(),
+            $this->getManifestStrategies(),
         );
     }
 
@@ -248,7 +248,7 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createCopyFileManifestStrategy(): ManifestStrategyInterface
+    public function createCopyModuleFileManifestStrategy(): ManifestStrategyInterface
     {
         return new CopyModuleFileManifestStrategy(
             $this->getConfig(),
@@ -378,7 +378,7 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
      */
-    public function createNavigationManifestStrategy(): ManifestStrategyInterface
+    public function createWireNavigationManifestStrategy(): ManifestStrategyInterface
     {
         return new WireNavigationManifestStrategy(
             $this->getConfig(),
@@ -452,7 +452,7 @@ class IntegratorFactory
         return new ClassGenerator(
             $this->createClassLoader(),
             $this->createClassHelper(),
-            $this->createClassBuilderFactory(),
+            $this->createBuilderFactory(),
             $this->getConfig(),
         );
     }
@@ -466,7 +466,7 @@ class IntegratorFactory
             $this->createCommonClassModifier(),
             $this->createClassNodeFinder(),
             $this->createClassMethodChecker(),
-            $this->getWireClassInstanceModifierStrategies(),
+            $this->getWireModifierStrategies(),
         );
     }
 
@@ -479,7 +479,7 @@ class IntegratorFactory
             $this->createCommonClassModifier(),
             $this->createClassNodeFinder(),
             $this->createClassMethodChecker(),
-            $this->getUnwireClassInstanceModifierStrategies(),
+            $this->getUnwireModifierStrategies(),
         );
     }
 
@@ -491,18 +491,18 @@ class IntegratorFactory
         return new CommonClassModifier(
             $this->createClassNodeFinder(),
             $this->createClassMethodChecker(),
-            $this->createMethodBodyCreator(),
-            $this->createNodeTreeCreator(),
+            $this->createMethodCreator(),
+            $this->createMethodStatementsCreator(),
         );
     }
 
     /**
      * @return \SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface
      */
-    public function createMethodBodyCreator(): MethodCreatorInterface
+    public function createMethodCreator(): MethodCreatorInterface
     {
         return new MethodCreator(
-            $this->createNodeTreeCreator(),
+            $this->createMethodStatementsCreator(),
             $this->createMethodDocBlockCreator(),
             $this->createMethodReturnTypeCreator(),
             $this->createParserFactory(),
@@ -528,7 +528,7 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface
      */
-    public function createNodeTreeCreator(): MethodStatementsCreatorInterface
+    public function createMethodStatementsCreator(): MethodStatementsCreatorInterface
     {
         return new MethodStatementsCreator();
     }
@@ -560,7 +560,7 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassConstant\ModifierInterface
      */
-    public function createClassConstantModifier(): ModifierInterface
+    public function createModifier(): ModifierInterface
     {
         return new Modifier(
             $this->createClassNodeFinder(),
@@ -577,7 +577,7 @@ class IntegratorFactory
             $this->createCommonClassModifier(),
             $this->createClassNodeFinder(),
             $this->createClassHelper(),
-            $this->createClassBuilderFactory(),
+            $this->createBuilderFactory(),
         );
     }
 
@@ -591,7 +591,7 @@ class IntegratorFactory
             $this->createCommonClassModifier(),
             $this->createClassNodeFinder(),
             $this->createClassHelper(),
-            $this->createClassBuilderFactory(),
+            $this->createBuilderFactory(),
         );
     }
 
@@ -639,7 +639,7 @@ class IntegratorFactory
     /**
      * @return \PhpParser\BuilderFactory
      */
-    public function createClassBuilderFactory(): BuilderFactory
+    public function createBuilderFactory(): BuilderFactory
     {
         return new BuilderFactory();
     }
@@ -699,7 +699,7 @@ class IntegratorFactory
     /**
      * @return array<\SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface>
      */
-    public function getManifestExecutorStrategies(): array
+    public function getManifestStrategies(): array
     {
         return [
             $this->createWirePluginManifestStrategy(),
@@ -708,12 +708,12 @@ class IntegratorFactory
             $this->createUnwireWidgetManifestStrategy(),
             $this->createAddConfigArrayElementManifestStrategy(),
             $this->createConfigureModuleManifestStrategy(),
-            $this->createCopyFileManifestStrategy(),
+            $this->createCopyModuleFileManifestStrategy(),
             $this->createConfigureEnvManifestStrategy(),
             $this->createWireGlueRelationshipManifestStrategy(),
             $this->createUnwireGlueRelationshipManifestStrategy(),
             $this->createExecuteConsoleManifestStrategy(),
-            $this->createNavigationManifestStrategy(),
+            $this->createWireNavigationManifestStrategy(),
             $this->createGlossaryManifestStrategy(),
         ];
     }
@@ -721,140 +721,140 @@ class IntegratorFactory
     /**
      * @return array<\SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Wire\WireModifierStrategyInterface>
      */
-    public function getWireClassInstanceModifierStrategies(): array
+    public function getWireModifierStrategies(): array
     {
         return [
-            $this->createWireClassInstanceReturnArrayModifierStrategy(),
-            $this->createWireClassInstanceReturnClassModifierStrategy(),
-            $this->createWireClassInstanceReturnChainedCollectionModifierStrategy(),
-            $this->createWireClassInstanceReturnCollectionModifierStrategy(),
-            $this->createWireClassInstanceReturnExtendContainerModifierStrategy(),
+            $this->createWireReturnArrayModifierStrategy(),
+            $this->createWireReturnClassModifierStrategy(),
+            $this->createWireReturnChainedCollectionModifierStrategy(),
+            $this->createWireReturnCollectionModifierStrategy(),
+            $this->createWireReturnExtendContainerModifierStrategy(),
         ];
     }
 
     /**
      * @return array<\SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Unwire\UnwireModifierStrategyInterface>
      */
-    public function getUnwireClassInstanceModifierStrategies(): array
+    public function getUnwireModifierStrategies(): array
     {
         return [
-            $this->createUnwireClassInstanceReturnArrayModifierStrategy(),
-            $this->createUnwireClassInstanceReturnClassModifierStrategy(),
-            $this->createUnwireClassInstanceReturnChainedCollectionModifierStrategy(),
-            $this->createUnwireClassInstanceReturnCollectionModifierStrategy(),
-            $this->createUnwireClassInstanceReturnExtendContainerModifierStrategy(),
+            $this->createUnwireReturnArrayModifierStrategy(),
+            $this->createUnwireReturnClassModifierStrategy(),
+            $this->createUnwireReturnChainedCollectionModifierStrategy(),
+            $this->createUnwireReturnCollectionModifierStrategy(),
+            $this->createUnwireReturnExtendContainerModifierStrategy(),
         ];
     }
 
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Wire\WireModifierStrategyInterface
      */
-    public function createWireClassInstanceReturnArrayModifierStrategy(): WireModifierStrategyInterface
+    public function createWireReturnArrayModifierStrategy(): WireModifierStrategyInterface
     {
         return new WireReturnArrayModifierStrategy(
-            $this->createCheckApplicableClassInstanceReturnArrayModifierStrategy(),
+            $this->createApplicableReturnArrayModifierStrategy(),
         );
     }
 
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Wire\WireModifierStrategyInterface
      */
-    public function createWireClassInstanceReturnCollectionModifierStrategy(): WireModifierStrategyInterface
+    public function createWireReturnCollectionModifierStrategy(): WireModifierStrategyInterface
     {
         return new WireReturnCollectionModifierStrategy(
-            $this->createArgumentBuider(),
-            $this->createCheckApplicableClassInstanceReturnCollectionModifierStrategy(),
+            $this->createArgumentBuilder(),
+            $this->createApplicableReturnCollectionModifierStrategy(),
         );
     }
 
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Wire\WireModifierStrategyInterface
      */
-    public function createWireClassInstanceReturnExtendContainerModifierStrategy(): WireModifierStrategyInterface
+    public function createWireReturnExtendContainerModifierStrategy(): WireModifierStrategyInterface
     {
         return new WireReturnExtendContainerModifierStrategy(
-            $this->createArgumentBuider(),
-            $this->createCheckApplicableClassInstanceReturnExtendContainerModifierStrategy(),
+            $this->createArgumentBuilder(),
+            $this->createApplicableReturnExtendContainerModifierStrategy(),
         );
     }
 
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Wire\WireModifierStrategyInterface
      */
-    public function createWireClassInstanceReturnChainedCollectionModifierStrategy(): WireModifierStrategyInterface
+    public function createWireReturnChainedCollectionModifierStrategy(): WireModifierStrategyInterface
     {
         return new WireReturnChainedCollectionModifierStrategy(
-            $this->createArgumentBuider(),
-            $this->createCheckApplicableClassInstanceReturnChainedCollectionModifierStrategy(),
+            $this->createArgumentBuilder(),
+            $this->createApplicableReturnChainedCollectionModifierStrategy(),
         );
     }
 
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Wire\WireModifierStrategyInterface
      */
-    public function createWireClassInstanceReturnClassModifierStrategy(): WireModifierStrategyInterface
+    public function createWireReturnClassModifierStrategy(): WireModifierStrategyInterface
     {
         return new WireReturnClassModifierStrategy(
             $this->createCommonClassModifier(),
-            $this->createCheckApplicableClassInstanceReturnClassModifierStrategy(),
+            $this->createApplicableReturnClassModifierStrategy(),
         );
     }
 
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Unwire\UnwireModifierStrategyInterface
      */
-    public function createUnwireClassInstanceReturnArrayModifierStrategy(): UnwireModifierStrategyInterface
+    public function createUnwireReturnArrayModifierStrategy(): UnwireModifierStrategyInterface
     {
         return new UnwireReturnArrayModifierStrategy(
-            $this->createCheckApplicableClassInstanceReturnArrayModifierStrategy(),
+            $this->createApplicableReturnArrayModifierStrategy(),
         );
     }
 
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Unwire\UnwireModifierStrategyInterface
      */
-    public function createUnwireClassInstanceReturnCollectionModifierStrategy(): UnwireModifierStrategyInterface
+    public function createUnwireReturnCollectionModifierStrategy(): UnwireModifierStrategyInterface
     {
         return new UnwireReturnCollectionModifierStrategy(
-            $this->createCheckApplicableClassInstanceReturnCollectionModifierStrategy(),
+            $this->createApplicableReturnCollectionModifierStrategy(),
         );
     }
 
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Unwire\UnwireModifierStrategyInterface
      */
-    public function createUnwireClassInstanceReturnExtendContainerModifierStrategy(): UnwireModifierStrategyInterface
+    public function createUnwireReturnExtendContainerModifierStrategy(): UnwireModifierStrategyInterface
     {
         return new UnwireReturnExtendContainerModifierStrategy(
-            $this->createCheckApplicableClassInstanceReturnExtendContainerModifierStrategy(),
+            $this->createApplicableReturnExtendContainerModifierStrategy(),
         );
     }
 
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Unwire\UnwireModifierStrategyInterface
      */
-    public function createUnwireClassInstanceReturnChainedCollectionModifierStrategy(): UnwireModifierStrategyInterface
+    public function createUnwireReturnChainedCollectionModifierStrategy(): UnwireModifierStrategyInterface
     {
         return new UnwireReturnChainedCollectionModifierStrategy(
-            $this->createCheckApplicableClassInstanceReturnChainedCollectionModifierStrategy(),
+            $this->createApplicableReturnChainedCollectionModifierStrategy(),
         );
     }
 
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Unwire\UnwireModifierStrategyInterface
      */
-    public function createUnwireClassInstanceReturnClassModifierStrategy(): UnwireModifierStrategyInterface
+    public function createUnwireReturnClassModifierStrategy(): UnwireModifierStrategyInterface
     {
         return new UnwireReturnClassModifierStrategy(
             $this->createCommonClassModifier(),
-            $this->createCheckApplicableClassInstanceReturnClassModifierStrategy(),
+            $this->createApplicableReturnClassModifierStrategy(),
         );
     }
 
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableReturnArrayModifierStrategy
      */
-    public function createCheckApplicableClassInstanceReturnArrayModifierStrategy(): ApplicableInterface
+    public function createApplicableReturnArrayModifierStrategy(): ApplicableInterface
     {
         return new ApplicableReturnArrayModifierStrategy();
     }
@@ -862,7 +862,7 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableReturnCollectionModifierStrategy
      */
-    public function createCheckApplicableClassInstanceReturnCollectionModifierStrategy(): ApplicableInterface
+    public function createApplicableReturnCollectionModifierStrategy(): ApplicableInterface
     {
         return new ApplicableReturnCollectionModifierStrategy();
     }
@@ -870,7 +870,7 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableReturnExtendContainerModifierStrategy
      */
-    public function createCheckApplicableClassInstanceReturnExtendContainerModifierStrategy(): ApplicableInterface
+    public function createApplicableReturnExtendContainerModifierStrategy(): ApplicableInterface
     {
         return new ApplicableReturnExtendContainerModifierStrategy();
     }
@@ -878,7 +878,7 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableReturnChainedCollectionModifierStrategy
      */
-    public function createCheckApplicableClassInstanceReturnChainedCollectionModifierStrategy(): ApplicableInterface
+    public function createApplicableReturnChainedCollectionModifierStrategy(): ApplicableInterface
     {
         return new ApplicableReturnChainedCollectionModifierStrategy();
     }
@@ -886,7 +886,7 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableReturnClassModifierStrategy
      */
-    public function createCheckApplicableClassInstanceReturnClassModifierStrategy(): ApplicableInterface
+    public function createApplicableReturnClassModifierStrategy(): ApplicableInterface
     {
         return new ApplicableReturnClassModifierStrategy();
     }
@@ -894,8 +894,8 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
      */
-    public function createArgumentBuider(): ArgumentBuilderInterface
+    public function createArgumentBuilder(): ArgumentBuilderInterface
     {
-        return new ArgumentBuilder($this->createClassBuilderFactory());
+        return new ArgumentBuilder($this->createBuilderFactory());
     }
 }

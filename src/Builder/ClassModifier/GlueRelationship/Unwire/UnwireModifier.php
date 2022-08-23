@@ -27,7 +27,7 @@ class UnwireModifier extends AbstractModifier implements UnwireModifierInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function unwireGlueRelationship(
+    public function unwire(
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
         string $key,

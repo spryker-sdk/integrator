@@ -20,7 +20,7 @@ interface UnwireModifierInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
-    public function unwireClassInstance(
+    public function unwire(
         ClassInformationTransfer $classInformationTransfer,
         ClassMetadataTransfer $classMetadataTransfer
     ): ?ClassInformationTransfer;

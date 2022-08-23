@@ -20,7 +20,7 @@ interface UnwireModifierInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
-    public function unwireClassConstant(
+    public function unwire(
         ClassInformationTransfer $classInformationTransfer,
         string $classNameToRemove,
         string $targetMethodName

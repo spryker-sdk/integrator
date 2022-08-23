@@ -67,7 +67,7 @@ class WireModifier implements WireModifierInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function wireClassInstance(
+    public function wire(
         ClassInformationTransfer $classInformationTransfer,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
