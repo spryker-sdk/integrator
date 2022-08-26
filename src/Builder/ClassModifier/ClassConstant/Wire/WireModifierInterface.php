@@ -7,11 +7,11 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\Builder\ClassModifier;
+namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassConstant\Wire;
 
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-interface ClassListModifierInterface
+interface WireModifierInterface
 {
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
@@ -23,7 +23,7 @@ interface ClassListModifierInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function wireClassConstant(
+    public function wire(
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
         string $classNameToAdd,
@@ -31,17 +31,4 @@ interface ClassListModifierInterface
         string $before = '',
         string $after = ''
     ): ClassInformationTransfer;
-
-    /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $classNameToRemove
-     * @param string $targetMethodName
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
-     */
-    public function unwireClassConstant(
-        ClassInformationTransfer $classInformationTransfer,
-        string $classNameToRemove,
-        string $targetMethodName
-    ): ?ClassInformationTransfer;
 }

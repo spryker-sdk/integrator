@@ -7,29 +7,12 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\Builder\ClassModifier;
+namespace SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationship\Unwire;
 
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-interface GlueRelationshipModifierInterface
+interface UnwireModifierInterface
 {
-    /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
-     * @param string $key
-     * @param string $classNameToAdd
-     *
-     * @throws \RuntimeException
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
-     */
-    public function wireGlueRelationship(
-        ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
-        string $key,
-        string $classNameToAdd
-    ): ClassInformationTransfer;
-
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
@@ -40,7 +23,7 @@ interface GlueRelationshipModifierInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function unwireGlueRelationship(
+    public function unwire(
         ClassInformationTransfer $classInformationTransfer,
         string $targetMethodName,
         string $key,

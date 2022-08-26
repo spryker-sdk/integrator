@@ -7,18 +7,21 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\Builder\ClassModifier;
+namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassInstance\Wire;
 
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
-interface ClassConstantModifierInterface
+interface WireModifierInterface
 {
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $constantName
-     * @param mixed $value
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function setConstant(ClassInformationTransfer $classInformationTransfer, string $constantName, $value): ClassInformationTransfer;
+    public function wire(
+        ClassInformationTransfer $classInformationTransfer,
+        ClassMetadataTransfer $classMetadataTransfer
+    ): ClassInformationTransfer;
 }

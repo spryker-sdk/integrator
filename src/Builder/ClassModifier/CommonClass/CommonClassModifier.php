@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\Builder\ClassModifier;
+namespace SprykerSdk\Integrator\Builder\ClassModifier\CommonClass;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node;

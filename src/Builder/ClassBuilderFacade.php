@@ -72,7 +72,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
     public function setConstant(ClassInformationTransfer $classInformationTransfer, string $constantName, $value): ClassInformationTransfer
     {
         return $this->getFactory()
-            ->createClassConstantModifier()
+            ->createModifier()
             ->setConstant($classInformationTransfer, $constantName, $value);
     }
 
@@ -89,8 +89,8 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
         return $this->getFactory()
-            ->createClassInstanceClassModifier()
-            ->wireClassInstance($classInformationTransfer, $classMetadataTransfer);
+            ->createWireClassInstanceModifier()
+            ->wire($classInformationTransfer, $classMetadataTransfer);
     }
 
     /**
@@ -106,8 +106,8 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         ClassMetadataTransfer $classMetadataTransfer
     ): ?ClassInformationTransfer {
         return $this->getFactory()
-            ->createClassInstanceClassModifier()
-            ->unwireClassInstance($classInformationTransfer, $classMetadataTransfer);
+            ->createUnwireClassInstanceModifier()
+            ->unwire($classInformationTransfer, $classMetadataTransfer);
     }
 
     /**
@@ -131,8 +131,8 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         string $after = ''
     ): ClassInformationTransfer {
         return $this->getFactory()
-            ->createClassListModifier()
-            ->wireClassConstant(
+            ->createWireClassConstantModifier()
+            ->wire(
                 $classInformationTransfer,
                 $targetMethodName,
                 $classNameToAdd,
@@ -157,8 +157,8 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         string $targetMethodName
     ): ?ClassInformationTransfer {
         return $this->getFactory()
-            ->createClassListModifier()
-            ->unwireClassConstant($classInformationTransfer, $classNameToRemove, $targetMethodName);
+            ->createUnwireClassConstantModifier()
+            ->unwire($classInformationTransfer, $classNameToRemove, $targetMethodName);
     }
 
     /**
@@ -199,8 +199,8 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         string $classNameToAdd
     ): ClassInformationTransfer {
         return $this->getFactory()
-            ->createGlueRelationshipModifier()
-            ->wireGlueRelationship($classInformationTransfer, $targetMethodName, $key, $classNameToAdd);
+            ->createWireGlueRelationshipModifier()
+            ->wire($classInformationTransfer, $targetMethodName, $key, $classNameToAdd);
     }
 
     /**
@@ -218,7 +218,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
         string $classNameToAdd
     ): ClassInformationTransfer {
         return $this->getFactory()
-            ->createGlueRelationshipModifier()
-            ->unwireGlueRelationship($classInformationTransfer, $targetMethodName, $key, $classNameToAdd);
+            ->createUnwireGlueRelationshipModifier()
+            ->unwire($classInformationTransfer, $targetMethodName, $key, $classNameToAdd);
     }
 }

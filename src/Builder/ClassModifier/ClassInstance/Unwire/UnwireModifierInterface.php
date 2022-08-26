@@ -7,31 +7,20 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\Builder\ClassModifier;
+namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassInstance\Unwire;
 
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
-interface ClassInstanceClassModifierInterface
+interface UnwireModifierInterface
 {
-    /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
-     */
-    public function wireClassInstance(
-        ClassInformationTransfer $classInformationTransfer,
-        ClassMetadataTransfer $classMetadataTransfer
-    ): ClassInformationTransfer;
-
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
-    public function unwireClassInstance(
+    public function unwire(
         ClassInformationTransfer $classInformationTransfer,
         ClassMetadataTransfer $classMetadataTransfer
     ): ?ClassInformationTransfer;
