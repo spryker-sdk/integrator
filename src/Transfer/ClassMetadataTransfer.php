@@ -55,6 +55,11 @@ class ClassMetadataTransfer extends AbstractTransfer
     /**
      * @var string
      */
+    public const CONDITION = 'condition';
+
+    /**
+     * @var string
+     */
     public const TARGET_METHOD_NAME = 'targetMethodName';
 
     /**
@@ -100,6 +105,11 @@ class ClassMetadataTransfer extends AbstractTransfer
     /**
      * @var string|null
      */
+    protected $condition;
+
+    /**
+     * @var string|null
+     */
     protected $targetMethodName;
 
     /**
@@ -125,6 +135,8 @@ class ClassMetadataTransfer extends AbstractTransfer
         'After' => 'after',
         'index' => 'index',
         'Index' => 'index',
+        'condition' => 'condition',
+        'Condition' => 'condition',
         'targetMethodName' => 'targetMethodName',
         'TargetMethodName' => 'targetMethodName',
         'target_methodName' => 'targetMethodName',
@@ -222,6 +234,18 @@ class ClassMetadataTransfer extends AbstractTransfer
             'type' => 'string',
             'type_shim' => null,
             'name_underscore' => 'index',
+            'is_collection' => false,
+            'is_transfer' => false,
+            'is_value_object' => false,
+            'rest_request_parameter' => 'no',
+            'is_associative' => false,
+            'is_nullable' => false,
+            'is_strict' => false,
+        ],
+        self::CONDITION => [
+            'type' => 'string',
+            'type_shim' => null,
+            'name_underscore' => 'condition',
             'is_collection' => false,
             'is_transfer' => false,
             'is_value_object' => false,
@@ -594,6 +618,49 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
+     * @param string|null $condition
+     *
+     * @return $this
+     */
+    public function setCondition(?string $condition)
+    {
+        $this->condition = $condition;
+        $this->modifiedProperties[static::CONDITION] = true;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCondition(): ?string
+    {
+        return $this->condition;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConditionOrFail(): string
+    {
+        if ($this->condition === null) {
+            $this->throwNullValueException(static::CONDITION);
+        }
+
+        return $this->condition;
+    }
+
+    /**
+     * @return $this
+     */
+    public function requireCondition()
+    {
+        $this->assertPropertyIsSet(static::CONDITION);
+
+        return $this;
+    }
+
+    /**
      * @param string|null $targetMethodName
      *
      * @return $this
@@ -655,6 +722,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                 case 'before':
                 case 'after':
                 case 'index':
+                case 'condition':
                 case 'targetMethodName':
                     $this->$normalizedPropertyName = $value;
                     $this->modifiedProperties[$normalizedPropertyName] = true;
@@ -793,6 +861,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                 case 'before':
                 case 'after':
                 case 'index':
+                case 'condition':
                 case 'targetMethodName':
                     $values[$arrayKey] = $value;
 
@@ -832,6 +901,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                 case 'before':
                 case 'after':
                 case 'index':
+                case 'condition':
                 case 'targetMethodName':
                     $values[$arrayKey] = $value;
 
@@ -915,6 +985,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'before' => $this->before,
             'after' => $this->after,
             'index' => $this->index,
+            'condition' => $this->condition,
             'targetMethodName' => $this->targetMethodName,
             'prependArguments' => $this->prependArguments,
             'appendArguments' => $this->appendArguments,
@@ -932,6 +1003,8 @@ class ClassMetadataTransfer extends AbstractTransfer
             'source' => $this->source,
             'before' => $this->before,
             'after' => $this->after,
+            'index' => $this->index,
+            'condition' => $this->condition,
             'targetMethodName' => $this->targetMethodName,
             'prepend_arguments' => $this->prependArguments,
             'append_arguments' => $this->appendArguments,
@@ -950,6 +1023,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'before' => $this->before,
             'after' => $this->after,
             'index' => $this->index,
+            'condition' => $this->condition,
             'targetMethodName' => $this->targetMethodName,
             'prepend_arguments' => $this->addValuesToCollection($this->prependArguments, true, false),
             'append_arguments' => $this->addValuesToCollection($this->appendArguments, true, false),
@@ -967,6 +1041,8 @@ class ClassMetadataTransfer extends AbstractTransfer
             'source' => $this->source,
             'before' => $this->before,
             'after' => $this->after,
+            'index' => $this->index,
+            'condition' => $this->index,
             'targetMethodName' => $this->targetMethodName,
             'prependArguments' => $this->addValuesToCollection($this->prependArguments, true, true),
             'appendArguments' => $this->addValuesToCollection($this->appendArguments, true, true),

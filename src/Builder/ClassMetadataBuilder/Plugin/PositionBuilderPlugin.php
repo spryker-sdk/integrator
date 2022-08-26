@@ -22,6 +22,7 @@ class PositionBuilderPlugin implements ClassMetadataBuilderPluginInterface
     {
         $transfer->setBefore(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] ?? '', '\\'));
         $transfer->setAfter(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '', '\\'));
+        $transfer->setCondition($manifest[IntegratorConfig::MANIFEST_KEY_CONDITION] ?? null);
 
         return $transfer;
     }

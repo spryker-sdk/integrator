@@ -98,7 +98,7 @@ class RemovePluginFromPluginCollectionExtendContainerVisitor extends NodeVisitor
             }
         }
 
-        if ($pluginToRemoveIndex) {
+        if ($pluginToRemoveIndex !== null) {
             array_splice($closure->stmts, $pluginToRemoveIndex, 1);
         }
 

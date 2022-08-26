@@ -10,6 +10,10 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\Visitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeVisitorAbstract;
 
 class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
@@ -18,6 +22,11 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
      * @var string
      */
     protected const STATEMENT_ARRAY = 'Expr_Array';
+
+    /**
+     * @var string
+     */
+    protected const STATEMENT_ASSIGN = 'Expr_Assign';
 
     /**
      * @var string
@@ -59,11 +68,47 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
         if ($node->getType() === static::STATEMENT_CLASS_METHOD && $node->name->toString() === $this->targetMethodName) {
             $this->methodFound = true;
 
-            return $node;
+            $node = $this->filterStatements($node);
         }
 
         if ($this->methodFound && $node->getType() === static::STATEMENT_ARRAY) {
-            $node = $this->removePlugin($node);
+            $arrayItemsCount = count($node->items);
+            $node = $this->removePluginFromArrayNode($node);
+            if ($arrayItemsCount !== count($node->items)) {
+                $this->methodFound = false;
+            }
+        }
+
+        return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node $node
+     *
+     * @return \PhpParser\Node
+     */
+    public function filterStatements(Node $node): Node
+    {
+        $pluginToRemoveIndex = null;
+        foreach ($node->stmts as $index => $stmt) {
+            if ($stmt instanceof If_) {
+                $stmt = $this->filterStatements($stmt);
+            }
+
+            if (
+                $stmt instanceof Expression
+                && $stmt->expr instanceof Assign
+                && $stmt->expr->expr instanceof New_
+                && $stmt->expr->expr->class->toString() === $this->classNameToRemove
+            ) {
+                $pluginToRemoveIndex = $index;
+
+                break;
+            }
+        }
+
+        if ($pluginToRemoveIndex !== null) {
+            array_splice($node->stmts, $pluginToRemoveIndex, 1);
             $this->methodFound = false;
         }
 
@@ -75,7 +120,7 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
      *
      * @return \PhpParser\Node
      */
-    protected function removePlugin(Node $node): Node
+    protected function removePluginFromArrayNode(Node $node): Node
     {
         $items = [];
         foreach ($node->items as $item) {
