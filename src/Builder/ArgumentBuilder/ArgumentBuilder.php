@@ -8,7 +8,9 @@
 namespace SprykerSdk\Integrator\Builder\ArgumentBuilder;
 
 use PhpParser\BuilderFactory;
-use PhpParser\Parser;
+use PhpParser\Node\Arg;
+use SprykerSdk\Integrator\Helper\ClassHelper;
+use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class ArgumentBuilder implements ArgumentBuilderInterface
 {
@@ -18,18 +20,54 @@ class ArgumentBuilder implements ArgumentBuilderInterface
     protected $builderFactory;
 
     /**
-     * @var \PhpParser\Parser
-     */
-    protected $parser;
-
-    /**
      * @param \PhpParser\BuilderFactory $builderFactory
-     * @param \PhpParser\Parser $parser
      */
-    public function __construct(BuilderFactory $builderFactory, Parser $parser)
+    public function __construct(BuilderFactory $builderFactory)
     {
         $this->builderFactory = $builderFactory;
-        $this->parser = $parser;
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
+     *
+     * @return array<\PhpParser\Node\Arg>
+     */
+    public function createAddPluginArguments(ClassMetadataTransfer $classMetadataTransfer): array
+    {
+        $args = [];
+
+        $constructorArgumentValues = [];
+        if ($classMetadataTransfer->getConstructorArguments()->count()) {
+            $constructorArgumentValues = $this->getArguments(
+                $classMetadataTransfer->getConstructorArguments()->getArrayCopy(),
+            );
+        }
+
+        if ($classMetadataTransfer->getPrependArguments()->count()) {
+            $prependArgumentValues = $this->getArguments(
+                $classMetadataTransfer->getPrependArguments()->getArrayCopy(),
+            );
+
+            $args = array_merge($args, $prependArgumentValues);
+        }
+
+        $mainArgument = new Arg(
+            $this->builderFactory->new(
+                (new ClassHelper())->getShortClassName($classMetadataTransfer->getSourceOrFail()),
+                $this->builderFactory->args($constructorArgumentValues),
+            ),
+        );
+        $args = array_merge($args, $this->builderFactory->args([$mainArgument]));
+
+        if ($classMetadataTransfer->getAppendArguments()->count()) {
+            $appendArgumentValues = $this->getArguments(
+                $classMetadataTransfer->getAppendArguments()->getArrayCopy(),
+            );
+
+            $args = array_merge($args, $appendArgumentValues);
+        }
+
+        return $args;
     }
 
     /**
@@ -37,7 +75,7 @@ class ArgumentBuilder implements ArgumentBuilderInterface
      *
      * @return array<\PhpParser\Node\Arg>
      */
-    public function getArguments(array $classArgumentMetadataTransfers): array
+    protected function getArguments(array $classArgumentMetadataTransfers): array
     {
         $args = [];
         foreach ($classArgumentMetadataTransfers as $classArgumentMetadataTransfer) {

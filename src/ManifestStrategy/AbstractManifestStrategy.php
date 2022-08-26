@@ -9,13 +9,10 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
-use ArrayObject;
 use SprykerSdk\Integrator\Builder\ClassBuilderFacade;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer;
-use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 abstract class AbstractManifestStrategy implements ManifestStrategyInterface
 {

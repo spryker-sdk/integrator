@@ -7,13 +7,14 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\Builder\ClassModifier;
+namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassConstant;
 
+use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddConstantVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassConstantModifier implements ClassConstantModifierInterface
+class Modifier implements ModifierInterface
 {
     use AddVisitorsTrait;
 

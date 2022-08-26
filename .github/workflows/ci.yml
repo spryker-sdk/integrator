@@ -14,6 +14,7 @@ jobs:
                 php-version: [
                         '7.4',
                         '8.0',
+                        '8.1',
                 ]
         steps:
             - name: Checkout
@@ -49,8 +50,42 @@ jobs:
             - name: PHPStan checks
               run: composer stan
 
-            - name: CodeStyle checks
-              run: composer cs-check
+    cs-check:
+        runs-on: ubuntu-20.04
+        strategy:
+            fail-fast: false
+            matrix:
+                php-version: [
+                    '7.4',
+                    '8.0',
+                ]
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-version }}
+                    extensions: mbstring, intl, pdo_mysql
+
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+            -   name: Composer cache
+                uses: actions/cache@v2
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: ${{ runner.os }}-composer-
+
+            -   name: Composer install
+                run: composer install --prefer-dist --no-interaction --optimize-autoloader
+
+            -   name: CodeStyle checks
+                run: composer cs-check
 
     prefer-lowest:
         runs-on: ubuntu-20.04
@@ -102,7 +137,7 @@ jobs:
             matrix:
                 php-version: [
                         '7.4',
-                        '8.0',
+                        '8.1',
                 ]
         steps:
             - name: Checkout
