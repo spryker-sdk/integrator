@@ -20,6 +20,14 @@ class NullInputOutputTest extends TestCase
     /**
      * @return void
      */
+    protected function setUp(): void
+    {
+        $this->command = new NullInputOutput();
+    }
+
+    /**
+     * @return void
+     */
     public function testWrite(): void
     {
         $this->expectOutputString('Output message');
@@ -74,13 +82,5 @@ class NullInputOutputTest extends TestCase
     public function testChoice(): void
     {
         $this->assertFalse($this->command->choice('Test question here', ['Option 1', 'Option 2'], false));
-    }
-
-    /**
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        $this->command = new NullInputOutput();
     }
 }

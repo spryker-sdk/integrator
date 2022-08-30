@@ -21,6 +21,14 @@ class ComposerInputOutputAdapterTest extends TestCase
     /**
      * @return void
      */
+    protected function setUp(): void
+    {
+        $this->adapter = new ComposerInputOutputAdapter(new NullIO());
+    }
+
+    /**
+     * @return void
+     */
     public function testWrite(): void
     {
         $this->expectOutputString('');
@@ -67,13 +75,5 @@ class ComposerInputOutputAdapterTest extends TestCase
 
         $this->adapter->setNoIteration();
         $this->assertSame(1, $this->adapter->choice('Test question', ['Test choice 1', 'Test choice 2'], 1));
-    }
-
-    /**
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        $this->adapter = new ComposerInputOutputAdapter(new NullIO());
     }
 }

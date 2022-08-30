@@ -20,6 +20,14 @@ class PackageFinderTest extends TestCase
     protected PackageFinder $packageFinder;
 
     /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->packageFinder = new PackageFinder($this->createMock(IntegratorConfig::class));
+    }
+
+    /**
      * @dataProvider camelCaseDataProvider
      *
      * @param string $expRes
@@ -48,13 +56,5 @@ class PackageFinderTest extends TestCase
         foreach ($testData as $set) {
             yield $set;
         }
-    }
-
-    /**
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        $this->packageFinder = new PackageFinder($this->createMock(IntegratorConfig::class));
     }
 }
