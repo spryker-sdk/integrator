@@ -133,4 +133,13 @@ jobs:
               run: composer install --prefer-dist --no-interaction --optimize-autoloader
 
             - name: Run tests
-              run: composer test
+              run: |
+                  if [[ ${{ matrix.php-version }} == '7.4' ]]; then
+                   XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover coverage.xml
+                  else
+                   composer test
+                  fi
+
+            - name: Code Coverage Report
+              if: success() && matrix.php-version == '7.4'
+              uses: codecov/codecov-action@v1
