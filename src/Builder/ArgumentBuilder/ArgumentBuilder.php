@@ -35,20 +35,25 @@ class ArgumentBuilder implements ArgumentBuilderInterface
     public function createAddPluginArguments(ClassMetadataTransfer $classMetadataTransfer): array
     {
         $args = [];
+        $args = array_merge($args, $this->getPrependArguments($classMetadataTransfer));
+        $args = array_merge($args, $this->getConstructorArguments($classMetadataTransfer));
+        $args = array_merge($args, $this->getAppendArguments($classMetadataTransfer));
 
+        return $args;
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
+     *
+     * @return array<\PhpParser\Node\Arg>
+     */
+    protected function getConstructorArguments(ClassMetadataTransfer $classMetadataTransfer): array
+    {
         $constructorArgumentValues = [];
         if ($classMetadataTransfer->getConstructorArguments()->count()) {
             $constructorArgumentValues = $this->getArguments(
                 $classMetadataTransfer->getConstructorArguments()->getArrayCopy(),
             );
-        }
-
-        if ($classMetadataTransfer->getPrependArguments()->count()) {
-            $prependArgumentValues = $this->getArguments(
-                $classMetadataTransfer->getPrependArguments()->getArrayCopy(),
-            );
-
-            $args = array_merge($args, $prependArgumentValues);
         }
 
         $mainArgument = new Arg(
@@ -57,17 +62,44 @@ class ArgumentBuilder implements ArgumentBuilderInterface
                 $this->builderFactory->args($constructorArgumentValues),
             ),
         );
-        $args = array_merge($args, $this->builderFactory->args([$mainArgument]));
 
-        if ($classMetadataTransfer->getAppendArguments()->count()) {
-            $appendArgumentValues = $this->getArguments(
-                $classMetadataTransfer->getAppendArguments()->getArrayCopy(),
-            );
+        return $this->builderFactory->args([$mainArgument]);
+    }
 
-            $args = array_merge($args, $appendArgumentValues);
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
+     *
+     * @return array<\PhpParser\Node\Arg>
+     */
+    protected function getAppendArguments(ClassMetadataTransfer $classMetadataTransfer): array
+    {
+        if (!$classMetadataTransfer->getAppendArguments()->count()) {
+            return [];
         }
 
-        return $args;
+        $appendArgumentValues = $this->getArguments(
+            $classMetadataTransfer->getAppendArguments()->getArrayCopy(),
+        );
+
+        return $appendArgumentValues;
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
+     *
+     * @return array<\PhpParser\Node\Arg>
+     */
+    protected function getPrependArguments(ClassMetadataTransfer $classMetadataTransfer): array
+    {
+        if (!$classMetadataTransfer->getPrependArguments()->count()) {
+            return [];
+        }
+
+        $prependArgumentValues = $this->getArguments(
+            $classMetadataTransfer->getPrependArguments()->getArrayCopy(),
+        );
+
+        return $prependArgumentValues;
     }
 
     /**

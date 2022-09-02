@@ -72,7 +72,7 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
     public function setConstant(ClassInformationTransfer $classInformationTransfer, string $constantName, $value): ClassInformationTransfer
     {
         return $this->getFactory()
-            ->createModifier()
+            ->createClassConstantModifier()
             ->setConstant($classInformationTransfer, $constantName, $value);
     }
 
