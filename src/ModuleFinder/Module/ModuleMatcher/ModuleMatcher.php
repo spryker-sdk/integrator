@@ -23,19 +23,9 @@ class ModuleMatcher implements ModuleMatcherInterface
      */
     public function matches(ModuleTransfer $moduleTransfer, ModuleFilterTransfer $moduleFilterTransfer): bool
     {
-        $accepted = true;
-
-        if (!$this->matchesOrganization($moduleFilterTransfer, $moduleTransfer->getOrganizationOrFail())) {
-            $accepted = false;
-        }
-        if (!$this->matchesApplication($moduleFilterTransfer, $moduleTransfer)) {
-            $accepted = false;
-        }
-        if (!$this->matchesModule($moduleFilterTransfer, $moduleTransfer)) {
-            $accepted = false;
-        }
-
-        return $accepted;
+        return $this->matchesOrganization($moduleFilterTransfer, $moduleTransfer->getOrganizationOrFail())
+            && $this->matchesApplication($moduleFilterTransfer, $moduleTransfer)
+            && $this->matchesModule($moduleFilterTransfer, $moduleTransfer);
     }
 
     /**
@@ -68,14 +58,13 @@ class ModuleMatcher implements ModuleMatcherInterface
             return true;
         }
 
-        $applicationMatches = false;
         foreach ($moduleTransfer->getApplications() as $applicationTransfer) {
             if ($this->match($moduleFilterTransfer->getApplication()->getNameOrFail(), $applicationTransfer->getNameOrFail())) {
-                $applicationMatches = true;
+                return true;
             }
         }
 
-        return $applicationMatches;
+        return false;
     }
 
     /**

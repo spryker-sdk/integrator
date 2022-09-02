@@ -82,7 +82,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorConfigureModule'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_tests_files/test_integrator_configure_module.php';
+        $testFilePath = './tests/_data/tests_files/test_integrator_configure_module.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorDefault/TestIntegratorDefaultConfig.php';
 
         $this->assertFileExists($classPath);
@@ -103,7 +103,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWirePlugin'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_tests_files/test_integrator_wire_plugin_dependency_provider.php';
+        $testFilePath = './tests/_data/tests_files/test_integrator_wire_plugin_dependency_provider.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
 
         $this->assertFileExists($classPath);
@@ -123,7 +123,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwirePlugin'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_tests_files/test_integrator_unwire_plugin_dependency_provider.php';
+        $testFilePath = './tests/_data/tests_files/test_integrator_unwire_plugin_dependency_provider.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorUnwirePlugin/TestIntegratorUnwirePluginDependencyProvider.php';
 
         $this->assertFileExists($classPath);
@@ -159,7 +159,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWireWidget'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_tests_files/test_integrator_wire_widget.php';
+        $testFilePath = './tests/_data/tests_files/test_integrator_wire_widget.php';
         $classPath = './tests/tmp/src/Pyz/Yves/ShopApplication/ShopApplicationDependencyProvider.php';
 
         $this->assertFileExists($classPath);
@@ -180,7 +180,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwireWidget'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_tests_files/test_integrator_unwire_widget.php';
+        $testFilePath = './tests/_data/tests_files/test_integrator_unwire_widget.php';
         $classPath = './tests/tmp/src/Pyz/Yves/ShopApplication/ShopApplicationDependencyProvider.php';
 
         $this->assertFileExists($classPath);
@@ -201,7 +201,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorConfigureEnv'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_tests_files/test_integrator_configure_env.php';
+        $testFilePath = './tests/_data/tests_files/test_integrator_configure_env.php';
         $classPath = './tests/tmp/config/Shared/config_default.php';
 
         $this->assertFileExists($classPath);
@@ -229,7 +229,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorConfigureEnv'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_tests_files/test_integrator_configure_env_choices.php';
+        $testFilePath = './tests/_data/tests_files/test_integrator_configure_env_choices.php';
         $classPath = './tests/tmp/config/Shared/config_default.php';
 
         $this->assertFileExists($classPath);
@@ -267,7 +267,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWireGlueRelationship'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_tests_files/test_integrator_wire_glue_relationship.php';
+        $testFilePath = './tests/_data/tests_files/test_integrator_wire_glue_relationship.php';
         $classPath = './tests/tmp/src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php';
 
         $this->assertFileExists($classPath);
@@ -288,7 +288,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwireGlueRelationship'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_tests_files/test_integrator_unwire_glue_relationship.php';
+        $testFilePath = './tests/_data/tests_files/test_integrator_unwire_glue_relationship.php';
         $classPath = './tests/tmp/src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php';
 
         $this->assertFileExists($classPath);
@@ -309,7 +309,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWireNavigation'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_tests_files/test_integrator_wire_navigation.xml';
+        $testFilePath = './tests/_data/tests_files/test_integrator_wire_navigation.xml';
         $resultFilePath = './tests/tmp/config/Zed/navigation.xml';
 
         $this->assertFileExists($resultFilePath);
@@ -333,7 +333,7 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = './tests/_tests_files/test_integrator_add_config_array_element_config.php';
+        $testFilePath = './tests/_data/tests_files/test_integrator_add_config_array_element_config.php';
         $classPath = './tests/tmp/src/Pyz/Client/TestIntegratorAddConfigArrayElement/TestIntegratorAddConfigArrayElementConfig.php';
 
         $this->assertFileExists($classPath);
@@ -355,7 +355,7 @@ class IntegratorFacadeTest extends BaseTestCase
 
         // Assert
         $projectGlossaryFilePath = './tests/_data/project_mock/data/import/common/common/glossary.csv';
-        $testFilePath = './tests/_tests_files/test_integrator_glossary.csv';
+        $testFilePath = './tests/_data/tests_files/test_integrator_glossary.csv';
         $testResultFile = './tests/tmp/data/import/common/common/glossary.csv';
 
         $this->assertFileExists($testFilePath);

@@ -102,18 +102,20 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             return $node;
         }
 
-        if ($this->methodFound) {
-            if ($node instanceof FuncCall && $this->isArrayMergeFuncCallNode($node)) {
-                $this->addNewPluginIntoArrayMergeFuncNode($node);
+        if (!$this->methodFound) {
+            return $node;
+        }
 
-                return $this->successfullyProcessed();
-            }
+        if ($node instanceof FuncCall && $this->isArrayMergeFuncCallNode($node)) {
+            $this->addNewPluginIntoArrayMergeFuncNode($node);
 
-            if ($node instanceof Array_) {
-                $this->addNewPlugin($node);
+            return $this->successfullyProcessed();
+        }
 
-                return $this->successfullyProcessed();
-            }
+        if ($node instanceof Array_) {
+            $this->addNewPlugin($node);
+
+            return $this->successfullyProcessed();
         }
 
         return $node;
@@ -201,6 +203,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
                 continue;
             }
+
             if ($nodeClassName === $this->after) {
                 $items[] = $item;
                 $items[] = $this->createArrayItemWithInstanceOf();
