@@ -12,6 +12,10 @@ parameters:
         SprykerSdk\Integrator\Transfer\AbstractTransfer:
             - throwNullValueException
 
+    excludePaths:
+        analyseAndScan:
+            - src/Transfer/AbstractTransfer.php
+
     ignoreErrors:
         - '#Call to an undefined method object::fromArray\(\)#'
         - '#Call to an undefined method [a-zA-Z0-9\|\\_]+::toString\(\)#'
@@ -19,4 +23,3 @@ parameters:
         - '#Access to an undefined property PhpParser\\[a-zA-Z0-9\|\\_]+::\$value#'
         - '#Binary operation "." between non-falsy-string and PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Identifier results in an error#'
         - '#Property PhpParser\\Node\\Stmt\\ClassLike::\$stmts \(array<PhpParser\\Node\\Stmt>\) does not accept array<PhpParser\\Node>#'
-        - '#Return type mixed of method SprykerSdk\\Integrator\\Transfer\\AbstractTransfer::offsetGet\(\) is not covariant with tentative return type mixed of method ArrayAccess::offsetGet\(\)#'
