@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerSdkTest\Integrator\ModuleFinder\Package;
+namespace SprykerSdkTest\Integrator\ModuleFinder\Package\PackageFinder;
 
 use Generator;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +24,10 @@ class PackageFinderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->packageFinder = new PackageFinder($this->createMock(IntegratorConfig::class));
+        $configMock = $this->createMock(IntegratorConfig::class);
+        $configMock->method('getVendorDirectory')->willReturn('./tests/_data/project_mock/vendor/');
+
+        $this->packageFinder = new PackageFinder($configMock);
     }
 
     /**
@@ -56,5 +59,13 @@ class PackageFinderTest extends TestCase
         foreach ($testData as $set) {
             yield $set;
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetPackages(): void
+    {
+        $this->assertSame([], $this->packageFinder->getPackages());
     }
 }
