@@ -29,20 +29,20 @@ All manifests have such structure for common types. More data you can find below
 
 ## Available manifest types
 
-| Type                                                  | Generation | Integration |
-|-------------------------------------------------------|------------|-------------|
-| [wire-plugin](#wire-plugin)                           | YES        | YES         |
-| [unwire-plugin](#unwire-plugin)                       |            |             |
-| [wire-widget](#wire-widget)                           |            |             |
-| [unwire-widget](#unwire-widget)                       |            |             |
-| [configure-module](#configure-module)                 |            |             |
-| [configure-env](#configure-env)                       |            |             |
-| [copy-module-file](#copy-module-file)                 |            |             |
-| [wire-glue-relationship](#wire-glue-relationship)     |            |             |
-| [unwire-glue-relationship](#unwire-glue-relationship) |            |             |
-| [glossary-key](#glossary-key)                         | YES        |             |
-| [add-config-array-element](#add-config-array-element) |            |             |
-| [wire-navigation](#wire-navigation)                   | YES        |             |
+| Type                                                   | Generation | Integration |
+|--------------------------------------------------------|------------|-------------|
+| [ wire-plugin](#wire-plugin-manifest)                           | YES        | YES         |
+| [ unwire-plugin](#unwire-plugin-manifest)                       |            |             |
+| [ wire-widget](#wire-widget-manifest)                           |            |             |
+| [ unwire-widget](#unwire-widget-manifest)                       |            |             |
+| [ configure-module](#configure-module-manifest)                 |            |             |
+| [ configure-env](#configure-env-manifest)                       |            |             |
+| [ copy-module-file](#copy-module-file-manifest)                 |            |             |
+| [ wire-glue-relationship](#wire-glue-relationship-manifest)     |            |             |
+| [ unwire-glue-relationship](#unwire-glue-relationship-manifest) |            |             |
+| [glossary-key](#glossary-key-manifest)                          | YES        |             |
+| [add-config-array-element](#add-config-array-element-manifest)  |            |             |
+| [wire-navigation](#wire-navigation-manifest)                    | YES        |             |
 
 Generation is currently handled in release app (Spryker internally), whereas Integration is done though this code base directly with
 [Strategy classes](//github.com/spryker-sdk/integrator/tree/master/src/ManifestStrategy/).
