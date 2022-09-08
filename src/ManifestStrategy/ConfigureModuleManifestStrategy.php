@@ -61,6 +61,16 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
                 );
             }
 
+            if (!is_bool($value) && !$value) {
+                $inputOutput->writeln(sprintf(
+                    'Value for %s::%s() configuration is not provided. Ignoring manifest.',
+                    $classInformationTransfer->getClassName(),
+                    $targetPointName,
+                ), InputOutputInterface::DEBUG);
+
+                return false;
+            }
+
             if ($this->isConstant($targetPointName)) {
                 $classInformationTransfer = $this->createClassBuilderFacade()
                     ->setConstant($classInformationTransfer, $targetPointName, $value);

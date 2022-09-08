@@ -56,6 +56,19 @@ class PackageFinder implements PackageFinderInterface
     }
 
     /**
+     * @param string $value
+     *
+     * @return string
+     */
+    public function camelCase(string $value): string
+    {
+        $filterChain = new FilterChain();
+        $filterChain->attach(new DashToCamelCase());
+
+        return ucfirst($filterChain->filter($value));
+    }
+
+    /**
      * @return \Symfony\Component\Finder\Finder<\Symfony\Component\Finder\SplFileInfo>
      */
     protected function getPackageFinder(): Finder
@@ -106,19 +119,6 @@ class PackageFinder implements PackageFinderInterface
         }
 
         return json_decode($fileContent, true);
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    public function camelCase(string $value): string
-    {
-        $filterChain = new FilterChain();
-        $filterChain->attach(new DashToCamelCase());
-
-        return ucfirst($filterChain->filter($value));
     }
 
     /**
