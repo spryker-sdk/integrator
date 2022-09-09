@@ -41,9 +41,17 @@ interface CommonClassModifierInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $methodName
-     * @param array|string|float|int|bool|null $value
+     * @param mixed $value
+     * @param bool $isLiteral
+     * @param mixed $previousValue
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function setMethodReturnValue(ClassInformationTransfer $classInformationTransfer, string $methodName, $value): ClassInformationTransfer;
+    public function createClassMethod(
+        ClassInformationTransfer $classInformationTransfer,
+        string $methodName,
+        $value,
+        bool $isLiteral,
+        $previousValue
+    ): ClassInformationTransfer;
 }

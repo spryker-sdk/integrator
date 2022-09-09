@@ -56,7 +56,20 @@ class PackageFinder implements PackageFinderInterface
     }
 
     /**
-     * @return \Symfony\Component\Finder\SplFileInfo[]|\Symfony\Component\Finder\Finder
+     * @param string $value
+     *
+     * @return string
+     */
+    public function camelCase(string $value): string
+    {
+        $filterChain = new FilterChain();
+        $filterChain->attach(new DashToCamelCase());
+
+        return ucfirst($filterChain->filter($value));
+    }
+
+    /**
+     * @return \Symfony\Component\Finder\Finder<\Symfony\Component\Finder\SplFileInfo>
      */
     protected function getPackageFinder(): Finder
     {
@@ -109,19 +122,6 @@ class PackageFinder implements PackageFinderInterface
     }
 
     /**
-     * @param string $value
-     *
-     * @return string
-     */
-    public function camelCase(string $value): string
-    {
-        $filterChain = new FilterChain();
-        $filterChain->attach(new DashToCamelCase());
-
-        return ucfirst($filterChain->filter($value));
-    }
-
-    /**
      * Packages which are standalone, can also be normal modules. This can be detected by the composer.json description
      * which contains `module` at the end of the description.
      *
@@ -131,7 +131,7 @@ class PackageFinder implements PackageFinderInterface
      */
     protected function isModule(PackageTransfer $packageTransfer): bool
     {
-        $composerJsonAsArray = $this->getComposerJsonAsArray($packageTransfer->getPath());
+        $composerJsonAsArray = $this->getComposerJsonAsArray($packageTransfer->getPathOrFail());
         $description = $composerJsonAsArray['description'];
 
         return (bool)preg_match('/\smodule$/', $description);

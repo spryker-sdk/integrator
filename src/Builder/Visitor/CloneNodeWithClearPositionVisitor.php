@@ -29,7 +29,7 @@ class CloneNodeWithClearPositionVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return \PhpParser\Node|\PhpParser\Node[]|int|null
+     * @return \PhpParser\Node|array<\PhpParser\Node>|int|null
      */
     public function leaveNode(Node $node)
     {

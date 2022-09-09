@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier;
 
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Return_;
+use RuntimeException;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
@@ -60,6 +61,9 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
      * @param string $classNameToAdd
      * @param string $before
      * @param string $after
+     * @param string|null $index
+     *
+     * @throws \RuntimeException
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
@@ -68,12 +72,17 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
         string $targetMethodName,
         string $classNameToAdd,
         string $before = '',
-        string $after = ''
+        string $after = '',
+        ?string $index = null
     ): ClassInformationTransfer {
         $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         if (!$methodNode) {
             $classInformationTransfer = $this->commonClassModifier->overrideMethodFromParent($classInformationTransfer, $targetMethodName);
             $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
+        }
+
+        if ($methodNode === null) {
+            throw new RuntimeException('Method node not found');
         }
 
         if ($this->classMethodChecker->isMethodReturnArray($methodNode)) {
@@ -84,8 +93,13 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
                     $classNameToAdd,
                     $before,
                     $after,
+                    $index,
                 ),
             ];
+
+            if ($index !== null && $this->isIndexFullyQualifiedClassName($index)) {
+                $visitors[] = new AddUseVisitor($this->getFullyQualifiedClassNameFromIndex($index));
+            }
 
             return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
         }
@@ -100,6 +114,26 @@ class ClassInstanceClassModifier implements ClassInstanceClassModifierInterface
         $this->commonClassModifier->replaceMethodBody($classInformationTransfer, $targetMethodName, $methodBody);
 
         return $classInformationTransfer;
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return bool
+     */
+    protected function isIndexFullyQualifiedClassName(string $index): bool
+    {
+        return strpos($index, '::') !== false && strpos($index, 'static::') === false;
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return string
+     */
+    protected function getFullyQualifiedClassNameFromIndex(string $index): string
+    {
+        return explode('::', $index)[0];
     }
 
     /**

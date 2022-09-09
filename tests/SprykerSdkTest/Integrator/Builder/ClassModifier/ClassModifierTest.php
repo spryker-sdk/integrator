@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
 namespace SprykerSdkTest\Integrator\Builder\ClassModifier;
 
 use PhpParser\Node\Expr\FuncCall;
@@ -23,13 +28,13 @@ class ClassModifierTest extends BaseTestCase
         $value = 'value_that_we_are_looking';
 
         //Act
-        $classModifier->setMethodReturnValue($classInformationTransfer, 'getScalarValue', $value);
+        $classModifier->createClassMethod($classInformationTransfer, 'getScalarValue', $value, false, '');
         $stmts = $finder->findMethodNode($classInformationTransfer, 'getScalarValue')->stmts;
 
         //Assert
         $this->assertTrue(isset($stmts[0]));
-        $this->assertTrue(Return_::class === get_class($stmts[0]));
-        $this->assertSame($stmts[0]->expr->value, $value);
+        $this->assertTrue(get_class($stmts[0]) === Return_::class);
+        $this->assertSame($stmts[0]->expr->name->parts[0], $value);
     }
 
     /**
@@ -44,18 +49,15 @@ class ClassModifierTest extends BaseTestCase
         );
         $classModifier = $this->getFactory()->createCommonClassModifier();
         $finder = $this->getFactory()->createClassNodeFinder();
-        $value = [
-            'value' => 'getenv(\'FOOBAR\')',
-            'is_literal' => true,
-        ];
+        $value = 'getenv(\'FOOBAR\')';
 
         //Act
-        $classModifier->setMethodReturnValue($classInformationTransfer, 'getLiteralValue', $value);
+        $classModifier->createClassMethod($classInformationTransfer, 'getLiteralValue', $value, true, '');
         $stmts = $finder->findMethodNode($classInformationTransfer, 'getLiteralValue')->stmts;
 
         //Assert
         $this->assertTrue(isset($stmts[0]));
-        $this->assertTrue(Return_::class === get_class($stmts[0]));
-        $this->assertTrue(FuncCall::class === get_class($stmts[0]->expr));
+        $this->assertTrue(get_class($stmts[0]) === Return_::class);
+        $this->assertTrue(get_class($stmts[0]->expr) === FuncCall::class);
     }
 }

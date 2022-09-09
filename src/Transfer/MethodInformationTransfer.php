@@ -78,7 +78,7 @@ class MethodInformationTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function setName($name)
+    public function setName(?string $name)
     {
         $this->name = $name;
         $this->modifiedProperties[static::NAME] = true;
@@ -89,7 +89,7 @@ class MethodInformationTransfer extends AbstractTransfer
     /**
      * @return string|null
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -97,7 +97,7 @@ class MethodInformationTransfer extends AbstractTransfer
     /**
      * @return string
      */
-    public function getNameOrFail()
+    public function getNameOrFail(): string
     {
         if ($this->name === null) {
             $this->throwNullValueException(static::NAME);
@@ -132,7 +132,7 @@ class MethodInformationTransfer extends AbstractTransfer
     /**
      * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer|null
      */
-    public function getReturnType()
+    public function getReturnType(): ?AbstractTransfer
     {
         return $this->returnType;
     }
@@ -140,7 +140,7 @@ class MethodInformationTransfer extends AbstractTransfer
     /**
      * @return \SprykerSdk\Integrator\Transfer\AbstractTransfer
      */
-    public function getReturnTypeOrFail()
+    public function getReturnTypeOrFail(): AbstractTransfer
     {
         if ($this->returnType === null) {
             $this->throwNullValueException(static::RETURN_TYPE);
@@ -167,10 +167,10 @@ class MethodInformationTransfer extends AbstractTransfer
      *
      * @return $this
      */
-    public function fromArray(array $data, $ignoreMissingProperty = false)
+    public function fromArray(array $data, bool $ignoreMissingProperty = false)
     {
         foreach ($data as $property => $value) {
-            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? null;
+            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? '';
 
             switch ($normalizedPropertyName) {
                 case 'name':
@@ -208,7 +208,7 @@ class MethodInformationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function modifiedToArray($isRecursive = true, $camelCasedKeys = false)
+    public function modifiedToArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->modifiedToArrayRecursiveNotCamelCased();
@@ -232,7 +232,7 @@ class MethodInformationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    public function toArray($isRecursive = true, $camelCasedKeys = false)
+    public function toArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
     {
         if ($isRecursive && !$camelCasedKeys) {
             return $this->toArrayRecursiveNotCamelCased();
@@ -257,7 +257,7 @@ class MethodInformationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    protected function addValuesToCollectionModified($value, $isRecursive, $camelCasedKeys)
+    protected function addValuesToCollectionModified($value, bool $isRecursive, bool $camelCasedKeys): array
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
@@ -279,7 +279,7 @@ class MethodInformationTransfer extends AbstractTransfer
      *
      * @return array
      */
-    protected function addValuesToCollection($value, $isRecursive, $camelCasedKeys)
+    protected function addValuesToCollection($value, bool $isRecursive, bool $camelCasedKeys): array
     {
         $result = [];
         foreach ($value as $elementKey => $arrayElement) {
@@ -297,7 +297,7 @@ class MethodInformationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayRecursiveCamelCased()
+    public function modifiedToArrayRecursiveCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -325,7 +325,7 @@ class MethodInformationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayRecursiveNotCamelCased()
+    public function modifiedToArrayRecursiveNotCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -353,7 +353,7 @@ class MethodInformationTransfer extends AbstractTransfer
     /**
      * @return array
      */
-    public function modifiedToArrayNotRecursiveNotCamelCased()
+    public function modifiedToArrayNotRecursiveNotCamelCased(): array
     {
         $values = [];
         foreach ($this->modifiedProperties as $property => $_) {
@@ -387,7 +387,7 @@ class MethodInformationTransfer extends AbstractTransfer
     /**
      * @return void
      */
-    protected function initCollectionProperties()
+    protected function initCollectionProperties(): void
     {
     }
 

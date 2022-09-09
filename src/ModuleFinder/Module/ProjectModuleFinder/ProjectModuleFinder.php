@@ -93,7 +93,7 @@ class ProjectModuleFinder implements ProjectModuleFinderInterface
     /**
      * @param array $projectOrganizationModuleDirectories
      *
-     * @return \Symfony\Component\Finder\SplFileInfo[]|\Symfony\Component\Finder\Finder
+     * @return \Symfony\Component\Finder\Finder<\Symfony\Component\Finder\SplFileInfo>
      */
     protected function getProjectModuleFinder(array $projectOrganizationModuleDirectories): Finder
     {
@@ -239,6 +239,6 @@ class ProjectModuleFinder implements ProjectModuleFinderInterface
      */
     protected function buildOrganizationModuleKey(ModuleTransfer $moduleTransfer): string
     {
-        return sprintf('%s.%s', $moduleTransfer->getOrganization()->getName(), $moduleTransfer->getName());
+        return sprintf('%s.%s', $moduleTransfer->getOrganizationOrFail()->getNameOrFail(), $moduleTransfer->getNameOrFail());
     }
 }

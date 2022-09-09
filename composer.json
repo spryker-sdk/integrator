@@ -1,7 +1,6 @@
 {
     "name": "spryker-sdk/integrator",
     "bin": ["bin/integrator"],
-    "type": "composer-plugin",
     "description": "Integrator module",
     "license": "proprietary",
     "require": {
@@ -39,22 +38,22 @@
             "Spryker\\Glue\\TestIntegratorWireGlueRelationship\\": "tests/tmp/vendor/spryker/test-integrator-wire-glue-relationship/src/Spryker/Glue/TestIntegratorWireGlueRelationship/",
             "Spryker\\Glue\\TestIntegratorUnwireGlueRelationship\\": "tests/tmp/vendor/spryker/test-integrator-unwire-glue-relationship/src/Spryker/Glue/TestIntegratorUnwireGlueRelationship/",
             "Spryker\\Glue\\GlueApplication\\": "tests/tmp/vendor/spryker/glue-application/src/Spryker/Glue/GlueApplication/",
-            "SprykerShop\\Yves\\ShopApplication\\": "tests/tmp/vendor/spryker-shop/shop-application/src/SprykerShop/Yves/ShopApplication/"
+            "SprykerShop\\Yves\\ShopApplication\\": "tests/tmp/vendor/spryker-shop/shop-application/src/SprykerShop/Yves/ShopApplication/",
+            "Spryker\\Client\\TestIntegratorAddConfigArrayElement\\": "tests/tmp/vendor/spryker/test-integrator-add-config-array-element/src/Spryker/Client/TestIntegratorAddConfigArrayElement/"
         }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "cs-check": "vendor/bin/phpcs -p -s --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml --standard=phpcs.xml.dist src/ tests/SprykerSdkTest/",
-        "cs-fix": "vendor/bin/phpcbf -p --standard=vendor/spryker/code-sniffer/Spryker/ruleset.xml src/ tests/SprykerSdkTest/",
+        "cs-check": "vendor/bin/phpcs",
+        "cs-fix": "vendor/bin/phpcbf",
         "stan": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/phpunit"
     },
     "extra": {
         "branch-alias": {
             "dev-master": "1.0.x-dev"
-        },
-        "class": "SprykerSdk\\Integrator\\Plugin\\Composer\\InstallerComposerPlugin"
+        }
     },
     "config": {
         "sort-packages": true,

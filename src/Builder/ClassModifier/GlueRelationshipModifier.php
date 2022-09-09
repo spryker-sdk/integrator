@@ -98,8 +98,12 @@ class GlueRelationshipModifier implements GlueRelationshipModifierInterface
             $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         }
 
+        if (!$methodNode) {
+            throw new RuntimeException('No method node found');
+        }
+
         if (count($methodNode->params) !== 1) {
-            throw new RuntimeException('GLUE relationship method is not valid!');
+            throw new RuntimeException('Glue relationship method is not valid!');
         }
 
         if ($this->isRelationshipExists($methodNode, $key, $classNameToAdd)) {
@@ -167,8 +171,12 @@ class GlueRelationshipModifier implements GlueRelationshipModifierInterface
             $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         }
 
+        if (!$methodNode) {
+            throw new RuntimeException('No method node found');
+        }
+
         if (count($methodNode->params) !== 1) {
-            throw new RuntimeException('GLUE relationship method is not valid!');
+            throw new RuntimeException('Glue relationship method is not valid!');
         }
 
         if (!$this->isRelationshipExists($methodNode, $key, $classNameToRemove)) {
@@ -196,9 +204,13 @@ class GlueRelationshipModifier implements GlueRelationshipModifierInterface
     {
         $key = ltrim($key, '\\');
         $classNameToAdd = ltrim($classNameToAdd, '\\');
+
+        /** @var array<\PhpParser\Node> $nodes */
+        $nodes = $classMethod->stmts;
+
         /** @var \PhpParser\Node\Stmt\ClassMethod|null $node */
         $node = (new NodeFinder())->findFirst(
-            $classMethod->stmts,
+            $nodes,
             function (Node $node) use ($key, $classNameToAdd) {
                 if (!($node instanceof MethodCall) || count($node->args) !== 2) {
                     return false;

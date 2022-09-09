@@ -9,7 +9,6 @@ namespace Pyz\Zed\TestIntegratorDefault;
 
 use Spryker\Zed\TestIntegratorDefault\Communication\Plugin\TestIntegratorDefault1Plugin;
 use Spryker\Zed\TestIntegratorDefault\Communication\Plugin\TestIntegratorDefault2Plugin;
-use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\TestIntegratorUnwirePlugin;
 
 class TestIntegratorDefaultDependencyProvider
 {

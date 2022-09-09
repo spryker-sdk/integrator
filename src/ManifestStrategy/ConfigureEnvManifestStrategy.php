@@ -10,10 +10,31 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
 {
+    /**
+     * @var array<array-key, \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface>
+     */
+    protected $configurationEnvironmentStrategies;
+
+    /**
+     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @param \SprykerSdk\Integrator\Helper\ClassHelperInterface $classHelper
+     * @param array<array-key, \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface> $configurationEnvironmentBuilders
+     */
+    public function __construct(
+        IntegratorConfig $config,
+        ClassHelperInterface $classHelper,
+        array $configurationEnvironmentBuilders
+    ) {
+        parent::__construct($config, $classHelper);
+
+        $this->configurationEnvironmentStrategies = $configurationEnvironmentBuilders;
+    }
+
     /**
      * @return string
      */
@@ -37,7 +58,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
         $choices = $manifest[IntegratorConfig::MANIFEST_KEY_CHOICES] ?? [];
         $defaultValue = $manifest[IntegratorConfig::MANIFEST_KEY_DEFAULT_VALUE] ?? null;
 
-        if (!$value) {
+        if (!is_bool($value) && !$value) {
             $value = $this->askValue(
                 "'Provide value for $target global configuration.'",
                 $choices,
@@ -49,7 +70,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
         $configFileName = $this->config->getConfigPath();
         if (!file_exists($configFileName)) {
             $inputOutput->writeln(sprintf(
-                'File %s does not exist. Please check filepath.',
+                'File `%s` does not exist. Please check file path or customize using `IntegratorConfig::getConfigPath()`.',
                 $configFileName,
             ), InputOutputInterface::DEBUG);
 
@@ -60,10 +81,10 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
         }
 
         $inputOutput->writeln(sprintf(
-            'Global config %s was added with to %s value %s',
+            'Global config `%s` was added with to %s value `%s`',
             $target,
             $configFileName,
-            $value,
+            is_array($value) ? json_encode($value) : $value,
         ), InputOutputInterface::DEBUG);
 
         return true;
@@ -92,8 +113,10 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
      */
     protected function prepareValue($value)
     {
-        if (is_array($value) && isset($value['is_literal'])) {
-            return $value['value'];
+        foreach ($this->configurationEnvironmentStrategies as $configurationEnvironmentStrategy) {
+            if ($configurationEnvironmentStrategy->isApplicable($value)) {
+                return $configurationEnvironmentStrategy->getFormattedExpression($value);
+            }
         }
 
         return var_export($value, true);

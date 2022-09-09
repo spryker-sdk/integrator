@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassResolver;
 
+use RuntimeException;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
@@ -46,13 +47,15 @@ class ClassResolver implements ClassResolverInterface
      * @param string $targetClassName
      * @param string $customOrganisation
      *
+     * @throws \RuntimeException
+     *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
     public function resolveClass(string $targetClassName, string $customOrganisation = ''): ?ClassInformationTransfer
     {
         $resolvedClassName = $targetClassName;
         if ($customOrganisation) {
-            $resolvedClassName = preg_replace("/(\w+)/", $customOrganisation, $targetClassName, 1);
+            $resolvedClassName = (string)preg_replace("/(\w+)/", $customOrganisation, $targetClassName, 1);
         }
 
         if (!isset(static::$generatedClassList[$resolvedClassName])) {
@@ -61,6 +64,11 @@ class ClassResolver implements ClassResolverInterface
             } else {
                 $classInformationTransfer = $this->classGenerator->generateClass($resolvedClassName, $targetClassName);
             }
+
+            if ($classInformationTransfer === null) {
+                throw new RuntimeException(sprintf('Cannot resolve `%s`', $targetClassName));
+            }
+
             static::$generatedClassList[$resolvedClassName] = $classInformationTransfer;
         }
 

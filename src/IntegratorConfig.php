@@ -29,7 +29,22 @@ class IntegratorConfig
     /**
      * @var string
      */
-    public const MANIFEST_KEY_DEFAULT_VALUE = 'default';
+    public const MANIFEST_KEY_INDEX = 'index';
+
+    /**
+     * @var string
+     */
+    public const MANIFEST_KEY_IS_LITERAL = 'is_literal';
+
+    /**
+     * @var string
+     */
+    public const MANIFEST_KEY_PREVIOUS_VALUE = 'previousValue';
+
+    /**
+     * @var string
+     */
+    public const MANIFEST_KEY_DEFAULT_VALUE = 'defaultValue';
 
     /**
      * @var string
@@ -72,7 +87,17 @@ class IntegratorConfig
     protected const MANIFESTS_URL = 'https://github.com/spryker-sdk/integrator-manifests/archive/master.zip';
 
     /**
-     * @var array|null
+     * @var string
+     */
+    protected const LOCAL_RECIPES_DIRECTORY = 'vendor/spryker-sdk/integrator-recipes/';
+
+    /**
+     * @var string
+     */
+    protected const PATH_GLOSSARY = 'data/import/common/common/glossary.csv';
+
+    /**
+     * @var array<string, mixed>|null
      */
     protected $config;
 
@@ -88,7 +113,7 @@ class IntegratorConfig
     ];
 
     /**
-     * @var self|null
+     * @var static|null
      */
     protected static $instance;
 
@@ -99,7 +124,7 @@ class IntegratorConfig
     /**
      * @api
      *
-     * @return \SprykerSdk\Integrator\IntegratorConfig
+     * @return static
      */
     public static function getInstance()
     {
@@ -169,7 +194,10 @@ class IntegratorConfig
      */
     public function getProjectNamespaces(): array
     {
-        return $this->config[static::PROJECT_NAMESPACES];
+        /** @var array<string, mixed> $config */
+        $config = $this->config;
+
+        return $config[static::PROJECT_NAMESPACES];
     }
 
     /**
@@ -177,7 +205,10 @@ class IntegratorConfig
      */
     public function getCoreNamespaces(): array
     {
-        return $this->config[static::CORE_NAMESPACES];
+        /** @var array<string, mixed> $config */
+        $config = $this->config;
+
+        return $config[static::CORE_NAMESPACES];
     }
 
     /**
@@ -291,6 +322,24 @@ class IntegratorConfig
     }
 
     /**
+     * This is used for local development purposes only.
+     *
+     * @return string
+     */
+    public function getLocalRecipesDirectory(): string
+    {
+        return $this->getProjectRootDirectory() . static::LOCAL_RECIPES_DIRECTORY;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGlossaryFilePath(): string
+    {
+        return $this->getProjectRootDirectory() . static::PATH_GLOSSARY;
+    }
+
+    /**
      * @return string
      */
     public function getManifestsRepository(): string
@@ -305,7 +354,7 @@ class IntegratorConfig
     /**
      * @return array
      */
-    public function getApplications()
+    public function getApplications(): array
     {
         return [
             'Client',

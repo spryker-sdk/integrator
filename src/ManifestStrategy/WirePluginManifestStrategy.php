@@ -69,10 +69,14 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
                 $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
                 $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] ?? '',
                 $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '',
+                $manifest[IntegratorConfig::MANIFEST_KEY_INDEX] ?? null,
             );
 
             if ($isDry) {
-                $inputOutput->writeln($this->createClassBuilderFacade()->printDiff($classInformationTransfer));
+                $diff = $this->createClassBuilderFacade()->printDiff($classInformationTransfer);
+                if ($diff) {
+                    $inputOutput->writeln($diff);
+                }
             } else {
                 $this->createClassBuilderFacade()->storeClass($classInformationTransfer);
             }
