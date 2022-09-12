@@ -29,20 +29,20 @@ All manifests have such structure for common types. More data you can find below
 
 ## Available manifest types
 
-| Type                                                               | Generation | Integration |
-|--------------------------------------------------------------------|------------|-------------|
-| [wire-plugin](#wire-plugin-manifest)                               | YES        | YES         |
-| [unwire-plugin](#unwire-plugin-manifest)                           | YES        | YES         |
-| [wire-widget](#wire-widget-manifest)                               | YES        | YES         |
-| [unwire-widget](#unwire-widget-manifest)                           | YES        | YES         |
-| [configure-module](#configure-module-manifest)                     | YES        | YES         |
-| [configure-env](#configure-env-manifest)                           | YES        | YES         |
-| [copy-module-file](#copy-module-file-manifest)                     | YES        | YES         |
-| [wire-glue-relationship](#wire-glue-relationship-manifest)         | YES        | YES         |
-| [unwire-glue-relationship](#unwire-glue-relationship-manifest)     | YES        | YES         |
-| [glossary-key](#glossary-key-manifest)                             | YES        |             |
-| [add-config-array-element](#wip-add-config-array-element-manifest) | YES        |             |
-| [wire-navigation](#wip-wire-navigation-manifest)                   |            |             |
+| Type                                                           | Generation | Integration |
+|----------------------------------------------------------------|------------|-------------|
+| [wire-plugin](#wire-plugin-manifest)                           | YES        | YES         |
+| [unwire-plugin](#unwire-plugin-manifest)                       | YES        | YES         |
+| [wire-widget](#wire-widget-manifest)                           | YES        | YES         |
+| [unwire-widget](#unwire-widget-manifest)                       | YES        | YES         |
+| [configure-module](#configure-module-manifest)                 | YES        | YES         |
+| [configure-env](#configure-env-manifest)                       | YES        | YES         |
+| [copy-module-file](#copy-module-file-manifest)                 | YES        | YES         |
+| [wire-glue-relationship](#wire-glue-relationship-manifest)     | YES        | YES         |
+| [unwire-glue-relationship](#unwire-glue-relationship-manifest) | YES        | YES         |
+| [glossary-key](#glossary-key-manifest)                         | YES        | YES         |
+| [add-config-array-element](#add-config-array-element-manifest) | YES        | YES         |
+| [wire-navigation](#wip-wire-navigation-manifest)               |            | YES         |
 
 Generation is currently handled in release app (Spryker internally), whereas Integration is done though this code base directly with
 [Strategy classes](//github.com/spryker-sdk/integrator/tree/master/src/ManifestStrategy/).
@@ -294,7 +294,7 @@ This manifest contains glossary keys for project’s glossary.yml file.This miti
 }
 ```
 
-### [WIP] Add Config Array Element Manifest
+### Add Config Array Element Manifest
 
 This type of manifest adds a source constant as an element to the array returned by the target method.
 
