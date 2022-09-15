@@ -383,7 +383,7 @@ class IntegratorFacadeTest extends BaseTestCase
      */
     private function buildInput(): InputInterface
     {
-        $verboseOption = new InputOption(InputOutputInterface::DEBUG);
+        $verboseOption = new InputOption('verboseOption', null, InputOutputInterface::DEBUG);
         $inputDefinition = new InputDefinition();
 
         $inputDefinition->addOption($verboseOption);
