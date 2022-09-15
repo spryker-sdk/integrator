@@ -51,51 +51,53 @@ class RemovePluginFromChainedPluginCollectionVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node): Node
     {
         if (
-            $node->getType() === static::STATEMENT_CLASS_METHOD
-            && $node->name->toString() === $this->classMetadataTransfer->getTargetMethodNameOrFail()
+            $node->getType() !== static::STATEMENT_CLASS_METHOD
+            || $node->name->toString() !== $this->classMetadataTransfer->getTargetMethodNameOrFail()
         ) {
-            $addPluginCalls = (new NodeFinder())->find($node->stmts, function (Node $node) {
-                return $node instanceof MethodCall
-                    && strpos(strtolower($node->name->toString()), 'add') !== false;
-            });
-
-            if (!$addPluginCalls) {
-                return $node;
-            }
-
-            foreach ($node->stmts as $stmt) {
-                if ($this->pluginRemoved) {
-                    break;
-                }
-
-                if (!$this->isStatementAddPluginMethodCall($stmt)) {
-                    continue;
-                }
-
-                $stmt->expr = $this->processMethodCall($stmt->expr);
-            }
-
-            if (!$this->pluginRemoved) {
-                foreach ($node->stmts as $stmt) {
-                    if (!$this->isStatementAddPluginMethodCall($stmt)) {
-                        continue;
-                    }
-
-                    if ($stmt->expr instanceof MethodCall) {
-                        foreach ($stmt->expr->args as $arg) {
-                            if ($arg->value instanceof New_ && $arg->value->class->toString() === $this->classMetadataTransfer->getSourceOrFail()) {
-                                $stmt->expr = $stmt->expr->var;
-
-                                $this->pluginRemoved = true;
-
-                                break 2;
-                            }
-                        }
-                    }
-                }
-            }
-
             return $node;
+        }
+
+        $addPluginCalls = (new NodeFinder())->find($node->stmts, function (Node $node) {
+            return $node instanceof MethodCall
+                && strpos(strtolower($node->name->toString()), 'add') !== false;
+        });
+
+        if (!$addPluginCalls) {
+            return $node;
+        }
+
+        foreach ($node->stmts as $stmt) {
+            if ($this->pluginRemoved) {
+                break;
+            }
+
+            if (!$this->isStatementAddPluginMethodCall($stmt)) {
+                continue;
+            }
+
+            $stmt->expr = $this->processMethodCall($stmt->expr);
+        }
+
+        if ($this->pluginRemoved) {
+            return $node;
+        }
+
+        foreach ($node->stmts as $stmt) {
+            if (!$this->isStatementAddPluginMethodCall($stmt)) {
+                continue;
+            }
+
+            if ($stmt->expr instanceof MethodCall) {
+                foreach ($stmt->expr->args as $arg) {
+                    if ($arg->value instanceof New_ && $arg->value->class->toString() === $this->classMetadataTransfer->getSourceOrFail()) {
+                        $stmt->expr = $stmt->expr->var;
+
+                        $this->pluginRemoved = true;
+
+                        break 2;
+                    }
+                }
+            }
         }
 
         return $node;
@@ -108,21 +110,25 @@ class RemovePluginFromChainedPluginCollectionVisitor extends NodeVisitorAbstract
      */
     protected function processMethodCall(MethodCall $methodCall): MethodCall
     {
-        if ($methodCall->var instanceof MethodCall) {
-            /** @var \PhpParser\Node\Arg $arg */
-            foreach ($methodCall->var->args as $arg) {
-                if ($arg->value instanceof New_ && $arg->value->class->toString() === $this->classMetadataTransfer->getSourceOrFail()) {
-                    $methodCall->var = $methodCall->var->var;
-                    $this->pluginRemoved = true;
+        if (!$methodCall->var instanceof MethodCall) {
+            return $methodCall;
+        }
 
-                    return $methodCall;
-                }
+        /** @var \PhpParser\Node\Arg $arg */
+        foreach ($methodCall->var->args as $arg) {
+            if ($arg->value instanceof New_ && $arg->value->class->toString() === $this->classMetadataTransfer->getSourceOrFail()) {
+                $methodCall->var = $methodCall->var->var;
+                $this->pluginRemoved = true;
+
+                return $methodCall;
             }
         }
 
-        if ($methodCall->var instanceof MethodCall) {
-            $methodCall->var = $this->processMethodCall($methodCall->var);
+        if (!$methodCall->var instanceof MethodCall) {
+            return $methodCall;
         }
+
+        $methodCall->var = $this->processMethodCall($methodCall->var);
 
         return $methodCall;
     }
