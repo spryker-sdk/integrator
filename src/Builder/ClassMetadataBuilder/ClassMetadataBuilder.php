@@ -149,10 +149,48 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
      */
     protected function addPositions(array $manifest, ClassMetadataTransfer $transfer): ClassMetadataTransfer
     {
-        $transfer->setBefore(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] ?? '', '\\'));
+//        $positionData = $manifest[IntegratorConfig::MANIFEST_KEY_POSITION];
+//        if(!$positionData) {
+//            return $transfer;
+//        }
+//
+//        $appendArguments = new ArrayObject();
+//
+//
+//        if(is_array($positionData[IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE])) {
+//            foreach ($positionData[IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] as $beforePosition){
+//
+//            }
+//
+//        }
+
+        $transfer->setBefore($this->getPositions($manifest, IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE));
         $transfer->setAfter(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '', '\\'));
         $transfer->setCondition($manifest[IntegratorConfig::MANIFEST_KEY_CONDITION] ?? null);
 
         return $transfer;
+    }
+
+
+    protected function getPositions(array $manifest, string $positionKey): ArrayObject
+    {
+        $positions = new ArrayObject();
+
+        $positionData = $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][$positionKey] ?? null;
+        if(!$positionData) {
+            return $positions;
+        }
+
+        if(is_string($positionData)) {
+            $positions->append(ltrim($positionData, '\\'));
+
+            return $positions;
+        }
+
+        foreach ($positionData as $position) {
+            $positions->append(ltrim($position, '\\'));
+        }
+
+        return $positions;
     }
 }

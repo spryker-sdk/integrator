@@ -88,7 +88,7 @@ class ClassMetadataTransfer extends AbstractTransfer
     protected $constructorArguments;
 
     /**
-     * @var string|null
+     * @var \ArrayObject<string>
      */
     protected $before;
 
@@ -489,11 +489,10 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @param string|null $before
-     *
+     * @param ArrayObject $before
      * @return $this
      */
-    public function setBefore(?string $before)
+    public function setBefore(ArrayObject $before)
     {
         $this->before = $before;
         $this->modifiedProperties[static::BEFORE] = true;
@@ -502,23 +501,23 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @return string|null
+     * @return ArrayObject
      */
-    public function getBefore(): ?string
+    public function getBefore(): ArrayObject
     {
         return $this->before;
     }
 
     /**
-     * @return string
+     * @param string $before
+     * @return $this
      */
-    public function getBeforeOrFail(): string
+    public function addBefore(string $before)
     {
-        if ($this->before === null) {
-            $this->throwNullValueException(static::BEFORE);
-        }
+        $this->before[] = $before;
+        $this->modifiedProperties[static::BEFORE] = true;
 
-        return $this->before;
+        return $this;
     }
 
     /**
@@ -526,7 +525,7 @@ class ClassMetadataTransfer extends AbstractTransfer
      */
     public function requireBefore()
     {
-        $this->assertPropertyIsSet(static::BEFORE);
+        $this->assertCollectionPropertyIsSet(static::BEFORE);
 
         return $this;
     }
@@ -719,7 +718,6 @@ class ClassMetadataTransfer extends AbstractTransfer
             switch ($normalizedPropertyName) {
                 case 'target':
                 case 'source':
-                case 'before':
                 case 'after':
                 case 'index':
                 case 'condition':
@@ -728,6 +726,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                     $this->modifiedProperties[$normalizedPropertyName] = true;
 
                     break;
+                case 'before':
                 case 'prependArguments':
                 case 'appendArguments':
                 case 'constructorArguments':
@@ -858,7 +857,6 @@ class ClassMetadataTransfer extends AbstractTransfer
             switch ($property) {
                 case 'target':
                 case 'source':
-                case 'before':
                 case 'after':
                 case 'index':
                 case 'condition':
@@ -866,6 +864,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                     $values[$arrayKey] = $value;
 
                     break;
+                case 'before':
                 case 'prependArguments':
                 case 'appendArguments':
                 case 'constructorArguments':
@@ -898,7 +897,6 @@ class ClassMetadataTransfer extends AbstractTransfer
             switch ($property) {
                 case 'target':
                 case 'source':
-                case 'before':
                 case 'after':
                 case 'index':
                 case 'condition':
@@ -906,6 +904,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                     $values[$arrayKey] = $value;
 
                     break;
+                case 'before':
                 case 'prependArguments':
                 case 'appendArguments':
                 case 'constructorArguments':
@@ -1020,7 +1019,7 @@ class ClassMetadataTransfer extends AbstractTransfer
         return [
             'target' => $this->target,
             'source' => $this->source,
-            'before' => $this->before,
+            'before' =>  $this->addValuesToCollection($this->before, true, false),
             'after' => $this->after,
             'index' => $this->index,
             'condition' => $this->condition,
@@ -1039,7 +1038,7 @@ class ClassMetadataTransfer extends AbstractTransfer
         return [
             'target' => $this->target,
             'source' => $this->source,
-            'before' => $this->before,
+            'before' => $this->addValuesToCollection($this->before, true, true),
             'after' => $this->after,
             'index' => $this->index,
             'condition' => $this->index,

@@ -239,7 +239,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             }
 
             $nodeClassName = $item->value->class->toString();
-            if ($nodeClassName === $this->classMetadataTransfer->getBeforeOrFail()) {
+            if ($nodeClassName === $this->classMetadataTransfer->getBefore()) {
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $items[] = $item;
                 $itemAdded = true;

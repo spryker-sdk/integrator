@@ -51,6 +51,19 @@
                 "after": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\UrlStorageEventSubscriber"
             }
         },
+
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getEventListenerPluginsWithChainedOrderedBeforeCollectionReturn",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\FooStorageEventSubscriber",
+            "position": {
+                "before": [
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\A0AvailabilityStorageEventSubscriber",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\A1AvailabilityStorageEventSubscriber",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\A2AvailabilityStorageEventSubscriber"
+                ]
+            }
+        },
+
         {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::extendConditionPlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestBarConditionPlugin"
