@@ -23,8 +23,14 @@
         <exclude-pattern>src/Builder/Printer/ClassPrinter\.php</exclude-pattern>
     </rule>
 
-    <rule ref="Generic.PHP.RequireStrictTypes">
+    <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
         <exclude-pattern>tests/bootstrap.php</exclude-pattern>
+        <properties>
+            <property name="declareOnFirstLine" type="bool" value="false"/>
+            <property name="linesCountBeforeDeclare" type="int" value="1"/>
+            <property name="linesCountAfterDeclare" type="int" value="1"/>
+            <property name="spacesCountAroundEqualsSign" type="int" value="0"/>
+        </properties>
     </rule>
 
 </ruleset>
