@@ -23,4 +23,8 @@
         <exclude-pattern>src/Builder/Printer/ClassPrinter\.php</exclude-pattern>
     </rule>
 
+    <rule ref="Generic.PHP.RequireStrictTypes">
+        <exclude-pattern>tests/bootstrap.php</exclude-pattern>
+    </rule>
+
 </ruleset>
