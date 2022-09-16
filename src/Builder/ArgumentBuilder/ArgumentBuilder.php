@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace SprykerSdk\Integrator\Builder\ArgumentBuilder;
 
 use PhpParser\BuilderFactory;
@@ -34,12 +36,11 @@ class ArgumentBuilder implements ArgumentBuilderInterface
      */
     public function createAddPluginArguments(ClassMetadataTransfer $classMetadataTransfer): array
     {
-        $args = [];
-        $args = array_merge($args, $this->getPrependArguments($classMetadataTransfer));
-        $args = array_merge($args, $this->getConstructorArguments($classMetadataTransfer));
-        $args = array_merge($args, $this->getAppendArguments($classMetadataTransfer));
-
-        return $args;
+        return array_merge(
+            $this->getPrependArguments($classMetadataTransfer),
+            $this->getConstructorArguments($classMetadataTransfer),
+            $this->getAppendArguments($classMetadataTransfer),
+        );
     }
 
     /**
