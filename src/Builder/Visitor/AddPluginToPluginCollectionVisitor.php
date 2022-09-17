@@ -17,6 +17,9 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginToPluginCollectionPositionResolver;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginToPluginListPositionResolver;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
@@ -69,7 +72,10 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
 
             $addPluginCallCount = 0;
             $newPluginAddCallIndex = 0;
-
+            $firstAddPluginLine = null;
+            $pluginPositionResolver = $this->getPluginPositionResolver();
+            $beforePlugin = $pluginPositionResolver->getFirstExistPluginByPositions($node, $this->classMetadataTransfer->getBefore()->getArrayCopy());
+            $afterPlugin = $pluginPositionResolver->getFirstExistPluginByPositions($node, $this->classMetadataTransfer->getAfter()->getArrayCopy());
             foreach ($node->stmts as $index => $stmt) {
                 if (
                     $stmt->expr instanceof MethodCall === false
@@ -77,21 +83,30 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
                 ) {
                     continue;
                 }
+                if($firstAddPluginLine === null){
+                    $firstAddPluginLine = $index;
+                }
                 $addPluginCallCount++;
 
                 /** @var \PhpParser\Node\Arg $arg */
                 foreach ($stmt->expr->args as $arg) {
-                    if ($arg->value instanceof New_ && $arg->value->class->toString() === $this->classMetadataTransfer->getBefore()) {
+                    if ($arg->value instanceof New_ && $arg->value->class->toString() === $beforePlugin) {
                         $newPluginAddCallIndex = $index;
 
                         break 2;
                     }
 
-                    if ($arg->value instanceof New_ && $arg->value->class->toString() === $this->classMetadataTransfer->getAfter()) {
+                    if ($arg->value instanceof New_ && $arg->value->class->toString() === $afterPlugin) {
                         $newPluginAddCallIndex = $index + 1;
 
                         break 2;
                     }
+                }
+
+                if ($addPluginCallCount === count($addPluginCalls) && $beforePlugin) {
+                    $newPluginAddCallIndex = $firstAddPluginLine;
+
+                    break;
                 }
 
                 if ($addPluginCallCount === count($addPluginCalls)) {
@@ -113,5 +128,13 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
         }
 
         return $node;
+    }
+
+    /**
+     * @return PluginPositionResolverInterface
+     */
+    protected function getPluginPositionResolver(): PluginPositionResolverInterface
+    {
+        return new PluginToPluginCollectionPositionResolver();
     }
 }

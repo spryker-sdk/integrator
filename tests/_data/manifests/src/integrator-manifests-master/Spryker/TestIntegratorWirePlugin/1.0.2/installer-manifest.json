@@ -16,8 +16,52 @@
             }
         },
         {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getOrderedTestPlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\AAAFooStorageEventSubscriber",
+            "position": {
+                "before": [
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin1",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin2",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\SecondPlugin"
+                ]
+            }
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getOrderedTestPlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\AA2FooStorageEventSubscriber",
+            "position": {
+                "before": [
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin1",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin2",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin3"
+                ]
+            }
+        },
+        {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getEventListenerPluginsWithCollectionReturn",
             "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\AvailabilityStorageEventSubscriber"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getEventListenerPluginsWithCollectionReturn",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\AfterFirstPluginSubscriber",
+            "position": {
+                "after": [
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin1",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin2",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\FirstPlugin",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin3"
+                ]
+            }
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getEventListenerPluginsWithCollectionReturn",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\BeforeAllPlugin",
+            "position": {
+                "before": [
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin1",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin2"
+                ]
+            }
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getEventListenerPluginsWithOrderedBeforeCollectionReturn",
@@ -51,22 +95,30 @@
                 "after": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\UrlStorageEventSubscriber"
             }
         },
-
-        {
-            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getEventListenerPluginsWithChainedOrderedBeforeCollectionReturn",
-            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\FooStorageEventSubscriber",
-            "position": {
-                "before": [
-                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\A0AvailabilityStorageEventSubscriber",
-                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\A1AvailabilityStorageEventSubscriber",
-                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\A2AvailabilityStorageEventSubscriber"
-                ]
-            }
-        },
-
         {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::extendConditionPlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestBarConditionPlugin"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::extendConditionPlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\BeforeAllPlugin",
+            "position": {
+                "before": [
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin1",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin2"
+                ]
+            }
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::extendConditionPlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\AfterTestBarConditionPlugin",
+            "position": {
+                "after": [
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin1",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NotExistPlugin2",
+                    "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestBarConditionPlugin"
+                ]
+            }
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::extendConditionKeyValuePlugins",

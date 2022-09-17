@@ -151,29 +151,18 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
      */
     protected function addPositions(array $manifest, ClassMetadataTransfer $transfer): ClassMetadataTransfer
     {
-//        $positionData = $manifest[IntegratorConfig::MANIFEST_KEY_POSITION];
-//        if(!$positionData) {
-//            return $transfer;
-//        }
-//
-//        $appendArguments = new ArrayObject();
-//
-//
-//        if(is_array($positionData[IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE])) {
-//            foreach ($positionData[IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] as $beforePosition){
-//
-//            }
-//
-//        }
-
         $transfer->setBefore($this->getPositions($manifest, IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE));
-        $transfer->setAfter(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '', '\\'));
+        $transfer->setAfter($this->getPositions($manifest, IntegratorConfig::MANIFEST_KEY_POSITION_AFTER));
         $transfer->setCondition($manifest[IntegratorConfig::MANIFEST_KEY_CONDITION] ?? null);
 
         return $transfer;
     }
 
-
+    /**
+     * @param array $manifest
+     * @param string $positionKey
+     * @return ArrayObject
+     */
     protected function getPositions(array $manifest, string $positionKey): ArrayObject
     {
         $positions = new ArrayObject();

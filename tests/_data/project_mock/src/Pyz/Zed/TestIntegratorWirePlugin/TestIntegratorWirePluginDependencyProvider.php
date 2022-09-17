@@ -38,6 +38,7 @@ class TestIntegratorWirePluginDependencyProvider
     {
         $collection = new Collection();
 
+        $collection->add(new FirstPlugin());
         $collection->add(new UrlStorageEventSubscriber());
 
         return $collection;

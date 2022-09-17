@@ -18,6 +18,9 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginToPluginCollectionExtendContainerPositionResolver;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginToPluginCollectionPositionResolver;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstract
@@ -67,6 +70,9 @@ class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstr
                 return $node;
             }
 
+            $pluginPositionResolver = $this->getPluginPositionResolver();
+            $beforePlugin = $pluginPositionResolver->getFirstExistPluginByPositions($node, $this->classMetadataTransfer->getBefore()->getArrayCopy());
+            $afterPlugin = $pluginPositionResolver->getFirstExistPluginByPositions($node, $this->classMetadataTransfer->getAfter()->getArrayCopy());
             foreach ($node->stmts as $stmt) {
                 if (
                     $stmt instanceof Expression
@@ -74,7 +80,12 @@ class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstr
                     && count($stmt->expr->args) >= 2
                     && $stmt->expr->args[1]->value instanceof Closure
                 ) {
-                    $stmt->expr->args[1]->value = $this->handleContainerExtendClosure($stmt->expr->args[1]->value, $addPluginCalls);
+                    $stmt->expr->args[1]->value = $this->handleContainerExtendClosure(
+                        $stmt->expr->args[1]->value,
+                        $addPluginCalls,
+                        $beforePlugin,
+                        $afterPlugin
+                    );
 
                     break;
                 }
@@ -90,10 +101,16 @@ class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstr
      *
      * @return \PhpParser\Node\Expr\Closure
      */
-    protected function handleContainerExtendClosure(Closure $closure, array $addPluginCalls): Closure
+    protected function handleContainerExtendClosure(
+        Closure $closure,
+        array   $addPluginCalls,
+        ?string $beforePlugin = null,
+        ?string $afterPlugin = null
+    ): Closure
     {
         $addPluginCallCount = 0;
         $newPluginAddCallIndex = 0;
+        $firstAddPluginLine = null;
 
         foreach ($closure->stmts as $index => $stmt) {
             if ($stmt instanceof Expression === false) {
@@ -105,21 +122,31 @@ class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstr
             ) {
                 continue;
             }
+            if ($firstAddPluginLine === null) {
+                $firstAddPluginLine = $index;
+            }
+
             $addPluginCallCount++;
 
             /** @var \PhpParser\Node\Arg $arg */
             foreach ($stmt->expr->args as $arg) {
-                if ($arg->value instanceof New_ && $arg->value->class->toString() === $this->classMetadataTransfer->getBefore()) {
+                if ($arg->value instanceof New_ && $arg->value->class->toString() === $beforePlugin) {
                     $newPluginAddCallIndex = $index;
 
                     break 2;
                 }
 
-                if ($arg->value instanceof New_ && $arg->value->class->toString() === $this->classMetadataTransfer->getAfter()) {
+                if ($arg->value instanceof New_ && $arg->value->class->toString() === $afterPlugin) {
                     $newPluginAddCallIndex = $index + 1;
 
                     break 2;
                 }
+            }
+
+            if ($addPluginCallCount === count($addPluginCalls) && $beforePlugin) {
+                $newPluginAddCallIndex = $firstAddPluginLine;
+
+                break;
             }
 
             if ($addPluginCallCount === count($addPluginCalls)) {
@@ -138,5 +165,13 @@ class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstr
         }
 
         return $closure;
+    }
+
+    /**
+     * @return PluginPositionResolverInterface
+     */
+    protected function getPluginPositionResolver(): PluginPositionResolverInterface
+    {
+        return new PluginToPluginCollectionExtendContainerPositionResolver();
     }
 }
