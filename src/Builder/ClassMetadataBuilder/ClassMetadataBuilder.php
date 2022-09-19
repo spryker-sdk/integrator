@@ -161,18 +161,19 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
     /**
      * @param array $manifest
      * @param string $positionKey
-     * @return ArrayObject
+     *
+     * @return \ArrayObject
      */
     protected function getPositions(array $manifest, string $positionKey): ArrayObject
     {
         $positions = new ArrayObject();
 
         $positionData = $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][$positionKey] ?? null;
-        if(!$positionData) {
+        if (!$positionData) {
             return $positions;
         }
 
-        if(is_string($positionData)) {
+        if (is_string($positionData)) {
             $positions->append(ltrim($positionData, '\\'));
 
             return $positions;

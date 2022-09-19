@@ -17,9 +17,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolver;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
-use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginToPluginCollectionPositionResolver;
-use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginToPluginListPositionResolver;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
@@ -74,8 +73,14 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
             $newPluginAddCallIndex = 0;
             $firstAddPluginLine = null;
             $pluginPositionResolver = $this->getPluginPositionResolver();
-            $beforePlugin = $pluginPositionResolver->getFirstExistPluginByPositions($node, $this->classMetadataTransfer->getBefore()->getArrayCopy());
-            $afterPlugin = $pluginPositionResolver->getFirstExistPluginByPositions($node, $this->classMetadataTransfer->getAfter()->getArrayCopy());
+            $beforePlugin = $pluginPositionResolver->getFirstExistPluginByPositions(
+                $this->getPluginList($node),
+                $this->classMetadataTransfer->getBefore()->getArrayCopy(),
+            );
+            $afterPlugin = $pluginPositionResolver->getFirstExistPluginByPositions(
+                $this->getPluginList($node),
+                $this->classMetadataTransfer->getAfter()->getArrayCopy(),
+            );
             foreach ($node->stmts as $index => $stmt) {
                 if (
                     $stmt->expr instanceof MethodCall === false
@@ -83,7 +88,7 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
                 ) {
                     continue;
                 }
-                if($firstAddPluginLine === null){
+                if ($firstAddPluginLine === null) {
                     $firstAddPluginLine = $index;
                 }
                 $addPluginCallCount++;
@@ -131,10 +136,38 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return PluginPositionResolverInterface
+     * @param \PhpParser\Node $node
+     *
+     * @return array<string>
+     */
+    protected function getPluginList(Node $node): array
+    {
+        $plugins = [];
+
+        foreach ($node->stmts as $stmt) {
+            if (
+                $stmt->expr instanceof MethodCall === false
+                || strpos(strtolower($stmt->expr->name->toString()), 'add') === false
+            ) {
+                continue;
+            }
+
+            /** @var \PhpParser\Node\Arg $arg */
+            foreach ($stmt->expr->args as $arg) {
+                if ($arg->value instanceof New_) {
+                    $plugins[] = $arg->value->class->toString();
+                }
+            }
+        }
+
+        return $plugins;
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface
      */
     protected function getPluginPositionResolver(): PluginPositionResolverInterface
     {
-        return new PluginToPluginCollectionPositionResolver();
+        return new PluginPositionResolver();
     }
 }

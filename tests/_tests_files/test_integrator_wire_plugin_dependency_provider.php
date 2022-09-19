@@ -7,7 +7,11 @@
 
 namespace Pyz\Zed\TestIntegratorWirePlugin;
 
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AfterFirstPluginSubscriber;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AfterTestBarConditionPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AvailabilityStorageEventSubscriber;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\BeforeAllPlugin;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\BeforeAllPluginsSubscriber;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FirstPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FooStorageEventSubscriber;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SecondPlugin;
@@ -42,7 +46,9 @@ class TestIntegratorWirePluginDependencyProvider
     public function getOrderedTestPlugins(): array
     {
         return [
+            new BeforeAllPluginsSubscriber(),
             new FirstPlugin(),
+            new AfterFirstPluginSubscriber(),
             new TestIntegratorWirePlugin(),
             new SecondPlugin(),
         ];
@@ -51,9 +57,10 @@ class TestIntegratorWirePluginDependencyProvider
     protected function getEventListenerPluginsWithCollectionReturn(): Collection
     {
         $collection = new Collection();
+        $collection->add(new BeforeAllPlugin());
 
         $collection->add(new FirstPlugin());
-        $collection->add(new AAvailabilityStorageEventSubscriber());
+        $collection->add(new AfterFirstPluginSubscriber());
         $collection->add(new UrlStorageEventSubscriber());
         $collection->add(new AvailabilityStorageEventSubscriber());
 
@@ -118,8 +125,10 @@ class TestIntegratorWirePluginDependencyProvider
     protected function extendConditionPlugins(Container $container): Container
     {
         $container->extend('TEST_PLUGINS', function (ConditionCollectionInterface $conditionCollection) {
+            $conditionCollection->add(new BeforeAllPluginsSubscriber());
             $conditionCollection->add(new TestFooConditionPlugin());
             $conditionCollection->add(new TestBarConditionPlugin());
+            $conditionCollection->add(new AfterTestBarConditionPlugin());
 
             return $conditionCollection;
         });

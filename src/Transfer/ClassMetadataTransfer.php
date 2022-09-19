@@ -491,7 +491,8 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @param ArrayObject $before
+     * @param \ArrayObject $before
+     *
      * @return $this
      */
     public function setBefore(ArrayObject $before)
@@ -503,7 +504,7 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @return ArrayObject
+     * @return \ArrayObject
      */
     public function getBefore(): ArrayObject
     {
@@ -512,6 +513,7 @@ class ClassMetadataTransfer extends AbstractTransfer
 
     /**
      * @param string $before
+     *
      * @return $this
      */
     public function addBefore(string $before)
@@ -533,7 +535,8 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @param ArrayObject $after
+     * @param \ArrayObject $after
+     *
      * @return $this
      */
     public function setAfter(ArrayObject $after)
@@ -545,7 +548,7 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @return ArrayObject
+     * @return \ArrayObject
      */
     public function getAfter(): ArrayObject
     {
@@ -554,6 +557,7 @@ class ClassMetadataTransfer extends AbstractTransfer
 
     /**
      * @param string $after
+     *
      * @return $this
      */
     public function addAfter(string $after)
@@ -1020,7 +1024,7 @@ class ClassMetadataTransfer extends AbstractTransfer
         return [
             'target' => $this->target,
             'source' => $this->source,
-            'before' =>  $this->addValuesToCollection($this->before, true, false),
+            'before' => $this->addValuesToCollection($this->before, true, false),
             'after' => $this->after,
             'index' => $this->index,
             'condition' => $this->condition,

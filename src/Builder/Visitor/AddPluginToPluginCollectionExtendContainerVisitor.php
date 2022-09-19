@@ -18,9 +18,8 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolver;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
-use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginToPluginCollectionExtendContainerPositionResolver;
-use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginToPluginCollectionPositionResolver;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstract
@@ -71,8 +70,14 @@ class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstr
             }
 
             $pluginPositionResolver = $this->getPluginPositionResolver();
-            $beforePlugin = $pluginPositionResolver->getFirstExistPluginByPositions($node, $this->classMetadataTransfer->getBefore()->getArrayCopy());
-            $afterPlugin = $pluginPositionResolver->getFirstExistPluginByPositions($node, $this->classMetadataTransfer->getAfter()->getArrayCopy());
+            $beforePlugin = $pluginPositionResolver->getFirstExistPluginByPositions(
+                $this->getPluginList($node),
+                $this->classMetadataTransfer->getBefore()->getArrayCopy(),
+            );
+            $afterPlugin = $pluginPositionResolver->getFirstExistPluginByPositions(
+                $this->getPluginList($node),
+                $this->classMetadataTransfer->getAfter()->getArrayCopy(),
+            );
             foreach ($node->stmts as $stmt) {
                 if (
                     $stmt instanceof Expression
@@ -84,7 +89,7 @@ class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstr
                         $stmt->expr->args[1]->value,
                         $addPluginCalls,
                         $beforePlugin,
-                        $afterPlugin
+                        $afterPlugin,
                     );
 
                     break;
@@ -98,16 +103,17 @@ class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstr
     /**
      * @param \PhpParser\Node\Expr\Closure $closure
      * @param array $addPluginCalls
+     * @param string|null $beforePlugin
+     * @param string|null $afterPlugin
      *
      * @return \PhpParser\Node\Expr\Closure
      */
     protected function handleContainerExtendClosure(
         Closure $closure,
-        array   $addPluginCalls,
+        array $addPluginCalls,
         ?string $beforePlugin = null,
         ?string $afterPlugin = null
-    ): Closure
-    {
+    ): Closure {
         $addPluginCallCount = 0;
         $newPluginAddCallIndex = 0;
         $firstAddPluginLine = null;
@@ -161,17 +167,59 @@ class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstr
             $newMethodCall = (new BuilderFactory())
                 ->methodCall($addPluginCalls[0]->var, $addPluginCalls[0]->name, $arguments);
 
-            array_splice($closure->stmts, $newPluginAddCallIndex, 0, [new Expression($newMethodCall)]);
+            array_splice($closure->stmts, (int)$newPluginAddCallIndex, 0, [new Expression($newMethodCall)]);
         }
 
         return $closure;
     }
 
     /**
-     * @return PluginPositionResolverInterface
+     * @param \PhpParser\Node $node
+     *
+     * @return array<string>
+     */
+    protected function getPluginList(Node $node): array
+    {
+        $plugins = [];
+
+        foreach ($node->stmts as $stmt) {
+            if (
+                $stmt instanceof Expression
+                && $stmt->expr instanceof MethodCall
+                && count($stmt->expr->args) >= 2
+                && $stmt->expr->args[1]->value instanceof Closure
+            ) {
+                /** @var \PhpParser\Node\Expr\Closure $closure */
+                $closure = $stmt->expr->args[1]->value;
+                foreach ($closure->stmts as $stmt) {
+                    if ($stmt instanceof Expression === false) {
+                        continue;
+                    }
+                    if (
+                        $stmt->expr instanceof MethodCall === false
+                        || strpos(strtolower($stmt->expr->name->toString()), 'add') === false
+                    ) {
+                        continue;
+                    }
+
+                    /** @var \PhpParser\Node\Arg $arg */
+                    foreach ($stmt->expr->args as $arg) {
+                        if ($arg->value instanceof New_) {
+                            $plugins[] = $arg->value->class->toString();
+                        }
+                    }
+                }
+            }
+        }
+
+        return $plugins;
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface
      */
     protected function getPluginPositionResolver(): PluginPositionResolverInterface
     {
-        return new PluginToPluginCollectionExtendContainerPositionResolver();
+        return new PluginPositionResolver();
     }
 }

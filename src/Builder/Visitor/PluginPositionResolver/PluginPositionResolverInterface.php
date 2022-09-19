@@ -1,16 +1,19 @@
 <?php
 
-namespace SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver;
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
 
-use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
+namespace SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver;
 
 interface PluginPositionResolverInterface
 {
     /**
-     * @param \PhpParser\Node $node
-     * @param array $positions
+     * @param array<string> $existPlugins
+     * @param array<string> $positionPlugins
+     *
      * @return string|null
      */
-    public function getFirstExistPluginByPositions(Node $node, array $positions): ?string;
+    public function getFirstExistPluginByPositions(array $existPlugins, array $positionPlugins): ?string;
 }
