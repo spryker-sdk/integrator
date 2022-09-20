@@ -28,7 +28,6 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
-use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolver;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
@@ -56,16 +55,25 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $classMetadataTransfer;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface
+     */
+    protected PluginPositionResolverInterface $pluginPositionResolver;
+
+    /**
      * @var bool
      */
     protected $methodFound = false;
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
+     * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
      */
-    public function __construct(ClassMetadataTransfer $classMetadataTransfer)
-    {
+    public function __construct(
+        ClassMetadataTransfer $classMetadataTransfer,
+        PluginPositionResolverInterface $pluginPositionResolver
+    ) {
         $this->classMetadataTransfer = $classMetadataTransfer;
+        $this->pluginPositionResolver = $pluginPositionResolver;
     }
 
     /**
@@ -235,12 +243,11 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
         $items = [];
         $itemAdded = false;
-        $pluginPositionResolver = $this->getPluginPositionResolver();
-        $beforePlugin = $pluginPositionResolver->getFirstExistPluginByPositions(
+        $beforePlugin = $this->pluginPositionResolver->getFirstExistPluginByPositions(
             $this->getPluginList($node),
             $this->classMetadataTransfer->getBefore()->getArrayCopy(),
         );
-        $afterPlugin = $pluginPositionResolver->getFirstExistPluginByPositions(
+        $afterPlugin = $this->pluginPositionResolver->getFirstExistPluginByPositions(
             $this->getPluginList($node),
             $this->classMetadataTransfer->getAfter()->getArrayCopy(),
         );
@@ -407,13 +414,5 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         $this->methodFound = false;
 
         return NodeTraverser::DONT_TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * @return \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface
-     */
-    protected function getPluginPositionResolver(): PluginPositionResolverInterface
-    {
-        return new PluginPositionResolver();
     }
 }

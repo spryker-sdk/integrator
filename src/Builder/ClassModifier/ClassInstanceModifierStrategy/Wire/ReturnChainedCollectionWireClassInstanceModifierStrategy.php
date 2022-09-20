@@ -15,6 +15,7 @@ use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToChainedPluginCollectionVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -28,6 +29,11 @@ class ReturnChainedCollectionWireClassInstanceModifierStrategy implements WireCl
     protected $argumentBuilder;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface
+     */
+    protected PluginPositionResolverInterface $pluginPositionResolver;
+
+    /**
      * @var \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface
      */
     protected ApplicableModifierStrategyInterface $applicableCheck;
@@ -35,11 +41,16 @@ class ReturnChainedCollectionWireClassInstanceModifierStrategy implements WireCl
     /**
      * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface $applicableCheck
+     * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
      */
-    public function __construct(ArgumentBuilderInterface $argumentBuilder, ApplicableModifierStrategyInterface $applicableCheck)
-    {
+    public function __construct(
+        ArgumentBuilderInterface $argumentBuilder,
+        ApplicableModifierStrategyInterface $applicableCheck,
+        PluginPositionResolverInterface $pluginPositionResolver
+    ) {
         $this->argumentBuilder = $argumentBuilder;
         $this->applicableCheck = $applicableCheck;
+        $this->pluginPositionResolver = $pluginPositionResolver;
     }
 
     /**
@@ -81,6 +92,7 @@ class ReturnChainedCollectionWireClassInstanceModifierStrategy implements WireCl
             new AddPluginToChainedPluginCollectionVisitor(
                 $classMetadataTransfer,
                 $this->argumentBuilder,
+                $this->pluginPositionResolver,
             ),
         ];
     }

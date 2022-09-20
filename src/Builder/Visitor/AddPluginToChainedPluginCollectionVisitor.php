@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
-use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolver;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -40,6 +39,11 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
     protected $argumentBuilder;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface
+     */
+    protected PluginPositionResolverInterface $pluginPositionResolver;
+
+    /**
      * @var bool
      */
     protected $pluginInserted = false;
@@ -47,11 +51,16 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
+     * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
      */
-    public function __construct(ClassMetadataTransfer $classMetadataTransfer, ArgumentBuilderInterface $argumentBuilder)
-    {
+    public function __construct(
+        ClassMetadataTransfer $classMetadataTransfer,
+        ArgumentBuilderInterface $argumentBuilder,
+        PluginPositionResolverInterface $pluginPositionResolver
+    ) {
         $this->classMetadataTransfer = $classMetadataTransfer;
         $this->argumentBuilder = $argumentBuilder;
+        $this->pluginPositionResolver = $pluginPositionResolver;
     }
 
     /**
@@ -74,12 +83,11 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
                 return $node;
             }
 
-            $pluginPositionResolver = $this->getPluginPositionResolver();
-            $beforePlugin = $pluginPositionResolver->getFirstExistPluginByPositions(
+            $beforePlugin = $this->pluginPositionResolver->getFirstExistPluginByPositions(
                 $this->getPluginList($node),
                 $this->classMetadataTransfer->getBefore()->getArrayCopy(),
             );
-            $afterPlugin = $pluginPositionResolver->getFirstExistPluginByPositions(
+            $afterPlugin = $this->pluginPositionResolver->getFirstExistPluginByPositions(
                 $this->getPluginList($node),
                 $this->classMetadataTransfer->getAfter()->getArrayCopy(),
             );
@@ -210,13 +218,5 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
         }
 
         return $plugins;
-    }
-
-    /**
-     * @return \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface
-     */
-    protected function getPluginPositionResolver(): PluginPositionResolverInterface
-    {
-        return new PluginPositionResolver();
     }
 }

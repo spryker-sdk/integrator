@@ -89,6 +89,8 @@ use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinterInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolver;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
@@ -744,6 +746,7 @@ class IntegratorFactory
     {
         return new ReturnArrayWireClassInstanceModifierStrategy(
             $this->createReturnArrayModifierApplicableModifierStrategy(),
+            $this->createPluginPositionResolver(),
         );
     }
 
@@ -755,6 +758,7 @@ class IntegratorFactory
         return new ReturnCollectionWireClassInstanceModifierStrategy(
             $this->createArgumentBuilder(),
             $this->createReturnCollectionApplicableModifierStrategy(),
+            $this->createPluginPositionResolver(),
         );
     }
 
@@ -766,6 +770,7 @@ class IntegratorFactory
         return new ReturnExtendContainerWireClassInstanceModifierStrategy(
             $this->createArgumentBuilder(),
             $this->createReturnExtendContainerApplicableModifierStrategy(),
+            $this->createPluginPositionResolver(),
         );
     }
 
@@ -777,6 +782,7 @@ class IntegratorFactory
         return new ReturnChainedCollectionWireClassInstanceModifierStrategy(
             $this->createArgumentBuilder(),
             $this->createReturnChainedCollectionApplicableModifierStrategy(),
+            $this->createPluginPositionResolver(),
         );
     }
 
@@ -888,5 +894,13 @@ class IntegratorFactory
     public function createArgumentBuilder(): ArgumentBuilderInterface
     {
         return new ArgumentBuilder($this->createBuilderFactory());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface
+     */
+    protected function createPluginPositionResolver(): PluginPositionResolverInterface
+    {
+        return new PluginPositionResolver();
     }
 }
