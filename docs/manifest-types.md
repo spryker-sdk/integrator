@@ -33,6 +33,8 @@ All manifests have such structure for common types. More data you can find below
 ### Wire Plugin Manifest
 
 This manifest type adds Plugin to desired place (by defining exact method) of the code. We can specify the place where to put our changes by specifying position field with before or after settings.
+Before and after keys could have string or array of strings value.
+Integrator will check existing before and after plugins one by one and put value after/before the first find
 
 ```json
 {
@@ -42,7 +44,7 @@ This manifest type adds Plugin to desired place (by defining exact method) of th
             "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin",
             "position": {
                 "before": "",
-                "after": ""
+                "after": ["", ""]
             },
             "arguments": {
                 "prepend-arguments": [
