@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder;
 
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 interface ClassBuilderFacadeInterface
 {
@@ -61,21 +62,13 @@ interface ClassBuilderFacadeInterface
      * - Wires an instance of given class with given content.
      *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $targetMethodName
-     * @param string $classNameToAdd
-     * @param string $before
-     * @param string $after
-     * @param string|null $index
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function wireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $targetMethodName,
-        string $classNameToAdd,
-        string $before = '',
-        string $after = '',
-        ?string $index = null
+        ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer;
 
     /**
@@ -83,15 +76,13 @@ interface ClassBuilderFacadeInterface
      * - Removes given method from a given class.
      *
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $classNameToRemove
-     * @param string $targetMethodName
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
      */
     public function unwireClassInstance(
         ClassInformationTransfer $classInformationTransfer,
-        string $classNameToRemove,
-        string $targetMethodName
+        ClassMetadataTransfer $classMetadataTransfer
     ): ?ClassInformationTransfer;
 
     /**

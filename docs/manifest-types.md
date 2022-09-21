@@ -60,6 +60,26 @@ This manifest type adds Plugin to desired place (by defining exact method) of th
             "position": {
                 "before": "",
                 "after": ""
+            },
+            "arguments": {
+                "prepend-arguments": [
+                    {
+                        "value": "",
+                        "is_literal": true
+                    }
+                ],
+                "append-arguments": [
+                    {
+                        "value": "",
+                        "is_literal": true
+                    }
+                ],
+                "constructor-arguments": [
+                    {
+                        "value": "",
+                        "is_literal": true
+                    }
+                ]
             }
         }
     ]

@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\Builder\ClassModifier;
+namespace SprykerSdk\Integrator\Builder\ClassModifier\CommonClass;
 
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -24,11 +24,15 @@ interface CommonClassModifierInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $targetMethodName
-     * @param array<\PhpParser\Node> $methodAst
+     * @param array<string, mixed> $methodNodeProperties
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function replaceMethodBody(ClassInformationTransfer $classInformationTransfer, string $targetMethodName, array $methodAst): ClassInformationTransfer;
+    public function replaceMethodBody(
+        ClassInformationTransfer $classInformationTransfer,
+        string $targetMethodName,
+        array $methodNodeProperties = []
+    ): ClassInformationTransfer;
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
