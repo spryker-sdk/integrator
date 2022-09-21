@@ -87,21 +87,18 @@ class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstr
                 $this->classMetadataTransfer->getAfter()->getArrayCopy(),
             );
             foreach ($node->stmts as $stmt) {
-                if (
-                    $stmt instanceof Expression
-                    && $stmt->expr instanceof MethodCall
-                    && count($stmt->expr->args) >= 2
-                    && $stmt->expr->args[1]->value instanceof Closure
-                ) {
-                    $stmt->expr->args[1]->value = $this->handleContainerExtendClosure(
-                        $stmt->expr->args[1]->value,
-                        $addPluginCalls,
-                        $beforePlugin,
-                        $afterPlugin,
-                    );
-
-                    break;
+                if (!$this->isExpressionWithClosure($stmt)) {
+                    continue;
                 }
+
+                $stmt->expr->args[1]->value = $this->handleContainerExtendClosure(
+                    $stmt->expr->args[1]->value,
+                    $addPluginCalls,
+                    $beforePlugin,
+                    $afterPlugin,
+                );
+
+                break;
             }
         }
 
@@ -191,35 +188,45 @@ class AddPluginToPluginCollectionExtendContainerVisitor extends NodeVisitorAbstr
         $plugins = [];
 
         foreach ($node->stmts as $stmt) {
-            if (
-                $stmt instanceof Expression
-                && $stmt->expr instanceof MethodCall
-                && count($stmt->expr->args) >= 2
-                && $stmt->expr->args[1]->value instanceof Closure
-            ) {
-                /** @var \PhpParser\Node\Expr\Closure $closure */
-                $closure = $stmt->expr->args[1]->value;
-                foreach ($closure->stmts as $stmt) {
-                    if ($stmt instanceof Expression === false) {
-                        continue;
-                    }
-                    if (
-                        $stmt->expr instanceof MethodCall === false
-                        || strpos(strtolower($stmt->expr->name->toString()), 'add') === false
-                    ) {
-                        continue;
-                    }
+            if (!$this->isExpressionWithClosure($stmt)) {
+                continue;
+            }
 
-                    /** @var \PhpParser\Node\Arg $arg */
-                    foreach ($stmt->expr->args as $arg) {
-                        if ($arg->value instanceof New_) {
-                            $plugins[] = $arg->value->class->toString();
-                        }
+            /** @var \PhpParser\Node\Expr\Closure $closure */
+            $closure = $stmt->expr->args[1]->value;
+            foreach ($closure->stmts as $stmt) {
+                if ($stmt instanceof Expression === false) {
+                    continue;
+                }
+                if (
+                    $stmt->expr instanceof MethodCall === false
+                    || strpos(strtolower($stmt->expr->name->toString()), 'add') === false
+                ) {
+                    continue;
+                }
+
+                /** @var \PhpParser\Node\Arg $arg */
+                foreach ($stmt->expr->args as $arg) {
+                    if ($arg->value instanceof New_) {
+                        $plugins[] = $arg->value->class->toString();
                     }
                 }
             }
         }
 
         return $plugins;
+    }
+
+    /**
+     * @param object $stmt
+     *
+     * @return bool
+     */
+    protected function isExpressionWithClosure(object $stmt): bool
+    {
+        return $stmt instanceof Expression
+            && $stmt->expr instanceof MethodCall
+            && count($stmt->expr->args) >= 2
+            && $stmt->expr->args[1]->value instanceof Closure;
     }
 }

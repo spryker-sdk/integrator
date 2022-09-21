@@ -174,13 +174,13 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
         }
 
         if (is_string($positionData)) {
-            $positions->append($this->removeSlashFromFromBeginningOfString($positionData));
+            $positions->append($this->removeLeadingSlash($positionData));
 
             return $positions;
         }
 
         foreach ($positionData as $position) {
-            $positions->append($this->removeSlashFromFromBeginningOfString($position));
+            $positions->append($this->removeLeadingSlash($position));
         }
 
         return $positions;
@@ -191,7 +191,7 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
      *
      * @return string|null
      */
-    protected function removeSlashFromFromBeginningOfString(string $value): ?string
+    protected function removeLeadingSlash(string $value): ?string
     {
         return ltrim($value, '\\');
     }
