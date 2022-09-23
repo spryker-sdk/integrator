@@ -1,0 +1,9 @@
+{
+    "name": "spryker/test-integrator-wire-console",
+    "type": "composer-plugin",
+    "description": "test-integrator-wire-console module",
+    "license": "proprietary",
+    "require": {
+        "php": ">=7.4"
+    }
+}

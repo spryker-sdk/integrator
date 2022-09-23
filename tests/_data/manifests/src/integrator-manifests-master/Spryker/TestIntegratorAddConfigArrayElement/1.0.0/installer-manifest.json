@@ -1,37 +1,37 @@
 {
     "add-config-array-element": [
         {
-            "target": "\\Spryker\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestConfiguration",
+            "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestConfiguration",
             "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddConfigArrayElement::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST"
         },
         {
-            "target": "\\Spryker\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestConfiguration",
+            "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestConfiguration",
             "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddConfigArrayElementBefore::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST_BEFORE",
             "position": {
                 "before": "TestIntegratorAddConfigArrayElement::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST"
             }
         },
         {
-            "target": "\\Spryker\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestConfiguration",
+            "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestConfiguration",
             "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddConfigArrayElementAfter::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST_AFTER",
             "position": {
                 "after": "TestIntegratorAddConfigArrayElementBefore::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST_BEFORE"
             }
         },
         {
-            "target": "\\Spryker\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getNotExistOnProjectLevelTestConfiguration",
+            "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getNotExistOnProjectLevelTestConfiguration",
             "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddConfigArrayElement::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST"
         },
         {
-            "target": "\\Spryker\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getNotExistOnCoreLevelTestConfiguration",
+            "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getNotExistOnCoreLevelTestConfiguration",
             "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddConfigArrayElement::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST"
         },
         {
-            "target": "\\Spryker\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestArrayMergeConfiguration",
+            "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestArrayMergeConfiguration",
             "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddConfigArrayElement::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST"
         },
         {
-            "target": "\\Spryker\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestArrayMergeConfiguration",
+            "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestArrayMergeConfiguration",
             "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddConfigArrayElement::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST"
         }
     ]

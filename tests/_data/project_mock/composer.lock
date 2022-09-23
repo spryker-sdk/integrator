@@ -13,6 +13,14 @@
             "version": "1.0.3"
         },
         {
+            "name": "spryker/test-integrator-wire-console",
+            "version": "1.0.2"
+        },
+        {
+            "name": "spryker/test-integrator-unwire-console",
+            "version": "1.0.2"
+        },
+        {
             "name": "spryker/test-integrator-configure-module",
             "version": "1.0.3"
         },
