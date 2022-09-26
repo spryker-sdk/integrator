@@ -35,46 +35,6 @@ class ModuleMatcherTest extends TestCase
     protected ModuleMatcher $moduleMatcher;
 
     /**
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        $this->moduleMatcher = new ModuleMatcher();
-    }
-
-    /**
-     * @param bool $matchOrganization
-     * @param bool $matchApplication
-     * @param bool $matchModule
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer
-     */
-    protected function createMockModuleFilterTransfer(
-        bool $matchOrganization,
-        bool $matchApplication,
-        bool $matchModule
-    ): ModuleFilterTransfer {
-        $organizationTransfer = $this->createMock(OrganizationTransfer::class);
-        $organizationTransfer->method('getNameOrFail')
-            ->willReturn($matchOrganization ? static::CORRECT_NAME : static::WRONG_NAME);
-
-        $applicationTransfer = $this->createMock(ApplicationTransfer::class);
-        $applicationTransfer->method('getNameOrFail')
-            ->willReturn($matchApplication ? static::CORRECT_NAME : static::WRONG_NAME);
-
-        $moduleTransfer = $this->createMock(ModuleTransfer::class);
-        $moduleTransfer->method('getNameOrFail')
-            ->willReturn($matchModule ? static::CORRECT_NAME : static::WRONG_NAME);
-
-        $filterTransfer = $this->createMock(ModuleFilterTransfer::class);
-        $filterTransfer->method('getOrganization')->willReturn($organizationTransfer);
-        $filterTransfer->method('getApplication')->willReturn($applicationTransfer);
-        $filterTransfer->method('getModule')->willReturn($moduleTransfer);
-
-        return $filterTransfer;
-    }
-
-    /**
      * @return \Generator
      */
     public function matchesDataProvider(): Generator
@@ -116,5 +76,45 @@ class ModuleMatcherTest extends TestCase
     public function testMatches(bool $expResult, ModuleTransfer $moduleTransfer, ModuleFilterTransfer $moduleFilterTransfer): void
     {
         $this->assertSame($expResult, $this->moduleMatcher->matches($moduleTransfer, $moduleFilterTransfer));
+    }
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->moduleMatcher = new ModuleMatcher();
+    }
+
+    /**
+     * @param bool $matchOrganization
+     * @param bool $matchApplication
+     * @param bool $matchModule
+     *
+     * @return \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer
+     */
+    protected function createMockModuleFilterTransfer(
+        bool $matchOrganization,
+        bool $matchApplication,
+        bool $matchModule
+    ): ModuleFilterTransfer {
+        $organizationTransfer = $this->createMock(OrganizationTransfer::class);
+        $organizationTransfer->method('getNameOrFail')
+            ->willReturn($matchOrganization ? static::CORRECT_NAME : static::WRONG_NAME);
+
+        $applicationTransfer = $this->createMock(ApplicationTransfer::class);
+        $applicationTransfer->method('getNameOrFail')
+            ->willReturn($matchApplication ? static::CORRECT_NAME : static::WRONG_NAME);
+
+        $moduleTransfer = $this->createMock(ModuleTransfer::class);
+        $moduleTransfer->method('getNameOrFail')
+            ->willReturn($matchModule ? static::CORRECT_NAME : static::WRONG_NAME);
+
+        $filterTransfer = $this->createMock(ModuleFilterTransfer::class);
+        $filterTransfer->method('getOrganization')->willReturn($organizationTransfer);
+        $filterTransfer->method('getApplication')->willReturn($applicationTransfer);
+        $filterTransfer->method('getModule')->willReturn($moduleTransfer);
+
+        return $filterTransfer;
     }
 }

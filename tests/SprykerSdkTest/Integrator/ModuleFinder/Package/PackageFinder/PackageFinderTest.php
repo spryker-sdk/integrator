@@ -22,17 +22,6 @@ class PackageFinderTest extends TestCase
     protected PackageFinder $packageFinder;
 
     /**
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        $configMock = $this->createMock(IntegratorConfig::class);
-        $configMock->method('getVendorDirectory')->willReturn('./tests/_data/project_mock/vendor/');
-
-        $this->packageFinder = new PackageFinder($configMock);
-    }
-
-    /**
      * @dataProvider camelCaseDataProvider
      *
      * @param string $expRes
@@ -69,5 +58,16 @@ class PackageFinderTest extends TestCase
     public function testGetPackages(): void
     {
         $this->assertSame([], $this->packageFinder->getPackages());
+    }
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $configMock = $this->createMock(IntegratorConfig::class);
+        $configMock->method('getVendorDirectory')->willReturn('./tests/_data/project_mock/vendor/');
+
+        $this->packageFinder = new PackageFinder($configMock);
     }
 }
