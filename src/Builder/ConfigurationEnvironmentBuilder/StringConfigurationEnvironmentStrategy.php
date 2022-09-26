@@ -18,11 +18,7 @@ class StringConfigurationEnvironmentStrategy implements ConfigurationEnvironment
      */
     public function isApplicable($value): bool
     {
-        if (!is_string($value) || !preg_match('/^\'.*\'$/', $value)) {
-            return false;
-        }
-
-        return true;
+        return is_string($value) && preg_match('/^\'.*\'$/', $value);
     }
 
     /**
