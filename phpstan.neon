@@ -12,10 +12,6 @@ parameters:
         SprykerSdk\Integrator\Transfer\AbstractTransfer:
             - throwNullValueException
 
-    excludePaths:
-        analyseAndScan:
-            - src/Transfer/AbstractTransfer.php
-
     ignoreErrors:
         - '#Call to an undefined method object::fromArray\(\)#'
         - '#Call to an undefined method [a-zA-Z0-9\|\\_]+::toString\(\)#'
