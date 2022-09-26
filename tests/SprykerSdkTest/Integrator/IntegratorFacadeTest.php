@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace SprykerSdkTest\Integrator;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
@@ -421,7 +423,7 @@ class IntegratorFacadeTest extends BaseTestCase
      */
     private function buildInput(): InputInterface
     {
-        $verboseOption = new InputOption(InputOutputInterface::DEBUG);
+        $verboseOption = new InputOption('verboseOption', null, InputOutputInterface::DEBUG);
         $inputDefinition = new InputDefinition();
 
         $inputDefinition->addOption($verboseOption);
