@@ -47,7 +47,7 @@
     "scripts": {
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
-        "stan": "phpstan analyze src/",
+        "stan": "phpstan",
         "linters": [
             "@cs-fix",
             "@cs-check",
