@@ -404,6 +404,39 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
     }
 
     /**
+     * @return array
+     */
+    public function __serialize(): array
+    {
+        return $this->modifiedToArray() ?: [];
+    }
+
+    /**
+     * @param array $serialized
+     *
+     * @throws \Exception
+     *
+     * @return void
+     */
+    public function __unserialize(array $serialized): void
+    {
+        try {
+            $this->fromArray($serialized, true);
+            $this->initCollectionProperties();
+        } catch (Exception $exception) {
+            throw new Exception(
+                sprintf(
+                    'Failed to unserialize %s. Updating or clearing your data source may solve this problem: %s',
+                    static::class,
+                    $exception->getMessage(),
+                ),
+                $exception->getCode(),
+                $exception,
+            );
+        }
+    }
+
+    /**
      * @param mixed $offset
      *
      * @return bool
@@ -418,6 +451,7 @@ abstract class AbstractTransfer implements Serializable, ArrayAccess
      *
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->$offset;

@@ -15,6 +15,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
@@ -22,9 +23,13 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
+use PhpParser\PrettyPrinter\Standard;
 use SprykerSdk\Integrator\Helper\ClassHelper;
+use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 {
@@ -44,29 +49,9 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected const STATEMENT_CLASS_METHOD = 'Stmt_ClassMethod';
 
     /**
-     * @var string
+     * @var \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer
      */
-    protected $methodName;
-
-    /**
-     * @var string
-     */
-    protected $className;
-
-    /**
-     * @var string
-     */
-    protected $before;
-
-    /**
-     * @var string
-     */
-    protected $after;
-
-    /**
-     * @var string|null
-     */
-    protected $index;
+    protected $classMetadataTransfer;
 
     /**
      * @var bool
@@ -74,19 +59,11 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $methodFound = false;
 
     /**
-     * @param string $methodName
-     * @param string $className
-     * @param string $before
-     * @param string $after
-     * @param string|null $index
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      */
-    public function __construct(string $methodName, string $className, string $before = '', string $after = '', ?string $index = null)
+    public function __construct(ClassMetadataTransfer $classMetadataTransfer)
     {
-        $this->methodName = $methodName;
-        $this->className = ltrim($className, '\\');
-        $this->before = ltrim($before, '\\');
-        $this->after = ltrim($after, '\\');
-        $this->index = $index;
+        $this->classMetadataTransfer = $classMetadataTransfer;
     }
 
     /**
@@ -96,29 +73,45 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if ($node instanceof ClassMethod && $node->name->toString() === $this->methodName) {
+        if ($node instanceof ClassMethod && $node->name->toString() === $this->classMetadataTransfer->getTargetMethodNameOrFail()) {
             $this->methodFound = true;
 
             return $node;
         }
 
-        if (!$this->methodFound) {
-            return $node;
-        }
+        if ($this->methodFound) {
+            if ($node instanceof FuncCall && $this->isArrayMergeFuncCallNode($node)) {
+                $this->addNewPluginIntoArrayMergeFuncNode($node);
 
-        if ($node instanceof FuncCall && $this->isArrayMergeFuncCallNode($node)) {
-            $this->addNewPluginIntoArrayMergeFuncNode($node);
+                return $this->successfullyProcessed();
+            }
 
-            return $this->successfullyProcessed();
-        }
+            if ($node instanceof If_ && $this->classMetadataTransfer->getCondition() !== null) {
+                $this->addNewPluginIntoIfCondition($node);
 
-        if ($node instanceof Array_) {
-            $this->addNewPlugin($node);
+                return $this->successfullyProcessed();
+            }
 
-            return $this->successfullyProcessed();
+            if ($node instanceof Array_ && $this->classMetadataTransfer->getCondition() === null) {
+                $this->addNewPlugin($node);
+
+                return $this->successfullyProcessed();
+            }
         }
 
         return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\If_ $ifCondition
+     *
+     * @return string
+     */
+    protected function getIfClausePrettyPrint(If_ $ifCondition): string
+    {
+        $prettyPrinter = new Standard();
+
+        return $prettyPrinter->prettyPrintExpr($ifCondition->cond);
     }
 
     /**
@@ -145,6 +138,56 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         $node->args[] = new Arg($this->createArrayWithInstanceOf());
 
         return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\If_ $node
+     *
+     * @return \PhpParser\Node
+     */
+    protected function addNewPluginIntoIfCondition(If_ $node): Node
+    {
+        if ($this->getIfClausePrettyPrint($node) === $this->classMetadataTransfer->getCondition()) {
+            $this->addNewPluginInstance($node);
+
+            return $node;
+        }
+
+        foreach ($node->stmts as $stmt) {
+            if ($stmt instanceof If_) {
+                return $this->addNewPluginIntoIfCondition($stmt);
+            }
+        }
+
+        return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\If_ $statement
+     *
+     * @return void
+     */
+    protected function addNewPluginInstance(If_ $statement): void
+    {
+        foreach ($statement->stmts as $stmt) {
+            if ($stmt instanceof Expression && $stmt->expr instanceof Assign) {
+                array_unshift($statement->stmts, $this->createNewAssignStatement($stmt->expr));
+
+                break;
+            }
+        }
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\Assign $reference
+     *
+     * @return \PhpParser\Node\Stmt\Expression
+     */
+    protected function createNewAssignStatement(Assign $reference): Expression
+    {
+        return new Expression(new Assign($reference->var, (new BuilderFactory())->new(
+            (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
+        )));
     }
 
     /**
@@ -196,7 +239,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             }
 
             $nodeClassName = $item->value->class->toString();
-            if ($nodeClassName === $this->before) {
+            if ($nodeClassName === $this->classMetadataTransfer->getBeforeOrFail()) {
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $items[] = $item;
                 $itemAdded = true;
@@ -204,7 +247,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
                 continue;
             }
 
-            if ($nodeClassName === $this->after) {
+            if ($nodeClassName === $this->classMetadataTransfer->getAfterOrFail()) {
                 $items[] = $item;
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $itemAdded = true;
@@ -237,7 +280,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             }
             $nodeClassName = $item->value->class->toString();
 
-            if ($this->isKeyEqualsToCurrentOne($item) && $nodeClassName === $this->className) {
+            if ($this->isKeyEqualsToCurrentOne($item) && $nodeClassName === $this->classMetadataTransfer->getSourceOrFail()) {
                 return true;
             }
         }
@@ -254,7 +297,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     {
         $nodeKey = $this->getArrayItemNodeKey($node);
 
-        return ltrim((string)$nodeKey, '\\') === ltrim((string)$this->index, '\\');
+        return ltrim((string)$nodeKey, '\\') === ltrim((string)$this->classMetadataTransfer->getIndex(), '\\');
     }
 
     /**
@@ -286,9 +329,9 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     {
         return new ArrayItem(
             (new BuilderFactory())->new(
-                (new ClassHelper())->getShortClassName($this->className),
+                (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
             ),
-            $this->index ? $this->createIndexExpr($this->index) : null,
+            $this->classMetadataTransfer->getIndex() ? $this->createIndexExpr($this->classMetadataTransfer->getIndex()) : null,
         );
     }
 

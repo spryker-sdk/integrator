@@ -34,6 +34,11 @@ class IntegratorConfig
     /**
      * @var string
      */
+    public const MANIFEST_KEY_CONDITION = 'condition';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_IS_LITERAL = 'is_literal';
 
     /**
@@ -55,6 +60,26 @@ class IntegratorConfig
      * @var string
      */
     public const MANIFEST_KEY_POSITION = 'position';
+
+    /**
+     * @var string
+     */
+    public const MANIFEST_KEY_ARGUMENTS = 'arguments';
+
+    /**
+     * @var string
+     */
+    public const MANIFEST_KEY_ARGUMENTS_PREPEND = 'prepend-arguments';
+
+    /**
+     * @var string
+     */
+    public const MANIFEST_KEY_ARGUMENTS_APPEND = 'append-arguments';
+
+    /**
+     * @var string
+     */
+    public const MANIFEST_KEY_ARGUMENTS_CONSTRUCTOR = 'constructor-arguments';
 
     /**
      * @var string

@@ -14,7 +14,7 @@
         "symfony/finder": "^5.3.0"
     },
     "require-dev": {
-        "spryker/code-sniffer": "@stable",
+        "spryker/code-sniffer": "dev-master",
         "phpunit/phpunit": "^9.5.0",
         "phpstan/phpstan": "^1.0.0",
         "symfony/filesystem": "^5.3.0"

@@ -5,6 +5,8 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
+declare(strict_types=1);
+
 namespace SprykerSdkTest\Integrator;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
@@ -108,7 +110,7 @@ class IntegratorFacadeTest extends BaseTestCase
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
-        $this->assertSame(trim(file_get_contents($classPath)), trim(file_get_contents($testFilePath)));
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
     }
 
     /**
@@ -125,6 +127,46 @@ class IntegratorFacadeTest extends BaseTestCase
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_unwire_plugin_dependency_provider.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorUnwirePlugin/TestIntegratorUnwirePluginDependencyProvider.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunInstallationWireConsole(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWireConsole'), $ioAdapter, false);
+
+        // Assert
+        $testFilePath = './tests/_data/_tests_files/test_integrator_wire_console.php';
+        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorWireConsoleCommands/ConsoleDependencyProvider.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunInstallationUnwireConsole(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwireConsole'), $ioAdapter, false);
+
+        // Assert
+        $testFilePath = './tests/_data/_tests_files/test_integrator_unwire_console.php';
+        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorUnwireConsoleCommands/ConsoleDependencyProvider.php';
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -258,7 +300,7 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
-    public function testRunInstallationWireGlueRelaitonship(): void
+    public function testRunInstallationWireGlueRelationship(): void
     {
         // Arrange
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
@@ -279,7 +321,7 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
-    public function testRunInstallationUnwireGlueRelaitonship(): void
+    public function testRunInstallationUnwireGlueRelationship(): void
     {
         // Arrange
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
@@ -381,7 +423,7 @@ class IntegratorFacadeTest extends BaseTestCase
      */
     private function buildInput(): InputInterface
     {
-        $verboseOption = new InputOption(InputOutputInterface::DEBUG);
+        $verboseOption = new InputOption('verboseOption', null, InputOutputInterface::DEBUG);
         $inputDefinition = new InputDefinition();
 
         $inputDefinition->addOption($verboseOption);
@@ -502,6 +544,9 @@ class IntegratorFacadeTest extends BaseTestCase
      */
     private function clearTestEnv(): void
     {
-        //$this->removeTmpDirectory();
+        $this->removeTmpDirectory();
+        $this->createTmpDirectory();
+        $this->createTmpStandaloneModulesDirectory();
+        $this->copyProjectMockToTmpDirectory();
     }
 }
