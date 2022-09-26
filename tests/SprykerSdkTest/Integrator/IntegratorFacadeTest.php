@@ -145,7 +145,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWireConsole'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_data/_tests_files/test_integrator_wire_console.php';
+        $testFilePath = './tests/_data/tests_files/test_integrator_wire_console.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorWireConsoleCommands/ConsoleDependencyProvider.php';
 
         $this->assertFileExists($classPath);
@@ -165,7 +165,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwireConsole'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_data/_tests_files/test_integrator_unwire_console.php';
+        $testFilePath = './tests/_data/tests_files/test_integrator_unwire_console.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorUnwireConsoleCommands/ConsoleDependencyProvider.php';
 
         $this->assertFileExists($classPath);
