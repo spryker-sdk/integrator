@@ -9,11 +9,29 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
+use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 class UnwirePluginManifestStrategy extends AbstractManifestStrategy
 {
+    protected ClassMetadataBuilderInterface $metadataBuilder;
+
+    /**
+     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @param \SprykerSdk\Integrator\Helper\ClassHelperInterface $classHelper
+     * @param \SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface $metadataBuilder
+     */
+    public function __construct(
+        IntegratorConfig $config,
+        ClassHelperInterface $classHelper,
+        ClassMetadataBuilderInterface $metadataBuilder
+    ) {
+        parent::__construct($config, $classHelper);
+        $this->metadataBuilder = $metadataBuilder;
+    }
+
     /**
      * @return string
      */
@@ -41,10 +59,11 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
                 continue;
             }
 
+            $classMetadataTransfer = $this->metadataBuilder->build($manifest);
+
             $classInformationTransfer = $this->createClassBuilderFacade()->unwireClassInstance(
                 $classInformationTransfer,
-                $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
-                $targetMethodName,
+                $classMetadataTransfer,
             );
 
             if ($classInformationTransfer) {

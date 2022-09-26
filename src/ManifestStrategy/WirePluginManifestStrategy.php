@@ -10,11 +10,29 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use ReflectionClass;
+use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 class WirePluginManifestStrategy extends AbstractManifestStrategy
 {
+    protected ClassMetadataBuilderInterface $metadataBuilder;
+
+    /**
+     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @param \SprykerSdk\Integrator\Helper\ClassHelperInterface $classHelper
+     * @param \SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface $metadataBuilder
+     */
+    public function __construct(
+        IntegratorConfig $config,
+        ClassHelperInterface $classHelper,
+        ClassMetadataBuilderInterface $metadataBuilder
+    ) {
+        parent::__construct($config, $classHelper);
+        $this->metadataBuilder = $metadataBuilder;
+    }
+
     /**
      * @return string
      */
@@ -63,13 +81,11 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
                 continue;
             }
 
+            $classMetadataTransfer = $this->metadataBuilder->build($manifest);
+
             $classInformationTransfer = $this->createClassBuilderFacade()->wireClassInstance(
                 $classInformationTransfer,
-                $targetMethodName,
-                $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE],
-                $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] ?? '',
-                $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '',
-                $manifest[IntegratorConfig::MANIFEST_KEY_INDEX] ?? null,
+                $classMetadataTransfer,
             );
 
             if ($isDry) {

@@ -23,4 +23,9 @@
         <exclude-pattern>src/Builder/Printer/ClassPrinter\.php</exclude-pattern>
     </rule>
 
+    <rule ref="Spryker.PHP.DeclareStrictTypesAfterFileDoc">
+        <properties>
+            <property name="strictTypesMandatory" value="true"/>
+        </properties>
+    </rule>
 </ruleset>

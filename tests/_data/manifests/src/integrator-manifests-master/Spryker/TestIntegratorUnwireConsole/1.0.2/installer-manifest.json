@@ -1,0 +1,16 @@
+{
+    "unwire-plugin": [
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorUnwireConsoleCommands\\ConsoleDependencyProvider::getConsoleCommands",
+            "source": "\\Spryker\\Zed\\TestIntegratorUnwireConsoleCommands\\Console\\TestPlainConsole"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorUnwireConsoleCommands\\ConsoleDependencyProvider::getConsoleCommands",
+            "source": "\\Spryker\\Zed\\TestIntegratorUnwireConsoleCommands\\Console\\TestDevConsole"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorUnwireConsoleCommands\\ConsoleDependencyProvider::getConsoleCommands",
+            "source": "\\Spryker\\Zed\\TestIntegratorUnwireConsoleCommands\\Console\\TestClassExistsConsole"
+        }
+    ]
+}
