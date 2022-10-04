@@ -45,10 +45,15 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "cs-check": "vendor/bin/phpcs",
-        "cs-fix": "vendor/bin/phpcbf",
-        "stan": "vendor/bin/phpstan analyse",
-        "test": "vendor/bin/phpunit"
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "stan": "phpstan",
+        "linters": [
+            "@cs-fix",
+            "@cs-check",
+            "@stan"
+        ],
+        "test": "phpunit"
     },
     "extra": {
         "branch-alias": {

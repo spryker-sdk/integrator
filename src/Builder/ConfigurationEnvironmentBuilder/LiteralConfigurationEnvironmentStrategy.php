@@ -20,11 +20,7 @@ class LiteralConfigurationEnvironmentStrategy implements ConfigurationEnvironmen
      */
     public function isApplicable($value): bool
     {
-        if (!is_array($value) || empty($value[IntegratorConfig::MANIFEST_KEY_IS_LITERAL])) {
-            return false;
-        }
-
-        return true;
+        return is_array($value) && !empty($value[IntegratorConfig::MANIFEST_KEY_IS_LITERAL]);
     }
 
     /**

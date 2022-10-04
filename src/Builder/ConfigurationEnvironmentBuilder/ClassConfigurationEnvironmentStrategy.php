@@ -18,11 +18,7 @@ class ClassConfigurationEnvironmentStrategy implements ConfigurationEnvironmentS
      */
     public function isApplicable($value): bool
     {
-        if (!is_string($value) || !preg_match('/::class$/', $value)) {
-            return false;
-        }
-
-        return true;
+        return is_string($value) && preg_match('/::class$/', $value);
     }
 
     /**

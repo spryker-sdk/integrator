@@ -246,6 +246,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
                 continue;
             }
+
             if ($nodeClassName === $this->classMetadataTransfer->getAfterOrFail()) {
                 $items[] = $item;
                 $items[] = $this->createArrayItemWithInstanceOf();

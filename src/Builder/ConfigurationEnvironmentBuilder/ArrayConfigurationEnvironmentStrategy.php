@@ -20,11 +20,7 @@ class ArrayConfigurationEnvironmentStrategy implements ConfigurationEnvironmentS
      */
     public function isApplicable($value): bool
     {
-        if (!is_array($value) || !empty($value[IntegratorConfig::MANIFEST_KEY_IS_LITERAL])) {
-            return false;
-        }
-
-        return true;
+        return is_array($value) && empty($value[IntegratorConfig::MANIFEST_KEY_IS_LITERAL]);
     }
 
     /**
@@ -47,6 +43,7 @@ class ArrayConfigurationEnvironmentStrategy implements ConfigurationEnvironmentS
     {
         $level++;
         $result = ['['];
+
         foreach ($value as $keyValueItem => $valueItem) {
             $outputFormat = '\'%s\',';
             if (is_array($valueItem)) {
@@ -62,6 +59,7 @@ class ArrayConfigurationEnvironmentStrategy implements ConfigurationEnvironmentS
             $formattedValue = $this->getFormattedValueExpression($valueItem);
             $result[] = $this->createIndent($level) . sprintf('%s => %s,', $formattedKeyValue, $formattedValue);
         }
+
         $result[] = $this->createIndent($level - 1) . ']';
 
         return implode("\n", $result);

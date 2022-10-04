@@ -28,10 +28,6 @@ class BooleanConfigurationEnvironmentStrategy implements ConfigurationEnvironmen
      */
     public function getFormattedExpression($value): string
     {
-        if ($value) {
-            return 'true';
-        }
-
-        return 'false';
+        return $value ? 'true' : 'false';
     }
 }
