@@ -151,10 +151,48 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
      */
     protected function addPositions(array $manifest, ClassMetadataTransfer $transfer): ClassMetadataTransfer
     {
-        $transfer->setBefore(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE] ?? '', '\\'));
-        $transfer->setAfter(ltrim($manifest[IntegratorConfig::MANIFEST_KEY_POSITION][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER] ?? '', '\\'));
+        $transfer->setBefore($this->getPositions($manifest, IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE));
+        $transfer->setAfter($this->getPositions($manifest, IntegratorConfig::MANIFEST_KEY_POSITION_AFTER));
         $transfer->setCondition($manifest[IntegratorConfig::MANIFEST_KEY_CONDITION] ?? null);
 
         return $transfer;
+    }
+
+    /**
+     * @param array $manifest
+     * @param string $positionKey
+     *
+     * @return \ArrayObject
+     */
+    protected function getPositions(array $manifest, string $positionKey): ArrayObject
+    {
+        $positions = new ArrayObject();
+
+        $positionData = $manifest[IntegratorConfig::MANIFEST_KEY_POSITION][$positionKey] ?? null;
+        if (!$positionData) {
+            return $positions;
+        }
+
+        if (is_string($positionData)) {
+            $positions->append($this->removeLeadingSlash($positionData));
+
+            return $positions;
+        }
+
+        foreach ($positionData as $position) {
+            $positions->append($this->removeLeadingSlash($position));
+        }
+
+        return $positions;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string|null
+     */
+    protected function removeLeadingSlash(string $value): ?string
+    {
+        return ltrim($value, '\\');
     }
 }

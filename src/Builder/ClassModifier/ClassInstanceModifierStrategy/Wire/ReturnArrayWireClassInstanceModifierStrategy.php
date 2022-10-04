@@ -14,6 +14,7 @@ use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -27,11 +28,20 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
     protected ApplicableModifierStrategyInterface $applicableCheck;
 
     /**
-     * @param \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface $applicableCheck
+     * @var \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface
      */
-    public function __construct(ApplicableModifierStrategyInterface $applicableCheck)
-    {
+    protected PluginPositionResolverInterface $pluginPositionResolver;
+
+    /**
+     * @param \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface $applicableCheck
+     * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
+     */
+    public function __construct(
+        ApplicableModifierStrategyInterface $applicableCheck,
+        PluginPositionResolverInterface $pluginPositionResolver
+    ) {
         $this->applicableCheck = $applicableCheck;
+        $this->pluginPositionResolver = $pluginPositionResolver;
     }
 
     /**
@@ -94,6 +104,7 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
             new AddUseVisitor($classMetadataTransfer->getSourceOrFail()),
             new AddPluginToPluginListVisitor(
                 $classMetadataTransfer,
+                $this->pluginPositionResolver,
             ),
         ];
     }

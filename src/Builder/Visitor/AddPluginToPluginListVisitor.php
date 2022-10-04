@@ -28,6 +28,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -54,16 +55,25 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $classMetadataTransfer;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface
+     */
+    protected PluginPositionResolverInterface $pluginPositionResolver;
+
+    /**
      * @var bool
      */
     protected $methodFound = false;
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
+     * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
      */
-    public function __construct(ClassMetadataTransfer $classMetadataTransfer)
-    {
+    public function __construct(
+        ClassMetadataTransfer $classMetadataTransfer,
+        PluginPositionResolverInterface $pluginPositionResolver
+    ) {
         $this->classMetadataTransfer = $classMetadataTransfer;
+        $this->pluginPositionResolver = $pluginPositionResolver;
     }
 
     /**
@@ -233,21 +243,28 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
         $items = [];
         $itemAdded = false;
+        $beforePlugin = $this->pluginPositionResolver->getFirstExistPluginByPositions(
+            $this->getPluginList($node),
+            $this->classMetadataTransfer->getBefore()->getArrayCopy(),
+        );
+        $afterPlugin = $this->pluginPositionResolver->getFirstExistPluginByPositions(
+            $this->getPluginList($node),
+            $this->classMetadataTransfer->getAfter()->getArrayCopy(),
+        );
         foreach ($node->items as $item) {
             if ($item === null || !($item->value instanceof New_)) {
                 continue;
             }
 
             $nodeClassName = $item->value->class->toString();
-            if ($nodeClassName === $this->classMetadataTransfer->getBeforeOrFail()) {
+            if ($nodeClassName === $beforePlugin) {
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $items[] = $item;
                 $itemAdded = true;
 
                 continue;
             }
-
-            if ($nodeClassName === $this->classMetadataTransfer->getAfterOrFail()) {
+            if ($nodeClassName === $afterPlugin) {
                 $items[] = $item;
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $itemAdded = true;
@@ -258,6 +275,11 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             $items[] = $item;
         }
 
+        if (!$itemAdded && $beforePlugin) {
+            array_unshift($items, $this->createArrayItemWithInstanceOf());
+            $itemAdded = true;
+        }
+
         if (!$itemAdded) {
             $items[] = $this->createArrayItemWithInstanceOf();
         }
@@ -265,6 +287,26 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         $node->items = $items;
 
         return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node $node
+     *
+     * @return array<string>
+     */
+    protected function getPluginList(Node $node): array
+    {
+        $plugins = [];
+
+        foreach ($node->items as $item) {
+            if ($item === null || !($item->value instanceof New_)) {
+                continue;
+            }
+
+            $plugins[] = $item->value->class->toString();
+        }
+
+        return $plugins;
     }
 
     /**
