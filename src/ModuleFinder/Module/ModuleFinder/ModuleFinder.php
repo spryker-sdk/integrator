@@ -9,10 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ModuleFinder\Module\ModuleFinder;
 
-use Laminas\Filter\FilterChain;
-use Laminas\Filter\StringToLower;
-use Laminas\Filter\Word\CamelCaseToDash;
-use Laminas\Filter\Word\DashToCamelCase;
+use SprykerSdk\Integrator\Common\UtilText\TextCaseHelper;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\ModuleFinder\Module\ModuleMatcher\ModuleMatcherInterface;
 use SprykerSdk\Integrator\Transfer\ApplicationTransfer;
@@ -83,7 +80,7 @@ class ModuleFinder implements ModuleFinderInterface
     protected function addStandaloneModulesToCollection(array $moduleTransferCollection, ?ModuleFilterTransfer $moduleFilterTransfer = null): array
     {
         foreach ($this->getStandaloneModuleFinder() as $directoryInfo) {
-            if (in_array($this->camelCase($directoryInfo->getFilename()), $this->config->getCoreNonSplitOrganisations(), true)) {
+            if (in_array(TextCaseHelper::dashToCamelCase($directoryInfo->getFilename()), $this->config->getCoreNonSplitOrganisations(), true)) {
                 continue;
             }
 
@@ -240,10 +237,10 @@ class ModuleFinder implements ModuleFinderInterface
     protected function buildModuleTransferFromDirectoryInformation(SplFileInfo $directoryInfo): ModuleTransfer
     {
         $organizationNameDashed = $this->getOrganizationNameFromDirectory($directoryInfo);
-        $organizationName = $this->camelCase($organizationNameDashed);
+        $organizationName = TextCaseHelper::dashToCamelCase($organizationNameDashed);
 
-        $moduleName = $this->camelCase($this->getModuleNameFromDirectory($directoryInfo));
-        $moduleNameDashed = $this->dasherize($moduleName);
+        $moduleName = TextCaseHelper::dashToCamelCase($this->getModuleNameFromDirectory($directoryInfo));
+        $moduleNameDashed = TextCaseHelper::camelCaseToDash($moduleName);
 
         $organizationTransfer = $this->buildOrganizationTransfer($organizationName, $organizationNameDashed);
 
@@ -265,10 +262,10 @@ class ModuleFinder implements ModuleFinderInterface
         $composerJsonAsArray = $this->getComposerJsonAsArray($directoryInfo->getPathname());
 
         $organizationNameDashed = $this->getOrganizationNameFromComposer($composerJsonAsArray);
-        $organizationName = $this->camelCase($organizationNameDashed);
+        $organizationName = TextCaseHelper::dashToCamelCase($organizationNameDashed);
 
         $moduleNameDashed = $this->getModuleNameFromComposer($composerJsonAsArray);
-        $moduleName = $this->camelCase($moduleNameDashed);
+        $moduleName = TextCaseHelper::dashToCamelCase($moduleNameDashed);
 
         $organizationTransfer = $this->buildOrganizationTransfer($organizationName, $organizationNameDashed);
 
@@ -430,33 +427,5 @@ class ModuleFinder implements ModuleFinderInterface
     protected function getModuleNameFromDirectory(SplFileInfo $directoryInfo): string
     {
         return $directoryInfo->getRelativePathname();
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    protected function camelCase(string $value): string
-    {
-        $filterChain = new FilterChain();
-        $filterChain->attach(new DashToCamelCase());
-
-        return ucfirst($filterChain->filter($value));
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    protected function dasherize(string $value): string
-    {
-        $filterChain = new FilterChain();
-        $filterChain
-            ->attach(new CamelCaseToDash())
-            ->attach(new StringToLower());
-
-        return $filterChain->filter($value);
     }
 }

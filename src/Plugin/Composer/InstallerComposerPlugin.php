@@ -17,7 +17,7 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
-use SprykerSdk\Integrator\Common\UtilText\Filter\SeparatorToCamelCase;
+use SprykerSdk\Integrator\Common\UtilText\TextCaseHelper;
 use SprykerSdk\Integrator\Dependency\Console\ComposerInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFacade;
 use SprykerSdk\Integrator\IntegratorFacadeInterface;
@@ -153,16 +153,15 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
      */
     protected function createModuleTransfer(string $moduleName): ModuleTransfer
     {
-        $dashToCamelCaseFilter = new SeparatorToCamelCase();
         [$moduleName, $organization] = explode('/', $moduleName);
 
         $organisationTransfer = (new OrganizationTransfer())
             ->setNameDashed($organization)
-            ->setName($dashToCamelCaseFilter->filter($organization, '-'));
+            ->setName(TextCaseHelper::dashToCamelCase($organization, false));
 
         return (new ModuleTransfer())
             ->setNameDashed($moduleName)
-            ->setName($dashToCamelCaseFilter->filter($moduleName, '-'))
+            ->setName(TextCaseHelper::dashToCamelCase($moduleName, false))
             ->setOrganization($organisationTransfer);
     }
 
