@@ -248,8 +248,7 @@ class ModuleFinder implements ModuleFinderInterface
         $organizationTransfer = $this->buildOrganizationTransfer($organizationName, $organizationNameDashed);
 
         $moduleTransfer = $this->buildModuleTransfer($moduleName, $moduleNameDashed, $directoryInfo);
-        $moduleTransfer
-            ->setOrganization($organizationTransfer);
+        $moduleTransfer->setOrganization($organizationTransfer);
 
         $moduleTransfer = $this->addApplications($moduleTransfer);
 
@@ -274,8 +273,7 @@ class ModuleFinder implements ModuleFinderInterface
         $organizationTransfer = $this->buildOrganizationTransfer($organizationName, $organizationNameDashed);
 
         $moduleTransfer = $this->buildModuleTransfer($moduleName, $moduleNameDashed, $directoryInfo);
-        $moduleTransfer
-            ->setOrganization($organizationTransfer);
+        $moduleTransfer->setOrganization($organizationTransfer);
 
         $moduleTransfer = $this->addApplications($moduleTransfer);
 

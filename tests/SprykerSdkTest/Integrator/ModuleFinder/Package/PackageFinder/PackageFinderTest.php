@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdkTest\Integrator\ModuleFinder\Package;
+namespace SprykerSdkTest\Integrator\ModuleFinder\Package\PackageFinder;
 
 use Generator;
 use PHPUnit\Framework\TestCase;
@@ -20,14 +20,6 @@ class PackageFinderTest extends TestCase
      * @var \SprykerSdk\Integrator\ModuleFinder\Package\PackageFinder\PackageFinder
      */
     protected PackageFinder $packageFinder;
-
-    /**
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        $this->packageFinder = new PackageFinder($this->createMock(IntegratorConfig::class));
-    }
 
     /**
      * @dataProvider camelCaseDataProvider
@@ -58,5 +50,24 @@ class PackageFinderTest extends TestCase
         foreach ($testData as $set) {
             yield $set;
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetPackages(): void
+    {
+        $this->assertSame([], $this->packageFinder->getPackages());
+    }
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $configMock = $this->createMock(IntegratorConfig::class);
+        $configMock->method('getVendorDirectory')->willReturn('./tests/_data/project_mock/vendor/');
+
+        $this->packageFinder = new PackageFinder($configMock);
     }
 }
