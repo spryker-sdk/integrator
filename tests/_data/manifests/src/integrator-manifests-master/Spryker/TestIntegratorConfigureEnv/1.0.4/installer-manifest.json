@@ -83,6 +83,12 @@
             }
         },
         {
+            "target": "\\Spryker\\Shared\\Oms\\OmsConstants::PROCESS_LOCATION",
+            "value": [
+                "APPLICATION_SOURCE_DIR . '/vendor/spryker/payment/config/Zed/Oms'"
+            ]
+        },
+        {
             "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::ENCRYPTION_KEY",
             "value":
             {

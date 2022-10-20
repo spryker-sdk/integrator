@@ -45,13 +45,11 @@ class ArrayConfigurationEnvironmentStrategy implements ConfigurationEnvironmentS
         $result = ['['];
 
         foreach ($value as $keyValueItem => $valueItem) {
-            $outputFormat = '\'%s\',';
             if (is_array($valueItem)) {
                 $valueItem = $this->createExpressionStringFromValue($valueItem, $level);
-                $outputFormat = '%s,';
             }
             if (is_int($keyValueItem)) {
-                $result[] = $this->createIndent($level) . sprintf($outputFormat, trim($valueItem, '\''));
+                $result[] = $this->createIndent($level) . sprintf('%s,', $this->getFormattedValueExpression($valueItem));
 
                 continue;
             }
@@ -88,11 +86,21 @@ class ArrayConfigurationEnvironmentStrategy implements ConfigurationEnvironmentS
     /**
      * @param string $expression
      *
+     * @return bool
+     */
+    protected function isLiteral(string $expression): bool
+    {
+        return (bool)preg_match('/\'/', trim($expression, '\''));
+    }
+
+    /**
+     * @param string $expression
+     *
      * @return string
      */
     protected function getFormattedValueExpression(string $expression): string
     {
-        if ($this->isComplicatedExpression($expression)) {
+        if ($this->isComplicatedExpression($expression) || $this->isLiteral($expression)) {
             return $expression;
         }
 
