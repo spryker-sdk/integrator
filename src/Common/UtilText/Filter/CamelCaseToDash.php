@@ -25,6 +25,8 @@ class CamelCaseToDash extends AbstractSeparator
      */
     public function filter($string): string
     {
-        return (string)preg_replace('/([a-z])([A-Z])/', '$1' . addcslashes($this->getSeparator(), '$') . '$2', $string);
+        $value = preg_replace('/([a-z])([A-Z])/', '$1' . addcslashes($this->getSeparator(), '$') . '$2', $string);
+
+        return is_array($value) ? (string)array_shift($value) : (string)$value;
     }
 }
