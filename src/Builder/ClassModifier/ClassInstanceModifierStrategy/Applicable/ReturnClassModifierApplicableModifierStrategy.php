@@ -33,6 +33,7 @@ class ReturnClassModifierApplicableModifierStrategy implements ApplicableModifie
     {
         if (
             !$node->getReturnType() instanceof Node
+            || !method_exists($node->getReturnType(), 'toString')
         ) {
             return false;
         }
