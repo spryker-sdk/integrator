@@ -7,6 +7,8 @@
 
 namespace Pyz\Zed\TestIntegratorWirePlugin;
 
+use Pyz\Shared\Scheduler\SchedulerConfig;
+use Spryker\Zed\SchedulerJenkins\Communication\Plugin\Adapter\SchedulerJenkinsAdapterPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SinglePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FirstPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SecondPlugin;
@@ -31,6 +33,13 @@ class TestIntegratorWirePluginDependencyProvider
         return [
             new FirstPlugin(),
             new SecondPlugin(),
+        ];
+    }
+
+    protected function getSchedulerAdapterPlugins(): array
+    {
+        return [
+            SchedulerConfig::PYZ_SCHEDULER_JENKINS => new SchedulerJenkinsAdapterPlugin(),
         ];
     }
 
