@@ -18,6 +18,13 @@ use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\AvailabilityStor
 
 class TestIntegratorUnwirePluginDependencyProvider
 {
+    public function getTestOnePlugins(): array
+    {
+        return [
+            new TestIntegratorDefault1Plugin(),
+        ];
+    }
+
     public function getTestPlugins(): array
     {
         return [
