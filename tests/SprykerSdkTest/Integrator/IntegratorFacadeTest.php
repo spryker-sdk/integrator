@@ -105,7 +105,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWirePlugin'), $ioAdapter, false);
 
         // Assert
-        $testFilePath = './tests/_data/tests_files/test_integrator_wire_plugin_dependency_provider.php';
+        $testFilePath = './tests/_data/tests_files/TestIntegratorWirePluginDependencyProvider.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
 
         $this->assertFileExists($classPath);
