@@ -7,6 +7,7 @@
 
 namespace Pyz\Zed\TestIntegratorUnwirePlugin;
 
+use Pyz\Shared\Scheduler\SchedulerConfig;
 use Spryker\Zed\TestIntegratorDefault\Communication\Plugin\TestIntegratorDefault1Plugin;
 use Spryker\Zed\TestIntegratorDefault\Communication\Plugin\TestIntegratorDefault2Plugin;
 use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\TestIntegratorUnwirePlugin;
@@ -15,6 +16,7 @@ use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\TestBarCondition
 use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\UrlStorageEventSubscriber;
 use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\FooStorageEventSubscriber;
 use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\AvailabilityStorageEventSubscriber;
+use Spryker\Zed\SchedulerJenkins\Communication\Plugin\Adapter\SchedulerJenkinsAdapterPlugin;
 
 class TestIntegratorUnwirePluginDependencyProvider
 {
@@ -66,6 +68,13 @@ class TestIntegratorUnwirePluginDependencyProvider
             ->add(new FooStorageEventSubscriber());
 
         return $collection;
+    }
+
+    protected function getSchedulerAdapterPlugins(): array
+    {
+        return [
+            SchedulerConfig::PYZ_SCHEDULER_JENKINS => new SchedulerJenkinsAdapterPlugin(),
+        ];
     }
 
     protected function extendConditionPlugins(Container $container): Container
