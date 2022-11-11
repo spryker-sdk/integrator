@@ -61,7 +61,7 @@ class UnwireNavigationManifestStrategy extends AbstractNavigationManifestStrateg
 
         foreach ($navigation as $key => $value) {
             if (array_key_exists($key, $newNavigations)) {
-                if ($value !== null && $newNavigations[$key] === null) {
+                if ($newNavigations[$key] === null) {
                     // Deleted element is found, do not add element to output array
                 } elseif (is_array($value) && is_array($newNavigations[$key])) {
                     $recursiveDiff = $this->applyNewNavigation($value, $newNavigations[$key]);
