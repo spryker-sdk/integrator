@@ -41,7 +41,7 @@ class UnwireNavigationManifestStrategy extends AbstractNavigationManifestStrateg
 
         $navigation = $this->applyNewNavigation(
             $navigation,
-            $manifest[static::KEY_NAVIGATIONS_CONFIGURATION]
+            $manifest[static::KEY_NAVIGATIONS_CONFIGURATION],
         );
 
         return $this->writeNavigationSchema($navigation, $inputOutput, $isDry);
@@ -49,31 +49,30 @@ class UnwireNavigationManifestStrategy extends AbstractNavigationManifestStrateg
 
     /**
      * @param array<string|int, array<string, mixed>> $navigation
-     * @param array<string|int, array<string, mixed>> $newNavigations
+     * @param array<string|int, array<string, mixed|null>> $newNavigations
      *
-     * @return array<string|int, array<string, mixed>>
+     * @return array<string|int, array<int|string, mixed>>
      */
     protected function applyNewNavigation(
         array $navigation,
         array $newNavigations
-    ): array
-    {
+    ): array {
         $outputDiff = [];
 
         foreach ($navigation as $key => $value) {
             if (array_key_exists($key, $newNavigations)) {
                 if ($value !== null && $newNavigations[$key] === null) {
                     // Deleted element is found, do not add element to output array
-                } else if (is_array($value) && is_array($newNavigations[$key])) {
+                } elseif (is_array($value) && is_array($newNavigations[$key])) {
                     $recursiveDiff = $this->applyNewNavigation($value, $newNavigations[$key]);
 
                     if (count($recursiveDiff)) {
                         $outputDiff[$key] = $recursiveDiff;
                     }
-                } else if (!in_array($value, $newNavigations)) {
+                } elseif (!in_array($value, $newNavigations)) {
                     $outputDiff[$key] = $value;
                 }
-            } else if (!in_array($value, $newNavigations)) {
+            } elseif (!in_array($value, $newNavigations)) {
                 $outputDiff[$key] = $value;
             }
         }
