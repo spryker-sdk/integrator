@@ -48,7 +48,7 @@ class UnwireNavigationManifestStrategy extends AbstractNavigationManifestStrateg
     }
 
     /**
-     * @param array<string|int, array<string, mixed>> $navigation
+     * @param array<string|int, array<int|string, mixed>> $navigation
      * @param array<string|int, array<string, mixed|null>> $newNavigations
      *
      * @return array<string|int, array<int|string, mixed>>
@@ -81,7 +81,7 @@ class UnwireNavigationManifestStrategy extends AbstractNavigationManifestStrateg
     }
 
     /**
-     * @param array<string|int, array<string, mixed>> $navigation
+     * @param array<string|int, array<int|string, mixed>> $navigation
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *

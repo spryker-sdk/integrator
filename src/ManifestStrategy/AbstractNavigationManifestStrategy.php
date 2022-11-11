@@ -71,7 +71,7 @@ abstract class AbstractNavigationManifestStrategy extends AbstractManifestStrate
     }
 
     /**
-     * @param array<string|int, array<string, mixed>> $navigation
+     * @param array<string|int, array<int|string, mixed>> $navigation
      *
      * @return \SimpleXMLElement
      */
@@ -84,7 +84,7 @@ abstract class AbstractNavigationManifestStrategy extends AbstractManifestStrate
     }
 
     /**
-     * @param array<string|int, array<string, mixed>|string> $navigation
+     * @param array<string|int, array<int|string, mixed>|string> $navigation
      * @param \SimpleXMLElement $parentXmlElement
      *
      * @return \SimpleXMLElement
