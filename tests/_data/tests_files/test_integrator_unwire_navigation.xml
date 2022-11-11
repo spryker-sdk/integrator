@@ -7,5 +7,15 @@
         <bundle>main</bundle>
         <controller>index</controller>
         <action>index</action>
+        <pages>
+            <main-nested>
+                <label>Before main - nested</label>
+                <title>Before main - nested</title>
+                <icon>fa-archive</icon>
+                <bundle>before-main-nested</bundle>
+                <controller>index</controller>
+                <action>index</action>
+            </main-nested>
+        </pages>
     </main>
 </config>

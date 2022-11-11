@@ -9,6 +9,26 @@
         <controller>index</controller>
         <action>index</action>
         <visibility>0</visibility>
+        <pages>
+            <main-nested>
+                <label>Before main - nested</label>
+                <title>Before main - nested</title>
+                <icon>fa-archive</icon>
+                <bundle>before-main-nested</bundle>
+                <controller>index</controller>
+                <action>index</action>
+                <visible>0</visible>
+            </main-nested>
+            <main-nested2>
+                <label>Before main - nested</label>
+                <title>Before main - nested</title>
+                <icon>fa-archive</icon>
+                <bundle>before-main-nested</bundle>
+                <controller>index</controller>
+                <action>index</action>
+                <visible>0</visible>
+            </main-nested2>
+        </pages>
     </main>
     <element2>
         <label>Element 2</label>

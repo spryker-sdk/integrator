@@ -11,6 +11,26 @@
             "navigations": {
                 "element2": null
             }
+        },
+        {
+            "navigations": {
+                "main": {
+                    "pages": {
+                        "main-nested": {
+                            "visible": null
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "navigations": {
+                "main": {
+                    "pages": {
+                        "main-nested2": null
+                    }
+                }
+            }
         }
     ]
 }
