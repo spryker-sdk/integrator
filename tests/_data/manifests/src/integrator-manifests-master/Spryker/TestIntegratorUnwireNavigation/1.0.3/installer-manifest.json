@@ -3,8 +3,13 @@
         {
             "navigations": {
                 "main": {
-                    "label": null
+                    "visibility": null
                 }
+            }
+        },
+        {
+            "navigations": {
+                "element2": null
             }
         }
     ]

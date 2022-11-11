@@ -26,6 +26,7 @@
         <bundle>main</bundle>
         <controller>index</controller>
         <action>index</action>
+        <visibility>0</visibility>
     </main>
     <after-main>
         <label>After main</label>
@@ -36,6 +37,14 @@
         <action>index</action>
         <visible>0</visible>
     </after-main>
+    <element2>
+        <label>Element 2</label>
+        <title>Element 2</title>
+        <icon>fa-archive</icon>
+        <bundle>element2</bundle>
+        <controller>index</controller>
+        <action>newIndex</action>
+    </element2>
     <new-latest>
         <label>New latest</label>
         <title>New latest</title>

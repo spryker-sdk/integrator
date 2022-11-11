@@ -1,4 +1,11 @@
 <?xml version="1.0"?>
 <config>
-
+    <main>
+        <label>Main</label>
+        <title>Main</title>
+        <icon>fa-archive</icon>
+        <bundle>main</bundle>
+        <controller>index</controller>
+        <action>index</action>
+    </main>
 </config>

@@ -8,6 +8,15 @@
         <bundle>main</bundle>
         <controller>index</controller>
         <action>index</action>
+        <visibility>0</visibility>
     </main>
+    <element2>
+        <label>Element 2</label>
+        <title>Element 2</title>
+        <icon>fa-archive</icon>
+        <bundle>element2</bundle>
+        <controller>index</controller>
+        <action>newIndex</action>
+    </element2>
     <!-- Test redundant comment -->
 </config>
