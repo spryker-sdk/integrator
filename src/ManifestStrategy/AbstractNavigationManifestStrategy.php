@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
+use SimpleXMLElement;
 use SprykerSdk\Integrator\Exception\UnexpectedNavigationXmlStructureException;
 
 abstract class AbstractNavigationManifestStrategy extends AbstractManifestStrategy

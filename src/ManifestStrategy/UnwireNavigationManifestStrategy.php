@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use DOMDocument;
-use SimpleXMLElement;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Exception\UnexpectedNavigationXmlStructureException;
 
@@ -42,9 +41,7 @@ class UnwireNavigationManifestStrategy extends AbstractNavigationManifestStrateg
 
         $navigation = $this->applyNewNavigation(
             $navigation,
-            $manifest[static::KEY_NAVIGATIONS_CONFIGURATION],
-            $manifest[static::KEY_NAVIGATION_POSITION_BEFORE] ?? null,
-            $manifest[static::KEY_NAVIGATION_POSITION_AFTER] ?? null,
+            $manifest[static::KEY_NAVIGATIONS_CONFIGURATION]
         );
 
         return $this->writeNavigationSchema($navigation, $inputOutput, $isDry);
@@ -53,95 +50,35 @@ class UnwireNavigationManifestStrategy extends AbstractNavigationManifestStrateg
     /**
      * @param array<string|int, array<string, mixed>> $navigation
      * @param array<string|int, array<string, mixed>> $newNavigations
-     * @param string|null $before
-     * @param string|null $after
      *
      * @return array<string|int, array<string, mixed>>
      */
     protected function applyNewNavigation(
         array $navigation,
-        array $newNavigations,
-        ?string $before = null,
-        ?string $after = null
-    ): array {
-        // TODO: Implement changes here
-        $newNavigations = $this->prepareNewNavigationsToApplying($newNavigations);
-        $key = $before ?? $after;
-        $position = array_search($key, array_keys($navigation));
-
-        if ($position === false) {
-            return $this->addNewNavigations($navigation, $newNavigations);
-        }
-
-        $offset = $position + 1;
-
-        if ($before !== null) {
-            $offset--;
-        }
-
-        return array_slice($navigation, 0, $offset, true)
-            + $newNavigations
-            + array_slice($navigation, $offset, null, true);
-    }
-
-    /**
-     * @param array<string|int, array<string, mixed>> $newNavigations
-     *
-     * @return array<string|int, array<string, mixed>>
-     */
-    protected function prepareNewNavigationsToApplying(array $newNavigations): array
-    {
-        $resultNewNavigations = [];
-        $navigationDataReplacingMap = [
-            static::NAVIGATION_DATA_KEY_MODULE => static::NAVIGATION_DATA_KEY_BUNDLE,
-        ];
-
-        foreach ($newNavigations as $navigationKey => $navigationData) {
-            $newNavigationData = [];
-
-            foreach ($navigationData as $navigationDataKey => $navigationDataValue) {
-                if (array_key_exists($navigationDataKey, $navigationDataReplacingMap)) {
-                    $newNavigationData[$navigationDataReplacingMap[$navigationDataKey]] = $navigationDataValue;
-
-                    continue;
-                }
-
-                $newNavigationData[$navigationDataKey] = $navigationDataValue;
-            }
-
-            $resultNewNavigations[$navigationKey] = $newNavigationData;
-
-            if (!isset($resultNewNavigations[$navigationKey][static::NAVIGATION_DATA_KEY_PAGES])) {
-                continue;
-            }
-
-            $resultNewNavigations[$navigationKey][static::NAVIGATION_DATA_KEY_PAGES] = $this->prepareNewNavigationsToApplying(
-                $resultNewNavigations[$navigationKey][static::NAVIGATION_DATA_KEY_PAGES],
-            );
-        }
-
-        return $resultNewNavigations;
-    }
-
-    /**
-     * @param array<string|int, array<string, mixed>> $navigation
-     * @param array<string|int, array<string, mixed>> $newNavigations
-     *
-     * @return array<string|int, array<string, mixed>>
-     */
-    protected function addNewNavigations(
-        array $navigation,
         array $newNavigations
-    ): array {
-        foreach ($newNavigations as $navigationItemKey => $navigationItemData) {
-            if (isset($navigation[$navigationItemKey])) {
-                continue;
-            }
+    ): array
+    {
+        $outputDiff = [];
 
-            $navigation[$navigationItemKey] = $navigationItemData;
+        foreach ($navigation as $key => $value) {
+            if (array_key_exists($key, $newNavigations)) {
+                if ($value !== null && $newNavigations[$key] === null) {
+                    // Deleted element is found, do not add element to output array
+                } else if (is_array($value) && is_array($newNavigations[$key])) {
+                    $recursiveDiff = $this->applyNewNavigation($value, $newNavigations[$key]);
+
+                    if (count($recursiveDiff)) {
+                        $outputDiff[$key] = $recursiveDiff;
+                    }
+                } else if (!in_array($value, $newNavigations)) {
+                    $outputDiff[$key] = $value;
+                }
+            } else if (!in_array($value, $newNavigations)) {
+                $outputDiff[$key] = $value;
+            }
         }
 
-        return $navigation;
+        return $outputDiff;
     }
 
     /**
