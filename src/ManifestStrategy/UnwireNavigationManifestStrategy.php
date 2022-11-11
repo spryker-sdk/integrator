@@ -10,17 +10,18 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use DOMDocument;
+use SimpleXMLElement;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Exception\UnexpectedNavigationXmlStructureException;
 
-class WireNavigationManifestStrategy extends AbstractNavigationManifestStrategy
+class UnwireNavigationManifestStrategy extends AbstractNavigationManifestStrategy
 {
     /**
      * @return string
      */
     public function getType(): string
     {
-        return 'wire-navigation';
+        return 'unwire-navigation';
     }
 
     /**
@@ -63,6 +64,7 @@ class WireNavigationManifestStrategy extends AbstractNavigationManifestStrategy
         ?string $before = null,
         ?string $after = null
     ): array {
+        // TODO: Implement changes here
         $newNavigations = $this->prepareNewNavigationsToApplying($newNavigations);
         $key = $before ?? $after;
         $position = array_search($key, array_keys($navigation));

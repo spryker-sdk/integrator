@@ -6,6 +6,7 @@
         "php": ">=8.0",
         "spryker/test-integrator-wire-plugin": "^1.0",
         "spryker/test-integrator-wire-navigation": "^1.0",
+        "spryker/test-integrator-unwire-navigation": "^1.0",
         "spryker/test-integrator-unwire-plugin": "^1.0",
         "spryker/test-integrator-wire-console": "^1.0",
         "spryker/test-integrator-unwire-console": "^1.0",
