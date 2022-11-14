@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SimpleXMLElement;
+use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Exception\UnexpectedNavigationXmlStructureException;
 
 abstract class AbstractNavigationManifestStrategy extends AbstractManifestStrategy
@@ -115,5 +116,50 @@ abstract class AbstractNavigationManifestStrategy extends AbstractManifestStrate
     protected function getNavigationSourceFilePath(): string
     {
         return $this->config->getProjectRootDirectory() . static::TARGET_NAVIGATION_FILE;
+    }
+
+    /**
+     * @param array<string|int, array<string, mixed>> $navigation
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
+     * @param bool $isDry
+     *
+     * @return bool
+     */
+    protected function writeNavigationSchema(array $navigation, InputOutputInterface $inputOutput, bool $isDry): bool
+    {
+        $navigationXmlString = $this->getXmlNavigationFromArrayNavigation($navigation)->asXML();
+
+        if ($isDry) {
+            $inputOutput->writeln($navigationXmlString ?: '');
+
+            return true;
+        }
+
+        if ($navigationXmlString === false) {
+            return false;
+        }
+
+        $navigationXmlDomDocument = new DOMDocument('1.0');
+        $navigationXmlDomDocument->preserveWhiteSpace = false;
+        $navigationXmlDomDocument->formatOutput = true;
+        $navigationXmlDomDocument->loadXML($navigationXmlString);
+
+        $callback = function ($matches) {
+            $multiplier = (int)(strlen($matches[1]) / 2) * 4;
+
+            return str_repeat(' ', $multiplier) . '<';
+        };
+
+        $navigationXmlString = $navigationXmlDomDocument->saveXML();
+
+        if ($navigationXmlString === false) {
+            return false;
+        }
+
+        $content = preg_replace_callback('/^( +)</m', $callback, $navigationXmlString);
+
+        file_put_contents($this->getNavigationSourceFilePath(), $content);
+
+        return true;
     }
 }

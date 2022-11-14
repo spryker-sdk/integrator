@@ -141,49 +141,4 @@ class WireNavigationManifestStrategy extends AbstractNavigationManifestStrategy
 
         return $navigation;
     }
-
-    /**
-     * @param array<string|int, array<string, mixed>> $navigation
-     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
-     * @param bool $isDry
-     *
-     * @return bool
-     */
-    protected function writeNavigationSchema(array $navigation, InputOutputInterface $inputOutput, bool $isDry): bool
-    {
-        $navigationXmlString = $this->getXmlNavigationFromArrayNavigation($navigation)->asXML();
-
-        if ($isDry) {
-            $inputOutput->writeln($navigationXmlString ?: '');
-
-            return true;
-        }
-
-        if ($navigationXmlString === false) {
-            return false;
-        }
-
-        $navigationXmlDomDocument = new DOMDocument('1.0');
-        $navigationXmlDomDocument->preserveWhiteSpace = false;
-        $navigationXmlDomDocument->formatOutput = true;
-        $navigationXmlDomDocument->loadXML($navigationXmlString);
-
-        $callback = function ($matches) {
-            $multiplier = (int)(strlen($matches[1]) / 2) * 4;
-
-            return str_repeat(' ', $multiplier) . '<';
-        };
-
-        $navigationXmlString = $navigationXmlDomDocument->saveXML();
-
-        if ($navigationXmlString === false) {
-            return false;
-        }
-
-        $content = preg_replace_callback('/^( +)</m', $callback, $navigationXmlString);
-
-        file_put_contents($this->getNavigationSourceFilePath(), $content);
-
-        return true;
-    }
 }
