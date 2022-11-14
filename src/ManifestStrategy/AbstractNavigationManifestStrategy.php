@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
+use DOMDocument;
 use SimpleXMLElement;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Exception\UnexpectedNavigationXmlStructureException;
@@ -119,7 +120,7 @@ abstract class AbstractNavigationManifestStrategy extends AbstractManifestStrate
     }
 
     /**
-     * @param array<string|int, array<string, mixed>> $navigation
+     * @param array<int|string, array<int|string, mixed>> $navigation
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
