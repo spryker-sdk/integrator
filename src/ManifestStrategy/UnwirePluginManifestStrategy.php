@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
+use ReflectionClass;
 use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
@@ -51,6 +52,28 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
         [$targetClassName, $targetMethodName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
+
+        if (!class_exists($targetClassName)) {
+            $inputOutput->writeln(sprintf(
+                'Target module %s/%s does not exists in your system.',
+                $this->classHelper->getOrganisationName($targetClassName),
+                $this->classHelper->getModuleName($targetClassName),
+            ), InputOutputInterface::DEBUG);
+
+            return false;
+        }
+
+        $targetClassInfo = (new ReflectionClass($targetClassName));
+
+        if (!$targetClassInfo->hasMethod($targetMethodName)) {
+            $inputOutput->writeln(sprintf(
+                'Your version of module %s/%s does not support needed plugin stack. Please, update it to use full functionality.',
+                $this->classHelper->getOrganisationName($targetClassName),
+                $this->classHelper->getModuleName($targetClassName),
+            ), InputOutputInterface::DEBUG);
+
+            return false;
+        }
 
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
