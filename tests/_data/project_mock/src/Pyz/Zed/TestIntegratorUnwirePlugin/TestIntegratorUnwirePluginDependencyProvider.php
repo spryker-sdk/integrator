@@ -27,6 +27,17 @@ class TestIntegratorUnwirePluginDependencyProvider
         ];
     }
 
+    public function getConditionPlugins(): array
+    {
+        $plugins = [];
+
+        if (class_exists(WebProfilerApplicationPlugin::class)) {
+            $plugins[] = new WebProfilerApplicationPlugin();
+        }
+
+        return $plugins;
+    }
+
     public function getTestPlugins(): array
     {
         return [

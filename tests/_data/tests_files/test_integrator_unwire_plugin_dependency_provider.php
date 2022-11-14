@@ -26,6 +26,13 @@ class TestIntegratorUnwirePluginDependencyProvider
         ];
     }
 
+    public function getConditionPlugins(): array
+    {
+        $plugins = [];
+
+        return $plugins;
+    }
+
     public function getTestPlugins(): array
     {
         return [

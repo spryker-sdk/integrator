@@ -26,6 +26,7 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWire
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginStaticIndex;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginStringIndex;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\UrlStorageEventSubscriber;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\WebProfilerApplicationPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\TestIntegratorWirePluginConfig;
 
 class TestIntegratorWirePluginDependencyProvider
@@ -33,6 +34,17 @@ class TestIntegratorWirePluginDependencyProvider
     public function getSinglePlugin(): TestIntegratorSingleWirePlugin
     {
         return new TestIntegratorSingleWirePlugin();
+    }
+
+    public function getConditionPlugins(): array
+    {
+        $plugins = [];
+
+        if (class_exists(WebProfilerApplicationPlugin::class)) {
+            $plugins[] = new WebProfilerApplicationPlugin();
+        }
+
+        return $plugins;
     }
 
     public function getTestPlugins(): array
