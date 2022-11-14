@@ -20,8 +20,8 @@
                 <visible>0</visible>
             </main-nested>
             <main-nested2>
-                <label>Before main - nested</label>
-                <title>Before main - nested</title>
+                <label>Before main - nested 2</label>
+                <title>Before main - nested 2</title>
                 <icon>fa-archive</icon>
                 <bundle>before-main-nested</bundle>
                 <controller>index</controller>

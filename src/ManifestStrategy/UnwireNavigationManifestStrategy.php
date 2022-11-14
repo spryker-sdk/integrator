@@ -49,30 +49,30 @@ class UnwireNavigationManifestStrategy extends AbstractNavigationManifestStrateg
 
     /**
      * @param array<string|int, array<int|string, mixed>> $navigation
-     * @param array<string|int, array<string, mixed|null>|null> $newNavigations
+     * @param array<string|int, array<string, mixed|null>|null> $manifestData
      *
      * @return array<string|int, array<int|string, mixed>>
      */
     protected function applyNewNavigation(
         array $navigation,
-        array $newNavigations
+        array $manifestData
     ): array {
         $outputDiff = [];
 
         foreach ($navigation as $key => $value) {
-            if (array_key_exists($key, $newNavigations)) {
-                if ($newNavigations[$key] === null) {
+            if (array_key_exists($key, $manifestData)) {
+                if ($manifestData[$key] === null) {
                     // Deleted element is found, do not add element to output array
-                } elseif (is_array($value) && is_array($newNavigations[$key])) {
-                    $recursiveDiff = $this->applyNewNavigation($value, $newNavigations[$key]);
+                } elseif (is_array($value) && is_array($manifestData[$key])) {
+                    $recursiveDiff = $this->applyNewNavigation($value, $manifestData[$key]);
 
                     if (count($recursiveDiff)) {
                         $outputDiff[$key] = $recursiveDiff;
                     }
-                } elseif (!in_array($value, $newNavigations)) {
+                } elseif (!in_array($value, $manifestData)) {
                     $outputDiff[$key] = $value;
                 }
-            } elseif (!in_array($value, $newNavigations)) {
+            } elseif (!in_array($value, $manifestData)) {
                 $outputDiff[$key] = $value;
             }
         }
