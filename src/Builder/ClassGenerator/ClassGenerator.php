@@ -14,7 +14,7 @@ use PhpParser\Builder\Namespace_;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
-use SprykerSdk\Integrator\Common\UtilText\Filter\CamelCaseToSeparator;
+use SprykerSdk\Integrator\Common\UtilText\TextCaseHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
@@ -163,7 +163,7 @@ class ClassGenerator implements ClassGeneratorInterface
     {
         if (in_array($organisation, $this->config->getCoreNonSplitOrganisations())) {
             return $this->config->getVendorDirectory()
-                . sprintf($this->config->getNonSplitRepositoryPathPattern(), $this->camelCaseToDash($organisation))
+                . sprintf($this->config->getNonSplitRepositoryPathPattern(), TextCaseHelper::camelCaseToDash($organisation, false))
                 . $module
                 . DIRECTORY_SEPARATOR;
         }
@@ -203,15 +203,5 @@ class ClassGenerator implements ClassGeneratorInterface
     protected function convertClassNameToPath(string $className): string
     {
         return str_replace('\\', '/', $className);
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    protected function camelCaseToDash(string $value): string
-    {
-        return (new CamelCaseToSeparator())->filter($value);
     }
 }

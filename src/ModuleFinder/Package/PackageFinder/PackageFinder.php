@@ -9,8 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ModuleFinder\Package\PackageFinder;
 
-use Laminas\Filter\FilterChain;
-use Laminas\Filter\Word\DashToCamelCase;
+use SprykerSdk\Integrator\Common\UtilText\TextCaseHelper;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\PackageTransfer;
 use Symfony\Component\Finder\Finder;
@@ -62,10 +61,7 @@ class PackageFinder implements PackageFinderInterface
      */
     public function camelCase(string $value): string
     {
-        $filterChain = new FilterChain();
-        $filterChain->attach(new DashToCamelCase());
-
-        return ucfirst($filterChain->filter($value));
+        return TextCaseHelper::dashToCamelCase($value);
     }
 
     /**

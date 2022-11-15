@@ -15,6 +15,7 @@ use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginCollectionExtendContainerVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -33,13 +34,23 @@ class ReturnExtendContainerWireClassInstanceModifierStrategy implements WireClas
     protected ApplicableModifierStrategyInterface $applicableCheck;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface
+     */
+    protected PluginPositionResolverInterface $pluginPositionResolver;
+
+    /**
      * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface $applicableCheck
+     * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
      */
-    public function __construct(ArgumentBuilderInterface $argumentBuilder, ApplicableModifierStrategyInterface $applicableCheck)
-    {
+    public function __construct(
+        ArgumentBuilderInterface $argumentBuilder,
+        ApplicableModifierStrategyInterface $applicableCheck,
+        PluginPositionResolverInterface $pluginPositionResolver
+    ) {
         $this->argumentBuilder = $argumentBuilder;
         $this->applicableCheck = $applicableCheck;
+        $this->pluginPositionResolver = $pluginPositionResolver;
     }
 
     /**
@@ -81,6 +92,7 @@ class ReturnExtendContainerWireClassInstanceModifierStrategy implements WireClas
             new AddPluginToPluginCollectionExtendContainerVisitor(
                 $classMetadataTransfer,
                 $this->argumentBuilder,
+                $this->pluginPositionResolver,
             ),
         ];
     }

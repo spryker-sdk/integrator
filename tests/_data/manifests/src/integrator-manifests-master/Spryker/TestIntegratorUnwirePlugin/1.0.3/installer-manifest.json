@@ -1,6 +1,18 @@
 {
     "unwire-plugin": [
         {
+            "target": "\\Pyz\\Zed\\TestIntegratorUnwirePlugin\\TestIntegratorUnwirePluginDependencyProvider::getTestOnePlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorDefault\\Communication\\Plugin\\TestIntegratorDefault1Plugin"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestNotExistedModule\\TestNotExistedDependencyProvider::getTestPlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorUnwirePlugin\\Communication\\Plugin\\TestIntegratorUnwirePlugin"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorUnwirePlugin\\TestIntegratorUnwirePluginDependencyProvider::testNotExistedMethod",
+            "source": "\\Spryker\\Zed\\TestIntegratorUnwirePlugin\\Communication\\Plugin\\TestIntegratorUnwirePlugin"
+        },
+        {
             "target": "\\Pyz\\Zed\\TestIntegratorUnwirePlugin\\TestIntegratorUnwirePluginDependencyProvider::getTestPlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorUnwirePlugin\\Communication\\Plugin\\TestIntegratorUnwirePlugin"
         },
@@ -19,6 +31,11 @@
         {
             "target": "\\Pyz\\Zed\\TestIntegratorUnwirePlugin\\TestIntegratorUnwirePluginDependencyProvider::extendConditionPlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorUnwirePlugin\\Communication\\Plugin\\TestBarConditionPlugin"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorUnwirePlugin\\TestIntegratorUnwirePluginDependencyProvider::getSchedulerAdapterPlugins",
+            "source": "\\Spryker\\Zed\\SchedulerJenkins\\Communication\\Plugin\\Adapter\\SchedulerJenkinsAdapterPlugin",
+            "index": "\\Pyz\\Shared\\Scheduler\\SchedulerConfig::PYZ_SCHEDULER_JENKINS"
         }
     ]
 }

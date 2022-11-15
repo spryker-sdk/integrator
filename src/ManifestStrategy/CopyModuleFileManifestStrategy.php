@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
-use SprykerSdk\Integrator\Common\UtilText\Filter\CamelCaseToSeparator;
+use SprykerSdk\Integrator\Common\UtilText\TextCaseHelper;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
@@ -65,9 +65,9 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         [$organisation, $moduleName] = explode('.', $moduleName);
 
         return $this->config->getVendorDirectory()
-            . mb_strtolower($this->camelCaseToDash($organisation))
+            . mb_strtolower(TextCaseHelper::camelCaseToDash($organisation))
             . DIRECTORY_SEPARATOR
-            . mb_strtolower($this->camelCaseToDash($moduleName))
+            . mb_strtolower(TextCaseHelper::camelCaseToDash($moduleName))
             . DIRECTORY_SEPARATOR
             . $source;
     }
@@ -82,15 +82,5 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         $target = $manifest[IntegratorConfig::MANIFEST_KEY_TARGET];
 
         return $this->config->getProjectRootDirectory() . $target;
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    protected function camelCaseToDash(string $value): string
-    {
-        return (new CamelCaseToSeparator())->filter($value, '-');
     }
 }

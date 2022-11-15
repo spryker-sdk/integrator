@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
+use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
@@ -38,6 +39,11 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
     protected $argumentBuilder;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface
+     */
+    protected PluginPositionResolverInterface $pluginPositionResolver;
+
+    /**
      * @var bool
      */
     protected $pluginInserted = false;
@@ -45,11 +51,16 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
+     * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
      */
-    public function __construct(ClassMetadataTransfer $classMetadataTransfer, ArgumentBuilderInterface $argumentBuilder)
-    {
+    public function __construct(
+        ClassMetadataTransfer $classMetadataTransfer,
+        ArgumentBuilderInterface $argumentBuilder,
+        PluginPositionResolverInterface $pluginPositionResolver
+    ) {
         $this->classMetadataTransfer = $classMetadataTransfer;
         $this->argumentBuilder = $argumentBuilder;
+        $this->pluginPositionResolver = $pluginPositionResolver;
     }
 
     /**
@@ -72,6 +83,14 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
                 return $node;
             }
 
+            $beforePlugin = $this->pluginPositionResolver->getFirstExistPluginByPositions(
+                $this->getPluginList($node),
+                $this->classMetadataTransfer->getBefore()->getArrayCopy(),
+            );
+            $afterPlugin = $this->pluginPositionResolver->getFirstExistPluginByPositions(
+                $this->getPluginList($node),
+                $this->classMetadataTransfer->getAfter()->getArrayCopy(),
+            );
             foreach ($node->stmts as $stmt) {
                 if ($this->pluginInserted) {
                     break;
@@ -81,7 +100,7 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
                     continue;
                 }
 
-                $stmt->expr = $this->processMethodCall($stmt->expr);
+                $stmt->expr = $this->processMethodCall($stmt->expr, $beforePlugin, $afterPlugin);
             }
 
             foreach ($node->stmts as $stmt) {
@@ -110,14 +129,19 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
 
     /**
      * @param \PhpParser\Node\Expr\MethodCall $methodCall
+     * @param string|null $beforePlugin
+     * @param string|null $afterPlugin
      *
      * @return \PhpParser\Node\Expr\MethodCall
      */
-    protected function processMethodCall(MethodCall $methodCall): MethodCall
-    {
+    protected function processMethodCall(
+        MethodCall $methodCall,
+        ?string $beforePlugin = null,
+        ?string $afterPlugin = null
+    ): MethodCall {
         /** @var \PhpParser\Node\Arg $arg */
         foreach ($methodCall->args as $arg) {
-            if ($arg->value instanceof New_ && $arg->value->class->toString() === $this->classMetadataTransfer->getBefore()) {
+            if ($arg->value instanceof New_ && $arg->value->class->toString() === $beforePlugin) {
                 $arguments = $this->argumentBuilder->createAddPluginArguments($this->classMetadataTransfer);
                 $newMethodCall = (new BuilderFactory())
                     ->methodCall($methodCall->var, $methodCall->name, $arguments);
@@ -128,7 +152,7 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
                 return $methodCall;
             }
 
-            if ($arg->value instanceof New_ && $arg->value->class->toString() === $this->classMetadataTransfer->getAfter()) {
+            if ($arg->value instanceof New_ && $arg->value->class->toString() === $afterPlugin) {
                 $arguments = $this->argumentBuilder->createAddPluginArguments($this->classMetadataTransfer);
                 $newMethodCall = (new BuilderFactory())
                     ->methodCall($methodCall, $methodCall->name, $arguments);
@@ -140,7 +164,7 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
         }
 
         if ($methodCall->var instanceof MethodCall) {
-            $methodCall->var = $this->processMethodCall($methodCall->var);
+            $methodCall->var = $this->processMethodCall($methodCall->var, $beforePlugin, $afterPlugin);
         }
 
         return $methodCall;
@@ -170,5 +194,29 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
         }
 
         return true;
+    }
+
+    /**
+     * @param \PhpParser\Node $node
+     *
+     * @return array<string>
+     */
+    protected function getPluginList(Node $node): array
+    {
+        $plugins = [];
+
+        foreach ($node->stmts as $stmt) {
+            if (!$this->isStatementAddPluginMethodCall($stmt)) {
+                continue;
+            }
+
+            foreach ($stmt->expr->args as $arg) {
+                if ($arg->value instanceof New_) {
+                    $plugins[] = $arg->value->class->toString();
+                }
+            }
+        }
+
+        return $plugins;
     }
 }

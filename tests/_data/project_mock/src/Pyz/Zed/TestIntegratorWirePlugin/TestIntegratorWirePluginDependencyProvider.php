@@ -34,10 +34,17 @@ class TestIntegratorWirePluginDependencyProvider
         ];
     }
 
+    protected function getSchedulerAdapterPlugins(): array
+    {
+        return [
+        ];
+    }
+
     protected function getEventListenerPluginsWithCollectionReturn(): Collection
     {
         $collection = new Collection();
 
+        $collection->add(new FirstPlugin());
         $collection->add(new UrlStorageEventSubscriber());
 
         return $collection;

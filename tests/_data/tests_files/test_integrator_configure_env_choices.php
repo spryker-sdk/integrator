@@ -36,6 +36,10 @@ $config[\Spryker\Shared\Kernel\KernelConstants::AUTH_DEFAULT_CREDENTIALS] = [
 
 $config[\Spryker\Shared\Kernel\KernelConstants::PRIVATE_NAME] = APPLICATION_SOURCE_DIR . '/Generated/Glue/Specification/spryker_rest_api.schema.yml';
 
+$config[\Spryker\Shared\Oms\OmsConstants::PROCESS_LOCATION] = [
+    APPLICATION_SOURCE_DIR . '/vendor/spryker/payment/config/Zed/Oms',
+];
+
 $config[\Spryker\Shared\Kernel\KernelConstants::ENCRYPTION_KEY] = getenv('SPRYKER_OAUTH_ENCRYPTION_KEY') ?: null;
 
 $config[\Spryker\Shared\Kernel\KernelConstants::ENCRYPTION_KEY_OTHER] = getenv('SPRYKER_OAUTH_ENCRYPTION_KEY') ? 'test' : 'other_test';
