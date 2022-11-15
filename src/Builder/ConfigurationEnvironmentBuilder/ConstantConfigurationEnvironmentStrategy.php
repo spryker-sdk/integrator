@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder;
 
-class ClassConfigurationEnvironmentStrategy implements ConfigurationEnvironmentStrategyInterface
+class ConstantConfigurationEnvironmentStrategy implements ConfigurationEnvironmentStrategyInterface
 {
     /**
      * @param mixed $value
@@ -18,7 +18,7 @@ class ClassConfigurationEnvironmentStrategy implements ConfigurationEnvironmentS
      */
     public function isApplicable($value): bool
     {
-        return is_string($value) && preg_match('/::class$/', $value);
+        return is_string($value) && preg_match('/::[A-Z_\-0-9]*$/', $value);
     }
 
     /**

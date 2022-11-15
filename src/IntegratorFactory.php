@@ -73,6 +73,7 @@ use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ArrayConfigura
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\BooleanConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ClassConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConstantConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\DefaultConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\LiteralConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\StringConfigurationEnvironmentStrategy;
@@ -276,6 +277,7 @@ class IntegratorFactory
             $this->createBooleanConfigurationEnvironmentStrategy(),
             $this->createArrayConfigurationEnvironmentStrategy(),
             $this->createClassConfigurationEnvironmentStrategy(),
+            $this->createConstantConfigurationEnvironmentStrategy(),
             $this->createLiteralConfigurationEnvironmentStrategy(),
             $this->createDefaultConfigurationEnvironmentStrategy(),
         ];
@@ -295,6 +297,14 @@ class IntegratorFactory
     public function createClassConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
     {
         return new ClassConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConstantConfigurationEnvironmentStrategy
+     */
+    public function createConstantConfigurationEnvironmentStrategy(): ConstantConfigurationEnvironmentStrategy
+    {
+        return new ConstantConfigurationEnvironmentStrategy();
     }
 
     /**
