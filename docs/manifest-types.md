@@ -345,7 +345,7 @@ This type of manifest adds a source constant as an element to the array returned
 }
 ```
 
-### [WIP] Wire Navigation Manifest
+### Wire Navigation Manifest
 
 This type of manifest adds a navigation entry into the navigation.xml.
 
@@ -357,6 +357,7 @@ This type of manifest adds a navigation entry into the navigation.xml.
                 "app-catalog-gui": {
                     "label": "Apps",
                     "title": "Apps",
+                    "bundle": "app-catalog-gui",
                     "icon": "fa-archive",
                     "module": "app-catalog-gui",
                     "controller": "index",
@@ -364,6 +365,70 @@ This type of manifest adds a navigation entry into the navigation.xml.
                 }
             },
             "after": "users"
+        },
+        {
+            "navigations": {
+                "main": {
+                    "pages": {
+                        "main-nested": {
+                            "bundle": "main",
+                            "controller": "index",
+                            "action": "index",
+                            "visible": "1"
+                        }
+                    }
+                }
+            },
+            "before": "before-main"
+        }
+    ]
+}
+```
+
+### Unwire Navigation Manifest
+
+This type of manifest removes a navigation entry into the navigation.xml.
+
+```json
+{
+    "unwire-navigation": [
+        {
+            "navigations": {
+                "delete": null
+            },
+            "after": "main"
+        },
+        {
+            "navigations": {
+                "catalog": {
+                    "pages": {
+                        "price-product-schedule": {
+                            "icon": null,
+                            "pages": {
+                                "price-product-schedule-dry-run-import": {
+                                    "icon": null
+                                },
+                                "price-product-schedule-publish": {
+                                    "icon": null
+                                },
+                                "price-product-schedule-list-view": {
+                                    "icon": null
+                                },
+                                "price-product-schedule-list-edit": {
+                                    "icon": null
+                                },
+                                "price-product-schedule-edit": {
+                                    "icon": null
+                                },
+                                "price-product-schedule-list-delete": {
+                                    "icon": null
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "after": "customer"
         }
     ]
 }
