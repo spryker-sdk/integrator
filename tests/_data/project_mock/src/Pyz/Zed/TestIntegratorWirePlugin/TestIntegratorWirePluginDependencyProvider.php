@@ -7,6 +7,7 @@
 
 namespace Pyz\Zed\TestIntegratorWirePlugin;
 
+use Pyz\Zed\TestIntegratorWirePlugin\Plugin\ChildPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SinglePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FirstPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SecondPlugin;
@@ -31,6 +32,7 @@ class TestIntegratorWirePluginDependencyProvider
         return [
             new FirstPlugin(),
             new SecondPlugin(),
+            new ChildPlugin(),
         ];
     }
 

@@ -320,9 +320,12 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             if ($item === null || !($item->value instanceof New_)) {
                 continue;
             }
-            $nodeClassName = $item->value->class->toString();
 
-            if ($this->isKeyEqualsToCurrentOne($item) && $nodeClassName === $this->classMetadataTransfer->getSourceOrFail()) {
+            $nodeClassName = $item->value->class->toString();
+            $usedParentClasses = class_exists($nodeClassName) ? class_parents($nodeClassName) : [];
+            $classToAdd = $this->classMetadataTransfer->getSourceOrFail();
+
+            if ($this->isKeyEqualsToCurrentOne($item) && ($nodeClassName === $classToAdd || in_array($classToAdd, $usedParentClasses))) {
                 return true;
             }
         }
