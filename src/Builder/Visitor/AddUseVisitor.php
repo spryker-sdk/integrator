@@ -99,7 +99,7 @@ class AddUseVisitor extends NodeVisitorAbstract
 
             foreach ($stmt->uses as $use) {
                 $usedClassName = $use->name->toString();
-                $usedClassParents = class_exists($usedClassName) ? class_parents($usedClassName) : [];
+                $usedClassParents = class_exists($usedClassName) ? (class_parents($usedClassName) ?: []) : [];
 
                 if ($usedClassName === $this->className || in_array($this->className, $usedClassParents)) {
                     return true;
