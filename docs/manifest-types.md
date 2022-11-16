@@ -42,7 +42,8 @@ All manifests have such structure for common types. More data you can find below
 | [unwire-glue-relationship](#unwire-glue-relationship-manifest) | YES        | YES         |
 | [glossary-key](#glossary-key-manifest)                         | YES        | YES         |
 | [add-config-array-element](#add-config-array-element-manifest) | YES        | YES         |
-| [wire-navigation](#wip-wire-navigation-manifest)               |            | YES         |
+| [wire-navigation](#wire-navigation-manifest)                   | YES        | YES         |
+| [unwire-navigation](#unwire-navigation-manifest)               | YES        | YES         |
 
 Generation is currently handled in release app (Spryker internally), whereas Integration is done though this code base directly with
 [Strategy classes](//github.com/spryker-sdk/integrator/tree/master/src/ManifestStrategy/).
