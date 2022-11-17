@@ -326,7 +326,8 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             $nodeClassName = $item->value->class->toString();
             $usedParentClasses = class_exists($nodeClassName) ? (class_parents($nodeClassName) ?: []) : [];
 
-            if ($this->isKeyEqualsToCurrentOne($item)
+            if (
+                $this->isKeyEqualsToCurrentOne($item)
                 && ($nodeClassName === $classToAdd || in_array($classToAdd, $usedParentClasses))
             ) {
                 return true;
