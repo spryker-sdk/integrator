@@ -379,8 +379,7 @@ This type of manifest adds a navigation entry into the navigation.xml.
                         }
                     }
                 }
-            },
-            "before": "before-main"
+            }
         }
     ]
 }
@@ -396,8 +395,7 @@ This type of manifest removes a navigation entry into the navigation.xml.
         {
             "navigations": {
                 "delete": null
-            },
-            "after": "main"
+            }
         },
         {
             "navigations": {
@@ -428,8 +426,7 @@ This type of manifest removes a navigation entry into the navigation.xml.
                         }
                     }
                 }
-            },
-            "after": "customer"
+            }
         }
     ]
 }
