@@ -17,3 +17,4 @@ composer require --dev spryker-sdk/integrator
 ## Documentation
 
 See [Documentation](docs/).
+
