@@ -36,9 +36,14 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         $source = $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE];
         $sourcePath = $this->getSourcePath($source, $moduleName);
         $targetPath = $this->getTargetPath($manifest);
+        $targetDir = dirname($targetPath);
 
         if (!file_exists($sourcePath) || file_exists($targetPath)) {
             return false;
+        }
+
+        if (!$isDry && !is_dir($targetDir)) {
+            mkdir($targetDir, 0770, true);
         }
 
         if (!$isDry && !copy($sourcePath, $targetPath)) {
