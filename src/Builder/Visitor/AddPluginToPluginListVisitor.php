@@ -316,13 +316,20 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      */
     protected function isPluginAdded(Array_ $node): bool
     {
+        $classToAdd = $this->classMetadataTransfer->getSourceOrFail();
+
         foreach ($node->items as $item) {
             if ($item === null || !($item->value instanceof New_)) {
                 continue;
             }
-            $nodeClassName = $item->value->class->toString();
 
-            if ($this->isKeyEqualsToCurrentOne($item) && $nodeClassName === $this->classMetadataTransfer->getSourceOrFail()) {
+            $nodeClassName = $item->value->class->toString();
+            $usedParentClasses = class_exists($nodeClassName) ? (class_parents($nodeClassName) ?: []) : [];
+
+            if (
+                $this->isKeyEqualsToCurrentOne($item)
+                && ($nodeClassName === $classToAdd || in_array($classToAdd, $usedParentClasses))
+            ) {
                 return true;
             }
         }
