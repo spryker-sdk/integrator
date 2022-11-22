@@ -351,7 +351,7 @@ This manifest adds a source constant as an element to the array returned by the 
 
 ### Wire Navigation Manifest
 
-This manifest adds a navigation entry to the `navigation.xml`.
+This manifest adds a navigation entry to `navigation.xml`.
 
 ```json
 {
@@ -390,7 +390,7 @@ This manifest adds a navigation entry to the `navigation.xml`.
 
 ### Unwire Navigation Manifest
 
-This type of manifest removes a navigation entry into the navigation.xml.
+This manifest removes a navigation entry from `navigation.xml`.
 
 ```json
 {
@@ -435,10 +435,8 @@ This type of manifest removes a navigation entry into the navigation.xml.
 }
 ```
 
-## Propose new types/functionality
+## Suggest new types and functionality
 
-https://github.com/spryker-sdk/integrator/issues
-Here you can propose new types or missing functionality regarding manifests.
-If approved we will implement them on our side.
+To suggest missing types or functionality, [create an issue](https://github.com/spryker-sdk/integrator/issues). If approved, we will implement them on our side.
 
-You can also open PRs with suggested changes.
+Also, feel free to suggest changes via PRs.
