@@ -64,7 +64,7 @@ class WireNavigationManifestStrategy extends AbstractNavigationManifestStrategy
     ): array {
         $newNavigations = $this->prepareNewNavigationsToApplying($newNavigations);
         foreach ($newNavigations as $key => &$value) {
-            if (array_key_exists($key,$navigation )) {
+            if (array_key_exists($key, $navigation)) {
                 $value = array_replace_recursive($navigation[$key], $value);
             }
         }
