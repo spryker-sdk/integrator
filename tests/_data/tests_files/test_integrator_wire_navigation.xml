@@ -25,27 +25,27 @@
         <icon>fa-archive</icon>
         <bundle>main</bundle>
         <controller>index</controller>
-        <action>index</action>
+        <action>index-main</action>
         <visibility>0</visibility>
         <pages>
             <main-nested>
-                <label>Before main - nested</label>
-                <title>Before main - nested</title>
+                <label>main - nested</label>
+                <title>main - nested</title>
                 <icon>fa-archive</icon>
-                <bundle>before-main-nested</bundle>
+                <bundle>main-nested</bundle>
                 <controller>index</controller>
-                <action>index</action>
+                <action>index-main</action>
                 <visible>0</visible>
             </main-nested>
-            <main-nested2>
-                <label>Before main - nested 2</label>
-                <title>Before main - nested 2</title>
+            <main-nested-2>
+                <label>main - nested 2</label>
+                <title>main - nested 2</title>
                 <icon>fa-archive</icon>
-                <bundle>before-main-nested</bundle>
+                <bundle>main-nested-2</bundle>
                 <controller>index</controller>
                 <action>index</action>
                 <visible>0</visible>
-            </main-nested2>
+            </main-nested-2>
         </pages>
     </main>
     <after-main>
@@ -57,6 +57,114 @@
         <action>index</action>
         <visible>0</visible>
     </after-main>
+    <administration>
+        <label>Administration</label>
+        <title>Administration</title>
+        <icon>fa-users-cog</icon>
+        <pages>
+            <stores>
+                <label>Stores</label>
+                <title>Stores</title>
+                <bundle>store-gui</bundle>
+                <controller>list</controller>
+                <action>index</action>
+            </stores>
+            <warehouses>
+                <label>Warehouses</label>
+                <title>Warehouses</title>
+                <bundle>stock-gui</bundle>
+                <controller>warehouse</controller>
+                <action>list</action>
+            </warehouses>
+            <payment-method>
+                <label>Payment Methods</label>
+                <title>Payment Methods</title>
+                <bundle>payment-gui</bundle>
+                <controller>payment-method</controller>
+                <action>index</action>
+            </payment-method>
+            <shipment-method>
+                <label>Delivery Methods</label>
+                <title>Delivery Methods</title>
+                <bundle>shipment-gui</bundle>
+                <controller>shipment-method</controller>
+                <action>index</action>
+            </shipment-method>
+            <glossary>
+                <label>Glossary</label>
+                <title>Glossary</title>
+                <bundle>glossary</bundle>
+                <uri>/glossary</uri>
+            </glossary>
+            <tax-rates>
+                <label>Tax Rates</label>
+                <title>Tax Rates</title>
+                <bundle>tax</bundle>
+                <controller>rate</controller>
+                <action>list</action>
+            </tax-rates>
+            <tax-sets>
+                <label>Tax Sets</label>
+                <title>Tax Sets</title>
+                <bundle>tax</bundle>
+                <controller>set</controller>
+                <action>list</action>
+            </tax-sets>
+            <sales-order-threshold-global>
+                <label>Global Threshold</label>
+                <title>Global Threshold</title>
+                <bundle>sales-order-threshold-gui</bundle>
+                <controller>global</controller>
+                <action>index</action>
+            </sales-order-threshold-global>
+            <sales-order-threshold-settings>
+                <label>Threshold Settings</label>
+                <title>Threshold Settings</title>
+                <bundle>sales-order-threshold-gui</bundle>
+                <controller>settings</controller>
+                <action>index</action>
+            </sales-order-threshold-settings>
+            <sales-order-threshold-merchant-relationship>
+                <label>Merchant Relationships Threshold</label>
+                <title>Merchant Relationships Threshold</title>
+                <uri>/merchant-relationship-sales-order-threshold-gui</uri>
+                <bundle>merchant-relationship-sales-order-threshold-gui</bundle>
+                <controller>index</controller>
+                <action>index</action>
+            </sales-order-threshold-merchant-relationship>
+            <sales-order-threshold-merchant-relationship-edit>
+                <label>Edit Merchant Relationship Threshold</label>
+                <title>Edit Merchant Relationship Threshold</title>
+                <uri>/merchant-relationship-sales-order-threshold-gui/edit</uri>
+                <bundle>merchant-relationship-sales-order-threshold-gui</bundle>
+                <controller>edit</controller>
+                <action>index</action>
+                <visible>0</visible>
+            </sales-order-threshold-merchant-relationship-edit>
+            <settings>
+                <label>MIME Type Settings</label>
+                <title>MIME Type Settings</title>
+                <bundle>file-manager-gui</bundle>
+                <controller>mime-type</controller>
+                <action>index</action>
+                <visible>1</visible>
+            </settings>
+            <oms>
+                <label>OMS</label>
+                <title>Order Management System</title>
+                <bundle>oms</bundle>
+                <controller>index</controller>
+                <action>index</action>
+            </oms>
+            <statemachines-index>
+                <label>State Machine</label>
+                <title>State Machine</title>
+                <bundle>state-machine</bundle>
+                <controller>list</controller>
+                <action>index</action>
+            </statemachines-index>
+        </pages>
+    </administration>
     <element2>
         <label>Element 2</label>
         <title>Element 2</title>

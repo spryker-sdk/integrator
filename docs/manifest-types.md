@@ -63,6 +63,7 @@ Integrator checks existing before and after plugins one by one and puts value af
         {
             "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getQuoteStorageStrategyPlugins",
             "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin",
+            "condition": "class_exists(\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin::class)",
             "position": {
                 "before": "",
                 "after": ["", ""]

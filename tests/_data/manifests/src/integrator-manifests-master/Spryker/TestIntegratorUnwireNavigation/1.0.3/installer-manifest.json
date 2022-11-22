@@ -31,6 +31,27 @@
                     }
                 }
             }
+        },
+        {
+            "navigations": {
+                "administration": {
+                    "pages": {
+                        "sales-order-threshold-global": null
+                    }
+                }
+            }
+        },
+        {
+            "navigations": {
+                "administration": {
+                    "pages": {
+                        "sales-order-threshold-settings": {
+                            "label": null,
+                            "title": null
+                        }
+                    }
+                }
+            }
         }
     ]
 }

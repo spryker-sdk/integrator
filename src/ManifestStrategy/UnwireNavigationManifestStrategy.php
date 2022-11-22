@@ -60,7 +60,7 @@ class UnwireNavigationManifestStrategy extends AbstractNavigationManifestStrateg
 
         foreach ($navigation as $key => $value) {
             if (!array_key_exists($key, $manifestData)) {
-                if (!in_array($value, $manifestData)) {
+                if (!in_array($value, $manifestData, true)) {
                     $outputDiff[$key] = $value;
                 }
 
