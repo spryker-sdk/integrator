@@ -9,10 +9,10 @@
         <action>index</action>
         <pages>
             <main-nested>
-                <label>Before main - nested</label>
-                <title>Before main - nested</title>
+                <label>main - nested</label>
+                <title>main - nested</title>
                 <icon>fa-archive</icon>
-                <bundle>before-main-nested</bundle>
+                <bundle>main-nested</bundle>
                 <controller>index</controller>
                 <action>index</action>
             </main-nested>

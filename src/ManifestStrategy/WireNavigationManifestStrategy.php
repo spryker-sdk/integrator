@@ -63,15 +63,20 @@ class WireNavigationManifestStrategy extends AbstractNavigationManifestStrategy
         ?string $after = null
     ): array {
         $newNavigations = $this->prepareNewNavigationsToApplying($newNavigations);
+        foreach ($newNavigations as $key => &$value) {
+            if (array_key_exists($key,$navigation )) {
+                $value = array_replace_recursive($navigation[$key], $value);
+            }
+        }
+
         $key = $before ?? $after;
         $position = array_search($key, array_keys($navigation));
 
         if ($position === false) {
-            return $this->addNewNavigations($navigation, $newNavigations);
+            return array_replace_recursive($navigation, $newNavigations);
         }
 
         $offset = $position + 1;
-
         if ($before !== null) {
             $offset--;
         }
@@ -118,26 +123,5 @@ class WireNavigationManifestStrategy extends AbstractNavigationManifestStrategy
         }
 
         return $resultNewNavigations;
-    }
-
-    /**
-     * @param array<string|int, array<string, mixed>> $navigation
-     * @param array<string|int, array<string, mixed>> $newNavigations
-     *
-     * @return array<string|int, array<string, mixed>>
-     */
-    protected function addNewNavigations(
-        array $navigation,
-        array $newNavigations
-    ): array {
-        foreach ($newNavigations as $navigationItemKey => $navigationItemData) {
-            if (isset($navigation[$navigationItemKey])) {
-                continue;
-            }
-
-            $navigation[$navigationItemKey] = $navigationItemData;
-        }
-
-        return $navigation;
     }
 }
