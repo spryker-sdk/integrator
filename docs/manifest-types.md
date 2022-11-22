@@ -348,7 +348,7 @@ This type of manifest adds a source constant as an element to the array returned
 
 ### Wire Navigation Manifest
 
-This type of manifest adds a navigation entry into the navigation.xml.
+This type of manifest adds a navigation entry into the `navigation.xml` file.
 
 ```json
 {
@@ -387,7 +387,7 @@ This type of manifest adds a navigation entry into the navigation.xml.
 
 ### Unwire Navigation Manifest
 
-This type of manifest removes a navigation entry into the navigation.xml.
+This type of manifest removes a navigation entry from the `navigation.xml` file.
 
 ```json
 {

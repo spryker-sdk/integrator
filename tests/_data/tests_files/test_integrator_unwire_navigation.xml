@@ -18,4 +18,103 @@
             </main-nested>
         </pages>
     </main>
+    <administration>
+        <label>Administration</label>
+        <title>Administration</title>
+        <icon>fa-users-cog</icon>
+        <pages>
+            <stores>
+                <label>Stores</label>
+                <title>Stores</title>
+                <bundle>store-gui</bundle>
+                <controller>list</controller>
+                <action>index</action>
+            </stores>
+            <warehouses>
+                <label>Warehouses</label>
+                <title>Warehouses</title>
+                <bundle>stock-gui</bundle>
+                <controller>warehouse</controller>
+                <action>list</action>
+            </warehouses>
+            <payment-method>
+                <label>Payment Methods</label>
+                <title>Payment Methods</title>
+                <bundle>payment-gui</bundle>
+                <controller>payment-method</controller>
+                <action>index</action>
+            </payment-method>
+            <shipment-method>
+                <label>Delivery Methods</label>
+                <title>Delivery Methods</title>
+                <bundle>shipment-gui</bundle>
+                <controller>shipment-method</controller>
+                <action>index</action>
+            </shipment-method>
+            <glossary>
+                <label>Glossary</label>
+                <title>Glossary</title>
+                <bundle>glossary</bundle>
+                <uri>/glossary</uri>
+            </glossary>
+            <tax-rates>
+                <label>Tax Rates</label>
+                <title>Tax Rates</title>
+                <bundle>tax</bundle>
+                <controller>rate</controller>
+                <action>list</action>
+            </tax-rates>
+            <tax-sets>
+                <label>Tax Sets</label>
+                <title>Tax Sets</title>
+                <bundle>tax</bundle>
+                <controller>set</controller>
+                <action>list</action>
+            </tax-sets>
+            <sales-order-threshold-settings>
+                <bundle>sales-order-threshold-gui</bundle>
+                <controller>settings</controller>
+                <action>index</action>
+            </sales-order-threshold-settings>
+            <sales-order-threshold-merchant-relationship>
+                <label>Merchant Relationships Threshold</label>
+                <title>Merchant Relationships Threshold</title>
+                <uri>/merchant-relationship-sales-order-threshold-gui</uri>
+                <bundle>merchant-relationship-sales-order-threshold-gui</bundle>
+                <controller>index</controller>
+                <action>index</action>
+            </sales-order-threshold-merchant-relationship>
+            <sales-order-threshold-merchant-relationship-edit>
+                <label>Edit Merchant Relationship Threshold</label>
+                <title>Edit Merchant Relationship Threshold</title>
+                <uri>/merchant-relationship-sales-order-threshold-gui/edit</uri>
+                <bundle>merchant-relationship-sales-order-threshold-gui</bundle>
+                <controller>edit</controller>
+                <action>index</action>
+                <visible>0</visible>
+            </sales-order-threshold-merchant-relationship-edit>
+            <settings>
+                <label>MIME Type Settings</label>
+                <title>MIME Type Settings</title>
+                <bundle>file-manager-gui</bundle>
+                <controller>mime-type</controller>
+                <action>index</action>
+                <visible>1</visible>
+            </settings>
+            <oms>
+                <label>OMS</label>
+                <title>Order Management System</title>
+                <bundle>oms</bundle>
+                <controller>index</controller>
+                <action>index</action>
+            </oms>
+            <statemachines-index>
+                <label>State Machine</label>
+                <title>State Machine</title>
+                <bundle>state-machine</bundle>
+                <controller>list</controller>
+                <action>index</action>
+            </statemachines-index>
+        </pages>
+    </administration>
 </config>
