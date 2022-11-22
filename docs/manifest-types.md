@@ -60,6 +60,7 @@ Integrator will check existing before and after plugins one by one and put value
         {
             "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getQuoteStorageStrategyPlugins",
             "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin",
+            "condition": "class_exists(\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin::class)",
             "position": {
                 "before": "",
                 "after": ["", ""]
@@ -348,7 +349,7 @@ This type of manifest adds a source constant as an element to the array returned
 
 ### Wire Navigation Manifest
 
-This type of manifest adds a navigation entry into the navigation.xml.
+This type of manifest adds a navigation entry into the `navigation.xml` file.
 
 ```json
 {
@@ -387,7 +388,7 @@ This type of manifest adds a navigation entry into the navigation.xml.
 
 ### Unwire Navigation Manifest
 
-This type of manifest removes a navigation entry into the navigation.xml.
+This type of manifest removes a navigation entry from the `navigation.xml` file.
 
 ```json
 {
