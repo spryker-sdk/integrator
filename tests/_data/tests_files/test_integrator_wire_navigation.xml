@@ -25,27 +25,27 @@
         <icon>fa-archive</icon>
         <bundle>main</bundle>
         <controller>index</controller>
-        <action>index</action>
+        <action>index-main</action>
         <visibility>0</visibility>
         <pages>
             <main-nested>
-                <label>Before main - nested</label>
-                <title>Before main - nested</title>
+                <label>main - nested</label>
+                <title>main - nested</title>
                 <icon>fa-archive</icon>
-                <bundle>before-main-nested</bundle>
+                <bundle>main-nested</bundle>
                 <controller>index</controller>
-                <action>index</action>
+                <action>index-main</action>
                 <visible>0</visible>
             </main-nested>
-            <main-nested2>
-                <label>Before main - nested 2</label>
-                <title>Before main - nested 2</title>
+            <main-nested-2>
+                <label>main - nested 2</label>
+                <title>main - nested 2</title>
                 <icon>fa-archive</icon>
-                <bundle>before-main-nested</bundle>
+                <bundle>main-nested-2</bundle>
                 <controller>index</controller>
                 <action>index</action>
                 <visible>0</visible>
-            </main-nested2>
+            </main-nested-2>
         </pages>
     </main>
     <after-main>
