@@ -62,3 +62,5 @@ $config[\Spryker\Shared\Kernel\KernelConstants::ACL_DEFAULT_RULES] = [
 $config[\Spryker\Shared\Kernel\KernelConstants::STORAGE_REDIS_CONNECTION_OPTIONS] = json_decode(getenv('SPRYKER_KEY_VALUE_STORE_CONNECTION_OPTIONS') ?: '[]', true) ?: [];
 
 $config[\Spryker\Shared\Kernel\KernelConstants::LOGGER_CONFIG_GLUE] = \Spryker\Shared\Kernel\KernelConstants::class;
+
+$config[\Spryker\Shared\Kernel\KernelConstants::OAUTH_PROVIDER_NAME] = \Spryker\Zed\OauthAuth0\OauthAuth0Config::PROVIDER_NAME;
