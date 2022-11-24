@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <config>
-    <!-- Test redundant comment -->
     <main>
         <label>Main</label>
         <title>Main</title>
@@ -8,7 +7,6 @@
         <bundle>main</bundle>
         <controller>index</controller>
         <action>index</action>
-        <visibility>0</visibility>
         <pages>
             <main-nested>
                 <label>main - nested</label>
@@ -17,7 +15,6 @@
                 <bundle>main-nested</bundle>
                 <controller>index</controller>
                 <action>index</action>
-                <visible>0</visible>
             </main-nested>
         </pages>
     </main>
@@ -74,16 +71,7 @@
                 <controller>set</controller>
                 <action>list</action>
             </tax-sets>
-            <sales-order-threshold-global>
-                <label>Global Threshold</label>
-                <title>Global Threshold</title>
-                <bundle>sales-order-threshold-gui</bundle>
-                <controller>global</controller>
-                <action>index</action>
-            </sales-order-threshold-global>
             <sales-order-threshold-settings>
-                <label>Threshold Settings</label>
-                <title>Threshold Settings</title>
                 <bundle>sales-order-threshold-gui</bundle>
                 <controller>settings</controller>
                 <action>index</action>
@@ -129,13 +117,4 @@
             </statemachines-index>
         </pages>
     </administration>
-    <element2>
-        <label>Element 2</label>
-        <title>Element 2</title>
-        <icon>fa-archive</icon>
-        <bundle>element2</bundle>
-        <controller>index</controller>
-        <action>newIndex</action>
-    </element2>
-    <!-- Test redundant comment -->
 </config>

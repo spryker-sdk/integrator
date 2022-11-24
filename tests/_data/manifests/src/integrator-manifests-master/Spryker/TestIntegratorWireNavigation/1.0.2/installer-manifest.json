@@ -41,24 +41,35 @@
         {
             "navigations": {
                 "main": {
-                    "label": "new main",
-                    "title": "new main",
-                    "icon": "fa-archive",
-                    "module": "new-main",
-                    "controller": "index",
-                    "action": "index",
-                    "visible": 0,
                     "pages": {
-                        "main-nested": {
-                            "label": "main - nested",
-                            "title": "main - nested",
+                        "main-nested-2": {
+                            "label": "main - nested 2",
+                            "title": "main - nested 2",
                             "icon": "fa-archive",
-                            "module": "main-nested",
+                            "module": "main-nested-2",
                             "controller": "index",
                             "action": "index",
                             "visible": 0
                         }
                     }
+                }
+            }
+        },
+        {
+            "navigations": {
+                "main": {
+                    "pages": {
+                        "main-nested": {
+                            "action": "index-main"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "navigations": {
+                "main": {
+                    "action": "index-main"
                 }
             }
         },

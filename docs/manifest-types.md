@@ -15,7 +15,7 @@ SprykerShop/
 ```
 
 
-All manifests have such structure for common types. More data you can find below for every manifest.
+For common types, all manifests have the following structure.
 ```json
 {
     "manifest-key-here": [
@@ -26,6 +26,8 @@ All manifests have such structure for common types. More data you can find below
     ]
 }
 ```
+
+ You can find more data for every manifest below.
 
 ## Available manifest types
 
@@ -42,16 +44,18 @@ All manifests have such structure for common types. More data you can find below
 | [unwire-glue-relationship](#unwire-glue-relationship-manifest) | YES        | YES         |
 | [glossary-key](#glossary-key-manifest)                         | YES        | YES         |
 | [add-config-array-element](#add-config-array-element-manifest) | YES        | YES         |
-| [wire-navigation](#wip-wire-navigation-manifest)               |            | YES         |
+| [wire-navigation](#wire-navigation-manifest)                   | YES        | YES         |
+| [unwire-navigation](#unwire-navigation-manifest)               | YES        | YES         |
 
-Generation is currently handled in release app (Spryker internally), whereas Integration is done though this code base directly with
+Generation is currently handled internally in the Spryker release app, whereas integration is done through this code base directly with
 [Strategy classes](//github.com/spryker-sdk/integrator/tree/master/src/ManifestStrategy/).
 
 ### Wire Plugin Manifest
 
-This manifest type adds Plugin to desired place (by defining exact method) of the code. We can specify the place where to put our changes by specifying position field with before or after settings.
-Before and after keys could have string or array of strings value.
-Integrator will check existing before and after plugins one by one and put value after/before the first find
+This manifest type adds Plugin to a needed place (by defining exact method) of the code. You can specify where to put the changes by specifying a position field with a `before` or `after` settings.
+`before` and `after` accept string and array of strings values.
+
+Integrator checks existing before and after plugins one by one and puts value after/before the first find.
 
 ```json
 {
@@ -59,6 +63,7 @@ Integrator will check existing before and after plugins one by one and put value
         {
             "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getQuoteStorageStrategyPlugins",
             "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin",
+            "condition": "class_exists(\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin::class)",
             "position": {
                 "before": "",
                 "after": ["", ""]
@@ -90,7 +95,7 @@ Integrator will check existing before and after plugins one by one and put value
 
 ### Unwire Plugin Manifest
 
-This manifest type removes Plugin from specified place of code.
+This manifest type removes a Plugin from a specified place of code.
 
 ```json
 {
@@ -105,7 +110,7 @@ This manifest type removes Plugin from specified place of code.
 
 ### Wire Widget Manifest
 
-This manifest adds Widget class to the SprykerShop.
+This manifest adds a Widget class to the SprykerShop.
 
 ```json
 {
@@ -119,7 +124,7 @@ This manifest adds Widget class to the SprykerShop.
 
 ### Unwire Widget Manifest
 
-This manifest removes Widget class from the SprykerShop.
+This manifest removes a Widget class from the SprykerShop.
 
 ```json
 {
@@ -133,7 +138,7 @@ This manifest removes Widget class from the SprykerShop.
 
 ### Configure Module Manifest
 
-This manifest adds a constant to specified target class. To set value you can specify value field. It can be everything supported by PHP.
+This manifest adds a constant to a target class specified in the `value` field.
 
 ```json
 {
@@ -149,7 +154,7 @@ This manifest adds a constant to specified target class. To set value you can sp
 }
 ```
 
-This manifest sets expression to specified method of a target class. To set a value you can specify a value field. It can be everything supported by PHP.
+This manifest sets an expression to a method of a target class specified in the `value` field. All PHP value types are supported.
 
 ```json
 {
@@ -177,7 +182,7 @@ This manifest adds expression to specified method of target class. To set value 
 }
 ```
 
-This manifest compares the statements of the target class method and the  previousValue parameter. If they are the same, the manifest substitutes the expression of the specified method with the value of the value field. If they are not the same, the manifest does nothing.
+This manifest compares the statements of the target class method and the `previousValue` parameter. If they are the same, the manifest substitutes the expression with the method specified in the `value` field. If they are not the same, the manifest does nothing.
 
 ```json
 {
@@ -196,9 +201,9 @@ This manifest compares the statements of the target class method and the  previo
 
 ### Configure Env Manifest
 
-This manifest adds global constants to configuration file of the project.
+This manifest adds global constants to the configuration file of the project.
 
-If we want to give exact value we set value field. If it isn't set then Intergrator looks for `choices` field and ask you a question “Provide value for global configuration“. If you answer with empty value Integrator relies on defaultValue option.
+Exact values are set in the `value` field. If it isn't set, Integrator looks for the `choices` field and outputs the request: `Provide value for global configuration`. If you answer with an empty value, Integrator defaults to the `defaultValue` field.
 
 ```json
 {
@@ -218,7 +223,7 @@ If we want to give exact value we set value field. If it isn't set then Intergra
 
 #### Literal values
 
-Sometimes configs are using not only simple scalar values or constants, but also functions or typecasting. For such cases config value should look like this:
+Sometimes configs are using not only simple scalar values or constants, but functions or typecasting. In such cases, the config value should look as follows:
 
 ```json
 {
@@ -236,7 +241,7 @@ Sometimes configs are using not only simple scalar values or constants, but also
 
 ### Copy Module File Manifest
 
-This manifest copies a specific file from the source to the target path.
+This manifest copies a specific file from the `source` to the `target` path.
 
 ```json
 {
@@ -251,7 +256,7 @@ This manifest copies a specific file from the source to the target path.
 
 ### Wire Glue Relationship Manifest
 
-This manifest adds relationship for Glue and internally adds a call of addRelationship` method with the parameters from manifest.
+This manifest adds relationship for Glue and internally adds a call of the `addRelationship` method with the parameters from the manifest.
 
 ```json
 {
@@ -267,7 +272,7 @@ This manifest adds relationship for Glue and internally adds a call of addRelati
 
 ### Unwire Glue Relationship Manifest
 
-This manifest removes Glue relationship from the code.
+This manifest removes the Glue relationship from the code.
 
 ```json
 {
@@ -283,7 +288,7 @@ This manifest removes Glue relationship from the code.
 
 ### Execute Console Manifest
 
-This manifest executes console command.
+This manifest executes a console command.
 
 ```json
 {
@@ -299,7 +304,7 @@ This manifest executes console command.
 
 ### Glossary Key Manifest
 
-This manifest contains glossary keys for project’s glossary.yml file.This mitigates “BC breaks” as it allows adding those missing ones, even if they are introduced in minors.
+This manifest contains glossary keys for the project’s `glossary.yml` file. This mitigates backward compatibility breaking changes, as it allows adding the missing ones, even if they are introduced in minors.
 
 ```json
 {
@@ -318,7 +323,7 @@ This manifest contains glossary keys for project’s glossary.yml file.This miti
 
 ### Add Config Array Element Manifest
 
-This type of manifest adds a source constant as an element to the array returned by the target method.
+This manifest adds a source constant as an element to the array returned by the target method.
 
 ```json
 {
@@ -345,9 +350,9 @@ This type of manifest adds a source constant as an element to the array returned
 }
 ```
 
-### [WIP] Wire Navigation Manifest
+### Wire Navigation Manifest
 
-This type of manifest adds a navigation entry into the navigation.xml.
+This manifest adds a navigation entry to `navigation.xml`.
 
 ```json
 {
@@ -357,6 +362,7 @@ This type of manifest adds a navigation entry into the navigation.xml.
                 "app-catalog-gui": {
                     "label": "Apps",
                     "title": "Apps",
+                    "bundle": "app-catalog-gui",
                     "icon": "fa-archive",
                     "module": "app-catalog-gui",
                     "controller": "index",
@@ -364,15 +370,74 @@ This type of manifest adds a navigation entry into the navigation.xml.
                 }
             },
             "after": "users"
+        },
+        {
+            "navigations": {
+                "main": {
+                    "pages": {
+                        "main-nested": {
+                            "bundle": "main",
+                            "controller": "index",
+                            "action": "index",
+                            "visible": "1"
+                        }
+                    }
+                }
+            }
         }
     ]
 }
 ```
 
-## Propose new types/functionality
+### Unwire Navigation Manifest
 
-https://github.com/spryker-sdk/integrator/issues
-Here you can propose new types or missing functionality regarding manifests.
-If approved we will implement them on our side.
+This manifest removes a navigation entry from `navigation.xml`.
 
-You can also open PRs with suggested changes.
+```json
+{
+    "unwire-navigation": [
+        {
+            "navigations": {
+                "delete": null
+            }
+        },
+        {
+            "navigations": {
+                "catalog": {
+                    "pages": {
+                        "price-product-schedule": {
+                            "icon": null,
+                            "pages": {
+                                "price-product-schedule-dry-run-import": {
+                                    "icon": null
+                                },
+                                "price-product-schedule-publish": {
+                                    "icon": null
+                                },
+                                "price-product-schedule-list-view": {
+                                    "icon": null
+                                },
+                                "price-product-schedule-list-edit": {
+                                    "icon": null
+                                },
+                                "price-product-schedule-edit": {
+                                    "icon": null
+                                },
+                                "price-product-schedule-list-delete": {
+                                    "icon": null
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
+```
+
+## Suggest new types and functionality
+
+To suggest missing types or functionality, [create an issue](https://github.com/spryker-sdk/integrator/issues). If approved, we will implement them on our side.
+
+Also, feel free to suggest changes via PRs.
