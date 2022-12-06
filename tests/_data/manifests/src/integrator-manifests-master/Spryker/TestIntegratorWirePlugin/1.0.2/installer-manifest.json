@@ -38,6 +38,13 @@
             }
         },
         {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getOrderedTestPlugins",
+            "source": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\Plugin\\ParentPlugin",
+            "position": {
+                "after": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\SecondPlugin"
+            }
+        },
+        {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getEventListenerPluginsWithCollectionReturn",
             "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\AvailabilityStorageEventSubscriber"
         },
@@ -177,6 +184,11 @@
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getTestArrayMergePlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestIntegratorWirePluginStringIndex",
             "index": "TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getSchedulerAdapterPlugins",
+            "source": "\\Spryker\\Zed\\SchedulerJenkins\\Communication\\Plugin\\Adapter\\SchedulerJenkinsAdapterPlugin",
+            "index": "\\Pyz\\Shared\\Scheduler\\SchedulerConfig::PYZ_SCHEDULER_JENKINS"
         }
     ]
 }

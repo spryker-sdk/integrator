@@ -1,0 +1,57 @@
+{
+    "unwire-navigation": [
+        {
+            "navigations": {
+                "main": {
+                    "visibility": null
+                }
+            }
+        },
+        {
+            "navigations": {
+                "element2": null
+            }
+        },
+        {
+            "navigations": {
+                "main": {
+                    "pages": {
+                        "main-nested": {
+                            "visible": null
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "navigations": {
+                "main": {
+                    "pages": {
+                        "main-nested2": null
+                    }
+                }
+            }
+        },
+        {
+            "navigations": {
+                "administration": {
+                    "pages": {
+                        "sales-order-threshold-global": null
+                    }
+                }
+            }
+        },
+        {
+            "navigations": {
+                "administration": {
+                    "pages": {
+                        "sales-order-threshold-settings": {
+                            "label": null,
+                            "title": null
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

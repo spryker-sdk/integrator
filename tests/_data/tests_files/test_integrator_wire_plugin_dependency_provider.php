@@ -7,6 +7,9 @@
 
 namespace Pyz\Zed\TestIntegratorWirePlugin;
 
+use Pyz\Shared\Scheduler\SchedulerConfig;
+use Pyz\Zed\TestIntegratorWirePlugin\Plugin\ChildPlugin;
+use Spryker\Zed\SchedulerJenkins\Communication\Plugin\Adapter\SchedulerJenkinsAdapterPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AfterFirstPluginSubscriber;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AfterTestBarConditionPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AvailabilityStorageEventSubscriber;
@@ -51,6 +54,14 @@ class TestIntegratorWirePluginDependencyProvider
             new AfterFirstPluginSubscriber(),
             new TestIntegratorWirePlugin(),
             new SecondPlugin(),
+            new ChildPlugin(),
+        ];
+    }
+
+    protected function getSchedulerAdapterPlugins(): array
+    {
+        return [
+            SchedulerConfig::PYZ_SCHEDULER_JENKINS => new SchedulerJenkinsAdapterPlugin(),
         ];
     }
 
