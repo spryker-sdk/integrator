@@ -167,6 +167,11 @@
             "index": "TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX"
         },
         {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getTestPlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestIntegratorWirePluginExpressionIndex",
+            "index": "\\Spryker\\Shared\\Config\\Config::get(\\Spryker\\Shared\\Log\\LogConstants::LOG_QUEUE_NAME)"
+        },
+        {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getTestArrayMergePlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestIntegratorWirePlugin"
         },
