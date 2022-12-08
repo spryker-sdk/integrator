@@ -1,6 +1,10 @@
 {
     "unwire-plugin": [
         {
+            "target": "\\Pyz\\Zed\\TestIntegratorUnwirePlugin\\TestIntegratorUnwirePluginDependencyProvider::getTestOnePlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorDefault\\Communication\\Plugin\\TestIntegratorDefault1Plugin"
+        },
+        {
             "target": "\\Pyz\\Zed\\TestNotExistedModule\\TestNotExistedDependencyProvider::getTestPlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorUnwirePlugin\\Communication\\Plugin\\TestIntegratorUnwirePlugin"
         },
