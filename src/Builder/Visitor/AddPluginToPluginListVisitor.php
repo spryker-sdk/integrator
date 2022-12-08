@@ -12,7 +12,6 @@ namespace SprykerSdk\Integrator\Builder\Visitor;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
@@ -65,15 +64,23 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $methodFound = false;
 
     /**
+     * @var \PhpParser\Node\Stmt\Expression|null
+     */
+    protected ?Expression $indexExpr;
+
+    /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
+     * @param \PhpParser\Node\Stmt\Expression|null $indexExpr
      */
     public function __construct(
         ClassMetadataTransfer $classMetadataTransfer,
-        PluginPositionResolverInterface $pluginPositionResolver
+        PluginPositionResolverInterface $pluginPositionResolver,
+        ?Expression $indexExpr = null
     ) {
         $this->classMetadataTransfer = $classMetadataTransfer;
         $this->pluginPositionResolver = $pluginPositionResolver;
+        $this->indexExpr = $indexExpr;
     }
 
     /**
@@ -380,37 +387,8 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             (new BuilderFactory())->new(
                 (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
             ),
-            $this->classMetadataTransfer->getIndex() ? $this->createIndexExpr($this->classMetadataTransfer->getIndex()) : null,
+            $this->indexExpr !== null ? $this->indexExpr->expr : null,
         );
-    }
-
-    /**
-     * @param string $index
-     *
-     * @return \PhpParser\Node\Expr
-     */
-    protected function createIndexExpr(string $index): Expr
-    {
-        if (strpos($index, 'static::') === 0) {
-            $indexParts = explode('::', $index);
-
-            return new ClassConstFetch(
-                new Name('static'),
-                $indexParts[1],
-            );
-        }
-
-        if (strpos($index, '::') !== false) {
-            $indexParts = explode('::', $index);
-            $classNamespaceChain = explode('\\', $indexParts[0]);
-
-            return new ClassConstFetch(
-                new Name(end($classNamespaceChain)),
-                $indexParts[1],
-            );
-        }
-
-        return new String_($index);
     }
 
     /**
