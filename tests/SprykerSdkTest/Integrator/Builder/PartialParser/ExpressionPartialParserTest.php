@@ -12,6 +12,7 @@ namespace SprykerSdkTest\Integrator\Builder\PartialParser;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeDumper;
+use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParser;
@@ -26,6 +27,24 @@ class ExpressionPartialParserTest extends TestCase
         // Arrange
         $parser = new ExpressionPartialParser((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
         $code = 'some invalid code';
+
+        // Act
+        $parserResult = $parser->parse($code);
+        $expression = $parserResult->getExpression();
+
+        // Assert
+        $this->assertInstanceOf(String_::class, $expression->expr);
+        $this->assertSame($code, $expression->expr->value);
+    }
+
+    /**
+     * @return void
+     */
+    public function testParseShouldReturnStringExprWhenAstIsNull(): void
+    {
+        // Arrange
+        $parser = new ExpressionPartialParser($this->createNullAstParserMock());
+        $code = 'new \ArrayObject()';
 
         // Act
         $parserResult = $parser->parse($code);
@@ -124,5 +143,16 @@ class ExpressionPartialParserTest extends TestCase
             DUMP,
             $dumpedExpr,
         );
+    }
+
+    /**
+     * @return \PhpParser\Parser
+     */
+    protected function createNullAstParserMock(): Parser
+    {
+        $parser = $this->createMock(Parser::class);
+        $parser->method('parse')->willReturn(null);
+
+        return $parser;
     }
 }
