@@ -109,7 +109,7 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
     protected function createClassArgumentMetadataTransfer(array $argumentData): ClassArgumentMetadataTransfer
     {
         return (new ClassArgumentMetadataTransfer())
-            ->setValue($argumentData['value'])
+            ->setValue((string)json_encode($argumentData['value']))
             ->setIsLiteral((bool)$argumentData['is_literal']);
     }
 

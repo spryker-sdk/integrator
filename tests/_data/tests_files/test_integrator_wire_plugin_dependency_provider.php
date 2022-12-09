@@ -19,6 +19,7 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FirstPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FooStorageEventSubscriber;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SecondPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SinglePlugin;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestAppendArgumentArrayValue;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestBarConditionPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestFooConditionPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorSingleWirePlugin;
@@ -152,6 +153,9 @@ class TestIntegratorWirePluginDependencyProvider
         $container->extend('TEST_PLUGINS', function (ConditionCollectionInterface $conditionCollection) {
             $conditionCollection->add('Oms/SendOrderShipped', new FirstPlugin());
             $conditionCollection->add(new TestBarConditionPlugin(), 'Oms/SendOrderShipped');
+            $conditionCollection->add(new TestAppendArgumentArrayValue(), [
+                'static::Oms/SendOrderShipped',
+            ]);
             $conditionCollection->add('Oms/SendOrderShipped', new TestFooConditionPlugin());
 
             return $conditionCollection;

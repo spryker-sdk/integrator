@@ -141,6 +141,20 @@
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::extendConditionKeyValuePlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestAppendArgumentArrayValue",
+            "arguments": {
+                "append-arguments": [
+                    {
+                        "value": [
+                            "static::Oms/SendOrderShipped"
+                        ],
+                        "is_literal": true
+                    }
+                ]
+            }
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::extendConditionKeyValuePlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestFooConditionPlugin",
             "arguments": {
                 "prepend-arguments": [
