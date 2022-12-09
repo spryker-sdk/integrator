@@ -29,7 +29,7 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\UrlStorageEventSub
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\WebProfilerApplicationPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\TestIntegratorWirePluginConfig;
 
-class TestIntegratorWirePluginDependencyProvider
+class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWirePluginDependencyProvider
 {
     public function getSinglePlugin(): TestIntegratorSingleWirePlugin
     {
@@ -39,7 +39,6 @@ class TestIntegratorWirePluginDependencyProvider
     public function getConditionPlugins(): array
     {
         $plugins = [];
-
         if (class_exists(WebProfilerApplicationPlugin::class)) {
             $plugins[] = new WebProfilerApplicationPlugin();
         }
@@ -181,5 +180,14 @@ class TestIntegratorWirePluginDependencyProvider
         ], [
             'TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX' => new TestIntegratorWirePluginStringIndex(),
         ]);
+    }
+    public function getConditionParentPlugins() : array
+    {
+        $plugins = [
+        ];
+        if (class_exists(WebProfilerApplicationPlugin::class)) {
+            $plugins[] = new WebProfilerApplicationPlugin();
+        }
+        return $plugins;
     }
 }

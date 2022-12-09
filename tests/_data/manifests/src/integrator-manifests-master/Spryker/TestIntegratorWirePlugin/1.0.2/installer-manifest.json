@@ -10,6 +10,11 @@
             "condition": "class_exists(\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\WebProfilerApplicationPlugin::class)"
         },
         {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getConditionParentPlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\WebProfilerApplicationPlugin",
+            "condition": "class_exists(\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\WebProfilerApplicationPlugin::class)"
+        },
+        {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getTestPlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestIntegratorWirePlugin"
         },

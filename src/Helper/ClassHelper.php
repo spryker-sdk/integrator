@@ -18,7 +18,7 @@ class ClassHelper implements ClassHelperInterface
      */
     public function getShortClassName(string $className): string
     {
-        return ($pos = strrpos($className, '\\')) === false ? $className : substr($className, $pos + 1);
+        return (string)preg_replace('/[A-z0-9]{0,}\\\\/', '', $className);
     }
 
     /**
