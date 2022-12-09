@@ -22,6 +22,7 @@ class TestIntegratorDefaultConfig extends BaseConfig
         10,
         1000,
     ];
+    public const BOOL_EXISTING_VALUE = 'false';
     /**
      * @return string
      */

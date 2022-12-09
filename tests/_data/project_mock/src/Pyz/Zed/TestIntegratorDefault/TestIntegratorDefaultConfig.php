@@ -9,6 +9,7 @@ namespace Pyz\Zed\TestIntegratorDefault;
 
 class TestIntegratorDefaultConfig extends BaseConfig
 {
+    public const BOOL_EXISTING_VALUE = 'false';
     /**
      * @return string
      */
