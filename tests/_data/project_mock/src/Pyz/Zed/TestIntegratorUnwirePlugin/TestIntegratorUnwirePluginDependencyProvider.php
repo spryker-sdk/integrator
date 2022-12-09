@@ -20,6 +20,11 @@ use Spryker\Zed\SchedulerJenkins\Communication\Plugin\Adapter\SchedulerJenkinsAd
 
 class TestIntegratorUnwirePluginDependencyProvider
 {
+    public function getSinglePlugin(): TestIntegratorUnwirePlugin
+    {
+        return new TestIntegratorUnwirePlugin();
+    }
+
     public function getTestOnePlugins(): array
     {
         return [

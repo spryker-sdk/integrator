@@ -10,16 +10,12 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\Visitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 
 class RemoveMethodVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var string
-     */
-    protected const STATEMENT_CLASS = 'Class_';
-
     /**
      * @var string
      */
@@ -40,13 +36,13 @@ class RemoveMethodVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if (!($node->getType() == static::STATEMENT_CLASS)) {
+        if (!($node instanceof Class_)) {
             return $node;
         }
 
         $stmts = [];
         foreach ($node->stmts as $stmt) {
-            if ($stmt instanceof ClassMethod && $node->name->toString() === $this->methodNameToRemove) {
+            if ($stmt instanceof ClassMethod && $stmt->name->toString() === $this->methodNameToRemove) {
                 continue;
             }
 
