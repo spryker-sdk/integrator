@@ -113,7 +113,8 @@ class ArgumentBuilder implements ArgumentBuilderInterface
         $args = [];
         foreach ($classArgumentMetadataTransfers as $classArgumentMetadataTransfer) {
             if ($classArgumentMetadataTransfer->getIsLiteral()) {
-                $args = array_merge($args, $this->builderFactory->args([$classArgumentMetadataTransfer->getValue()]));
+                $metadataValue = json_decode((string)$classArgumentMetadataTransfer->getValue());
+                $args = array_merge($args, $this->builderFactory->args([$metadataValue]));
             }
         }
 
