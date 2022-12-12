@@ -144,25 +144,37 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         }
         $newStmts = (array)$node->stmts;
         $returnStmt = array_pop($newStmts);
-        if ($returnStmt instanceof Return_) {
-            if ($returnStmt->expr instanceof Variable) {
-                $newStmts[] = $this->createNewConditionStatement($returnStmt->expr);
-            }
-            if ($returnStmt->expr instanceof FuncCall || $returnStmt->expr instanceof Array_) {
-                $newStmts[] = new Expression(
-                    new Assign(
-                        (new BuilderFactory())->var(static::PLUGINS_VARIBLE),
-                        new Array_(),
-                    ),
-                );
-                $newStmts[] = $this->createNewConditionStatement((new BuilderFactory())->var(static::PLUGINS_VARIBLE));
-                $returnStmt->expr = (new BuilderFactory())->var(static::PLUGINS_VARIBLE);
-            }
-            $newStmts[] = $returnStmt;
-            $node->stmts = $newStmts;
+        if (!($returnStmt instanceof Return_)) {
+            return $node;
         }
 
+        if ($returnStmt->expr instanceof Variable) {
+            $newStmts[] = $this->createNewConditionStatement($returnStmt->expr);
+        }
+        if ($returnStmt->expr instanceof FuncCall || $returnStmt->expr instanceof Array_) {
+            $newStmts[] = $this->createAssignEmptyArray(static::PLUGINS_VARIBLE);
+            $newStmts[] = $this->createNewConditionStatement((new BuilderFactory())->var(static::PLUGINS_VARIBLE));
+            $returnStmt->expr = (new BuilderFactory())->var(static::PLUGINS_VARIBLE);
+        }
+        $newStmts[] = $returnStmt;
+        $node->stmts = $newStmts;
+
         return $node;
+    }
+
+    /**
+     * @param string $varName
+     *
+     * @return \PhpParser\Node\Stmt\Expression
+     */
+    protected function createAssignEmptyArray(string $varName)
+    {
+        return new Expression(
+            new Assign(
+                (new BuilderFactory())->var($varName),
+                new Array_(),
+            ),
+        );
     }
 
     /**
