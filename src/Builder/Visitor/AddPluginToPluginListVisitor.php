@@ -167,7 +167,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      *
      * @return \PhpParser\Node\Stmt\Expression
      */
-    protected function createAssignEmptyArray(string $varName)
+    protected function createAssignEmptyArray(string $varName): Expression
     {
         return new Expression(
             new Assign(
