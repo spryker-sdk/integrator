@@ -15,11 +15,18 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\UrlStorageEventSub
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AvailabilityStorageEventSubscriber;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestFooConditionPlugin;
 
-class TestIntegratorWirePluginDependencyProvider
+class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWirePluginDependencyProvider
 {
     public function getSinglePlugin(): SinglePlugin
     {
         return new SinglePlugin();
+    }
+
+    public function getConditionPlugins(): array
+    {
+        $plugins = [];
+
+        return $plugins;
     }
 
     public function getTestPlugins(): array
