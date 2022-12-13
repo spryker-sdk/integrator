@@ -12,6 +12,7 @@ namespace SprykerSdk\Integrator\Manifest;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
+use SprykerSdk\Integrator\Transfer\SourceInputTransfer;
 use ZipArchive;
 
 class ManifestReader implements ManifestReaderInterface
@@ -38,14 +39,15 @@ class ManifestReader implements ManifestReaderInterface
 
     /**
      * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
+     * @param \SprykerSdk\Integrator\Transfer\SourceInputTransfer $sourceInputTransfer
      *
      * @return array<string, array<string, array<string>>>
      */
-    public function readManifests(array $moduleTransfers): array
+    public function readManifests(array $moduleTransfers, SourceInputTransfer $sourceInputTransfer): array
     {
         // Do not update repository folder when in local development
         if (!is_dir($this->config->getLocalRecipesDirectory())) {
-            $this->updateRepositoryFolder();
+            $this->updateRepositoryFolder($sourceInputTransfer);
         }
 
         $manifests = [];
@@ -83,22 +85,53 @@ class ManifestReader implements ManifestReaderInterface
     }
 
     /**
+     * @param \SprykerSdk\Integrator\Transfer\SourceInputTransfer $sourceInputTransfer
+     *
      * @return void
      */
-    protected function updateRepositoryFolder(): void
+    protected function updateRepositoryFolder(SourceInputTransfer $sourceInputTransfer): void
     {
         $manifestsArchive = $this->config->getManifestsDirectory() . 'archive.zip';
+        $manifestsRepository = $this->getManifestsRepositoryPath($sourceInputTransfer);
 
         if (!is_dir($this->config->getManifestsDirectory())) {
             mkdir($this->config->getManifestsDirectory(), 0700, true);
         }
 
-        file_put_contents($manifestsArchive, fopen($this->config->getManifestsRepository(), 'r'));
+        file_put_contents($manifestsArchive, fopen($manifestsRepository, 'r'));
 
         $zip = new ZipArchive();
         $zip->open($manifestsArchive);
         $zip->extractTo($this->config->getManifestsDirectory());
         $zip->close();
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\SourceInputTransfer $sourceInputTransfer
+     *
+     * @return string
+     */
+    protected function getManifestsRepositoryPath(SourceInputTransfer $sourceInputTransfer): string
+    {
+        // https://github.com/spryker-sdk/integrator-manifests/archive/refs/heads/bugfix/apps-3937-fix-the-manifest-errors-that-were-found-in-review.zip
+        // https://github.com/spryker-sdk/integrator-manifests/archive/ab2bd3ad0bd5429ae648133432fe944e57aa031e.zip
+        if ($sourceInputTransfer->getSourceCommit() !== null) {
+            return sprintf(
+                '%s/%s.zip',
+                $this->config->getManifestsArchiveUrl(),
+                $sourceInputTransfer->getSourceCommit(),
+            );
+        }
+
+        if ($sourceInputTransfer->getSource() !== null) {
+            return sprintf(
+                '%s/refs/heads/%s.zip',
+                $this->config->getManifestsArchiveUrl(),
+                $sourceInputTransfer->getSource(),
+            );
+        }
+
+        return $this->config->getManifestsRepository();
     }
 
     /**

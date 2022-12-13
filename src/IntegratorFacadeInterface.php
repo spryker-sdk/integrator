@@ -10,15 +10,17 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Transfer\SourceInputTransfer;
 
 interface IntegratorFacadeInterface
 {
     /**
      * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
+     * @param \SprykerSdk\Integrator\Transfer\SourceInputTransfer $sourceInputTransfer
      * @param bool $isDry
      *
      * @return int
      */
-    public function runInstallation(array $moduleTransfers, InputOutputInterface $input, bool $isDry = false): int;
+    public function runInstallation(array $moduleTransfers, InputOutputInterface $input, SourceInputTransfer $sourceInputTransfer, bool $isDry = false): int;
 }

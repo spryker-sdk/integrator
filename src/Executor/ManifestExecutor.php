@@ -15,6 +15,7 @@ use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
 use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
 use SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface;
+use SprykerSdk\Integrator\Transfer\SourceInputTransfer;
 
 class ManifestExecutor implements ManifestExecutorInterface
 {
@@ -59,11 +60,12 @@ class ManifestExecutor implements ManifestExecutorInterface
     /**
      * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
+     * @param \SprykerSdk\Integrator\Transfer\SourceInputTransfer $sourceInputTransfer
      * @param bool $isDry
      *
      * @return int
      */
-    public function runModuleManifestExecution(array $moduleTransfers, InputOutputInterface $inputOutput, bool $isDry): int
+    public function runModuleManifestExecution(array $moduleTransfers, InputOutputInterface $inputOutput, SourceInputTransfer $sourceInputTransfer, bool $isDry): int
     {
         $this->assertModuleData($moduleTransfers);
 

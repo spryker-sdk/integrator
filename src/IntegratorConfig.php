@@ -109,6 +109,11 @@ class IntegratorConfig
     /**
      * @var string
      */
+    protected const MANIFESTS_REPOSITORY_ARCHIVE_URL = 'https://github.com/spryker-sdk/integrator-manifests/archive';
+
+    /**
+     * @var string
+     */
     protected const MANIFESTS_URL = 'https://github.com/spryker-sdk/integrator-manifests/archive/master.zip';
 
     /**
@@ -374,6 +379,14 @@ class IntegratorConfig
         }
 
         return static::MANIFESTS_URL;
+    }
+
+    /**
+     * @return string
+     */
+    public function getManifestsArchiveUrl(): string
+    {
+        return static::MANIFESTS_REPOSITORY_ARCHIVE_URL;
     }
 
     /**

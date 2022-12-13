@@ -15,6 +15,7 @@ use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
+use SprykerSdk\Integrator\Transfer\SourceInputTransfer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,6 +35,36 @@ class ModuleInstallerConsole extends Command
     /**
      * @var string
      */
+    protected const ARGUMENT_MODULE_NAMES_DESCRIPTION = 'Name of modules which should be build, separated by `,`';
+
+    /**
+     * @var string
+     */
+    protected const ARGUMENT_SOURCE = 'source-branch';
+
+    /**
+     * @var string
+     */
+    protected const ARGUMENT_SOURCE_DESCRIPTION = 'Source branch of the manifests to be applied';
+
+    /**
+     * @var string
+     */
+    protected const ARGUMENT_SOURCE_COMMIT = 'source-commit';
+
+    /**
+     * @var string
+     */
+    protected const ARGUMENT_SOURCE_COMMIT_DESCRIPTION = 'Source commit (SHA1) of the manifests to be applied';
+
+    /**
+     * @var string
+     */
+    protected const COMMAND_NAME = 'integrator:manifest:run';
+
+    /**
+     * @var string
+     */
     protected const FLAG_DRY = 'dry';
 
     /**
@@ -41,13 +72,23 @@ class ModuleInstallerConsole extends Command
      */
     protected function configure(): void
     {
-        $this->setName('integrator:manifest:run')
+        $this->setName(static::COMMAND_NAME)
             ->setDescription('')
             ->addOption(static::FLAG_DRY)
             ->addArgument(
                 static::ARGUMENT_MODULE_NAMES,
                 InputArgument::OPTIONAL,
-                'Name of modules which should be build, separated by `,`',
+                static::ARGUMENT_MODULE_NAMES_DESCRIPTION,
+            )
+            ->addArgument(
+                static::ARGUMENT_SOURCE,
+                InputArgument::OPTIONAL,
+                static::ARGUMENT_SOURCE_DESCRIPTION,
+            )
+            ->addArgument(
+                static::ARGUMENT_SOURCE_COMMIT,
+                InputArgument::OPTIONAL,
+                static::ARGUMENT_SOURCE_COMMIT_DESCRIPTION,
             );
     }
 
@@ -62,9 +103,10 @@ class ModuleInstallerConsole extends Command
         $io = new SymfonyStyle($input, $output);
 
         $moduleList = $this->getModuleList($input);
+        $sourceInputTransfer = $this->buildSourceInputTransfer($input);
         $isDry = $this->getDryOptionValue($input);
 
-        $this->getFacade()->runInstallation($moduleList, new SymfonyConsoleInputOutputAdapter($io), $isDry);
+        $this->getFacade()->runInstallation($moduleList, new SymfonyConsoleInputOutputAdapter($io), $sourceInputTransfer, $isDry);
 
         return 0;
     }
@@ -124,6 +166,29 @@ class ModuleInstallerConsole extends Command
         $this->addModuleFilterDetails($moduleArgument, $moduleFilterTransfer);
 
         return $moduleFilterTransfer;
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     *
+     * @return \SprykerSdk\Integrator\Transfer\SourceInputTransfer
+     */
+    protected function buildSourceInputTransfer(InputInterface $input): SourceInputTransfer
+    {
+        $sourceInputTransfer = new SourceInputTransfer();
+
+        $source = $input->getArgument(static::ARGUMENT_SOURCE);
+        $sourceCommit = $input->getArgument(static::ARGUMENT_SOURCE_COMMIT);
+
+        if ($source !== null) {
+            $sourceInputTransfer->setSource($source);
+        }
+
+        if ($sourceCommit !== null) {
+            $sourceInputTransfer->setSourceCommit($sourceCommit);
+        }
+
+        return $sourceInputTransfer;
     }
 
     /**
