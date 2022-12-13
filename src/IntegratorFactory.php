@@ -87,6 +87,8 @@ use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
+use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParser;
+use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinterInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
@@ -770,6 +772,7 @@ class IntegratorFactory
         return new ReturnArrayWireClassInstanceModifierStrategy(
             $this->createReturnArrayModifierApplicableModifierStrategy(),
             $this->createPluginPositionResolver(),
+            $this->createNodeExpressionPartialParser(),
         );
     }
 
@@ -917,6 +920,16 @@ class IntegratorFactory
     public function createArgumentBuilder(): ArgumentBuilderInterface
     {
         return new ArgumentBuilder($this->createBuilderFactory());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface
+     */
+    public function createNodeExpressionPartialParser(): ExpressionPartialParserInterface
+    {
+        return new ExpressionPartialParser(
+            (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
+        );
     }
 
     /**

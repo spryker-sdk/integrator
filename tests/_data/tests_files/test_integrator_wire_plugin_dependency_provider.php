@@ -9,6 +9,8 @@ namespace Pyz\Zed\TestIntegratorWirePlugin;
 
 use Pyz\Shared\Scheduler\SchedulerConfig;
 use Pyz\Zed\TestIntegratorWirePlugin\Plugin\ChildPlugin;
+use Spryker\Shared\Config\Config;
+use Spryker\Shared\Log\LogConstants;
 use Spryker\Zed\SchedulerJenkins\Communication\Plugin\Adapter\SchedulerJenkinsAdapterPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AfterFirstPluginSubscriber;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AfterTestBarConditionPlugin;
@@ -24,6 +26,7 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestBarConditionPl
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestFooConditionPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorSingleWirePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePlugin;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginExpressionIndex;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginIndex;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginStaticIndex;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginStringIndex;
@@ -44,6 +47,7 @@ class TestIntegratorWirePluginDependencyProvider
             TestIntegratorWirePluginConfig::TEST_INTEGRATOR_WIRE_PLUGIN => new TestIntegratorWirePluginIndex(),
             static::TEST_INTEGRATOR_WIRE_PLUGIN_STATIC_INDEX => new TestIntegratorWirePluginStaticIndex(),
             'TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX' => new TestIntegratorWirePluginStringIndex(),
+            Config::get(LogConstants::LOG_QUEUE_NAME) => new TestIntegratorWirePluginExpressionIndex(),
         ];
     }
 
