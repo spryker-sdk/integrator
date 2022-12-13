@@ -30,9 +30,6 @@ class ConsoleDependencyProvider
                 $commands[] = new TestClassExistsConsole();
             }
         }
-        if (class_exists(TestNewConsoleWithMissingCondition::class)) {
-            $commands[] = new TestNewConsoleWithMissingCondition();
-        }
 
         return $commands;
     }
