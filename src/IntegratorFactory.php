@@ -73,6 +73,7 @@ use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ArrayConfigura
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\BooleanConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ClassConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface;
+use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConstantConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\DefaultConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\LiteralConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\StringConfigurationEnvironmentStrategy;
@@ -86,6 +87,8 @@ use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
+use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParser;
+use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinterInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
@@ -111,6 +114,7 @@ use SprykerSdk\Integrator\ManifestStrategy\ExecuteConsoleManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\GlossaryManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface;
 use SprykerSdk\Integrator\ManifestStrategy\UnwireGlueRelationshipManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\UnwireNavigationManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\UnwirePluginManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\UnwireWidgetManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireGlueRelationshipManifestStrategy;
@@ -276,6 +280,7 @@ class IntegratorFactory
             $this->createBooleanConfigurationEnvironmentStrategy(),
             $this->createArrayConfigurationEnvironmentStrategy(),
             $this->createClassConfigurationEnvironmentStrategy(),
+            $this->createConstantConfigurationEnvironmentStrategy(),
             $this->createLiteralConfigurationEnvironmentStrategy(),
             $this->createDefaultConfigurationEnvironmentStrategy(),
         ];
@@ -295,6 +300,14 @@ class IntegratorFactory
     public function createClassConfigurationEnvironmentStrategy(): ConfigurationEnvironmentStrategyInterface
     {
         return new ClassConfigurationEnvironmentStrategy();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConstantConfigurationEnvironmentStrategy
+     */
+    public function createConstantConfigurationEnvironmentStrategy(): ConstantConfigurationEnvironmentStrategy
+    {
+        return new ConstantConfigurationEnvironmentStrategy();
     }
 
     /**
@@ -379,6 +392,17 @@ class IntegratorFactory
     public function createWireNavigationManifestStrategy(): ManifestStrategyInterface
     {
         return new WireNavigationManifestStrategy(
+            $this->getConfig(),
+            $this->createClassHelper(),
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
+     */
+    public function createUnwireNavigationManifestStrategy(): ManifestStrategyInterface
+    {
+        return new UnwireNavigationManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
         );
@@ -707,6 +731,7 @@ class IntegratorFactory
             $this->createUnwireGlueRelationshipManifestStrategy(),
             $this->createExecuteConsoleManifestStrategy(),
             $this->createWireNavigationManifestStrategy(),
+            $this->createUnwireNavigationManifestStrategy(),
             $this->createGlossaryManifestStrategy(),
         ];
     }
@@ -747,6 +772,7 @@ class IntegratorFactory
         return new ReturnArrayWireClassInstanceModifierStrategy(
             $this->createReturnArrayModifierApplicableModifierStrategy(),
             $this->createPluginPositionResolver(),
+            $this->createNodeExpressionPartialParser(),
         );
     }
 
@@ -894,6 +920,16 @@ class IntegratorFactory
     public function createArgumentBuilder(): ArgumentBuilderInterface
     {
         return new ArgumentBuilder($this->createBuilderFactory());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface
+     */
+    public function createNodeExpressionPartialParser(): ExpressionPartialParserInterface
+    {
+        return new ExpressionPartialParser(
+            (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
+        );
     }
 
     /**

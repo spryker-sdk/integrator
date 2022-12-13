@@ -48,6 +48,13 @@
             }
         },
         {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getOrderedTestPlugins",
+            "source": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\Plugin\\ParentPlugin",
+            "position": {
+                "after": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\SecondPlugin"
+            }
+        },
+        {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getEventListenerPluginsWithCollectionReturn",
             "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\AvailabilityStorageEventSubscriber"
         },
@@ -144,6 +151,20 @@
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::extendConditionKeyValuePlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestAppendArgumentArrayValue",
+            "arguments": {
+                "append-arguments": [
+                    {
+                        "value": [
+                            "static::Oms/SendOrderShipped"
+                        ],
+                        "is_literal": true
+                    }
+                ]
+            }
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::extendConditionKeyValuePlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestFooConditionPlugin",
             "arguments": {
                 "prepend-arguments": [
@@ -168,6 +189,11 @@
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getTestPlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestIntegratorWirePluginStringIndex",
             "index": "TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getTestPlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestIntegratorWirePluginExpressionIndex",
+            "index": "\\Spryker\\Shared\\Config\\Config::get(\\Spryker\\Shared\\Log\\LogConstants::LOG_QUEUE_NAME)"
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getTestArrayMergePlugins",

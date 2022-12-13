@@ -21,6 +21,11 @@ use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\WebProfilerAppli
 
 class TestIntegratorUnwirePluginDependencyProvider
 {
+    public function getSinglePlugin(): TestIntegratorUnwirePlugin
+    {
+        return new TestIntegratorUnwirePlugin();
+    }
+
     public function getTestOnePlugins(): array
     {
         return [

@@ -17,6 +17,10 @@
             "source": "\\Spryker\\Zed\\TestIntegratorUnwirePlugin\\Communication\\Plugin\\TestIntegratorUnwirePlugin"
         },
         {
+            "target": "\\Pyz\\Zed\\TestIntegratorUnwirePlugin\\TestIntegratorUnwirePluginDependencyProvider::getSinglePlugin",
+            "source": "\\Spryker\\Zed\\TestIntegratorUnwirePlugin\\Communication\\Plugin\\TestIntegratorUnwirePlugin"
+        },
+        {
             "target": "\\Pyz\\Zed\\TestIntegratorUnwirePlugin\\TestIntegratorUnwirePluginDependencyProvider::getTestPlugins",
             "source": "\\Spryker\\Zed\\TestIntegratorUnwirePlugin\\Communication\\Plugin\\TestIntegratorUnwirePlugin"
         },

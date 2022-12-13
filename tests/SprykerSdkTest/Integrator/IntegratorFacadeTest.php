@@ -362,6 +362,26 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
+    public function testRunInstallationUnwireNavigationPlugin(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwireNavigation'), $ioAdapter, false);
+
+        // Assert
+        $testFilePath = './tests/_data/tests_files/test_integrator_unwire_navigation.xml';
+        $resultFilePath = './tests/tmp/config/Zed/navigation.xml';
+
+        $this->assertFileExists($resultFilePath);
+        $this->assertFileExists($testFilePath);
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($resultFilePath)));
+    }
+
+    /**
+     * @return void
+     */
     public function testRunInstallationAddConfigArrayElement(): void
     {
         // Arrange

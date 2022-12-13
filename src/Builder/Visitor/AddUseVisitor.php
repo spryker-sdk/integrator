@@ -96,8 +96,12 @@ class AddUseVisitor extends NodeVisitorAbstract
             if ($stmt->getType() !== static::STATEMENT_USE) {
                 continue;
             }
+
             foreach ($stmt->uses as $use) {
-                if ($use->name->toString() === $this->className) {
+                $usedClassName = $use->name->toString();
+                $usedClassParents = class_exists($usedClassName) ? (class_parents($usedClassName) ?: []) : [];
+
+                if ($usedClassName === $this->className || in_array($this->className, $usedClassParents)) {
                     return true;
                 }
             }
