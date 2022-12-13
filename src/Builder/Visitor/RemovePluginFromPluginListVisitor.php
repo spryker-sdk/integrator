@@ -93,6 +93,11 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
         foreach ($node->stmts as $index => $stmt) {
             if ($stmt instanceof If_) {
                 $stmt = $this->filterStatements($stmt);
+                if (!$stmt->stmts) {
+                    $pluginToRemoveIndex = $index;
+
+                    break;
+                }
             }
 
             if (
