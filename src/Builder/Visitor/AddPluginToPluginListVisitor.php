@@ -13,22 +13,17 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
@@ -41,17 +36,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     /**
      * @var string
      */
-    public const STMTS = 'stmts';
-
-    /**
-     * @var string
-     */
     protected const ARRAY_MERGE_FUNCTION = 'array_merge';
-
-    /**
-     * @var string
-     */
-    protected const PLUGINS_VARIBLE = 'plugins';
 
     /**
      * @var string
@@ -107,9 +92,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     {
         if ($node instanceof ClassMethod && $node->name->toString() === $this->classMetadataTransfer->getTargetMethodNameOrFail()) {
             $this->methodFound = true;
-            if ($this->classMetadataTransfer->getCondition()) {
-                $this->addNewPluginWithConditionIntoList($node);
-            }
 
             return $node;
         }
@@ -135,104 +117,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         }
 
         return $node;
-    }
-
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod $node
-     *
-     * @return \PhpParser\Node
-     */
-    protected function addNewPluginWithConditionIntoList(ClassMethod $node): Node
-    {
-        foreach ((array)$node->stmts as $stmt) {
-            if ($stmt instanceof If_ && $this->checkIfConditionExist($stmt)) {
-                return $node;
-            }
-        }
-        $newStmts = (array)$node->stmts;
-        $returnStmt = array_pop($newStmts);
-        if (!($returnStmt instanceof Return_)) {
-            return $node;
-        }
-
-        if ($returnStmt->expr instanceof Variable) {
-            $newStmts[] = $this->createNewConditionStatement($returnStmt->expr);
-        }
-        if ($returnStmt->expr instanceof FuncCall || $returnStmt->expr instanceof Array_) {
-            $newStmts[] = $this->createAssignEmptyArray(static::PLUGINS_VARIBLE);
-            $newStmts[] = $this->createNewConditionStatement((new BuilderFactory())->var(static::PLUGINS_VARIBLE));
-            $returnStmt->expr = (new BuilderFactory())->var(static::PLUGINS_VARIBLE);
-        }
-        $newStmts[] = $returnStmt;
-        $node->stmts = $newStmts;
-
-        return $node;
-    }
-
-    /**
-     * @param string $varName
-     *
-     * @return \PhpParser\Node\Stmt\Expression
-     */
-    protected function createAssignEmptyArray(string $varName): Expression
-    {
-        return new Expression(
-            new Assign(
-                (new BuilderFactory())->var($varName),
-                new Array_(),
-            ),
-        );
-    }
-
-    /**
-     * @param \PhpParser\Node\Expr $name
-     *
-     * @return \PhpParser\Node\Stmt
-     */
-    protected function createNewConditionStatement(Expr $name): Stmt
-    {
-        return new If_(
-            new ConstFetch(
-                new Name(
-                    (new ClassHelper())
-                        ->getShortClassName(
-                            (string)$this->classMetadataTransfer->getCondition(),
-                        ),
-                ),
-            ),
-            [
-                static::STMTS => [
-                    new Expression(
-                        new Assign(
-                            new ArrayDimFetch($name),
-                            (new BuilderFactory())->new(
-                                (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
-                            ),
-                        ),
-                    ),
-                ],
-            ],
-        );
-    }
-
-    /**
-     * @param \PhpParser\Node\Stmt\If_ $ifCondition
-     *
-     * @return bool
-     */
-    protected function checkIfConditionExist(If_ $ifCondition): bool
-    {
-        if ($this->getIfClausePrettyPrint($ifCondition) === $this->classMetadataTransfer->getCondition()) {
-            return true;
-        }
-
-        foreach ($ifCondition->stmts as $stmt) {
-            if ($stmt instanceof If_) {
-                return $this->checkIfConditionExist($stmt);
-            }
-        }
-
-        return false;
     }
 
     /**

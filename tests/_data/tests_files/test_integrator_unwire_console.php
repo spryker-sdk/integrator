@@ -17,6 +17,11 @@ class ConsoleDependencyProvider
     {
         $commands = [];
 
+        if ($this->getConfig()->isDevelopmentConsoleCommandsEnabled()) {
+            if (class_exists(TestClassExistsConsole::class)) {
+            }
+        }
+
         return $commands;
     }
 }
