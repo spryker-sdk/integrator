@@ -73,6 +73,23 @@ class ManifestExecutor implements ManifestExecutorInterface
 
         $unappliedManifests = $this->findUnappliedManifests($manifests, $lockedModules);
 
+        $unappliedManifests = [
+            'Spryker.ProductCategoryStorage' => [
+                'wire-plugin' => [
+                    '4907d69b6e2e02b034d2af5124d6b85abf9f7eb4' =>
+                        [
+                            'target' => '\Spryker\Zed\Category\CategoryDependencyProvider::getPluginsA',
+                            'source' => '\Spryker\Zed\ProductCategoryStorage\Communication\Plugin\Publisher\Category\CategoryWritePublisherPluginA',
+                            'call' => [
+                                'target' => '\Spryker\Zed\Category\CategoryDependencyProvider::getWrappedPlugins',
+                                'after' => '\Spryker\Zed\Category\CategoryDependencyProvider::getWrappedFunctionDefault'
+                            ]
+                        ]
+                ]
+            ]
+        ];
+
+
         if (!$unappliedManifests) {
             return 0;
         }

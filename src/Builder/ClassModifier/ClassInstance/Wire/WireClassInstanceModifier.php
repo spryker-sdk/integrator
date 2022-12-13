@@ -75,8 +75,18 @@ class WireClassInstanceModifier implements WireClassInstanceModifierInterface
         $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         if (!$methodNode) {
             $classInformationTransfer = $this->commonClassModifier->overrideMethodFromParent($classInformationTransfer, $targetMethodName);
-            $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
         }
+        $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
+        if (!$methodNode) {
+            $classInformationTransfer = $this->commonClassModifier->createClassMethod(
+                $classInformationTransfer,
+                $targetMethodName,
+                [],
+                true,
+                '',
+            );
+        }
+        $methodNode = $this->classNodeFinder->findMethodNode($classInformationTransfer, $targetMethodName);
 
         if ($methodNode === null) {
             throw new RuntimeException('Method node not found');

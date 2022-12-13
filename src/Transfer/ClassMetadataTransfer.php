@@ -62,6 +62,11 @@ class ClassMetadataTransfer extends AbstractTransfer
     /**
      * @var string
      */
+    public const CALL = 'call';
+
+    /**
+     * @var string
+     */
     public const TARGET_METHOD_NAME = 'targetMethodName';
 
     /**
@@ -110,6 +115,11 @@ class ClassMetadataTransfer extends AbstractTransfer
     protected $condition;
 
     /**
+     * @var \SprykerSdk\Integrator\Transfer\CallMetadataTransfer|null
+     */
+    protected $call;
+
+    /**
      * @var string|null
      */
     protected $targetMethodName;
@@ -139,6 +149,8 @@ class ClassMetadataTransfer extends AbstractTransfer
         'Index' => 'index',
         'condition' => 'condition',
         'Condition' => 'condition',
+        'call' => 'call',
+        'Call' => 'call',
         'targetMethodName' => 'targetMethodName',
         'TargetMethodName' => 'targetMethodName',
         'target_methodName' => 'targetMethodName',
@@ -254,6 +266,18 @@ class ClassMetadataTransfer extends AbstractTransfer
             'rest_request_parameter' => 'no',
             'is_associative' => false,
             'is_nullable' => false,
+            'is_strict' => false,
+        ],
+        self::CALL => [
+            'type' => 'SprykerSdk\Integrator\Transfer\CallMetadataTransfer',
+            'type_shim' => null,
+            'name_underscore' => 'call',
+            'is_collection' => true,
+            'is_transfer' => true,
+            'is_value_object' => false,
+            'rest_request_parameter' => 'no',
+            'is_associative' => false,
+            'is_nullable' => true,
             'is_strict' => false,
         ],
         self::TARGET_METHOD_NAME => [
@@ -665,6 +689,27 @@ class ClassMetadataTransfer extends AbstractTransfer
     }
 
     /**
+     * @param \SprykerSdk\Integrator\Transfer\CallMetadataTransfer|null $transfer
+     *
+     * @return $this
+     */
+    public function setCall(?CallMetadataTransfer $transfer)
+    {
+        $this->call = $transfer;
+        $this->modifiedProperties[static::CALL] = true;
+
+        return $this;
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Transfer\CallMetadataTransfer|null
+     */
+    public function getCall(): ?CallMetadataTransfer
+    {
+        return $this->call;
+    }
+
+    /**
      * @param string|null $targetMethodName
      *
      * @return $this
@@ -730,6 +775,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                     $this->modifiedProperties[$normalizedPropertyName] = true;
 
                     break;
+                case 'call':
                 case 'before':
                 case 'after':
                 case 'prependArguments':
@@ -868,6 +914,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                     $values[$arrayKey] = $value;
 
                     break;
+                case 'call':
                 case 'before':
                 case 'after':
                 case 'prependArguments':
@@ -908,6 +955,7 @@ class ClassMetadataTransfer extends AbstractTransfer
                     $values[$arrayKey] = $value;
 
                     break;
+                case 'call':
                 case 'before':
                 case 'after':
                 case 'prependArguments':
@@ -989,6 +1037,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'before' => $this->before,
             'after' => $this->after,
             'index' => $this->index,
+            'call' => $this->call,
             'condition' => $this->condition,
             'targetMethodName' => $this->targetMethodName,
             'prependArguments' => $this->prependArguments,
@@ -1008,6 +1057,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'before' => $this->before,
             'after' => $this->after,
             'index' => $this->index,
+            'call' => $this->call,
             'condition' => $this->condition,
             'targetMethodName' => $this->targetMethodName,
             'prepend_arguments' => $this->prependArguments,
@@ -1027,6 +1077,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'before' => $this->addValuesToCollection($this->before, true, false),
             'after' => $this->after,
             'index' => $this->index,
+            'call' => $this->call,
             'condition' => $this->condition,
             'targetMethodName' => $this->targetMethodName,
             'prepend_arguments' => $this->addValuesToCollection($this->prependArguments, true, false),
@@ -1047,6 +1098,7 @@ class ClassMetadataTransfer extends AbstractTransfer
             'after' => $this->after,
             'index' => $this->index,
             'condition' => $this->index,
+            'call' => $this->call,
             'targetMethodName' => $this->targetMethodName,
             'prependArguments' => $this->addValuesToCollection($this->prependArguments, true, true),
             'appendArguments' => $this->addValuesToCollection($this->appendArguments, true, true),

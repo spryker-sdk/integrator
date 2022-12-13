@@ -131,4 +131,21 @@ class TestIntegratorWirePluginDependencyProvider
     {
         return array_merge([\ArrayObject::class]);
     }
+
+    /**
+     * @return array
+     */
+    protected function getWrappedPlugins(): array
+    {
+        return array_merge(
+            $this->getWrappedFunctionDefault()
+        );
+    }
+    /**
+     * @return array
+     */
+    protected function getWrappedFunctionDefault(): array
+    {
+        return [];
+    }
 }
