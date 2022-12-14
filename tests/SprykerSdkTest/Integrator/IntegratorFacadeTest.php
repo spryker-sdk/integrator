@@ -519,34 +519,6 @@ class IntegratorFacadeTest extends BaseTestCase
     }
 
     /**
-     * @param string|null $moduleName
-     *
-     * @return array
-     */
-    private function getModuleList(?string $moduleName = null): array
-    {
-        return $this->getFactory()->getModuleFinderFacade()->getModules($this->buildModuleFilterTransfer($moduleName));
-    }
-
-    /**
-     * @param string|null $moduleName
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer
-     */
-    private function buildModuleFilterTransfer(?string $moduleName = null): ModuleFilterTransfer
-    {
-        $moduleFilterTransfer = new ModuleFilterTransfer();
-
-        if ($moduleName) {
-            $moduleTransfer = new ModuleTransfer();
-            $moduleTransfer->setName($moduleName);
-            $moduleFilterTransfer->setModule($moduleTransfer);
-        }
-
-        return $moduleFilterTransfer;
-    }
-
-    /**
      * @return \SprykerSdk\Integrator\Business\IntegratorFacade
      */
     private function createIntegratorFacade(): IntegratorFacade
@@ -624,8 +596,5 @@ class IntegratorFacadeTest extends BaseTestCase
     private function clearTestEnv(): void
     {
         $this->removeTmpDirectory();
-        $this->createTmpDirectory();
-        $this->createTmpStandaloneModulesDirectory();
-        $this->copyProjectMockToTmpDirectory();
     }
 }

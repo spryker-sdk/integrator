@@ -142,8 +142,10 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
         include $autoloadFile;
 
         $updatedModules = $this->createModuleFinderFacade()->getModules();
+        $commandArgumentsTransfer = (new IntegratorCommandArgumentsTransfer())
+            ->setIsDry(false);
 
-        $this->getIntegratorFacade()->runInstallation($updatedModules, new ComposerInputOutputAdapter($this->io), new IntegratorCommandArgumentsTransfer());
+        $this->getIntegratorFacade()->runInstallation($updatedModules, new ComposerInputOutputAdapter($this->io), $commandArgumentsTransfer);
         $this->io->write('runInstallerEnd' . PHP_EOL);
     }
 
