@@ -70,12 +70,14 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
             return $node;
         }
 
-        if ($this->methodFound) {
-            if ($node instanceof FuncCall && $this->isArrayMergeFuncCallNode($node)) {
-                $this->addNewCallIntoArrayMergeFuncNode($node);
+        if (!$this->methodFound) {
+            return $node;
+        }
 
-                return $this->successfullyProcessed();
-            }
+        if ($node instanceof FuncCall && $this->isArrayMergeFuncCallNode($node)) {
+            $this->addNewCallIntoArrayMergeFuncNode($node);
+
+            return $this->successfullyProcessed();
         }
 
         return $node;
@@ -98,16 +100,15 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
      */
     protected function addNewCallIntoArrayMergeFuncNode(FuncCall $node): Node
     {
-        $calledMethods = $this->getCalledMethods($node);
         $callMetadataTransfer = $this->classMetadataTransfer->getCall();
         if (!$callMetadataTransfer) {
             return $node;
         }
 
+        $calledMethods = $this->getCalledMethods($node);
         $before = $callMetadataTransfer->getBefore();
         if ($before) {
-            $beforeMethodName = $this->getMethodNameFromNamespaceName($before);
-            $beforePosition = array_search($beforeMethodName, $calledMethods, true);
+            $beforePosition = $this->getPositionByNamespace($calledMethods, $before);
             if (is_int($beforePosition)) {
                 return $this->addNewCallIntoArrayMergeFuncNodeByPosition($node, $beforePosition);
             }
@@ -115,8 +116,7 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
 
         $after = $callMetadataTransfer->getAfter();
         if ($after) {
-            $afterMethodName = $this->getMethodNameFromNamespaceName($after);
-            $afterPosition = array_search($afterMethodName, $calledMethods, true);
+            $afterPosition = $this->getPositionByNamespace($calledMethods, $after);
             if (is_int($afterPosition)) {
                 return $this->addNewCallIntoArrayMergeFuncNodeByPosition($node, $afterPosition + 1);
             }
@@ -181,6 +181,16 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
         $this->methodFound = false;
 
         return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+    }
+
+    protected function getPositionByNamespace(array $calledMethods, string $needleNamespace): ?int
+    {
+        $position = array_search($this->getMethodNameFromNamespaceName($needleNamespace), $calledMethods, true);
+        if ($position === false || is_string($position)) {
+            return null;
+        }
+
+        return $position;
     }
 
     /**
