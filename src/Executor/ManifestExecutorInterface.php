@@ -21,5 +21,9 @@ interface ManifestExecutorInterface
      *
      * @return int
      */
-    public function runModuleManifestExecution(array $moduleTransfers, InputOutputInterface $inputOutput, IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): int;
+    public function runModuleManifestExecution(
+        array $moduleTransfers,
+        InputOutputInterface $inputOutput,
+        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+    ): int;
 }

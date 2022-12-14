@@ -11,8 +11,8 @@ namespace SprykerSdk\Integrator\Manifest;
 
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use ZipArchive;
 
 class ManifestReader implements ManifestReaderInterface

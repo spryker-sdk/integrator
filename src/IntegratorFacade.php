@@ -23,7 +23,7 @@ class IntegratorFacade implements IntegratorFacadeInterface
      *
      * @return int
      */
-    public function runInstallation(array $moduleTransfers, InputOutputInterface $input, IntegratorCommandArgumentsTransfer $commandArgumentsTransfer, bool $isDry = false): int
+    public function runInstallation(array $moduleTransfers, InputOutputInterface $input, IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): int
     {
         return $this->getFactory()
             ->creatManifestExecutor()

@@ -22,6 +22,7 @@ use SprykerSdk\Integrator\Dependency\Console\ComposerInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFacade;
 use SprykerSdk\Integrator\IntegratorFacadeInterface;
 use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacade;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
 
@@ -142,7 +143,7 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
 
         $updatedModules = $this->createModuleFinderFacade()->getModules();
 
-        $this->getIntegratorFacade()->runInstallation($updatedModules, new ComposerInputOutputAdapter($this->io));
+        $this->getIntegratorFacade()->runInstallation($updatedModules, new ComposerInputOutputAdapter($this->io), new IntegratorCommandArgumentsTransfer());
         $this->io->write('runInstallerEnd' . PHP_EOL);
     }
 

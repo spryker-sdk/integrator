@@ -12,10 +12,10 @@ namespace SprykerSdk\Integrator\Console;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFacadeAwareTrait;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
-use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,7 +35,7 @@ class ModuleInstallerConsole extends Command
     /**
      * @var string
      */
-    protected const ARGUMENT_MODULE_NAMES_DESCRIPTION = 'Name of modules which should be build, separated by `,`';
+    protected const ARGUMENT_MODULE_NAMES_DESCRIPTION = 'Name of modules which should be built, separated by `,`';
 
     /**
      * @var string

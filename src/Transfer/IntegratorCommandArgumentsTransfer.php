@@ -174,7 +174,8 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
             $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? '';
 
             switch ($normalizedPropertyName) {
-                case 'name':
+                case 'source':
+                case 'isDry':
                     $this->$normalizedPropertyName = $value;
                     $this->modifiedProperties[$normalizedPropertyName] = true;
 
@@ -298,7 +299,8 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
                 continue;
             }
             switch ($property) {
-                case 'name':
+                case 'source':
+                case 'isDry':
                     $values[$arrayKey] = $value;
 
                     break;
@@ -325,7 +327,8 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
                 continue;
             }
             switch ($property) {
-                case 'name':
+                case 'source':
+                case 'isDry':
                     $values[$arrayKey] = $value;
 
                     break;

@@ -64,8 +64,11 @@ class ManifestExecutor implements ManifestExecutorInterface
      *
      * @return int
      */
-    public function runModuleManifestExecution(array $moduleTransfers, InputOutputInterface $inputOutput, IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): int
-    {
+    public function runModuleManifestExecution(
+        array $moduleTransfers,
+        InputOutputInterface $inputOutput,
+        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+    ): int {
         $this->assertModuleData($moduleTransfers);
 
         $manifests = $this->manifestReader->readManifests($moduleTransfers, $commandArgumentsTransfer);
