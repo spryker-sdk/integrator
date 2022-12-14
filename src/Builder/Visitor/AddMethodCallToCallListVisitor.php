@@ -31,7 +31,7 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
     /**
      * @var string
      */
-    public const THIS = 'this';
+    protected const THIS_KEY = 'this';
 
     /**
      * @var \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer
@@ -166,7 +166,7 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
      */
     protected function createFunctionArgWithMethodCall(): Arg
     {
-        $var = new Variable(static::THIS);
+        $var = new Variable(static::THIS_KEY);
         $methodName = $this->classMetadataTransfer->getTargetMethodNameOrFail();
         $methodCall = new MethodCall($var, $methodName);
 
