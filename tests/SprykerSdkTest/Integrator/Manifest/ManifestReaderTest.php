@@ -9,9 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdkTest\Integrator\Manifest;
 
-use SprykerSdk\Integrator\Manifest\ManifestReader;
 use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
-use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use SprykerSdkTest\Integrator\BaseTestCase;
 
 class ManifestReaderTest extends BaseTestCase

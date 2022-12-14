@@ -12,8 +12,6 @@ namespace SprykerSdkTest\Integrator;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFacade;
-use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
-use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
