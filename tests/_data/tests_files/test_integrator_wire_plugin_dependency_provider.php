@@ -191,15 +191,6 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
             'TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX' => new TestIntegratorWirePluginStringIndex(),
         ]);
     }
-    public function getConditionParentPlugins() : array
-    {
-        $plugins = [
-        ];
-        if (class_exists(WebProfilerApplicationPlugin::class)) {
-            $plugins[] = new WebProfilerApplicationPlugin();
-        }
-        return $plugins;
-    }
 
     /**
      * @return array
@@ -234,5 +225,14 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
         return [
             new FirstPlugin(),
         ];
+    }
+    public function getConditionParentPlugins() : array
+    {
+        $plugins = [
+        ];
+        if (class_exists(WebProfilerApplicationPlugin::class)) {
+            $plugins[] = new WebProfilerApplicationPlugin();
+        }
+        return $plugins;
     }
 }
