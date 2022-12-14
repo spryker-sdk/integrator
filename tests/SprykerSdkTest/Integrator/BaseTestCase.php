@@ -18,6 +18,7 @@ use RecursiveIteratorIterator;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use Symfony\Component\Filesystem\Filesystem;
 use ZipArchive;
 
@@ -101,6 +102,17 @@ class BaseTestCase extends PHPUnitTestCase
         }
 
         $zip->close();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer
+     */
+    public function createCommandArgumentsTransfer(): IntegratorCommandArgumentsTransfer
+    {
+        $commandArgumentsTransfer = new IntegratorCommandArgumentsTransfer();
+        $commandArgumentsTransfer->setIsDry(false);
+
+        return $commandArgumentsTransfer;
     }
 
     /**

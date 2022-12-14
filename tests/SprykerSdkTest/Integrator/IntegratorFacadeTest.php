@@ -81,7 +81,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorConfigureModule'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorConfigureModule'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_configure_module.php';
@@ -102,7 +106,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWirePlugin'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorWirePlugin'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_wire_plugin_dependency_provider.php';
@@ -122,7 +130,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwirePlugin'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorUnwirePlugin'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_unwire_plugin_dependency_provider.php';
@@ -142,7 +154,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWireConsole'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorWireConsole'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_wire_console.php';
@@ -162,7 +178,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwireConsole'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorUnwireConsole'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_unwire_console.php';
@@ -182,7 +202,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorCopyModuleFile'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorCopyModuleFile'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $filePath = './tests/tmp/data/import_test.csv';
@@ -198,7 +222,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWireWidget'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorWireWidget'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_wire_widget.php';
@@ -219,7 +247,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwireWidget'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorUnwireWidget'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_unwire_widget.php';
@@ -240,7 +272,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorConfigureEnv'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorConfigureEnv'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_configure_env.php';
@@ -268,7 +304,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->createMockSymfonyConsoleChoiceInputOutput('Value choice 1');
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorConfigureEnv'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorConfigureEnv'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_configure_env_choices.php';
@@ -306,7 +346,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWireGlueRelationship'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorWireGlueRelationship'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_wire_glue_relationship.php';
@@ -327,7 +371,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwireGlueRelationship'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorUnwireGlueRelationship'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_unwire_glue_relationship.php';
@@ -348,7 +396,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorWireNavigation'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorWireNavigation'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_wire_navigation.xml';
@@ -368,7 +420,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation($this->getModuleList('TestIntegratorUnwireNavigation'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorUnwireNavigation'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $testFilePath = './tests/_data/tests_files/test_integrator_unwire_navigation.xml';
@@ -391,7 +447,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->createIntegratorFacade()->runInstallation(
             $this->getModuleList('TestIntegratorAddConfigArrayElement'),
             $ioAdapter,
-            false,
+            $this->createCommandArgumentsTransfer(),
         );
 
         // Assert
@@ -412,8 +468,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()
-            ->runInstallation($this->getModuleList('TestIntegratorGlossary'), $ioAdapter, false);
+        $this->createIntegratorFacade()->runInstallation(
+            $this->getModuleList('TestIntegratorGlossary'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
 
         // Assert
         $projectGlossaryFilePath = './tests/_data/project_mock/data/import/common/common/glossary.csv';
