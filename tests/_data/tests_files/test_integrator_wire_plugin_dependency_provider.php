@@ -200,19 +200,19 @@ class TestIntegratorWirePluginDependencyProvider
     /**
      * @return array
      */
-    public function getWrappedFunctionA() : array
+    public function getWrappedFunctionB() : array
     {
         return [
-            new FirstPlugin(),
+            new SecondPlugin(),
         ];
     }
     /**
      * @return array
      */
-    public function getWrappedFunctionB() : array
+    public function getWrappedFunctionA() : array
     {
         return [
-            new SecondPlugin(),
+            new FirstPlugin(),
         ];
     }
 }

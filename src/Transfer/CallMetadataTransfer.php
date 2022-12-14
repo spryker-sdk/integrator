@@ -208,7 +208,7 @@ class CallMetadataTransfer extends AbstractTransfer
      */
     public function setAfter(?string $after)
     {
-        $this->before = $after;
+        $this->after = $after;
         $this->modifiedProperties[static::AFTER] = true;
 
         return $this;

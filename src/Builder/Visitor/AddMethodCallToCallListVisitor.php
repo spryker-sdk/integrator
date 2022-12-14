@@ -10,11 +10,13 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\Visitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
@@ -61,8 +63,8 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
             return $node;
         }
 
-        $callTarget = explode('::', $callMetadataTransfer->getTargetOrFail());
-        if ($node instanceof ClassMethod && $node->name->toString() === end($callTarget)) {
+        $callTargetMethodName = $this->getMethodNameFromNamespaceName($callMetadataTransfer->getTargetOrFail());
+        if ($node instanceof ClassMethod && $node->name->toString() === $callTargetMethodName) {
             $this->methodFound = true;
 
             return $node;
@@ -96,20 +98,79 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
      */
     protected function addNewCallIntoArrayMergeFuncNode(FuncCall $node): Node
     {
-        $node->args[] = $this->createMethodCall();
+        $calledMethods = $this->getCalledMethods($node);
+        $callMetadataTransfer = $this->classMetadataTransfer->getCall();
+        if (!$callMetadataTransfer) {
+            return $node;
+        }
+
+        $before = $callMetadataTransfer->getBefore();
+        if ($before) {
+            $beforeMethodName = $this->getMethodNameFromNamespaceName($before);
+            $beforePosition = array_search($beforeMethodName, $calledMethods, true);
+            if (is_int($beforePosition)) {
+                return $this->addNewCallIntoArrayMergeFuncNodeByPosition($node, $beforePosition);
+            }
+        }
+
+        $after = $callMetadataTransfer->getAfter();
+        if ($after) {
+            $afterMethodName = $this->getMethodNameFromNamespaceName($after);
+            $afterPosition = array_search($afterMethodName, $calledMethods, true);
+            if (is_int($afterPosition)) {
+                return $this->addNewCallIntoArrayMergeFuncNodeByPosition($node, $afterPosition + 1);
+            }
+        }
+
+        $node->args[] = $this->createFunctionArgWithMethodCall();
 
         return $node;
     }
 
     /**
-     * @return \PhpParser\Node\Expr\MethodCall
+     * @param \PhpParser\Node\Expr\FuncCall $node
+     * @param int $position
+     *
+     * @return \PhpParser\Node
      */
-    protected function createMethodCall(): MethodCall
+    protected function addNewCallIntoArrayMergeFuncNodeByPosition(FuncCall $node, int $position): Node
+    {
+        array_splice($node->args, $position, 0, [$this->createFunctionArgWithMethodCall()]);
+
+        return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall $node
+     *
+     * @return array<string>
+     */
+    protected function getCalledMethods(FuncCall $node): array
+    {
+        $result = [];
+
+        $nodeFinder = new NodeFinder();
+        /** @var array<\PhpParser\Node\Expr\MethodCall> $calledMethods */
+        $calledMethods = $nodeFinder->findInstanceOf($node, MethodCall::class);
+        foreach ($calledMethods as $method) {
+            /** @var \PhpParser\Node\Identifier $methodName */
+            $methodName = $method->name;
+            $result[] = $methodName->name;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return \PhpParser\Node\Arg
+     */
+    protected function createFunctionArgWithMethodCall(): Arg
     {
         $var = new Variable(static::THIS);
-        $name = $this->classMetadataTransfer->getTargetMethodNameOrFail();
+        $methodName = $this->classMetadataTransfer->getTargetMethodNameOrFail();
+        $methodCall = new MethodCall($var, $methodName);
 
-        return new MethodCall($var, $name);
+        return new Arg($methodCall);
     }
 
     /**
@@ -120,5 +181,17 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
         $this->methodFound = false;
 
         return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * @param string $namespaceName
+     *
+     * @return string
+     */
+    protected function getMethodNameFromNamespaceName(string $namespaceName): string
+    {
+        $data = explode('::', $namespaceName);
+
+        return end($data);
     }
 }
