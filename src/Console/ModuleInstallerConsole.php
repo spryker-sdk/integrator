@@ -15,7 +15,7 @@ use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
-use SprykerSdk\Integrator\Transfer\SourceInputTransfer;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,22 +40,12 @@ class ModuleInstallerConsole extends Command
     /**
      * @var string
      */
-    protected const ARGUMENT_SOURCE = 'source-branch';
+    protected const ARGUMENT_SOURCE = 'source';
 
     /**
      * @var string
      */
     protected const ARGUMENT_SOURCE_DESCRIPTION = 'Source branch of the manifests to be applied';
-
-    /**
-     * @var string
-     */
-    protected const ARGUMENT_SOURCE_COMMIT = 'source-commit';
-
-    /**
-     * @var string
-     */
-    protected const ARGUMENT_SOURCE_COMMIT_DESCRIPTION = 'Source commit (SHA1) of the manifests to be applied';
 
     /**
      * @var string
@@ -84,11 +74,6 @@ class ModuleInstallerConsole extends Command
                 static::ARGUMENT_SOURCE,
                 InputArgument::OPTIONAL,
                 static::ARGUMENT_SOURCE_DESCRIPTION,
-            )
-            ->addArgument(
-                static::ARGUMENT_SOURCE_COMMIT,
-                InputArgument::OPTIONAL,
-                static::ARGUMENT_SOURCE_COMMIT_DESCRIPTION,
             );
     }
 
@@ -103,10 +88,9 @@ class ModuleInstallerConsole extends Command
         $io = new SymfonyStyle($input, $output);
 
         $moduleList = $this->getModuleList($input);
-        $sourceInputTransfer = $this->buildSourceInputTransfer($input);
-        $isDry = $this->getDryOptionValue($input);
+        $commandArgumentsTransfer = $this->buildCommandArgumentsTransfer($input);
 
-        $this->getFacade()->runInstallation($moduleList, new SymfonyConsoleInputOutputAdapter($io), $sourceInputTransfer, $isDry);
+        $this->getFacade()->runInstallation($moduleList, new SymfonyConsoleInputOutputAdapter($io), $commandArgumentsTransfer);
 
         return 0;
     }
@@ -121,16 +105,6 @@ class ModuleInstallerConsole extends Command
         $moduleNames = (string)$input->getArgument(static::ARGUMENT_MODULE_NAMES);
 
         return $this->getFactory()->getModuleFinderFacade()->getModules($this->buildModuleFilterTransfer($moduleNames));
-    }
-
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     *
-     * @return bool
-     */
-    protected function getDryOptionValue(InputInterface $input): bool
-    {
-        return (bool)$input->getOption(static::FLAG_DRY);
     }
 
     /**
@@ -171,24 +145,22 @@ class ModuleInstallerConsole extends Command
     /**
      * @param \Symfony\Component\Console\Input\InputInterface $input
      *
-     * @return \SprykerSdk\Integrator\Transfer\SourceInputTransfer
+     * @return \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer
      */
-    protected function buildSourceInputTransfer(InputInterface $input): SourceInputTransfer
+    protected function buildCommandArgumentsTransfer(InputInterface $input): IntegratorCommandArgumentsTransfer
     {
-        $sourceInputTransfer = new SourceInputTransfer();
+        $commandArgumentsTransfer = new IntegratorCommandArgumentsTransfer();
 
         $source = $input->getArgument(static::ARGUMENT_SOURCE);
-        $sourceCommit = $input->getArgument(static::ARGUMENT_SOURCE_COMMIT);
+        $isDry = (bool)$input->getOption(static::FLAG_DRY);
 
         if ($source !== null) {
-            $sourceInputTransfer->setSource($source);
+            $commandArgumentsTransfer->setSource($source);
         }
 
-        if ($sourceCommit !== null) {
-            $sourceInputTransfer->setSourceCommit($sourceCommit);
-        }
+        $commandArgumentsTransfer->setIsDry($isDry);
 
-        return $sourceInputTransfer;
+        return $commandArgumentsTransfer;
     }
 
     /**

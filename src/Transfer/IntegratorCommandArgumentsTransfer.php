@@ -11,7 +11,7 @@ namespace SprykerSdk\Integrator\Transfer;
 
 use InvalidArgumentException;
 
-class SourceInputTransfer extends AbstractTransfer
+class IntegratorCommandArgumentsTransfer extends AbstractTransfer
 {
     /**
      * @var string
@@ -21,7 +21,7 @@ class SourceInputTransfer extends AbstractTransfer
     /**
      * @var string
      */
-    public const SOURCE_COMMIT = 'sourceCommit';
+    public const IS_DRY = 'isDry';
 
     /**
      * @var string|null
@@ -29,9 +29,9 @@ class SourceInputTransfer extends AbstractTransfer
     protected $source;
 
     /**
-     * @var string|null
+     * @var bool
      */
-    protected $sourceCommit;
+    protected $isDry;
 
     /**
      * @var array<string, string>
@@ -39,9 +39,9 @@ class SourceInputTransfer extends AbstractTransfer
     protected $transferPropertyNameMap = [
         'source' => 'source',
         'Source' => 'source',
-        'source_commit' => 'sourceCommit',
-        'sourceCommit' => 'sourceCommit',
-        'SourceCommit' => 'sourceCommit',
+        'is_dry' => 'isDry',
+        'isDry' => 'isDry',
+        'IsDry' => 'isDry',
     ];
 
     /**
@@ -60,8 +60,8 @@ class SourceInputTransfer extends AbstractTransfer
             'is_nullable' => true,
             'is_strict' => false,
         ],
-        self::SOURCE_COMMIT => [
-            'type' => 'string',
+        self::IS_DRY => [
+            'type' => 'boolean',
             'type_shim' => null,
             'name_underscore' => 'name',
             'is_collection' => false,
@@ -69,13 +69,13 @@ class SourceInputTransfer extends AbstractTransfer
             'is_value_object' => false,
             'rest_request_parameter' => 'no',
             'is_associative' => false,
-            'is_nullable' => true,
+            'is_nullable' => false,
             'is_strict' => false,
         ],
     ];
 
     /**
-     * @param string|null $name
+     * @param string|null $source
      *
      * @return $this
      */
@@ -118,44 +118,44 @@ class SourceInputTransfer extends AbstractTransfer
     }
 
     /**
-     * @param string|null $name
+     * @param bool $isDry
      *
      * @return $this
      */
-    public function setSourceCommit(?string $sourceCommit)
+    public function setIsDry(bool $isDry)
     {
-        $this->sourceCommit = $sourceCommit;
-        $this->modifiedProperties[static::SOURCE_COMMIT] = true;
+        $this->isDry = $isDry;
+        $this->modifiedProperties[static::IS_DRY] = true;
 
         return $this;
     }
 
     /**
-     * @return string|null
+     * @return bool
      */
-    public function getSourceCommit(): ?string
+    public function getIsDry(): bool
     {
-        return $this->sourceCommit;
+        return $this->isDry;
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function getSourceCommitOrFail(): string
+    public function getIsDryOrFail(): bool
     {
-        if ($this->sourceCommit === null) {
-            $this->throwNullValueException(static::SOURCE_COMMIT);
+        if ($this->isDry === null) {
+            $this->throwNullValueException(static::IS_DRY);
         }
 
-        return $this->sourceCommit;
+        return $this->isDry;
     }
 
     /**
      * @return $this
      */
-    public function requireSourceCommit()
+    public function requireIsDry()
     {
-        $this->assertPropertyIsSet(static::SOURCE_COMMIT);
+        $this->assertPropertyIsSet(static::IS_DRY);
 
         return $this;
     }
@@ -383,7 +383,7 @@ class SourceInputTransfer extends AbstractTransfer
     {
         return [
             'source' => $this->source,
-            'sourceCommit' => $this->sourceCommit,
+            'isDry' => $this->isDry,
         ];
     }
 
@@ -394,7 +394,7 @@ class SourceInputTransfer extends AbstractTransfer
     {
         return [
             'source' => $this->source,
-            'source_commit' => $this->sourceCommit,
+            'is_dry' => $this->isDry,
         ];
     }
 
@@ -405,7 +405,7 @@ class SourceInputTransfer extends AbstractTransfer
     {
         return [
             'source' => $this->source,
-            'source_commit' => $this->sourceCommit,
+            'is_dry' => $this->isDry,
         ];
     }
 
@@ -416,7 +416,7 @@ class SourceInputTransfer extends AbstractTransfer
     {
         return [
             'source' => $this->source,
-            'sourceCommit' => $this->sourceCommit,
+            'isDry' => $this->isDry,
         ];
     }
 }
