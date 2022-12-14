@@ -17,6 +17,7 @@ use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\UrlStorageEventS
 use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\FooStorageEventSubscriber;
 use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\AvailabilityStorageEventSubscriber;
 use Spryker\Zed\SchedulerJenkins\Communication\Plugin\Adapter\SchedulerJenkinsAdapterPlugin;
+use Spryker\Zed\TestIntegratorUnwirePlugin\Communication\Plugin\WebProfilerApplicationPlugin;
 
 class TestIntegratorUnwirePluginDependencyProvider
 {
@@ -24,6 +25,13 @@ class TestIntegratorUnwirePluginDependencyProvider
     {
         return [
         ];
+    }
+
+    public function getConditionPlugins(): array
+    {
+        $plugins = [];
+
+        return $plugins;
     }
 
     public function getTestPlugins(): array
