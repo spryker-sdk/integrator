@@ -183,6 +183,12 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
         return NodeTraverser::DONT_TRAVERSE_CHILDREN;
     }
 
+    /**
+     * @param array<string> $calledMethods
+     * @param string $needleNamespace
+     *
+     * @return int|null
+     */
     protected function getPositionByNamespace(array $calledMethods, string $needleNamespace): ?int
     {
         $position = array_search($this->getMethodNameFromNamespaceName($needleNamespace), $calledMethods, true);
