@@ -57,7 +57,7 @@ This manifest type adds Plugin to a needed place (by defining exact method) of t
 
 Integrator checks existing before and after plugins one by one and puts value after/before the first find.
 
-The manifest type coud contain an optional `call` section, that specifies where the target method should be called.
+The manifest type can contain an optional `call` section, that specifies where the target method should be called.
 
 ```json
 {
