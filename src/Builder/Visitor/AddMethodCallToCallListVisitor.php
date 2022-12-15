@@ -109,7 +109,7 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
         $before = $callMetadataTransfer->getBefore();
         if ($before) {
             $beforePosition = $this->getPositionByNamespace($calledMethods, $before);
-            if (is_int($beforePosition)) {
+            if ($beforePosition !== null) {
                 return $this->addNewCallIntoArrayMergeFuncNodeByPosition($node, $beforePosition);
             }
         }
@@ -117,7 +117,7 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
         $after = $callMetadataTransfer->getAfter();
         if ($after) {
             $afterPosition = $this->getPositionByNamespace($calledMethods, $after);
-            if (is_int($afterPosition)) {
+            if ($afterPosition !== null) {
                 return $this->addNewCallIntoArrayMergeFuncNodeByPosition($node, $afterPosition + 1);
             }
         }
