@@ -773,6 +773,7 @@ class IntegratorFactory
             $this->createReturnArrayModifierApplicableModifierStrategy(),
             $this->createPluginPositionResolver(),
             $this->createNodeExpressionPartialParser(),
+            $this->createArgumentBuilder(),
         );
     }
 
@@ -919,7 +920,7 @@ class IntegratorFactory
      */
     public function createArgumentBuilder(): ArgumentBuilderInterface
     {
-        return new ArgumentBuilder($this->createBuilderFactory());
+        return new ArgumentBuilder($this->createBuilderFactory(), $this->createNodeExpressionPartialParser());
     }
 
     /**

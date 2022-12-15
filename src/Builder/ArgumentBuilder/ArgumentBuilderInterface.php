@@ -15,8 +15,9 @@ interface ArgumentBuilderInterface
 {
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
+     * @param bool $withSource
      *
      * @return array<\PhpParser\Node\Arg>
      */
-    public function createAddPluginArguments(ClassMetadataTransfer $classMetadataTransfer): array;
+    public function createAddPluginArguments(ClassMetadataTransfer $classMetadataTransfer, bool $withSource = true): array;
 }

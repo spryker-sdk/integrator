@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\Builder\PartialParser;
 
 use ArrayObject;
 use PhpParser\Error;
+use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
@@ -105,6 +106,7 @@ class ExpressionPartialParser implements ExpressionPartialParserInterface
     {
         return isset($ast[0])
             && $ast[0] instanceof Expression
-            && !$ast[0]->expr instanceof ConstFetch; // Global constants should be considered as a strings
+            && !$ast[0]->expr instanceof ConstFetch
+            && !$ast[0]->expr instanceof Div; // Global constants should be considered as a strings
     }
 }
