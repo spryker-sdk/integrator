@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface;
 use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface;
+use SprykerSdk\Integrator\Builder\Visitor\AddMethodCallToCallListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
@@ -86,7 +87,10 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
      */
     protected function getWireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
     {
-        $visitors = [new AddUseVisitor($classMetadataTransfer->getSourceOrFail())];
+        $visitors = [
+            new AddUseVisitor($classMetadataTransfer->getSourceOrFail()),
+            new AddMethodCallToCallListVisitor($classMetadataTransfer),
+        ];
 
         if ($classMetadataTransfer->getIndex() === null) {
             return [...$visitors, new AddPluginToPluginListVisitor($classMetadataTransfer, $this->pluginPositionResolver)];

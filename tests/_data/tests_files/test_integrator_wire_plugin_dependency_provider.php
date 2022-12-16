@@ -191,6 +191,41 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
             'TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX' => new TestIntegratorWirePluginStringIndex(),
         ]);
     }
+
+    /**
+     * @return array
+     */
+    protected function getWrappedPlugins(): array
+    {
+        return array_merge(
+            $this->getWrappedFunctionDefault(), $this->getWrappedFunctionA(), $this->getWrappedFunctionB()
+        );
+    }
+    /**
+     * @return array
+     */
+    protected function getWrappedFunctionDefault(): array
+    {
+        return [];
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionB() : array
+    {
+        return [
+            new SecondPlugin(),
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionA() : array
+    {
+        return [
+            new FirstPlugin(),
+        ];
+    }
     public function getConditionParentPlugins() : array
     {
         $plugins = [
