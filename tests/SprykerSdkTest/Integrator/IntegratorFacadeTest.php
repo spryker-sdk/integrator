@@ -94,8 +94,6 @@ class IntegratorFacadeTest extends BaseTestCase
     }
 
     /**
-     * @group test2
-     *
      * @return void
      */
     public function testRunInstallationWirePlugin(): void
@@ -136,8 +134,6 @@ class IntegratorFacadeTest extends BaseTestCase
     }
 
     /**
-     * @group test1
-     *
      * @return void
      */
     public function testRunInstallationWireConsole(): void
@@ -158,6 +154,8 @@ class IntegratorFacadeTest extends BaseTestCase
     }
 
     /**
+     * @group test1
+     *
      * @return void
      */
     public function testRunInstallationUnwireConsole(): void

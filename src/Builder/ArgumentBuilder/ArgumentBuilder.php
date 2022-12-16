@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ArgumentBuilder;
 
+use ArrayObject;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface;
@@ -134,6 +135,25 @@ class ArgumentBuilder implements ArgumentBuilderInterface
                 }
 
                 $args = array_merge($args, $this->builderFactory->args([$metadataValue]));
+            }
+        }
+
+        return $args;
+    }
+
+    /**
+     * @param \ArrayObject<int, \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $classArgumentMetadataTransfers
+     *
+     * @return array<string>
+     */
+    public function getValueArguments(ArrayObject $classArgumentMetadataTransfers): array
+    {
+        $args = [];
+        foreach ($classArgumentMetadataTransfers as $classArgumentMetadataTransfer) {
+            if ($classArgumentMetadataTransfer->getIsLiteral()) {
+                $metadataValue = json_decode((string)$classArgumentMetadataTransfer->getValue());
+
+                $args = array_merge($args, is_array($metadataValue) ? $metadataValue : [$metadataValue]);
             }
         }
 

@@ -831,6 +831,7 @@ class IntegratorFactory
     {
         return new ReturnArrayUnwireClassInstanceModifierStrategy(
             $this->createReturnArrayModifierApplicableModifierStrategy(),
+            $this->createArgumentBuilder(),
         );
     }
 
