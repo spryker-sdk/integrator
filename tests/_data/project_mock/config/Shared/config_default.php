@@ -9,3 +9,4 @@ $config['CORE_NAMESPACES'] = [
     'Spryker',
     'SprykerSdk',
 ];
+$config[\Pyz\Client\TestIntegratorAddConfigArrayElement\TestIntegratorAddConfigArrayElementConfig::TEST_VALUE_CHANGING] = 'Original value';
