@@ -9,6 +9,8 @@ use Spryker\Shared\TestIntegrator\TestIntegratorAddConfigArrayElementBefore;
 
 class TestIntegratorAddConfigArrayElementConfig extends SprykerTestIntegratorAddConfigArrayElementConfig
 {
+    public const TEST_VALUE_CHANGING = 'Some value';
+
     protected function getTestConfiguration(): array
     {
         return [
