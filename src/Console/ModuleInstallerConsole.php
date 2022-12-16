@@ -19,6 +19,7 @@ use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -40,12 +41,12 @@ class ModuleInstallerConsole extends Command
     /**
      * @var string
      */
-    protected const ARGUMENT_SOURCE = 'source';
+    protected const OPTION_SOURCE = 'source';
 
     /**
      * @var string
      */
-    protected const ARGUMENT_SOURCE_DESCRIPTION = 'Source branch of the manifests to be applied';
+    protected const OPTION_SOURCE_DESCRIPTION = 'Source branch of the manifests to be applied';
 
     /**
      * @var string
@@ -70,10 +71,11 @@ class ModuleInstallerConsole extends Command
                 InputArgument::OPTIONAL,
                 static::ARGUMENT_MODULE_NAMES_DESCRIPTION,
             )
-            ->addArgument(
-                static::ARGUMENT_SOURCE,
-                InputArgument::OPTIONAL,
-                static::ARGUMENT_SOURCE_DESCRIPTION,
+            ->addOption(
+                static::OPTION_SOURCE,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                static::OPTION_SOURCE_DESCRIPTION,
             );
     }
 
@@ -89,6 +91,12 @@ class ModuleInstallerConsole extends Command
 
         $moduleList = $this->getModuleList($input);
         $commandArgumentsTransfer = $this->buildCommandArgumentsTransfer($input);
+
+        if ($moduleList === []) {
+            $output->writeln('Not found modules to apply changes.');
+
+            return 0;
+        }
 
         $this->getFacade()->runInstallation($moduleList, new SymfonyConsoleInputOutputAdapter($io), $commandArgumentsTransfer);
 
@@ -151,7 +159,7 @@ class ModuleInstallerConsole extends Command
     {
         $commandArgumentsTransfer = new IntegratorCommandArgumentsTransfer();
 
-        $source = $input->getArgument(static::ARGUMENT_SOURCE);
+        $source = $input->getOption(static::OPTION_SOURCE);
         $isDry = (bool)$input->getOption(static::FLAG_DRY);
 
         if ($source !== null) {
