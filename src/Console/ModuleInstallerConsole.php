@@ -91,13 +91,6 @@ class ModuleInstallerConsole extends Command
 
         $moduleList = $this->getModuleList($input);
         $commandArgumentsTransfer = $this->buildCommandArgumentsTransfer($input);
-
-        if ($moduleList === []) {
-            $output->writeln('Not found modules to apply changes.');
-
-            return 0;
-        }
-
         $this->getFacade()->runInstallation($moduleList, new SymfonyConsoleInputOutputAdapter($io), $commandArgumentsTransfer);
 
         return 0;
