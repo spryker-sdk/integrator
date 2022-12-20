@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 
 class IntegratorFacade implements IntegratorFacadeInterface
 {
@@ -18,14 +19,14 @@ class IntegratorFacade implements IntegratorFacadeInterface
     /**
      * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
-     * @param bool $isDry
+     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return int
      */
-    public function runInstallation(array $moduleTransfers, InputOutputInterface $input, bool $isDry = false): int
+    public function runInstallation(array $moduleTransfers, InputOutputInterface $input, IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): int
     {
         return $this->getFactory()
             ->creatManifestExecutor()
-            ->runModuleManifestExecution($moduleTransfers, $input, $isDry);
+            ->runModuleManifestExecution($moduleTransfers, $input, $commandArgumentsTransfer);
     }
 }

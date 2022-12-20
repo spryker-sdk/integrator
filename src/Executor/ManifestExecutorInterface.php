@@ -10,15 +10,20 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Executor;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 
 interface ManifestExecutorInterface
 {
     /**
      * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
-     * @param bool $isDry
+     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return int
      */
-    public function runModuleManifestExecution(array $moduleTransfers, InputOutputInterface $inputOutput, bool $isDry): int;
+    public function runModuleManifestExecution(
+        array $moduleTransfers,
+        InputOutputInterface $inputOutput,
+        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+    ): int;
 }

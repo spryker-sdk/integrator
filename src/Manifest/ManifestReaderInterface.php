@@ -9,12 +9,15 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Manifest;
 
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
+
 interface ManifestReaderInterface
 {
     /**
      * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
+     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return array<string, array<string, array<string>>>
      */
-    public function readManifests(array $moduleTransfers): array;
+    public function readManifests(array $moduleTransfers, IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): array;
 }

@@ -15,6 +15,7 @@ use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
 use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
 use SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 
 class ManifestExecutor implements ManifestExecutorInterface
 {
@@ -59,15 +60,18 @@ class ManifestExecutor implements ManifestExecutorInterface
     /**
      * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
-     * @param bool $isDry
+     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return int
      */
-    public function runModuleManifestExecution(array $moduleTransfers, InputOutputInterface $inputOutput, bool $isDry): int
-    {
+    public function runModuleManifestExecution(
+        array $moduleTransfers,
+        InputOutputInterface $inputOutput,
+        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+    ): int {
         $this->assertModuleData($moduleTransfers);
 
-        $manifests = $this->manifestReader->readManifests($moduleTransfers);
+        $manifests = $this->manifestReader->readManifests($moduleTransfers, $commandArgumentsTransfer);
 
         $lockedModules = $this->integratorLockReader->getLockFileData();
 
@@ -80,6 +84,8 @@ class ManifestExecutor implements ManifestExecutorInterface
         if (!$inputOutput->confirm('There are unapplied manifests found for your modules. Do you want to apply them?')) {
             return 0;
         }
+
+        $isDry = $commandArgumentsTransfer->getIsDryOrFail();
 
         foreach ($unappliedManifests as $moduleName => $moduleManifests) {
             foreach ($moduleManifests as $manifestType => $unappliedManifestByType) {
