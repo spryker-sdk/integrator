@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Executor;
 
 use RuntimeException;
+use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
@@ -34,6 +35,11 @@ class ManifestExecutor implements ManifestExecutorInterface
     protected $manifestExecutors;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface
+     */
+    protected $fileNormalizersExecutor;
+
+    /**
      * @var \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface
      */
     protected $integratorLockWriter;
@@ -42,18 +48,21 @@ class ManifestExecutor implements ManifestExecutorInterface
      * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface $integratorLockReader
      * @param \SprykerSdk\Integrator\Manifest\ManifestReaderInterface $manifestReader
      * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface $integratorLockWriter
+     * @param \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface $fileNormalizersExecutor
      * @param array<\SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface> $manifestExecutors
      */
     public function __construct(
         IntegratorLockReaderInterface $integratorLockReader,
         ManifestReaderInterface $manifestReader,
         IntegratorLockWriterInterface $integratorLockWriter,
+        FileNormalizersExecutorInterface $fileNormalizersExecutor,
         array $manifestExecutors
     ) {
         $this->integratorLockReader = $integratorLockReader;
         $this->manifestReader = $manifestReader;
         $this->manifestExecutors = $manifestExecutors;
         $this->integratorLockWriter = $integratorLockWriter;
+        $this->fileNormalizersExecutor = $fileNormalizersExecutor;
     }
 
     /**
@@ -96,6 +105,8 @@ class ManifestExecutor implements ManifestExecutorInterface
                 }
             }
         }
+
+        $this->fileNormalizersExecutor->execute($inputOutput, $isDry);
 
         if ($isDry) {
             return 0;

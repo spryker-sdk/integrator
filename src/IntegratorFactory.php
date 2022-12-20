@@ -85,6 +85,12 @@ use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface;
+use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface;
+use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutor;
+use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface;
+use SprykerSdk\Integrator\Builder\FileNormalizer\PhpCSFixerFileNormalizer;
+use SprykerSdk\Integrator\Builder\FileStorage\FileStorageFactory;
+use SprykerSdk\Integrator\Builder\FileStorage\FileStorageInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
@@ -141,6 +147,7 @@ class IntegratorFactory
             $this->createIntegratorLockReader(),
             $this->createManifestReader(),
             $this->createIntegratorLockWriter(),
+            $this->createFileNormalizersExecutor(),
             $this->getManifestStrategies(),
         );
     }
@@ -419,7 +426,28 @@ class IntegratorFactory
      */
     public function createClassFileWriter(): ClassFileWriterInterface
     {
-        return new ClassFileWriter($this->createClassPrinter());
+        return new ClassFileWriter($this->createClassPrinter(), $this->createFileStorage());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface
+     */
+    public function createFileNormalizersExecutor(): FileNormalizersExecutorInterface
+    {
+        return new FileNormalizersExecutor(
+            $this->createFileStorage(),
+            [
+                $this->createPhpCSFixerNormalizer(),
+            ],
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface
+     */
+    public function createPhpCSFixerNormalizer(): FileNormalizerInterface
+    {
+        return new PhpCSFixerFileNormalizer($this->getConfig());
     }
 
     /**
@@ -436,6 +464,14 @@ class IntegratorFactory
     public function createClassPrinter(): ClassPrinter
     {
         return new ClassPrinter();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\FileStorage\FileStorageInterface
+     */
+    protected function createFileStorage(): FileStorageInterface
+    {
+        return (FileStorageFactory::getInstance())->createEmptyFilesStorage();
     }
 
     /**
