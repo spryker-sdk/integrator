@@ -9,14 +9,23 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ArgumentBuilder;
 
+use ArrayObject;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 interface ArgumentBuilderInterface
 {
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
+     * @param bool $withSource
      *
      * @return array<\PhpParser\Node\Arg>
      */
-    public function createAddPluginArguments(ClassMetadataTransfer $classMetadataTransfer): array;
+    public function createAddPluginArguments(ClassMetadataTransfer $classMetadataTransfer, bool $withSource = true): array;
+
+    /**
+     * @param \ArrayObject<int, \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $classArgumentMetadataTransfers
+     *
+     * @return array<string>
+     */
+    public function getValueArguments(ArrayObject $classArgumentMetadataTransfers): array;
 }

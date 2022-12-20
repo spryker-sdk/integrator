@@ -33,6 +33,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
+use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
@@ -85,17 +86,25 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected ?Expression $indexExpr;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
+     */
+    private ArgumentBuilderInterface $argumentBuilder;
+
+    /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
+     * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
      * @param \PhpParser\Node\Stmt\Expression|null $indexExpr
      */
     public function __construct(
         ClassMetadataTransfer $classMetadataTransfer,
         PluginPositionResolverInterface $pluginPositionResolver,
+        ArgumentBuilderInterface $argumentBuilder,
         ?Expression $indexExpr = null
     ) {
         $this->classMetadataTransfer = $classMetadataTransfer;
         $this->pluginPositionResolver = $pluginPositionResolver;
+        $this->argumentBuilder = $argumentBuilder;
         $this->indexExpr = $indexExpr;
     }
 
@@ -500,9 +509,12 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      */
     protected function createArrayItemWithInstanceOf(): ArrayItem
     {
+        $args = $this->argumentBuilder->createAddPluginArguments($this->classMetadataTransfer, false);
+
         return new ArrayItem(
             (new BuilderFactory())->new(
                 (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
+                $args,
             ),
             $this->indexExpr !== null ? $this->indexExpr->expr : null,
         );

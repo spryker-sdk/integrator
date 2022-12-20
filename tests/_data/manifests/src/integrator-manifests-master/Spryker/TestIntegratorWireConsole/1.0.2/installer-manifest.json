@@ -13,6 +13,30 @@
             "target": "\\Pyz\\Zed\\TestIntegratorWireConsoleCommands\\ConsoleDependencyProvider::getConsoleCommands",
             "source": "\\Spryker\\Zed\\TestIntegratorWireConsoleCommands\\Console\\TestNewConsoleWithMissingCondition",
             "condition": "class_exists(\\Spryker\\Zed\\TestIntegratorWireConsoleCommands\\Console\\TestNewConsoleWithMissingCondition::class)"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWireConsoleCommands\\ConsoleDependencyProvider::getConsoleCommands",
+            "source": "\\Pyz\\Zed\\DependencyCollectionTest\\DataImportConsole",
+            "arguments": {
+                "constructor-arguments": [
+                    {
+                        "value": "\\Pyz\\Zed\\DataImport\\DataImportConfig::ANY_NAME . ':' . \\Pyz\\Zed\\DataImport\\DataImportConfig::IMPORT_TYPE_STORE",
+                        "is_literal": true
+                    }
+                ]
+            }
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorWireConsoleCommands\\ConsoleDependencyProvider::getConsoleCommands",
+            "source": "\\Pyz\\Zed\\DependencyCollectionTest\\DataImportConsole",
+            "arguments": {
+                "constructor-arguments": [
+                    {
+                        "value": "\\Pyz\\Zed\\DataImport\\DataImportConfig::ANY_NAME . ':' . \\Pyz\\Zed\\DataImport\\DataImportConfig::IMPORT_TYPE_CURRENCY",
+                        "is_literal": true
+                    }
+                ]
+            }
         }
     ]
 }
