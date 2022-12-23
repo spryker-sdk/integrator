@@ -181,13 +181,10 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
 
     public function getTestArrayMergePlugins(): array
     {
-        return array_merge([\ArrayObject::class], [
+        return array_merge(parent::getTestArrayMergePlugins(), [
             new TestIntegratorWirePlugin(),
-        ], [
             TestIntegratorWirePluginConfig::TEST_INTEGRATOR_WIRE_PLUGIN => new TestIntegratorWirePluginIndex(),
-        ], [
             static::TEST_INTEGRATOR_WIRE_PLUGIN_STATIC_INDEX => new TestIntegratorWirePluginStaticIndex(),
-        ], [
             'TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX' => new TestIntegratorWirePluginStringIndex(),
         ]);
     }

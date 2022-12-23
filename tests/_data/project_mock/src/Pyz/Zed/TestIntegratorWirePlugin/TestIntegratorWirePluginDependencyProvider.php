@@ -136,7 +136,7 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
 
     public function getTestArrayMergePlugins(): array
     {
-        return array_merge([\ArrayObject::class]);
+        return array_merge(parent::getTestArrayMergePlugins(), []);
     }
 
     /**
