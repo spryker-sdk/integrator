@@ -195,7 +195,9 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
     protected function getWrappedPlugins(): array
     {
         return array_merge(
-            $this->getWrappedFunctionDefault(), $this->getWrappedFunctionA(), $this->getWrappedFunctionB()
+            $this->getWrappedFunctionDefault(), $this->getWrappedFunctionA(), $this->getWrappedFunctionB(), [
+                new TestIntegratorWirePlugin(),
+            ]
         );
     }
     /**
