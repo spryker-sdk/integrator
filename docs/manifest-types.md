@@ -67,7 +67,7 @@ The manifest type can contain an optional `call` section, that specifies where t
         {
             "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getQuoteStorageStrategyPlugins",
             "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin",
-            "index": "",
+            "index": "\\Pyz\\Client\\Cart\\CartDependencyProvider::PYZ_PLUGIN_KEY",
             "condition": "class_exists(\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin::class)",
             "position": {
                 "before": "",
@@ -107,12 +107,15 @@ The manifest type can contain an optional `call` section, that specifies where t
 
 This manifest type removes a Plugin from a specified place of code.
 
+If the plugin should be removed from an associative array, the array key can be stored in `index` setting.
+
 ```json
 {
     "unwire-plugin": [
         {
             "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getQuoteStorageStrategyPlugins",
-            "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin"
+            "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin",
+            "index": "\\Pyz\\Client\\Cart\\CartDependencyProvider::PYZ_PLUGIN_KEY"
         }
     ]
 }
