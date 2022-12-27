@@ -52,7 +52,9 @@ Generation is currently handled internally in the Spryker release app, whereas i
 
 ### Wire Plugin Manifest
 
-This manifest type adds Plugin to a needed place (by defining exact method) of the code. You can specify where to put the changes by specifying a position field with a `before` or `after` settings.
+This manifest type adds Plugin to a needed place (by defining the exact method) of the code. If the plugin should be added to an associative array, you can set the array key in `index` setting.
+
+You can specify where to put the changes by specifying a position field with a `before` or `after` settings.
 `before` and `after` accept string and array of strings values.
 
 Integrator checks existing before and after plugins one by one and puts value after/before the first find.
@@ -65,6 +67,7 @@ The manifest type can contain an optional `call` section, that specifies where t
         {
             "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getQuoteStorageStrategyPlugins",
             "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin",
+            "index": "",
             "condition": "class_exists(\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin::class)",
             "position": {
                 "before": "",
