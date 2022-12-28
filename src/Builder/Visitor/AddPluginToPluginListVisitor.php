@@ -278,6 +278,14 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             return $node;
         }
 
+        foreach ($node->args as $arg) {
+            if ($arg->value instanceof Array_) {
+                $this->addNewPlugin($arg->value);
+
+                return $node;
+            }
+        }
+
         $node->args[] = new Arg($this->createArrayWithInstanceOf());
 
         return $node;
