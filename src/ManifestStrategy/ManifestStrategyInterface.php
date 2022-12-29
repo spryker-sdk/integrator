@@ -24,6 +24,8 @@ interface ManifestStrategyInterface
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
+     * @throws \SprykerSdk\Integrator\Exception\ManifestApplyingException
+     *
      * @return bool
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool;

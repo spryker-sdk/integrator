@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Exception\ManifestApplyingException;
 
 class GlossaryManifestStrategy extends AbstractManifestStrategy
 {
@@ -42,18 +43,18 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
+     * @throws \SprykerSdk\Integrator\Exception\ManifestApplyingException
+     *
      * @return bool
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
         $glossaryFilePath = $this->config->getGlossaryFilePath();
         if (!file_exists($glossaryFilePath)) {
-            $inputOutput->writeln(sprintf(
+            throw new ManifestApplyingException(sprintf(
                 'File `%s` does not exist. Please check file path or customize using `IntegratorConfig::getGlossaryFilePath()`.',
                 $glossaryFilePath,
-            ), InputOutputInterface::DEBUG);
-
-            return false;
+            ));
         }
 
         $existingGlossaryFileLines = $this->getGlossaryExistingFileLines();

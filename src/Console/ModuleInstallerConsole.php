@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Console;
 
+use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Dependency\Console\JsonInputOutputAdapter;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFacadeAwareTrait;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
@@ -51,12 +53,27 @@ class ModuleInstallerConsole extends Command
     /**
      * @var string
      */
+    protected const OPTION_FORMAT = 'format';
+
+    /**
+     * @var string
+     */
+    protected const OPTION_FORMAT_DESCRIPTION = 'Define format of command output, example: JSON';
+
+    /**
+     * @var string
+     */
     protected const COMMAND_NAME = 'integrator:manifest:run';
 
     /**
      * @var string
      */
     protected const FLAG_DRY = 'dry';
+
+    /**
+     * @var string
+     */
+    protected const FORMAT_JSON = 'json';
 
     /**
      * @return void
@@ -76,6 +93,12 @@ class ModuleInstallerConsole extends Command
                 null,
                 InputOption::VALUE_OPTIONAL,
                 static::OPTION_SOURCE_DESCRIPTION,
+            )
+            ->addOption(
+                static::OPTION_FORMAT,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                static::OPTION_FORMAT_DESCRIPTION,
             );
     }
 
@@ -87,11 +110,10 @@ class ModuleInstallerConsole extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-
         $moduleList = $this->getModuleList($input);
         $commandArgumentsTransfer = $this->buildCommandArgumentsTransfer($input);
-        $this->getFacade()->runInstallation($moduleList, new SymfonyConsoleInputOutputAdapter($io), $commandArgumentsTransfer);
+        $io = $this->createInputOutputAdapter($input, $output, $commandArgumentsTransfer->getFormat());
+        $this->getFacade()->runInstallation($moduleList, $io, $commandArgumentsTransfer);
 
         return 0;
     }
@@ -153,12 +175,16 @@ class ModuleInstallerConsole extends Command
         $commandArgumentsTransfer = new IntegratorCommandArgumentsTransfer();
 
         $source = $input->getOption(static::OPTION_SOURCE);
-        $isDry = (bool)$input->getOption(static::FLAG_DRY);
-
         if ($source !== null) {
             $commandArgumentsTransfer->setSource($source);
         }
 
+        $format = $input->getOption(static::OPTION_FORMAT);
+        if ($format !== null) {
+            $commandArgumentsTransfer->setFormat($format);
+        }
+
+        $isDry = (bool)$input->getOption(static::FLAG_DRY);
         $commandArgumentsTransfer->setIsDry($isDry);
 
         return $commandArgumentsTransfer;
@@ -194,5 +220,26 @@ class ModuleInstallerConsole extends Command
         $moduleFilterTransfer->setOrganization($organizationTransfer);
 
         return $moduleFilterTransfer;
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param string|null $format
+     *
+     * @return \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface
+     */
+    protected function createInputOutputAdapter(
+        InputInterface $input,
+        OutputInterface $output,
+        ?string $format
+    ): InputOutputInterface {
+        $io = new SymfonyStyle($input, $output);
+
+        if ($format === static::FORMAT_JSON) {
+            return new JsonInputOutputAdapter($io);
+        }
+
+        return new SymfonyConsoleInputOutputAdapter($io);
     }
 }

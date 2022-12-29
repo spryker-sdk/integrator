@@ -12,6 +12,7 @@ namespace SprykerSdk\Integrator\ManifestStrategy;
 use ReflectionClass;
 use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Exception\ManifestApplyingException;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
@@ -47,6 +48,8 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
+     * @throws \SprykerSdk\Integrator\Exception\ManifestApplyingException
+     *
      * @return bool
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
@@ -55,25 +58,21 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
         [$targetClassName, $targetMethodName] = explode('::', $classMetadataTransfer->getTargetOrFail());
 
         if (!class_exists($targetClassName)) {
-            $inputOutput->writeln(sprintf(
+            throw new ManifestApplyingException(sprintf(
                 'Target module %s/%s does not exists in your system.',
                 $this->classHelper->getOrganisationName($targetClassName),
                 $this->classHelper->getModuleName($targetClassName),
-            ), InputOutputInterface::DEBUG);
-
-            return false;
+            ));
         }
 
         $targetClassInfo = (new ReflectionClass($targetClassName));
 
         if (!$targetClassInfo->hasMethod($targetMethodName) && !$classMetadataTransfer->getCall()) {
-            $inputOutput->writeln(sprintf(
+            throw new ManifestApplyingException(sprintf(
                 'Your version of module %s/%s does not support needed plugin stack. Please, update it to use full functionality.',
                 $this->classHelper->getOrganisationName($targetClassName),
                 $this->classHelper->getModuleName($targetClassName),
-            ), InputOutputInterface::DEBUG);
-
-            return false;
+            ));
         }
 
         foreach ($this->config->getProjectNamespaces() as $namespace) {

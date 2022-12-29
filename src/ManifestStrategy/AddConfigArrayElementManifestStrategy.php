@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use ReflectionClass;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Exception\ManifestApplyingException;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 /**
@@ -33,6 +34,8 @@ class AddConfigArrayElementManifestStrategy extends AbstractManifestStrategy
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
+     * @throws \SprykerSdk\Integrator\Exception\ManifestApplyingException
+     *
      * @return bool
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
@@ -40,26 +43,22 @@ class AddConfigArrayElementManifestStrategy extends AbstractManifestStrategy
         [$targetClassName, $targetMethodName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
 
         if (!class_exists($targetClassName)) {
-            $inputOutput->writeln(sprintf(
+            throw new ManifestApplyingException(sprintf(
                 'Target module `%s.%s` does not exists in your system.',
                 $this->classHelper->getOrganisationName($targetClassName),
                 $this->classHelper->getModuleName($targetClassName),
-            ), InputOutputInterface::DEBUG);
-
-            return false;
+            ));
         }
 
         $targetClassInfo = (new ReflectionClass($targetClassName));
 
         if (!$targetClassInfo->hasMethod($targetMethodName)) {
-            $inputOutput->writeln(sprintf(
+            throw new ManifestApplyingException(sprintf(
                 'Your version of module `%s.%s` does not contain required configuration method `%s()`. Please, update it to use full functionality.',
                 $this->classHelper->getOrganisationName($targetClassName),
                 $this->classHelper->getModuleName($targetClassName),
                 $targetMethodName,
-            ), InputOutputInterface::DEBUG);
-
-            return false;
+            ));
         }
 
         foreach ($this->config->getProjectNamespaces() as $namespace) {

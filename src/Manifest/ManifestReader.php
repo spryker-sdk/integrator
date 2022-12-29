@@ -85,10 +85,15 @@ class ManifestReader implements ManifestReaderInterface
                 continue;
             }
 
-            $manifest = json_decode($json, true);
-
-            if ($manifest) {
-                $manifests[$moduleFullName] = $manifest;
+            $manifestFileData = json_decode($json, true);
+            if ($manifestFileData) {
+                foreach ($manifestFileData as &$strategy) {
+                    foreach ($strategy as &$manifest) {
+                        $manifest[IntegratorConfig::MODULE_KEY] = $moduleFullName;
+                        $manifest[IntegratorConfig::MODULE_VERSION_KEY] = $version;
+                    }
+                }
+                $manifests[$moduleFullName] = $manifestFileData;
             }
         }
 

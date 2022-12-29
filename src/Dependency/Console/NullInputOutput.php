@@ -49,6 +49,17 @@ class NullInputOutput implements InputOutputInterface
     }
 
     /**
+     * @param string $message
+     *
+     * @return void
+     */
+    public function warning(string $message): void
+    {
+        $this->write($message, true);
+        echo '<br>';
+    }
+
+    /**
      * Asks a question.
      *
      * @param string $question

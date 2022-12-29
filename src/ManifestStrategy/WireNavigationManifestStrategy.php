@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
-use SprykerSdk\Integrator\Exception\UnexpectedNavigationXmlStructureException;
 
 class WireNavigationManifestStrategy extends AbstractNavigationManifestStrategy
 {
@@ -32,12 +31,7 @@ class WireNavigationManifestStrategy extends AbstractNavigationManifestStrategy
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
-        try {
-            $navigation = $this->getNavigation();
-        } catch (UnexpectedNavigationXmlStructureException $unexpectedNavigationXmlStructureException) {
-            return false;
-        }
-
+        $navigation = $this->getNavigation();
         $navigation = $this->applyNewNavigation(
             $navigation,
             $manifest[static::KEY_NAVIGATIONS_CONFIGURATION],
