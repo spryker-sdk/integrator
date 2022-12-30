@@ -51,8 +51,7 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
-        $classMetadataTransfer = $this->metadataBuilder->build($manifest);
-        [$targetClassName, $targetMethodName] = explode('::', $classMetadataTransfer->getTargetOrFail());
+        [$targetClassName, $targetMethodName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
 
         if (!class_exists($targetClassName)) {
             $inputOutput->writeln(sprintf(
@@ -65,6 +64,7 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
         }
 
         $targetClassInfo = (new ReflectionClass($targetClassName));
+        $classMetadataTransfer = $this->metadataBuilder->build($manifest);
 
         if (!$targetClassInfo->hasMethod($targetMethodName) && !$classMetadataTransfer->getCall()) {
             $inputOutput->writeln(sprintf(

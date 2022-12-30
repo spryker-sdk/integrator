@@ -106,6 +106,10 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
         }
 
         $calledMethods = $this->getCalledMethods($node);
+        if (in_array($this->classMetadataTransfer->getTargetMethodNameOrFail(), $calledMethods)) {
+            return $node;
+        }
+
         $before = $callMetadataTransfer->getBefore();
         if ($before) {
             $beforePosition = $this->getPositionByNamespace($calledMethods, $before);

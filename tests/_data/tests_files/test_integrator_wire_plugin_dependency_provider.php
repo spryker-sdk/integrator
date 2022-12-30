@@ -205,7 +205,9 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
      */
     protected function getWrappedFunctionDefault(): array
     {
-        return [];
+        return [
+            new FirstPlugin(),
+        ];
     }
     /**
      * @return array
