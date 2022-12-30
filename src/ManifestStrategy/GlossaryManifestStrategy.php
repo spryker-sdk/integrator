@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Exception\ManifestApplyingException;
+use SprykerSdk\Integrator\IntegratorConfig;
 
 class GlossaryManifestStrategy extends AbstractManifestStrategy
 {
@@ -89,6 +90,9 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
         );
         $glossaryFileLinesForAdd = [];
         foreach ($manifest as $glossaryKey => $glossaryValues) {
+            if ($glossaryKey === IntegratorConfig::MODULE_KEY || $glossaryKey === IntegratorConfig::MODULE_VERSION_KEY) {
+                continue;
+            }
             $glossaryKeyFileLinesForAdd = $this->getGlossaryKeyFileLinesFromGlossaryKey(
                 $glossaryKey,
                 $glossaryValues,
