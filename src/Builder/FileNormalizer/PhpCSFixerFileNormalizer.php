@@ -21,6 +21,11 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
     protected const PHP_CS_FIX_RELATIVE_PATH = 'vendor/bin/phpcbf';
 
     /**
+     * @var int
+     */
+    protected const PROCESS_TIMEOUT = 300;
+
+    /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
     protected $config;
@@ -43,6 +48,7 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
     public function normalize(array $filePaths): void
     {
         $process = new Process([$this->getCSFixPath(), ...$this->getAbsoluteFilePaths($filePaths)]);
+        $process->setTimeout(static::PROCESS_TIMEOUT);
         $process->run();
 
         if ($process->getExitCode() > 0 && $process->getErrorOutput() !== '') {
