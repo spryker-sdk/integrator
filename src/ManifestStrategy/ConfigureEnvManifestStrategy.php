@@ -76,7 +76,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
 
             return false;
         }
-        if (!$isDry && !$this->isTargetExist($target, $inputOutput)) {
+        if (!$isDry && !$this->targetExists($target, $inputOutput)) {
             file_put_contents($configFileName, $this->getConfigAppendData($target, $value), FILE_APPEND);
         }
 
@@ -96,7 +96,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
      *
      * @return bool
      */
-    protected function isTargetExist(string $target, InputOutputInterface $inputOutput): bool
+    protected function targetExists(string $target, InputOutputInterface $inputOutput): bool
     {
         $configFileName = $this->config->getConfigPath();
         $configFileContent = file_get_contents($configFileName);
