@@ -112,7 +112,11 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
             return false;
         }
 
-        return str_contains($configFileContent, $this->getConfigTarget($target));
+        if (mb_strpos($configFileContent, $this->getConfigTarget($target)) === false) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
