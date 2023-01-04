@@ -29,6 +29,8 @@ $config[\Spryker\Shared\Kernel\KernelConstants::VAR_BOOL_CAST_VALUE] = (bool)$co
 
 $config[\Spryker\Shared\Kernel\KernelConstants::FUNC_VALUE] = getenv('SOMEKEY');
 
+$config[\Spryker\Shared\Kernel\KernelConstants::FUNC_VALUE2] = (string)getenv('SOMEKEY2');
+
 $config[\Spryker\Shared\Kernel\KernelConstants::PRIVATE_KEY_PATH] = str_replace('__LINE__', PHP_EOL, getenv('SPRYKER_OAUTH_KEY_PRIVATE') ?: '') ?: null;
 
 $config[\Spryker\Shared\Kernel\KernelConstants::AUTH_DEFAULT_CREDENTIALS] = [

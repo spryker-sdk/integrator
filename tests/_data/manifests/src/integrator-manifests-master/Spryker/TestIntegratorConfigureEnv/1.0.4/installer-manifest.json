@@ -61,6 +61,13 @@
             }
         },
         {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::FUNC_VALUE2",
+            "value": {
+                "value": "(string)getenv('SOMEKEY2')",
+                "is_literal": true
+            }
+        },
+        {
             "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::PRIVATE_KEY_PATH",
             "value":
             {
