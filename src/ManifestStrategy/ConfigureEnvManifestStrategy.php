@@ -76,10 +76,8 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
 
             return false;
         }
-        if (!$isDry) {
-            if (!$this->isTargetExist($target, $inputOutput)) {
-                file_put_contents($configFileName, $this->getConfigAppendData($target, $value), FILE_APPEND);
-            }
+        if (!$isDry && !$this->isTargetExist($target, $inputOutput)) {
+            file_put_contents($configFileName, $this->getConfigAppendData($target, $value), FILE_APPEND);
         }
 
         $inputOutput->writeln(sprintf(
