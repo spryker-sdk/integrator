@@ -97,8 +97,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
      */
     protected function targetExists(string $target): bool
     {
-        $configFileName = $this->config->getConfigPath();
-        $configFileContent = (string)file_get_contents($configFileName);
+        $configFileContent = (string)file_get_contents($this->config->getConfigPath());
 
         return mb_strpos($configFileContent, $this->getConfigTarget($target)) !== false;
     }
