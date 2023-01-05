@@ -287,7 +287,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->assertDuplicatedTargetDoesNotExistInFile(
             '\Pyz\Client\TestIntegratorAddConfigArrayElement\TestIntegratorAddConfigArrayElementConfig::TEST_VALUE_CHANGING',
             'Changed val',
-            $classPath
+            $classPath,
         );
     }
 
@@ -325,7 +325,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->assertDuplicatedTargetDoesNotExistInFile(
             '\Pyz\Client\TestIntegratorAddConfigArrayElement\TestIntegratorAddConfigArrayElementConfig::TEST_VALUE_CHANGING',
             'Changed val',
-            $classPath
+            $classPath,
         );
     }
 
@@ -506,8 +506,8 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->assertFalse(
             mb_strpos(
                 trim(file_get_contents($filePath)),
-                '$config[' . $target . '] = \'' . $value . '\';'
-            )
+                '$config[' . $target . '] = \'' . $value . '\';',
+            ),
         );
     }
 
