@@ -76,7 +76,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
 
             return false;
         }
-        if (!$isDry && !$this->targetExists($target, $inputOutput)) {
+        if (!$isDry && !$this->targetExists($target)) {
             file_put_contents($configFileName, $this->getConfigAppendData($target, $value), FILE_APPEND);
         }
 
@@ -92,29 +92,15 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
 
     /**
      * @param string $target
-     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      *
      * @return bool
      */
-    protected function targetExists(string $target, InputOutputInterface $inputOutput): bool
+    protected function targetExists(string $target): bool
     {
         $configFileName = $this->config->getConfigPath();
-        $configFileContent = file_get_contents($configFileName);
+        $configFileContent = (string)file_get_contents($configFileName);
 
-        if ($configFileContent === false) {
-            $inputOutput->writeln(sprintf(
-                'Could not read from file `%s`. Please check file path or customize using `IntegratorConfig::getConfigPath()`.',
-                $configFileName,
-            ), InputOutputInterface::DEBUG);
-
-            return false;
-        }
-
-        if (mb_strpos($configFileContent, $this->getConfigTarget($target)) === false) {
-            return false;
-        }
-
-        return true;
+        return mb_strpos($configFileContent, $this->getConfigTarget($target)) !== false;
     }
 
     /**
