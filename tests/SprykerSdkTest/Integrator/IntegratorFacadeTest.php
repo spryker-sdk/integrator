@@ -284,6 +284,11 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->assertFileExists($testFilePath);
 
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+        $this->assertDuplicatedTargetDoesNotExistInFile(
+            '\Pyz\Client\TestIntegratorAddConfigArrayElement\TestIntegratorAddConfigArrayElementConfig::TEST_VALUE_CHANGING',
+            'Changed val',
+            $classPath
+        );
     }
 
     /**
@@ -316,6 +321,12 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->assertFileExists($testFilePath);
 
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+
+        $this->assertDuplicatedTargetDoesNotExistInFile(
+            '\Pyz\Client\TestIntegratorAddConfigArrayElement\TestIntegratorAddConfigArrayElementConfig::TEST_VALUE_CHANGING',
+            'Changed val',
+            $classPath
+        );
     }
 
     /**
@@ -481,6 +492,23 @@ class IntegratorFacadeTest extends BaseTestCase
         $this->assertFileExists($testResultFile);
         $this->assertStringContainsString(trim(file_get_contents($projectGlossaryFilePath)), trim(file_get_contents($testResultFile)));
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($testResultFile)));
+    }
+
+    /**
+     * @param string $target
+     * @param string $value
+     * @param string $filePath
+     *
+     * @return void
+     */
+    private function assertDuplicatedTargetDoesNotExistInFile(string $target, string $value, string $filePath): void
+    {
+        $this->assertFalse(
+            mb_strpos(
+                trim(file_get_contents($filePath)),
+                '$config[' . $target . '] = \'' . $value . '\';'
+            )
+        );
     }
 
     /**
