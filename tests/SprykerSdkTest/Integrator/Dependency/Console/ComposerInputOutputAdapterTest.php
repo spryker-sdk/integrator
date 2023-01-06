@@ -49,6 +49,15 @@ class ComposerInputOutputAdapterTest extends TestCase
     /**
      * @return void
      */
+    public function testWarning(): void
+    {
+        $this->expectOutputString('');
+        $this->adapter->warning('Test message');
+    }
+
+    /**
+     * @return void
+     */
     public function testAsk(): void
     {
         $this->assertSame('Default answer', $this->adapter->ask('Test question', 'Default answer'));
