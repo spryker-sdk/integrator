@@ -52,12 +52,11 @@ Generation is currently handled internally in the Spryker release app, whereas i
 
 ### Wire Plugin Manifest
 
-This manifest type adds Plugin to a needed place (by defining exact method) of the code. You can specify where to put the changes by specifying a position field with a `before` or `after` settings.
-`before` and `after` accept string and array of strings values.
+This manifest type adds a Plugin to a needed place (by defining the exact method) of the code. To add the plugin to an associative array,  set the array key in the `index` setting.
 
-Integrator checks existing before and after plugins one by one and puts value after/before the first find.
+To specify where to put the changes, define a position field with the `before` or `after` settings. `before` and `after` accept string and array of strings values. Integrator checks existing `before` and `after` plugins one by one and puts value after or before the first find.
 
-The manifest type can contain an optional `call` section, that specifies where the target method should be called.
+The optional `call` section specifies where the target method should be called.
 
 ```json
 {
@@ -65,6 +64,7 @@ The manifest type can contain an optional `call` section, that specifies where t
         {
             "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getQuoteStorageStrategyPlugins",
             "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin",
+            "index": "\\Pyz\\Client\\Cart\\CartDependencyProvider::PYZ_PLUGIN_KEY",
             "condition": "class_exists(\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin::class)",
             "position": {
                 "before": "",
@@ -104,12 +104,15 @@ The manifest type can contain an optional `call` section, that specifies where t
 
 This manifest type removes a Plugin from a specified place of code.
 
+If a plugin should be removed from an associative array, the array key can be stored in `index` setting.
+
 ```json
 {
     "unwire-plugin": [
         {
             "target": "\\Spryker\\Client\\Cart\\CartDependencyProvider::getQuoteStorageStrategyPlugins",
-            "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin"
+            "source": "\\Spryker\\Client\\Cart\\Plugin\\SessionQuoteStorageStrategyPlugin",
+            "index": "\\Pyz\\Client\\Cart\\CartDependencyProvider::PYZ_PLUGIN_KEY"
         }
     ]
 }

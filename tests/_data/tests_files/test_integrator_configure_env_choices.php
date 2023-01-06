@@ -11,8 +11,6 @@ $config['CORE_NAMESPACES'] = [
 ];
 $config[\Pyz\Client\TestIntegratorAddConfigArrayElement\TestIntegratorAddConfigArrayElementConfig::TEST_VALUE_CHANGING] = 'Original value';
 
-$config[\Pyz\Client\TestIntegratorAddConfigArrayElement\TestIntegratorAddConfigArrayElementConfig::TEST_VALUE_CHANGING] = 'Changed val';
-
 $config[\Spryker\Shared\TestIntegratorConfigureEnv\TestIntegratorConfigureEnvConstants::TEST_VALUE] = 'Value 1';
 
 $config[\Spryker\Shared\TestIntegratorConfigureEnv\TestIntegratorConfigureEnvConstants::TEST_VALUE_DEFAULT] = 'Value choice 1';
@@ -28,6 +26,8 @@ $config[\Spryker\Shared\Kernel\KernelConstants::PROJECT_NAMESPACE] = 'Pyz';
 $config[\Spryker\Shared\Kernel\KernelConstants::VAR_BOOL_CAST_VALUE] = (bool)$config[\Spryker\Shared\Kernel\KernelConstants::PROJECT_NAMESPACE];
 
 $config[\Spryker\Shared\Kernel\KernelConstants::FUNC_VALUE] = getenv('SOMEKEY');
+
+$config[\Spryker\Shared\Kernel\KernelConstants::FUNC_VALUE2] = (string)getenv('SOMEKEY2');
 
 $config[\Spryker\Shared\Kernel\KernelConstants::PRIVATE_KEY_PATH] = str_replace('__LINE__', PHP_EOL, getenv('SPRYKER_OAUTH_KEY_PRIVATE') ?: '') ?: null;
 
