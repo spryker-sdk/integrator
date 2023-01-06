@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Console;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
-use SprykerSdk\Integrator\Dependency\Console\JsonInputOutputAdapter;
+use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputJsonOutputAdapter;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFacadeAwareTrait;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
@@ -58,7 +58,7 @@ class ModuleInstallerConsole extends Command
     /**
      * @var string
      */
-    protected const OPTION_FORMAT_DESCRIPTION = 'Define format of command output, example: JSON';
+    protected const OPTION_FORMAT_DESCRIPTION = 'Define the format of the command outputt, example: JSON';
 
     /**
      * @var string
@@ -237,7 +237,7 @@ class ModuleInstallerConsole extends Command
         $io = new SymfonyStyle($input, $output);
 
         if ($format === static::FORMAT_JSON) {
-            return new JsonInputOutputAdapter($io);
+            return new SymfonyConsoleInputJsonOutputAdapter($io);
         }
 
         return new SymfonyConsoleInputOutputAdapter($io);

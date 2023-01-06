@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Dependency\Console;
 
-class JsonInputOutputAdapter extends SymfonyConsoleInputOutputAdapter
+class SymfonyConsoleInputJsonOutputAdapter extends SymfonyConsoleInputOutputAdapter
 {
     /**
      * @var string
