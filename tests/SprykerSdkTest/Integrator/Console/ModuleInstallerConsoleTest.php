@@ -73,7 +73,7 @@ class ModuleInstallerConsoleTest extends KernelTestCase
      *
      * @return mixed
      */
-    protected function invokeMethod(&$object, $methodName, array $parameters = [])
+    protected function invokeMethod(&$object, string $methodName, array $parameters = [])
     {
         $reflection = new ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
