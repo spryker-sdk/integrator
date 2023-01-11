@@ -66,7 +66,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
 
             if (!is_bool($value) && !$value) {
                 throw new ManifestApplyingException(sprintf(
-                    'Value for %s::%s() configuration is not provided.',
+                    'Value for `%s::%s()` configuration is not provided.',
                     $classInformationTransfer->getClassName(),
                     $targetPointName,
                 ));
