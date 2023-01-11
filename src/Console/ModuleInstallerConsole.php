@@ -58,7 +58,7 @@ class ModuleInstallerConsole extends Command
     /**
      * @var string
      */
-    protected const OPTION_FORMAT_DESCRIPTION = 'Define the format of the command outputt, example: JSON';
+    protected const OPTION_FORMAT_DESCRIPTION = 'Define the format of the command output, example: json';
 
     /**
      * @var string
