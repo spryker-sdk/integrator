@@ -42,7 +42,7 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         $targetDir = dirname($targetPath);
 
         if (!file_exists($sourcePath)) {
-            throw new ManifestApplyingException(sprintf('Source file not found %s', $sourcePath));
+            throw new ManifestApplyingException(sprintf('Source file not found `%s`', $sourcePath));
         }
 
         if (file_exists($targetPath)) {
