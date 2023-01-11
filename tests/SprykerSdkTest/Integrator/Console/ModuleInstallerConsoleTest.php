@@ -67,8 +67,8 @@ class ModuleInstallerConsoleTest extends KernelTestCase
     }
 
     /**
-     * @param $object
-     * @param $methodName
+     * @param mixed $object
+     * @param string $methodName
      * @param array $parameters
      *
      * @return mixed
