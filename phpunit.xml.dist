@@ -5,6 +5,14 @@
             <directory suffix=".php">src/</directory>
         </include>
     </coverage>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../</directory>
+            <exclude>
+                <directory suffix=".php">../src/Transfer</directory>
+            </exclude>
+        </whitelist>
+    </filter>
     <testsuites>
         <testsuite name="spryker-sdk-integrator">
             <directory suffix="Test.php">tests/SprykerSdkTest/</directory>
