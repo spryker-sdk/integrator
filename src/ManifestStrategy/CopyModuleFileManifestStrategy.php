@@ -55,7 +55,7 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
 
         if (!$isDry && !copy($sourcePath, $targetPath)) {
             throw new ManifestApplyingException(sprintf(
-                'Error during file coping, source %s, target %s',
+                'Error during file coping, source `%s`, target `%s`',
                 $sourcePath,
                 $targetPath,
             ));
