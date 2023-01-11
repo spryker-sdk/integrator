@@ -46,7 +46,7 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         }
 
         if (file_exists($targetPath)) {
-            throw new ManifestApplyingException(sprintf('Target file exists %s', $targetPath));
+            throw new ManifestApplyingException(sprintf('Target file exists `%s`', $targetPath));
         }
 
         if (!$isDry && !is_dir($targetDir)) {
