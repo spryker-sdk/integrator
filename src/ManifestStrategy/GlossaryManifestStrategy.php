@@ -31,6 +31,13 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     protected const GLOSSARY_INDEX_LANGUAGE = 2;
 
     /**
+     * $var array<string>
+     *
+     * @var array
+     */
+    protected const EXCEPTION_KEY_LIST = [IntegratorConfig::MODULE_KEY, IntegratorConfig::MODULE_VERSION_KEY];
+
+    /**
      * @return string
      */
     public function getType(): string
@@ -90,7 +97,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
         );
         $glossaryFileLinesForAdd = [];
         foreach ($manifest as $glossaryKey => $glossaryValues) {
-            if ($glossaryKey === IntegratorConfig::MODULE_KEY || $glossaryKey === IntegratorConfig::MODULE_VERSION_KEY) {
+            if (in_array($glossaryKey, static::EXCEPTION_KEY_LIST)) {
                 continue;
             }
             $glossaryKeyFileLinesForAdd = $this->getGlossaryKeyFileLinesFromGlossaryKey(
