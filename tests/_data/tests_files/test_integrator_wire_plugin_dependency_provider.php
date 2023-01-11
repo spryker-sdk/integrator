@@ -78,6 +78,8 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
     protected function getSchedulerAdapterPlugins(): array
     {
         return [
+            $this->getWrappedFunctionC(),
+            $this->getWrappedFunctionD(),
             SchedulerConfig::PYZ_SCHEDULER_JENKINS => new SchedulerJenkinsAdapterPlugin(),
             $this->getWrappedFunction1(),
         ];
@@ -242,6 +244,24 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
      * @return array
      */
     public function getWrappedFunction1() : array
+    {
+        return [
+            new Plugin1(),
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionC() : array
+    {
+        return [
+            new Plugin1(),
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionD() : array
     {
         return [
             new Plugin1(),
