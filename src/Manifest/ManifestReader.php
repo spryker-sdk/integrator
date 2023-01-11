@@ -93,6 +93,7 @@ class ManifestReader implements ManifestReaderInterface
                         $manifest[IntegratorConfig::MODULE_VERSION_KEY] = $version;
                     }
                 }
+                unset($strategy, $manifest);
                 $manifests[$moduleFullName] = $manifestFileData;
             }
         }
