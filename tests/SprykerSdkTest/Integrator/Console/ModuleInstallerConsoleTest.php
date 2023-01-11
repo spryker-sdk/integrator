@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace SprykerSdkTest\Integrator\Console;
 
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use SprykerSdk\Integrator\Console\ModuleInstallerConsole;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputJsonOutputAdapter;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ModuleInstallerConsoleTest extends KernelTestCase
+class ModuleInstallerConsoleTest extends TestCase
 {
     /**
      * @return void
