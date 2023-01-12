@@ -52,9 +52,9 @@ Generation is currently handled internally in the Spryker release app, whereas i
 
 ### Wire Plugin Manifest
 
-This manifest type adds a Plugin to a needed place (by defining the exact method) of the code. To add the plugin to an associative array,  set the array key in the `index` setting.
+This manifest type adds a plugin to a required place in the code, by defining its exact method. To add the plugin to an associative array, set the array key in the `index` setting.
 
-To specify where to put the changes, define a position field with the `before` or `after` settings. `before` and `after` accept string and array of strings values. Integrator checks existing `before` and `after` plugins one by one and puts value after or before the first find.
+To specify where to put the changes, define a position field with the `before` setting or the `after` setting. `before` and `after` accept values which can be both a string and an array of string. The integrator checks the existing `before` and `after` plugins one by one, and puts a value after or before the first find.
 
 The optional `call` section specifies where the target method should be called.
 
