@@ -121,7 +121,7 @@ class ManifestExecutor implements ManifestExecutorInterface
         try {
             $manifestExecutor = $this->resolveExecutor($manifestType);
         } catch (RuntimeException $runtimeException) {
-            return;
+            $inputOutput->warning(sprintf('Incorrect manifest type `%s`', $manifestType));
         }
 
         foreach ($unappliedManifestByType as $manifestHash => $unappliedManifest) {

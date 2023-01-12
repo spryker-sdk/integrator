@@ -52,7 +52,7 @@ class SymfonyConsoleInputJsonOutputAdapter extends SymfonyConsoleInputOutputAdap
      */
     public function writeln($messages, int $options = 0, bool $isWarning = false): void
     {
-        $this->successList[] = is_array($messages) ? implode(' ', $messages) : $messages;
+        $this->write($messages, true, $options);
     }
 
     /**
