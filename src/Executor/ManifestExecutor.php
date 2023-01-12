@@ -122,6 +122,7 @@ class ManifestExecutor implements ManifestExecutorInterface
             $manifestExecutor = $this->resolveExecutor($manifestType);
         } catch (RuntimeException $runtimeException) {
             $inputOutput->warning($runtimeException->getMessage());
+
             return;
         }
 
