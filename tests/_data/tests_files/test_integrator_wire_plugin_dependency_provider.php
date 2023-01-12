@@ -19,6 +19,7 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\BeforeAllPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\BeforeAllPluginsSubscriber;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FirstPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FooStorageEventSubscriber;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\Plugin1;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SecondPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SinglePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestAppendArgumentArrayValue;
@@ -77,7 +78,10 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
     protected function getSchedulerAdapterPlugins(): array
     {
         return [
+            $this->getWrappedFunctionC(),
+            $this->getWrappedFunctionD(),
             SchedulerConfig::PYZ_SCHEDULER_JENKINS => new SchedulerJenkinsAdapterPlugin(),
+            $this->getWrappedFunction1(),
         ];
     }
 
@@ -235,5 +239,32 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
             $plugins[] = new WebProfilerApplicationPlugin();
         }
         return $plugins;
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunction1() : array
+    {
+        return [
+            new Plugin1(),
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionC() : array
+    {
+        return [
+            new Plugin1(),
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionD() : array
+    {
+        return [
+            new Plugin1(),
+        ];
     }
 }
