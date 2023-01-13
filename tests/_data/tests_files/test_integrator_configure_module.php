@@ -176,6 +176,13 @@ class TestIntegratorDefaultConfig extends BaseConfig
         );
     }
     /**
+     * @return bool
+     */
+    public function isOldDeterminationForOrderItemProcessEnabled() : bool
+    {
+        return false;
+    }
+    /**
      * @return array
      */
     public function testNewMethod() : array

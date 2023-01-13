@@ -11,6 +11,8 @@ namespace SprykerSdk\Integrator\Builder\Visitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -19,6 +21,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
+use SprykerSdk\Integrator\Transfer\CallMetadataTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
@@ -75,7 +78,13 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
         }
 
         if ($node instanceof FuncCall && $this->isArrayMergeFuncCallNode($node)) {
-            $this->addNewCallIntoArrayMergeFuncNode($node);
+            $this->addNewCallIntoArrayMergeFuncNode($node, $callMetadataTransfer);
+
+            return $this->successfullyProcessed();
+        }
+
+        if ($node instanceof Array_) {
+            $this->addNewCallIntoArray($node, $callMetadataTransfer);
 
             return $this->successfullyProcessed();
         }
@@ -95,17 +104,17 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
 
     /**
      * @param \PhpParser\Node\Expr\FuncCall $node
+     * @param \SprykerSdk\Integrator\Transfer\CallMetadataTransfer $callMetadataTransfer
      *
      * @return \PhpParser\Node
      */
-    protected function addNewCallIntoArrayMergeFuncNode(FuncCall $node): Node
+    protected function addNewCallIntoArrayMergeFuncNode(FuncCall $node, CallMetadataTransfer $callMetadataTransfer): Node
     {
-        $callMetadataTransfer = $this->classMetadataTransfer->getCall();
-        if (!$callMetadataTransfer) {
+        $calledMethods = $this->getCalledMethods($node);
+        if (in_array($this->classMetadataTransfer->getTargetMethodNameOrFail(), $calledMethods)) {
             return $node;
         }
 
-        $calledMethods = $this->getCalledMethods($node);
         $before = $callMetadataTransfer->getBefore();
         if ($before) {
             $beforePosition = $this->getPositionByNamespace($calledMethods, $before);
@@ -141,11 +150,11 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param \PhpParser\Node\Expr\FuncCall $node
+     * @param \PhpParser\Node $node
      *
      * @return array<string>
      */
-    protected function getCalledMethods(FuncCall $node): array
+    protected function getCalledMethods(Node $node): array
     {
         $result = [];
 
@@ -209,5 +218,64 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
         $data = explode('::', $namespaceName);
 
         return end($data);
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\Array_ $node
+     * @param \SprykerSdk\Integrator\Transfer\CallMetadataTransfer $callMetadataTransfer
+     *
+     * @return \PhpParser\Node
+     */
+    protected function addNewCallIntoArray(Array_ $node, CallMetadataTransfer $callMetadataTransfer): Node
+    {
+        $calledMethods = $this->getCalledMethods($node);
+        if (in_array($this->classMetadataTransfer->getTargetMethodNameOrFail(), $calledMethods)) {
+            return $node;
+        }
+
+        $before = $callMetadataTransfer->getBefore();
+        if ($before) {
+            $beforePosition = $this->getPositionByNamespace($calledMethods, $before);
+            if ($beforePosition !== null) {
+                return $this->addNewCallIntoArrayNodeByPosition($node, $beforePosition);
+            }
+        }
+
+        $after = $callMetadataTransfer->getAfter();
+        if ($after) {
+            $afterPosition = $this->getPositionByNamespace($calledMethods, $after);
+            if ($afterPosition !== null) {
+                return $this->addNewCallIntoArrayNodeByPosition($node, $afterPosition + 1);
+            }
+        }
+
+        $node->items[] = $this->createArrayItemWithMethodCall();
+
+        return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\Array_ $node
+     * @param int $position
+     *
+     * @return \PhpParser\Node
+     */
+    protected function addNewCallIntoArrayNodeByPosition(Array_ $node, int $position): Node
+    {
+        array_splice($node->items, $position, 0, [$this->createArrayItemWithMethodCall()]);
+
+        return $node;
+    }
+
+    /**
+     * @return \PhpParser\Node\Expr\ArrayItem
+     */
+    protected function createArrayItemWithMethodCall(): ArrayItem
+    {
+        $var = new Variable(static::THIS_KEY);
+        $methodName = $this->classMetadataTransfer->getTargetMethodNameOrFail();
+        $methodCall = new MethodCall($var, $methodName);
+
+        return new ArrayItem($methodCall);
     }
 }
