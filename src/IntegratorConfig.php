@@ -94,6 +94,11 @@ class IntegratorConfig
     /**
      * @var string
      */
+    public const MANIFEST_KEY_CALL = 'call';
+
+    /**
+     * @var string
+     */
     public const CORE_NAMESPACES = 'CORE_NAMESPACES';
 
     /**

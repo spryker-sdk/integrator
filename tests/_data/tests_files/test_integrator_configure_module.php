@@ -22,6 +22,7 @@ class TestIntegratorDefaultConfig extends BaseConfig
         10,
         1000,
     ];
+    public const BOOL_EXISTING_VALUE = 'false';
     /**
      * @return string
      */
@@ -173,6 +174,13 @@ class TestIntegratorDefaultConfig extends BaseConfig
             $this->getSharedConfig2(),
             parent::getSharedConfig2(),
         );
+    }
+    /**
+     * @return bool
+     */
+    public function isOldDeterminationForOrderItemProcessEnabled() : bool
+    {
+        return false;
     }
     /**
      * @return array

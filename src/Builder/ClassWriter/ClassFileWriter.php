@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassWriter;
 
+use SprykerSdk\Integrator\Builder\FileStorage\FileStorageInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -20,11 +21,18 @@ class ClassFileWriter implements ClassFileWriterInterface
     protected $classPrinter;
 
     /**
-     * @param \SprykerSdk\Integrator\Builder\Printer\ClassPrinter $classPrinter
+     * @var \SprykerSdk\Integrator\Builder\FileStorage\FileStorageInterface
      */
-    public function __construct(ClassPrinter $classPrinter)
+    protected $fileStorage;
+
+    /**
+     * @param \SprykerSdk\Integrator\Builder\Printer\ClassPrinter $classPrinter
+     * @param \SprykerSdk\Integrator\Builder\FileStorage\FileStorageInterface $fileStorage
+     */
+    public function __construct(ClassPrinter $classPrinter, FileStorageInterface $fileStorage)
     {
         $this->classPrinter = $classPrinter;
+        $this->fileStorage = $fileStorage;
     }
 
     /**
@@ -45,6 +53,8 @@ class ClassFileWriter implements ClassFileWriterInterface
                 $classInformationTransfer->getClassTokenTree(),
             );
         }
+
+        $this->fileStorage->addFile($classInformationTransfer->getFilePathOrFail());
 
         return $this->filePutContents($classInformationTransfer->getFilePathOrFail(), $code);
     }

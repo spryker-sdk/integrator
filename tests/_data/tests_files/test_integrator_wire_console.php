@@ -7,6 +7,7 @@
 
 namespace Pyz\Zed\TestIntegratorWireConsoleCommands;
 
+use Pyz\Zed\DependencyCollectionTest\DataImportConsole;
 use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestClassExistsConsole;
 use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestDevConsole;
 use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestNewConsole;
@@ -20,6 +21,8 @@ class ConsoleDependencyProvider
     {
         $commands = [
             new TestNewConsole(),
+            new DataImportConsole(DataImportConfig::ANY_NAME . ':' . DataImportConfig::IMPORT_TYPE_STORE),
+            new DataImportConsole(DataImportConfig::ANY_NAME . ':' . DataImportConfig::IMPORT_TYPE_CURRENCY),
         ];
         $commands[] = new TestPlainConsole();
 
@@ -29,6 +32,9 @@ class ConsoleDependencyProvider
             if (class_exists(TestClassExistsConsole::class)) {
                 $commands[] = new TestClassExistsConsole();
             }
+        }
+        if (class_exists(TestNewConsoleWithMissingCondition::class)) {
+            $commands[] = new TestNewConsoleWithMissingCondition();
         }
 
         return $commands;

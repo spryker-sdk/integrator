@@ -7,7 +7,10 @@
 
 namespace Pyz\Zed\TestIntegratorUnwireConsoleCommands;
 
+use Pyz\Zed\DependencyCollectionTest\DataImportConsole;
+use Pyz\Zed\DataImport\DataImportConfig;
 use Spryker\Zed\TestIntegratorUnwireConsoleCommands\Console\TestPlainConsole;
+use Spryker\Zed\TestIntegratorUnwireConsoleCommands\Console\TestConsole;
 use Spryker\Zed\TestIntegratorUnwireConsoleCommands\Console\TestDevConsole;
 use Spryker\Zed\TestIntegratorUnwireConsoleCommands\Console\TestClassExistsConsole;
 
@@ -16,11 +19,7 @@ class ConsoleDependencyProvider
     protected function getConsoleCommands(Container $container): array
     {
         $commands = [];
-
-        if ($this->getConfig()->isDevelopmentConsoleCommandsEnabled()) {
-            if (class_exists(TestClassExistsConsole::class)) {
-            }
-        }
+        $commands[] = new DataImportConsole(DataImportConfig::ANY_NAME . ':' . DataImportConfig::IMPORT_TYPE_CURRENCY);
 
         return $commands;
     }

@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\Builder\ClassMetadataBuilder;
 
 use ArrayObject;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Integrator\Transfer\CallMetadataTransfer;
 use SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -34,6 +35,7 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
         $this->addIndex($manifest, $transfer);
         $this->addPositions($manifest, $transfer);
         $this->addSourceAndTarget($manifest, $transfer);
+        $this->addCall($manifest, $transfer);
 
         return $transfer;
     }
@@ -109,7 +111,7 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
     protected function createClassArgumentMetadataTransfer(array $argumentData): ClassArgumentMetadataTransfer
     {
         return (new ClassArgumentMetadataTransfer())
-            ->setValue($argumentData['value'])
+            ->setValue((string)json_encode($argumentData['value']))
             ->setIsLiteral((bool)$argumentData['is_literal']);
     }
 
@@ -184,6 +186,36 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
         }
 
         return $positions;
+    }
+
+    /**
+     * @param array<mixed> $manifest
+     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $transfer
+     *
+     * @return \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer
+     */
+    protected function addCall(array $manifest, ClassMetadataTransfer $transfer): ClassMetadataTransfer
+    {
+        if (!isset($manifest[IntegratorConfig::MANIFEST_KEY_CALL][IntegratorConfig::MANIFEST_KEY_TARGET])) {
+            return $transfer;
+        }
+
+        $callMetadata = new CallMetadataTransfer();
+        $callMetadata->setTarget($manifest[IntegratorConfig::MANIFEST_KEY_CALL][IntegratorConfig::MANIFEST_KEY_TARGET]);
+
+        if (isset($manifest[IntegratorConfig::MANIFEST_KEY_CALL][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE])) {
+            $before = $manifest[IntegratorConfig::MANIFEST_KEY_CALL][IntegratorConfig::MANIFEST_KEY_POSITION_BEFORE];
+            $callMetadata->setBefore($before);
+        }
+
+        if (isset($manifest[IntegratorConfig::MANIFEST_KEY_CALL][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER])) {
+            $after = $manifest[IntegratorConfig::MANIFEST_KEY_CALL][IntegratorConfig::MANIFEST_KEY_POSITION_AFTER];
+            $callMetadata->setAfter($after);
+        }
+
+        $transfer->setCall($callMetadata);
+
+        return $transfer;
     }
 
     /**

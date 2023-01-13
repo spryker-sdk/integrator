@@ -18,6 +18,9 @@ use RecursiveIteratorIterator;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use Symfony\Component\Filesystem\Filesystem;
 use ZipArchive;
 
@@ -104,6 +107,17 @@ class BaseTestCase extends PHPUnitTestCase
     }
 
     /**
+     * @return \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer
+     */
+    public function createCommandArgumentsTransfer(): IntegratorCommandArgumentsTransfer
+    {
+        $commandArgumentsTransfer = new IntegratorCommandArgumentsTransfer();
+        $commandArgumentsTransfer->setIsDry(false);
+
+        return $commandArgumentsTransfer;
+    }
+
+    /**
      * @param string $className
      * @param string $filePath
      *
@@ -138,5 +152,33 @@ class BaseTestCase extends PHPUnitTestCase
         $nodeTraverser->addVisitor(new NameResolver());
 
         return $nodeTraverser->traverse($originalSyntaxTree);
+    }
+
+    /**
+     * @param string|null $moduleName
+     *
+     * @return array
+     */
+    protected function getModuleList(?string $moduleName = null): array
+    {
+        return $this->getFactory()->getModuleFinderFacade()->getModules($this->buildModuleFilterTransfer($moduleName));
+    }
+
+    /**
+     * @param string|null $moduleName
+     *
+     * @return \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer
+     */
+    protected function buildModuleFilterTransfer(?string $moduleName = null): ModuleFilterTransfer
+    {
+        $moduleFilterTransfer = new ModuleFilterTransfer();
+
+        if ($moduleName) {
+            $moduleTransfer = new ModuleTransfer();
+            $moduleTransfer->setName($moduleName);
+            $moduleFilterTransfer->setModule($moduleTransfer);
+        }
+
+        return $moduleFilterTransfer;
     }
 }

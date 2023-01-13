@@ -1,6 +1,10 @@
 {
     "configure-env": [
         {
+            "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::TEST_VALUE_CHANGING",
+            "value": "Changed val"
+        },
+        {
             "target": "\\Spryker\\Shared\\TestIntegratorConfigureEnv\\TestIntegratorConfigureEnvConstants::TEST_VALUE",
             "value": "Value 1",
             "defaultValue": "Value 1",
@@ -53,6 +57,13 @@
             "value":
             {
                 "value": "getenv('SOMEKEY')",
+                "is_literal": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::FUNC_VALUE2",
+            "value": {
+                "value": "(string)getenv('SOMEKEY2')",
                 "is_literal": true
             }
         },

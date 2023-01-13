@@ -14,20 +14,26 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
+use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
@@ -37,7 +43,17 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     /**
      * @var string
      */
+    public const STMTS = 'stmts';
+
+    /**
+     * @var string
+     */
     protected const ARRAY_MERGE_FUNCTION = 'array_merge';
+
+    /**
+     * @var string
+     */
+    protected const PLUGINS_VARIBLE = 'plugins';
 
     /**
      * @var string
@@ -65,15 +81,31 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected $methodFound = false;
 
     /**
+     * @var \PhpParser\Node\Stmt\Expression|null
+     */
+    protected ?Expression $indexExpr;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
+     */
+    private ArgumentBuilderInterface $argumentBuilder;
+
+    /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
+     * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
+     * @param \PhpParser\Node\Stmt\Expression|null $indexExpr
      */
     public function __construct(
         ClassMetadataTransfer $classMetadataTransfer,
-        PluginPositionResolverInterface $pluginPositionResolver
+        PluginPositionResolverInterface $pluginPositionResolver,
+        ArgumentBuilderInterface $argumentBuilder,
+        ?Expression $indexExpr = null
     ) {
         $this->classMetadataTransfer = $classMetadataTransfer;
         $this->pluginPositionResolver = $pluginPositionResolver;
+        $this->argumentBuilder = $argumentBuilder;
+        $this->indexExpr = $indexExpr;
     }
 
     /**
@@ -85,6 +117,9 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     {
         if ($node instanceof ClassMethod && $node->name->toString() === $this->classMetadataTransfer->getTargetMethodNameOrFail()) {
             $this->methodFound = true;
+            if ($this->classMetadataTransfer->getCondition()) {
+                $this->addNewPluginWithConditionIntoList($node);
+            }
 
             return $node;
         }
@@ -110,6 +145,104 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         }
 
         return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $node
+     *
+     * @return \PhpParser\Node
+     */
+    protected function addNewPluginWithConditionIntoList(ClassMethod $node): Node
+    {
+        foreach ((array)$node->stmts as $stmt) {
+            if ($stmt instanceof If_ && $this->checkIfConditionExist($stmt)) {
+                return $node;
+            }
+        }
+        $newStmts = (array)$node->stmts;
+        $returnStmt = array_pop($newStmts);
+        if (!($returnStmt instanceof Return_)) {
+            return $node;
+        }
+
+        if ($returnStmt->expr instanceof Variable) {
+            $newStmts[] = $this->createNewConditionStatement($returnStmt->expr);
+        }
+        if ($returnStmt->expr instanceof FuncCall || $returnStmt->expr instanceof Array_) {
+            $newStmts[] = $this->createAssignEmptyArray(static::PLUGINS_VARIBLE);
+            $newStmts[] = $this->createNewConditionStatement((new BuilderFactory())->var(static::PLUGINS_VARIBLE));
+            $returnStmt->expr = (new BuilderFactory())->var(static::PLUGINS_VARIBLE);
+        }
+        $newStmts[] = $returnStmt;
+        $node->stmts = $newStmts;
+
+        return $node;
+    }
+
+    /**
+     * @param string $varName
+     *
+     * @return \PhpParser\Node\Stmt\Expression
+     */
+    protected function createAssignEmptyArray(string $varName): Expression
+    {
+        return new Expression(
+            new Assign(
+                (new BuilderFactory())->var($varName),
+                new Array_(),
+            ),
+        );
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr $name
+     *
+     * @return \PhpParser\Node\Stmt
+     */
+    protected function createNewConditionStatement(Expr $name): Stmt
+    {
+        return new If_(
+            new ConstFetch(
+                new Name(
+                    (new ClassHelper())
+                        ->getShortClassName(
+                            (string)$this->classMetadataTransfer->getCondition(),
+                        ),
+                ),
+            ),
+            [
+                static::STMTS => [
+                    new Expression(
+                        new Assign(
+                            new ArrayDimFetch($name),
+                            (new BuilderFactory())->new(
+                                (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
+                            ),
+                        ),
+                    ),
+                ],
+            ],
+        );
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\If_ $ifCondition
+     *
+     * @return bool
+     */
+    protected function checkIfConditionExist(If_ $ifCondition): bool
+    {
+        if ($this->getIfClausePrettyPrint($ifCondition) === $this->classMetadataTransfer->getCondition()) {
+            return true;
+        }
+
+        foreach ($ifCondition->stmts as $stmt) {
+            if ($stmt instanceof If_) {
+                return $this->checkIfConditionExist($stmt);
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -143,6 +276,14 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     {
         if ($this->isPluginAddedInArrayMerge($node)) {
             return $node;
+        }
+
+        foreach ($node->args as $arg) {
+            if ($arg->value instanceof Array_) {
+                $this->addNewPlugin($arg->value);
+
+                return $node;
+            }
         }
 
         $node->args[] = new Arg($this->createArrayWithInstanceOf());
@@ -376,41 +517,15 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      */
     protected function createArrayItemWithInstanceOf(): ArrayItem
     {
+        $args = $this->argumentBuilder->createAddPluginArguments($this->classMetadataTransfer, false);
+
         return new ArrayItem(
             (new BuilderFactory())->new(
                 (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
+                $args,
             ),
-            $this->classMetadataTransfer->getIndex() ? $this->createIndexExpr($this->classMetadataTransfer->getIndex()) : null,
+            $this->indexExpr !== null ? $this->indexExpr->expr : null,
         );
-    }
-
-    /**
-     * @param string $index
-     *
-     * @return \PhpParser\Node\Expr
-     */
-    protected function createIndexExpr(string $index): Expr
-    {
-        if (strpos($index, 'static::') === 0) {
-            $indexParts = explode('::', $index);
-
-            return new ClassConstFetch(
-                new Name('static'),
-                $indexParts[1],
-            );
-        }
-
-        if (strpos($index, '::') !== false) {
-            $indexParts = explode('::', $index);
-            $classNamespaceChain = explode('\\', $indexParts[0]);
-
-            return new ClassConstFetch(
-                new Name(end($classNamespaceChain)),
-                $indexParts[1],
-            );
-        }
-
-        return new String_($index);
     }
 
     /**

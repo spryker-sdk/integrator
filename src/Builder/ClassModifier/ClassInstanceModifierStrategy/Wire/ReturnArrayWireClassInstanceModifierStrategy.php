@@ -9,9 +9,13 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Wire;
 
+use ArrayObject;
 use PhpParser\Node\Stmt\ClassMethod;
+use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface;
+use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface;
+use SprykerSdk\Integrator\Builder\Visitor\AddMethodCallToCallListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
@@ -33,15 +37,31 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
     protected PluginPositionResolverInterface $pluginPositionResolver;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface
+     */
+    protected ExpressionPartialParserInterface $nodeExpressionPartialParser;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
+     */
+    protected ArgumentBuilderInterface $argumentBuilder;
+
+    /**
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface $applicableCheck
      * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
+     * @param \SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface $nodeExpressionPartialParser
+     * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
      */
     public function __construct(
         ApplicableModifierStrategyInterface $applicableCheck,
-        PluginPositionResolverInterface $pluginPositionResolver
+        PluginPositionResolverInterface $pluginPositionResolver,
+        ExpressionPartialParserInterface $nodeExpressionPartialParser,
+        ArgumentBuilderInterface $argumentBuilder
     ) {
         $this->applicableCheck = $applicableCheck;
         $this->pluginPositionResolver = $pluginPositionResolver;
+        $this->nodeExpressionPartialParser = $nodeExpressionPartialParser;
+        $this->argumentBuilder = $argumentBuilder;
     }
 
     /**
@@ -66,31 +86,7 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
     ): ClassInformationTransfer {
         $visitors = $this->getWireVisitors($classMetadataTransfer);
 
-        if ($classMetadataTransfer->getIndex() !== null && $this->isIndexFullyQualifiedClassName($classMetadataTransfer->getIndex())) {
-            $visitors[] = new AddUseVisitor($this->getFullyQualifiedClassNameFromIndex($classMetadataTransfer->getIndex()));
-        }
-
         return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
-    }
-
-    /**
-     * @param string $index
-     *
-     * @return bool
-     */
-    protected function isIndexFullyQualifiedClassName(string $index): bool
-    {
-        return strpos($index, '::') !== false && strpos($index, 'static::') === false;
-    }
-
-    /**
-     * @param string $index
-     *
-     * @return string
-     */
-    protected function getFullyQualifiedClassNameFromIndex(string $index): string
-    {
-        return explode('::', $index)[0];
     }
 
     /**
@@ -100,12 +96,34 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
      */
     protected function getWireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
     {
-        return [
+        $visitors = [
             new AddUseVisitor($classMetadataTransfer->getSourceOrFail()),
-            new AddPluginToPluginListVisitor(
-                $classMetadataTransfer,
-                $this->pluginPositionResolver,
-            ),
+            new AddMethodCallToCallListVisitor($classMetadataTransfer),
         ];
+
+        if ($classMetadataTransfer->getIndex() === null) {
+            return [...$visitors, new AddPluginToPluginListVisitor($classMetadataTransfer, $this->pluginPositionResolver, $this->argumentBuilder)];
+        }
+
+        $parsedResult = $this->nodeExpressionPartialParser->parse($classMetadataTransfer->getIndex());
+
+        return [
+            ...$visitors,
+            ...$this->getUseVisitors($parsedResult->getUsedClasses()),
+            new AddPluginToPluginListVisitor($classMetadataTransfer, $this->pluginPositionResolver, $this->argumentBuilder, $parsedResult->getExpression()),
+        ];
+    }
+
+    /**
+     * @param \ArrayObject $usedClasses
+     *
+     * @return array<\SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor>
+     */
+    protected function getUseVisitors(ArrayObject $usedClasses): array
+    {
+        return array_map(
+            static fn (string $className): AddUseVisitor => new AddUseVisitor($className),
+            iterator_to_array($usedClasses),
+        );
     }
 }

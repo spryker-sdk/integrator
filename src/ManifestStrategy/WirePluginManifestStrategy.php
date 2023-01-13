@@ -64,8 +64,9 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
         }
 
         $targetClassInfo = (new ReflectionClass($targetClassName));
+        $classMetadataTransfer = $this->metadataBuilder->build($manifest);
 
-        if (!$targetClassInfo->hasMethod($targetMethodName)) {
+        if (!$targetClassInfo->hasMethod($targetMethodName) && !$classMetadataTransfer->getCall()) {
             $inputOutput->writeln(sprintf(
                 'Your version of module %s/%s does not support needed plugin stack. Please, update it to use full functionality.',
                 $this->classHelper->getOrganisationName($targetClassName),
@@ -80,8 +81,6 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
             if (!$classInformationTransfer) {
                 continue;
             }
-
-            $classMetadataTransfer = $this->metadataBuilder->build($manifest);
 
             $classInformationTransfer = $this->createClassBuilderFacade()->wireClassInstance(
                 $classInformationTransfer,

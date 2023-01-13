@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Unwire;
 
 use PhpParser\Node\Stmt\ClassMethod;
+use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface;
 use SprykerSdk\Integrator\Builder\Visitor\RemovePluginFromPluginListVisitor;
@@ -26,11 +27,18 @@ class ReturnArrayUnwireClassInstanceModifierStrategy implements UnwireClassInsta
     protected ApplicableModifierStrategyInterface $applicableCheck;
 
     /**
-     * @param \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface $applicableCheck
+     * @var \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
      */
-    public function __construct(ApplicableModifierStrategyInterface $applicableCheck)
+    protected ArgumentBuilderInterface $argumentBuilder;
+
+    /**
+     * @param \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface $applicableCheck
+     * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
+     */
+    public function __construct(ApplicableModifierStrategyInterface $applicableCheck, ArgumentBuilderInterface $argumentBuilder)
     {
         $this->applicableCheck = $applicableCheck;
+        $this->argumentBuilder = $argumentBuilder;
     }
 
     /**
@@ -66,10 +74,7 @@ class ReturnArrayUnwireClassInstanceModifierStrategy implements UnwireClassInsta
     protected function getUnwireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
     {
         return [
-            new RemovePluginFromPluginListVisitor(
-                $classMetadataTransfer->getTargetMethodNameOrFail(),
-                $classMetadataTransfer->getSourceOrFail(),
-            ),
+            new RemovePluginFromPluginListVisitor($classMetadataTransfer, $this->argumentBuilder),
         ];
     }
 }

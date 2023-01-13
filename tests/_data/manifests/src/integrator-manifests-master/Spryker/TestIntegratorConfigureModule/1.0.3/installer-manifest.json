@@ -30,8 +30,16 @@
             }
         },
         {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::BOOL_EXISTING_VALUE",
+            "value": "true"
+        },
+        {
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::BOOL_VALUE",
             "value": "true"
+        },
+        {
+            "value": false,
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::isOldDeterminationForOrderItemProcessEnabled"
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testNewMethod",

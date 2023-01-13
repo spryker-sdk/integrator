@@ -9,6 +9,8 @@ namespace Pyz\Zed\TestIntegratorWirePlugin;
 
 use Pyz\Shared\Scheduler\SchedulerConfig;
 use Pyz\Zed\TestIntegratorWirePlugin\Plugin\ChildPlugin;
+use Spryker\Shared\Config\Config;
+use Spryker\Shared\Log\LogConstants;
 use Spryker\Zed\SchedulerJenkins\Communication\Plugin\Adapter\SchedulerJenkinsAdapterPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AfterFirstPluginSubscriber;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AfterTestBarConditionPlugin;
@@ -17,23 +19,37 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\BeforeAllPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\BeforeAllPluginsSubscriber;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FirstPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FooStorageEventSubscriber;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\Plugin1;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SecondPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SinglePlugin;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestAppendArgumentArrayValue;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestBarConditionPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestFooConditionPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorSingleWirePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePlugin;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginExpressionIndex;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginIndex;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginStaticIndex;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginStringIndex;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\UrlStorageEventSubscriber;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\WebProfilerApplicationPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\TestIntegratorWirePluginConfig;
 
-class TestIntegratorWirePluginDependencyProvider
+class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWirePluginDependencyProvider
 {
     public function getSinglePlugin(): TestIntegratorSingleWirePlugin
     {
         return new TestIntegratorSingleWirePlugin();
+    }
+
+    public function getConditionPlugins(): array
+    {
+        $plugins = [];
+        if (class_exists(WebProfilerApplicationPlugin::class)) {
+            $plugins[] = new WebProfilerApplicationPlugin();
+        }
+
+        return $plugins;
     }
 
     public function getTestPlugins(): array
@@ -43,6 +59,7 @@ class TestIntegratorWirePluginDependencyProvider
             TestIntegratorWirePluginConfig::TEST_INTEGRATOR_WIRE_PLUGIN => new TestIntegratorWirePluginIndex(),
             static::TEST_INTEGRATOR_WIRE_PLUGIN_STATIC_INDEX => new TestIntegratorWirePluginStaticIndex(),
             'TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX' => new TestIntegratorWirePluginStringIndex(),
+            Config::get(LogConstants::LOG_QUEUE_NAME) => new TestIntegratorWirePluginExpressionIndex(),
         ];
     }
 
@@ -61,7 +78,10 @@ class TestIntegratorWirePluginDependencyProvider
     protected function getSchedulerAdapterPlugins(): array
     {
         return [
+            $this->getWrappedFunctionC(),
+            $this->getWrappedFunctionD(),
             SchedulerConfig::PYZ_SCHEDULER_JENKINS => new SchedulerJenkinsAdapterPlugin(),
+            $this->getWrappedFunction1(),
         ];
     }
 
@@ -152,6 +172,9 @@ class TestIntegratorWirePluginDependencyProvider
         $container->extend('TEST_PLUGINS', function (ConditionCollectionInterface $conditionCollection) {
             $conditionCollection->add('Oms/SendOrderShipped', new FirstPlugin());
             $conditionCollection->add(new TestBarConditionPlugin(), 'Oms/SendOrderShipped');
+            $conditionCollection->add(new TestAppendArgumentArrayValue(), [
+                'static::Oms/SendOrderShipped',
+            ]);
             $conditionCollection->add('Oms/SendOrderShipped', new TestFooConditionPlugin());
 
             return $conditionCollection;
@@ -162,14 +185,86 @@ class TestIntegratorWirePluginDependencyProvider
 
     public function getTestArrayMergePlugins(): array
     {
-        return array_merge([\ArrayObject::class], [
+        return array_merge(parent::getTestArrayMergePlugins(), [
             new TestIntegratorWirePlugin(),
-        ], [
             TestIntegratorWirePluginConfig::TEST_INTEGRATOR_WIRE_PLUGIN => new TestIntegratorWirePluginIndex(),
-        ], [
             static::TEST_INTEGRATOR_WIRE_PLUGIN_STATIC_INDEX => new TestIntegratorWirePluginStaticIndex(),
-        ], [
             'TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX' => new TestIntegratorWirePluginStringIndex(),
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getWrappedPlugins(): array
+    {
+        return array_merge(
+            $this->getWrappedFunctionDefault(), $this->getWrappedFunctionA(), $this->getWrappedFunctionB(), [
+                new TestIntegratorWirePlugin(),
+            ]
+        );
+    }
+    /**
+     * @return array
+     */
+    protected function getWrappedFunctionDefault(): array
+    {
+        return [
+            new FirstPlugin(),
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionB() : array
+    {
+        return [
+            new SecondPlugin(),
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionA() : array
+    {
+        return [
+            new FirstPlugin(),
+        ];
+    }
+    public function getConditionParentPlugins() : array
+    {
+        $plugins = [
+        ];
+        if (class_exists(WebProfilerApplicationPlugin::class)) {
+            $plugins[] = new WebProfilerApplicationPlugin();
+        }
+        return $plugins;
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunction1() : array
+    {
+        return [
+            new Plugin1(),
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionC() : array
+    {
+        return [
+            new Plugin1(),
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionD() : array
+    {
+        return [
+            new Plugin1(),
+        ];
     }
 }

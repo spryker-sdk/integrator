@@ -12,12 +12,14 @@ namespace SprykerSdk\Integrator\Console;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFacadeAwareTrait;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -34,6 +36,26 @@ class ModuleInstallerConsole extends Command
     /**
      * @var string
      */
+    protected const ARGUMENT_MODULE_NAMES_DESCRIPTION = 'Name of modules which should be built, separated by `,`';
+
+    /**
+     * @var string
+     */
+    protected const OPTION_SOURCE = 'source';
+
+    /**
+     * @var string
+     */
+    protected const OPTION_SOURCE_DESCRIPTION = 'Source branch of the manifests to be applied';
+
+    /**
+     * @var string
+     */
+    protected const COMMAND_NAME = 'integrator:manifest:run';
+
+    /**
+     * @var string
+     */
     protected const FLAG_DRY = 'dry';
 
     /**
@@ -41,13 +63,19 @@ class ModuleInstallerConsole extends Command
      */
     protected function configure(): void
     {
-        $this->setName('integrator:manifest:run')
+        $this->setName(static::COMMAND_NAME)
             ->setDescription('')
             ->addOption(static::FLAG_DRY)
             ->addArgument(
                 static::ARGUMENT_MODULE_NAMES,
                 InputArgument::OPTIONAL,
-                'Name of modules which should be build, separated by `,`',
+                static::ARGUMENT_MODULE_NAMES_DESCRIPTION,
+            )
+            ->addOption(
+                static::OPTION_SOURCE,
+                null,
+                InputOption::VALUE_OPTIONAL,
+                static::OPTION_SOURCE_DESCRIPTION,
             );
     }
 
@@ -62,9 +90,8 @@ class ModuleInstallerConsole extends Command
         $io = new SymfonyStyle($input, $output);
 
         $moduleList = $this->getModuleList($input);
-        $isDry = $this->getDryOptionValue($input);
-
-        $this->getFacade()->runInstallation($moduleList, new SymfonyConsoleInputOutputAdapter($io), $isDry);
+        $commandArgumentsTransfer = $this->buildCommandArgumentsTransfer($input);
+        $this->getFacade()->runInstallation($moduleList, new SymfonyConsoleInputOutputAdapter($io), $commandArgumentsTransfer);
 
         return 0;
     }
@@ -79,16 +106,6 @@ class ModuleInstallerConsole extends Command
         $moduleNames = (string)$input->getArgument(static::ARGUMENT_MODULE_NAMES);
 
         return $this->getFactory()->getModuleFinderFacade()->getModules($this->buildModuleFilterTransfer($moduleNames));
-    }
-
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     *
-     * @return bool
-     */
-    protected function getDryOptionValue(InputInterface $input): bool
-    {
-        return (bool)$input->getOption(static::FLAG_DRY);
     }
 
     /**
@@ -124,6 +141,27 @@ class ModuleInstallerConsole extends Command
         $this->addModuleFilterDetails($moduleArgument, $moduleFilterTransfer);
 
         return $moduleFilterTransfer;
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     *
+     * @return \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer
+     */
+    protected function buildCommandArgumentsTransfer(InputInterface $input): IntegratorCommandArgumentsTransfer
+    {
+        $commandArgumentsTransfer = new IntegratorCommandArgumentsTransfer();
+
+        $source = $input->getOption(static::OPTION_SOURCE);
+        $isDry = (bool)$input->getOption(static::FLAG_DRY);
+
+        if ($source !== null) {
+            $commandArgumentsTransfer->setSource($source);
+        }
+
+        $commandArgumentsTransfer->setIsDry($isDry);
+
+        return $commandArgumentsTransfer;
     }
 
     /**

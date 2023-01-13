@@ -76,7 +76,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
 
             return false;
         }
-        if (!$isDry) {
+        if (!$isDry && !$this->targetExists($target)) {
             file_put_contents($configFileName, $this->getConfigAppendData($target, $value), FILE_APPEND);
         }
 
@@ -88,6 +88,18 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
         ), InputOutputInterface::DEBUG);
 
         return true;
+    }
+
+    /**
+     * @param string $target
+     *
+     * @return bool
+     */
+    protected function targetExists(string $target): bool
+    {
+        $configFileContent = (string)file_get_contents($this->config->getConfigPath());
+
+        return mb_strpos($configFileContent, $this->getConfigTarget($target)) !== false;
     }
 
     /**
@@ -104,6 +116,16 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
         $data .= ';' . PHP_EOL;
 
         return $data;
+    }
+
+    /**
+     * @param string $target
+     *
+     * @return string
+     */
+    protected function getConfigTarget(string $target): string
+    {
+        return '$' . $this->config->getConfigVariableName() . '[' . $target . ']';
     }
 
     /**

@@ -11,11 +11,17 @@ namespace SprykerSdk\Integrator\Manifest;
 
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use ZipArchive;
 
 class ManifestReader implements ManifestReaderInterface
 {
+    /**
+     * @var string
+     */
+    protected const ARCHIVE_DIR = 'integrator-manifests-master/';
+
     /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
@@ -38,13 +44,14 @@ class ManifestReader implements ManifestReaderInterface
 
     /**
      * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
+     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return array<string, array<string, array<string>>>
      */
-    public function readManifests(array $moduleTransfers): array
+    public function readManifests(array $moduleTransfers, IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): array
     {
         // Do not update repository folder when in local development
-        if (!is_dir($this->config->getLocalRecipesDirectory())) {
+        if (!is_dir($this->config->getLocalRecipesDirectory()) && $commandArgumentsTransfer->getSource() === null) {
             $this->updateRepositoryFolder();
         }
 
@@ -61,7 +68,13 @@ class ManifestReader implements ManifestReaderInterface
                 continue;
             }
 
-            $filePath = $this->resolveManifestVersion($moduleTransfer, $version);
+            $moduleManifestsDir = $this->getModuleManifestsDir($moduleTransfer, $commandArgumentsTransfer);
+
+            if (!is_dir($moduleManifestsDir)) {
+                continue;
+            }
+
+            $filePath = $this->resolveManifestVersion($moduleManifestsDir, $version);
 
             if (!$filePath) {
                 continue;
@@ -102,27 +115,13 @@ class ManifestReader implements ManifestReaderInterface
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
+     * @param string $moduleManifestsDir
      * @param string $moduleVersion
      *
      * @return string|null
      */
-    protected function resolveManifestVersion(ModuleTransfer $moduleTransfer, string $moduleVersion): ?string
+    protected function resolveManifestVersion(string $moduleManifestsDir, string $moduleVersion): ?string
     {
-        $archiveDir = 'integrator-manifests-master/';
-        $organization = $moduleTransfer->getOrganizationOrFail();
-        $moduleManifestsDir = sprintf('%s%s%s/%s/', $this->config->getManifestsDirectory(), $archiveDir, $organization->getName(), $moduleTransfer->getName());
-
-        // When the recipes installed for local development use those instead of the one from the archive.
-        if (is_dir($this->config->getLocalRecipesDirectory())) {
-            $moduleManifestsDir = sprintf('%s%s/', $this->config->getLocalRecipesDirectory(), $moduleTransfer->getName());
-        }
-
-        // Check if module has any recipes
-        if (!is_dir($moduleManifestsDir)) {
-            return null;
-        }
-
         // Recipe path with module name and expected version
         $filePath = $moduleManifestsDir . sprintf(
             '%s/installer-manifest.json',
@@ -143,6 +142,43 @@ class ManifestReader implements ManifestReaderInterface
             '%s/installer-manifest.json',
             $nextSuitableVersion,
         );
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
+     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+     *
+     * @return string
+     */
+    protected function getModuleManifestsDir(
+        ModuleTransfer $moduleTransfer,
+        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+    ): string {
+        $organization = $moduleTransfer->getOrganizationOrFail();
+
+        if ($commandArgumentsTransfer->getSource() !== null) {
+            return sprintf(
+                '%s/%s/%s/',
+                $commandArgumentsTransfer->getSource(),
+                $organization->getName(),
+                $moduleTransfer->getName(),
+            );
+        }
+
+        $moduleManifestsDir = sprintf(
+            '%s%s%s/%s/',
+            $this->config->getManifestsDirectory(),
+            static::ARCHIVE_DIR,
+            $organization->getName(),
+            $moduleTransfer->getName(),
+        );
+
+        // When the recipes installed for local development use those instead of the one from the archive.
+        if (is_dir($this->config->getLocalRecipesDirectory())) {
+            $moduleManifestsDir = sprintf('%s%s/', $this->config->getLocalRecipesDirectory(), $moduleTransfer->getName());
+        }
+
+        return $moduleManifestsDir;
     }
 
     /**
