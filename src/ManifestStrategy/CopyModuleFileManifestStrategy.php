@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Common\UtilText\TextCaseHelper;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Exception\ManifestApplyingException;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
@@ -29,6 +30,8 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
+     * @throws \SprykerSdk\Integrator\Exception\ManifestApplyingException
+     *
      * @return bool
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
@@ -38,8 +41,12 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         $targetPath = $this->getTargetPath($manifest);
         $targetDir = dirname($targetPath);
 
-        if (!file_exists($sourcePath) || file_exists($targetPath)) {
-            return false;
+        if (!file_exists($sourcePath)) {
+            throw new ManifestApplyingException(sprintf('Source file not found `%s`', $sourcePath));
+        }
+
+        if (file_exists($targetPath)) {
+            throw new ManifestApplyingException(sprintf('Target file exists `%s`', $targetPath));
         }
 
         if (!$isDry && !is_dir($targetDir)) {
@@ -47,7 +54,11 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         }
 
         if (!$isDry && !copy($sourcePath, $targetPath)) {
-            return false;
+            throw new ManifestApplyingException(sprintf(
+                'Error during file coping, source `%s`, target `%s`',
+                $sourcePath,
+                $targetPath,
+            ));
         }
 
         $inputOutput->writeln(sprintf(

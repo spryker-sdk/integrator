@@ -109,6 +109,16 @@ class IntegratorConfig
     /**
      * @var string
      */
+    public const MODULE_KEY = 'module';
+
+    /**
+     * @var string
+     */
+    public const MODULE_VERSION_KEY = 'module-version';
+
+    /**
+     * @var string
+     */
     protected const MANIFESTS_DIRECTORY = 'vendor/spryker-sdk/integrator/data/manifests/';
 
     /**

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Exception\ManifestApplyingException;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
@@ -27,6 +28,8 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
      * @param string $moduleName
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
+     *
+     * @throws \SprykerSdk\Integrator\Exception\ManifestApplyingException
      *
      * @return bool
      */
@@ -62,13 +65,11 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
             }
 
             if (!is_bool($value) && !$value) {
-                $inputOutput->writeln(sprintf(
-                    'Value for %s::%s() configuration is not provided. Ignoring manifest.',
+                throw new ManifestApplyingException(sprintf(
+                    'Value for `%s::%s()` configuration is not provided.',
                     $classInformationTransfer->getClassName(),
                     $targetPointName,
-                ), InputOutputInterface::DEBUG);
-
-                return false;
+                ));
             }
 
             if ($this->isConstant($targetPointName)) {
