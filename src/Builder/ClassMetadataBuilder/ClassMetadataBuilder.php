@@ -213,6 +213,11 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
             $callMetadata->setAfter($after);
         }
 
+        if (isset($manifest[IntegratorConfig::MANIFEST_KEY_CALL][IntegratorConfig::MANIFEST_KEY_INDEX])) {
+            $index = $manifest[IntegratorConfig::MANIFEST_KEY_CALL][IntegratorConfig::MANIFEST_KEY_INDEX];
+            $callMetadata->setIndex($index);
+        }
+
         $transfer->setCall($callMetadata);
 
         return $transfer;

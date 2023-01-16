@@ -155,4 +155,36 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
     {
         return [];
     }
+    /**
+     * @return array
+     */
+    protected function getWrappedPluginsWithIndex(): array
+    {
+        return array_merge(
+            ['indexDefault' => $this->getWrappedFunctionWithIndexD()]
+        );
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionWithIndexD() : array
+    {
+        return [
+            new Plugin1(),
+        ];
+    }
+
+    protected function getWrappedFunctionsWithIndex(): array
+    {
+        return [
+            'indexDefault' => $this->getWrappedFunctionWithIndexA(),
+        ];
+    }
+
+    public function getWrappedFunctionWithIndexA() : array
+    {
+        return [
+            new Plugin1(),
+        ];
+    }
 }
