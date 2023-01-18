@@ -291,7 +291,8 @@
             "call": {
                 "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getWrappedFunctionsWithIndex",
                 "index": "indexDefault"
-            }
+            },
+            "index": "key"
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getWrappedFunctionWithIndexB",

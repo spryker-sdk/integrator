@@ -245,7 +245,7 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
     public function getWrappedFunctionWithIndexA() : array
     {
         return [
-            new Plugin1(), new Plugin2(),
+            new Plugin1(), 'key' => new Plugin2(),
         ];
     }
     /**
