@@ -20,6 +20,7 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\BeforeAllPluginsSu
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FirstPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FooStorageEventSubscriber;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\Plugin1;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\Plugin2;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SecondPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SinglePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestAppendArgumentArrayValue;
@@ -216,6 +217,40 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
     /**
      * @return array
      */
+    protected function getWrappedPluginsWithIndex(): array
+    {
+        return array_merge(
+            ['indexDefault' => $this->getWrappedFunctionWithIndexD()], [
+                'indexKey' => $this->getWrappedFunctionWithIndexC(),
+            ]
+        );
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionWithIndexD() : array
+    {
+        return [
+            new Plugin1(), new FirstPlugin(),
+        ];
+    }
+
+    protected function getWrappedFunctionsWithIndex(): array
+    {
+        return [
+            'indexDefault' => $this->getWrappedFunctionWithIndexA(), 'indexKey' => $this->getWrappedFunctionWithIndexB(),
+        ];
+    }
+
+    public function getWrappedFunctionWithIndexA() : array
+    {
+        return [
+            new Plugin1(), 'key' => new Plugin2(),
+        ];
+    }
+    /**
+     * @return array
+     */
     public function getWrappedFunctionB() : array
     {
         return [
@@ -226,6 +261,15 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
      * @return array
      */
     public function getWrappedFunctionA() : array
+    {
+        return [
+            new FirstPlugin(),
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionWithIndexC() : array
     {
         return [
             new FirstPlugin(),
@@ -265,6 +309,15 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
     {
         return [
             new Plugin1(),
+        ];
+    }
+    /**
+     * @return array
+     */
+    public function getWrappedFunctionWithIndexB() : array
+    {
+        return [
+            new Plugin2(),
         ];
     }
 }

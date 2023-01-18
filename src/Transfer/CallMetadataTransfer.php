@@ -9,117 +9,44 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Transfer;
 
-use InvalidArgumentException;
-
 class CallMetadataTransfer extends AbstractTransfer
 {
     /**
-     * @var string
+     * @var string|null
      */
-    public const TARGET = 'target';
-
-    /**
-     * @var string
-     */
-    public const BEFORE = 'before';
-
-    /**
-     * @var string
-     */
-    public const AFTER = 'after';
-
-    /**
-     * @var string
-     */
-    protected $target;
+    protected ?string $target = null;
 
     /**
      * @var string|null
      */
-    protected $before;
+    protected ?string $before = null;
 
     /**
      * @var string|null
      */
-    protected $after;
+    protected ?string $after = null;
 
     /**
-     * @var array<string, string>
+     * @var string|null
      */
-    protected $transferPropertyNameMap = [
-        'target' => 'target',
-        'Target' => 'target',
-        'before' => 'before',
-        'Before' => 'before',
-        'after' => 'after',
-        'After' => 'after',
-    ];
+    protected ?string $index = null;
 
     /**
-     * @var array<string, array<string, mixed>>
+     * @return string|null
      */
-    protected $transferMetadata = [
-        self::TARGET => [
-            'type' => 'string',
-            'type_shim' => null,
-            'name_underscore' => 'target',
-            'is_collection' => false,
-            'is_transfer' => false,
-            'is_value_object' => false,
-            'rest_request_parameter' => 'no',
-            'is_associative' => false,
-            'is_nullable' => false,
-            'is_strict' => false,
-        ],
-        self::BEFORE => [
-            'type' => 'string',
-            'type_shim' => null,
-            'name_underscore' => 'before',
-            'is_collection' => false,
-            'is_transfer' => false,
-            'is_value_object' => false,
-            'rest_request_parameter' => 'no',
-            'is_associative' => false,
-            'is_nullable' => true,
-            'is_strict' => false,
-        ],
-        self::AFTER => [
-            'type' => 'string',
-            'type_shim' => null,
-            'name_underscore' => 'after',
-            'is_collection' => false,
-            'is_transfer' => false,
-            'is_value_object' => false,
-            'rest_request_parameter' => 'no',
-            'is_associative' => false,
-            'is_nullable' => true,
-            'is_strict' => false,
-        ],
-    ];
-
-    /**
-     * @module App
-     *
-     * @param string $target
-     *
-     * @return $this
-     */
-    public function setTarget(string $target)
+    public function getTarget(): ?string
     {
-        $this->target = $target;
-        $this->modifiedProperties[static::TARGET] = true;
-
-        return $this;
+        return $this->target;
     }
 
     /**
-     * @module App
+     * @param string|null $target
      *
-     * @return string
+     * @return void
      */
-    public function getTarget(): string
+    public function setTarget(?string $target): void
     {
-        return $this->target;
+        $this->target = $target;
     }
 
     /**
@@ -130,42 +57,13 @@ class CallMetadataTransfer extends AbstractTransfer
     public function getTargetOrFail(): string
     {
         if ($this->target === null) {
-            $this->throwNullValueException(static::TARGET);
+            $this->throwNullValueException('TARGET');
         }
 
         return $this->target;
     }
 
     /**
-     * @module App
-     *
-     * @return $this
-     */
-    public function requireTarget()
-    {
-        $this->assertPropertyIsSet(static::TARGET);
-
-        return $this;
-    }
-
-    /**
-     * @module App
-     *
-     * @param string|null $before
-     *
-     * @return $this
-     */
-    public function setBefore(?string $before)
-    {
-        $this->before = $before;
-        $this->modifiedProperties[static::BEFORE] = true;
-
-        return $this;
-    }
-
-    /**
-     * @module App
-     *
      * @return string|null
      */
     public function getBefore(): ?string
@@ -174,49 +72,16 @@ class CallMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @module App
+     * @param string|null $before
      *
-     * @return string
+     * @return void
      */
-    public function getBeforeOrFail(): string
+    public function setBefore(?string $before): void
     {
-        if ($this->before === null) {
-            $this->throwNullValueException(static::BEFORE);
-        }
-
-        return $this->before;
+        $this->before = $before;
     }
 
     /**
-     * @module App
-     *
-     * @return $this
-     */
-    public function requireBefore()
-    {
-        $this->assertPropertyIsSet(static::BEFORE);
-
-        return $this;
-    }
-
-    /**
-     * @module App
-     *
-     * @param string|null $after
-     *
-     * @return $this
-     */
-    public function setAfter(?string $after)
-    {
-        $this->after = $after;
-        $this->modifiedProperties[static::AFTER] = true;
-
-        return $this;
-    }
-
-    /**
-     * @module App
-     *
      * @return string|null
      */
     public function getAfter(): ?string
@@ -225,59 +90,30 @@ class CallMetadataTransfer extends AbstractTransfer
     }
 
     /**
-     * @module App
+     * @param string|null $after
      *
-     * @return string
+     * @return void
      */
-    public function getAfterOrFail(): string
+    public function setAfter(?string $after): void
     {
-        if ($this->after === null) {
-            $this->throwNullValueException(static::AFTER);
-        }
-
-        return $this->after;
+        $this->after = $after;
     }
 
     /**
-     * @module App
-     *
-     * @return $this
+     * @return string|null
      */
-    public function requireAfter()
+    public function getIndex(): ?string
     {
-        $this->assertPropertyIsSet(static::AFTER);
-
-        return $this;
+        return $this->index;
     }
 
     /**
-     * @param array<string, mixed> $data
-     * @param bool $ignoreMissingProperty
+     * @param string|null $index
      *
-     * @throws \InvalidArgumentException
-     *
-     * @return $this
+     * @return void
      */
-    public function fromArray(array $data, bool $ignoreMissingProperty = false)
+    public function setIndex(?string $index): void
     {
-        foreach ($data as $property => $value) {
-            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? null;
-
-            switch ($normalizedPropertyName) {
-                case 'target':
-                case 'before':
-                case 'after':
-                    $this->$normalizedPropertyName = $value;
-                    $this->modifiedProperties[$normalizedPropertyName] = true;
-
-                    break;
-                default:
-                    if (!$ignoreMissingProperty) {
-                        throw new InvalidArgumentException(sprintf('Missing property `%s` in `%s`', $property, static::class));
-                    }
-            }
-        }
-
-        return $this;
+        $this->index = $index;
     }
 }
