@@ -94,9 +94,9 @@ class ArrayConfigurationEnvironmentStrategy implements ConfigurationEnvironmentS
     }
 
     /**
-     * @param string|int|float|bool $expression
+     * @param string|float|int|bool $expression
      *
-     * @return string|int|float|bool
+     * @return string|float|int|bool
      */
     protected function getFormattedValueExpression($expression)
     {
