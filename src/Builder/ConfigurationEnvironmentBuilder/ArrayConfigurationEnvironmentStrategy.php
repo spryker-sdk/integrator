@@ -94,13 +94,13 @@ class ArrayConfigurationEnvironmentStrategy implements ConfigurationEnvironmentS
     }
 
     /**
-     * @param string $expression
+     * @param string|int|float|bool $expression
      *
-     * @return string
+     * @return string|int|float|bool
      */
-    protected function getFormattedValueExpression(string $expression): string
+    protected function getFormattedValueExpression($expression)
     {
-        if ($this->isComplicatedExpression($expression) || $this->isLiteral($expression)) {
+        if (!is_string($expression) || $this->isComplicatedExpression($expression) || $this->isLiteral($expression)) {
             return $expression;
         }
 

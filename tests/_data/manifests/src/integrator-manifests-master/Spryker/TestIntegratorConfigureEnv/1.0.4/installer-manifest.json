@@ -68,6 +68,24 @@
             }
         },
         {
+            "target": "\\Spryker\\Shared\\Queue\\QueueConstants::QUEUE_ADAPTER_CONFIGURATION_DEFAULT",
+            "value": {
+                "\\Spryker\\Shared\\Queue\\QueueConfig::CONFIG_QUEUE_ADAPTER": "\\Spryker\\Client\\RabbitMq\\Model\\RabbitMqAdapter::class",
+                "\\Spryker\\Shared\\Queue\\QueueConfig::CONFIG_MAX_WORKER_NUMBER": 1,
+                "\\Spryker\\Shared\\Queue\\QueueConfig::CONFIG_FLOAT_VALUE": 10.0,
+                "\\Spryker\\Shared\\Queue\\QueueConfig::CONFIG_BOOL_VALUE": true
+            }
+        },
+        {
+            "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::COMPLEX_ARRAY_STRUCTURE",
+            "value": [
+                "SprykerShop",
+                "APPLICATION_SOURCE_DIR . '/vendor/spryker/payment/config/Zed/Oms'",
+                "getenv('SOMEKEY')",
+                "(bool)$config[\\Spryker\\Shared\\Kernel\\KernelConstants::PROJECT_NAMESPACE]"
+            ]
+        },
+        {
             "target": "\\Spryker\\Shared\\Kernel\\KernelConstants::PRIVATE_KEY_PATH",
             "value":
             {

@@ -29,6 +29,20 @@ $config[\Spryker\Shared\Kernel\KernelConstants::FUNC_VALUE] = getenv('SOMEKEY');
 
 $config[\Spryker\Shared\Kernel\KernelConstants::FUNC_VALUE2] = (string)getenv('SOMEKEY2');
 
+$config[\Spryker\Shared\Queue\QueueConstants::QUEUE_ADAPTER_CONFIGURATION_DEFAULT] = [
+    '\Spryker\Shared\Queue\QueueConfig::CONFIG_QUEUE_ADAPTER' => '\Spryker\Client\RabbitMq\Model\RabbitMqAdapter::class',
+    '\Spryker\Shared\Queue\QueueConfig::CONFIG_MAX_WORKER_NUMBER' => 1,
+    '\Spryker\Shared\Queue\QueueConfig::CONFIG_FLOAT_VALUE' => 10,
+    '\Spryker\Shared\Queue\QueueConfig::CONFIG_BOOL_VALUE' => 1,
+];
+
+$config[\Spryker\Shared\Kernel\KernelConstants::COMPLEX_ARRAY_STRUCTURE] = [
+    'SprykerShop',
+    APPLICATION_SOURCE_DIR . '/vendor/spryker/payment/config/Zed/Oms',
+    getenv('SOMEKEY'),
+    (bool)$config[\Spryker\Shared\Kernel\KernelConstants::PROJECT_NAMESPACE],
+];
+
 $config[\Spryker\Shared\Kernel\KernelConstants::PRIVATE_KEY_PATH] = str_replace('__LINE__', PHP_EOL, getenv('SPRYKER_OAUTH_KEY_PRIVATE') ?: '') ?: null;
 
 $config[\Spryker\Shared\Kernel\KernelConstants::AUTH_DEFAULT_CREDENTIALS] = [
