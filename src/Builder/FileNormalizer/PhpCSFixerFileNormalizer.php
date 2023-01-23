@@ -43,7 +43,7 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
      */
     public function isApplicable(): bool
     {
-        return is_file($this->config->getPhpCSConfigPath()) && is_file($this->getCSFixPath());
+        return is_file($this->config->getPhpCsConfigPath()) && is_file($this->getCSFixPath());
     }
 
     /**

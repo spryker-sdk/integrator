@@ -48,7 +48,7 @@ class CodeSniffStyleFileNormalizer implements FileNormalizerInterface
      */
     public function isApplicable(): bool
     {
-        return !is_file($this->config->getPhpCSConfigPath()) && is_file($this->getProjectConsolePath());
+        return !is_file($this->config->getPhpCsConfigPath()) && is_file($this->getProjectConsolePath());
     }
 
     /**

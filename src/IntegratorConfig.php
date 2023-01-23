@@ -449,7 +449,7 @@ class IntegratorConfig
     /**
      * @return string
      */
-    public function getPhpCSConfigPath(): string
+    public function getPhpCsConfigPath(): string
     {
         return $this->getProjectRootDirectory() . static::PHPCS_XML_FILE_NAME;
     }
