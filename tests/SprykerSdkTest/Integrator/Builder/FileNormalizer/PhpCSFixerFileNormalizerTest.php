@@ -34,7 +34,8 @@ class PhpCSFixerFileNormalizerTest extends TestCase
         );
 
         // Arrange
-        $normalizer = new PhpCSFixerFileNormalizer(IntegratorConfig::getInstance(), $processExecutorMock);
+        $configMock = $this->createMock(IntegratorConfig::class);
+        $normalizer = new PhpCSFixerFileNormalizer($configMock, $processExecutorMock);
 
         $fileStorage = new FileStorage();
         $fileStorage->addFile('someClass.php');
@@ -53,7 +54,8 @@ class PhpCSFixerFileNormalizerTest extends TestCase
 
         // Arrange
         $processExecutorMock = $this->createProcessExecutorMock(2, 'process error');
-        $normalizer = new PhpCSFixerFileNormalizer(IntegratorConfig::getInstance(), $processExecutorMock);
+        $configMock = $this->createMock(IntegratorConfig::class);
+        $normalizer = new PhpCSFixerFileNormalizer($configMock, $processExecutorMock);
 
         $fileStorage = new FileStorage();
         $fileStorage->addFile('someClass.php');

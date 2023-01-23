@@ -34,7 +34,8 @@ class CodeSniffStyleFileNormalizerTest extends TestCase
         );
 
         // Arrange
-        $normalizer = new CodeSniffStyleFileNormalizer(IntegratorConfig::getInstance(), $processExecutorMock);
+        $configMock = $this->createMock(IntegratorConfig::class);
+        $normalizer = new CodeSniffStyleFileNormalizer($configMock, $processExecutorMock);
 
         $fileStorage = new FileStorage();
         $fileStorage->addFile('someClass.php');
@@ -53,7 +54,8 @@ class CodeSniffStyleFileNormalizerTest extends TestCase
 
         // Arrange
         $processExecutorMock = $this->createProcessExecutorMock(2, 'process error');
-        $normalizer = new CodeSniffStyleFileNormalizer(IntegratorConfig::getInstance(), $processExecutorMock);
+        $configMock = $this->createMock(IntegratorConfig::class);
+        $normalizer = new CodeSniffStyleFileNormalizer($configMock, $processExecutorMock);
 
         $fileStorage = new FileStorage();
         $fileStorage->addFile('someClass.php');
