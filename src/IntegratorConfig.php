@@ -137,6 +137,11 @@ class IntegratorConfig
     protected const PATH_GLOSSARY = 'data/import/common/common/glossary.csv';
 
     /**
+     * @var string
+     */
+    protected const PHPCS_XML_FILE_NAME = 'phpcs.xml';
+
+    /**
      * @var array<string, mixed>|null
      */
     protected $config;
@@ -439,5 +444,13 @@ class IntegratorConfig
         }
 
         return $organizationPaths;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhpCSConfigPath(): string
+    {
+        return $this->getProjectRootDirectory() . static::PHPCS_XML_FILE_NAME;
     }
 }

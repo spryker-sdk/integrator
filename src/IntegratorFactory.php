@@ -85,6 +85,7 @@ use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface;
+use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSniffStyleFileNormalizer;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutor;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface;
@@ -440,8 +441,17 @@ class IntegratorFactory
             $this->createFileStorage(),
             [
                 $this->createPhpCSFixerNormalizer(),
+                $this->createCodeSniffStyleFileNormalizer(),
             ],
         );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface
+     */
+    public function createCodeSniffStyleFileNormalizer(): FileNormalizerInterface
+    {
+        return new CodeSniffStyleFileNormalizer($this->getConfig());
     }
 
     /**
