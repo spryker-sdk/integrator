@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\FileNormalizer;
 
 use RuntimeException;
+use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
-use Symfony\Component\Process\Process;
 
 class CodeSniffStyleFileNormalizer implements FileNormalizerInterface
 {
@@ -26,21 +26,23 @@ class CodeSniffStyleFileNormalizer implements FileNormalizerInterface
     protected const PHP_CS_FIX_COMMAND = 'code:sniff:style -f';
 
     /**
-     * @var int
-     */
-    protected const PROCESS_TIMEOUT = 300;
-
-    /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
     protected $config;
 
     /**
-     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @var \SprykerSdk\Integrator\Executor\ProcessExecutorInterface
      */
-    public function __construct(IntegratorConfig $config)
+    protected ProcessExecutorInterface $processExecutor;
+
+    /**
+     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @param \SprykerSdk\Integrator\Executor\ProcessExecutorInterface $processExecutor
+     */
+    public function __construct(IntegratorConfig $config, ProcessExecutorInterface $processExecutor)
     {
         $this->config = $config;
+        $this->processExecutor = $processExecutor;
     }
 
     /**
@@ -62,9 +64,7 @@ class CodeSniffStyleFileNormalizer implements FileNormalizerInterface
     {
         $projectConsolePath = $this->getProjectConsolePath();
         foreach ($this->getProjectRelativeFilePaths($filePaths) as $filePath) {
-            $process = new Process([$projectConsolePath, static::PHP_CS_FIX_COMMAND, $filePath]);
-            $process->setTimeout(static::PROCESS_TIMEOUT);
-            $process->run();
+            $process = $this->processExecutor->execute([$projectConsolePath, static::PHP_CS_FIX_COMMAND, $filePath]);
 
             if ($process->getExitCode() > 0 && $process->getErrorOutput() !== '') {
                 throw new RuntimeException($process->getErrorOutput());

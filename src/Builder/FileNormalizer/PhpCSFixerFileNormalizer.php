@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\FileNormalizer;
 
 use RuntimeException;
+use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
-use Symfony\Component\Process\Process;
 
 class PhpCSFixerFileNormalizer implements FileNormalizerInterface
 {
@@ -21,21 +21,23 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
     protected const PHP_CS_FIX_RELATIVE_PATH = 'vendor/bin/phpcbf';
 
     /**
-     * @var int
-     */
-    protected const PROCESS_TIMEOUT = 300;
-
-    /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
     protected $config;
 
     /**
-     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @var \SprykerSdk\Integrator\Executor\ProcessExecutorInterface
      */
-    public function __construct(IntegratorConfig $config)
+    protected ProcessExecutorInterface $processExecutor;
+
+    /**
+     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @param \SprykerSdk\Integrator\Executor\ProcessExecutorInterface $processExecutor
+     */
+    public function __construct(IntegratorConfig $config, ProcessExecutorInterface $processExecutor)
     {
         $this->config = $config;
+        $this->processExecutor = $processExecutor;
     }
 
     /**
@@ -55,10 +57,7 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
      */
     public function normalize(array $filePaths): void
     {
-        $process = new Process([$this->getCSFixPath(), ...$this->getAbsoluteFilePaths($filePaths)]);
-        $process->setTimeout(static::PROCESS_TIMEOUT);
-        $process->run();
-
+        $process = $this->processExecutor->execute([$this->getCSFixPath(), ...$this->getAbsoluteFilePaths($filePaths)]);
         if ($process->getExitCode() > 0 && $process->getErrorOutput() !== '') {
             throw new RuntimeException($process->getErrorOutput());
         }

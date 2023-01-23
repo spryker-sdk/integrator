@@ -105,6 +105,8 @@ use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
+use SprykerSdk\Integrator\Executor\ProcessExecutor;
+use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReader;
@@ -451,7 +453,7 @@ class IntegratorFactory
      */
     public function createCodeSniffStyleFileNormalizer(): FileNormalizerInterface
     {
-        return new CodeSniffStyleFileNormalizer($this->getConfig());
+        return new CodeSniffStyleFileNormalizer($this->getConfig(), $this->createProcessExecutor());
     }
 
     /**
@@ -459,7 +461,15 @@ class IntegratorFactory
      */
     public function createPhpCSFixerNormalizer(): FileNormalizerInterface
     {
-        return new PhpCSFixerFileNormalizer($this->getConfig());
+        return new PhpCSFixerFileNormalizer($this->getConfig(), $this->createProcessExecutor());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Executor\ProcessExecutorInterface
+     */
+    public function createProcessExecutor(): ProcessExecutorInterface
+    {
+        return new ProcessExecutor();
     }
 
     /**
