@@ -80,6 +80,9 @@ class CodeSniffStyleFileNormalizer implements FileNormalizerInterface
     protected function getProjectRelativeFilePaths(array $filePaths): array
     {
         $projectDir = $this->config->getProjectRootDirectory();
+        if (!$projectDir) {
+            return $filePaths;
+        }
 
         return array_map(
             static fn (string $filepath): string => strpos($filepath, $projectDir) === 0
