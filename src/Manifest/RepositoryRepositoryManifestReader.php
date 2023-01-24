@@ -15,7 +15,7 @@ use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use ZipArchive;
 
-class ManifestReader implements ManifestReaderInterface
+class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInterface
 {
     /**
      * @var string
