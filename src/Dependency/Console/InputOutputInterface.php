@@ -58,6 +58,13 @@ interface InputOutputInterface
     public function writeln($messages, int $options = 0): void;
 
     /**
+     * @param string $message
+     *
+     * @return void
+     */
+    public function warning(string $message): void;
+
+    /**
      * Asks a question.
      *
      * @param string $question

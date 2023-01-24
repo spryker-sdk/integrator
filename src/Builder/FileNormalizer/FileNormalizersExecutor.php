@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\FileNormalizer;
 
+use Exception;
 use SprykerSdk\Integrator\Builder\FileStorage\FileStorageInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 
@@ -59,7 +60,11 @@ class FileNormalizersExecutor implements FileNormalizersExecutorInterface
                 continue;
             }
 
-            $fileNormalizer->normalize($files);
+            try {
+                $fileNormalizer->normalize($files);
+            } catch (Exception $exception) {
+                $inputOutput->writeln(sprintf('Error during normalizing files: %s', $exception->getMessage()));
+            }
         }
     }
 }

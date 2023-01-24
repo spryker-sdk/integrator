@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
@@ -110,8 +111,14 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
      */
     protected function addNewCallIntoArrayMergeFuncNode(FuncCall $node, CallMetadataTransfer $callMetadataTransfer): Node
     {
-        $calledMethods = $this->getCalledMethods($node);
-        if (in_array($this->classMetadataTransfer->getTargetMethodNameOrFail(), $calledMethods)) {
+        $calledMethods = $this->getCalledMethodsFromArrayMergeFunc($node);
+        if ($this->hasTargetMethodCalled($calledMethods)) {
+            return $node;
+        }
+
+        if ($this->classMetadataTransfer->getCall() && $this->classMetadataTransfer->getCall()->getIndex()) {
+            $node->args[] = $this->createFunctionArgWithMethodCall();
+
             return $node;
         }
 
@@ -152,19 +159,56 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
     /**
      * @param \PhpParser\Node $node
      *
-     * @return array<string>
+     * @return array<string|int, string>
      */
-    protected function getCalledMethods(Node $node): array
+    protected function getCalledMethodsFromArray(Node $node): array
     {
         $result = [];
 
         $nodeFinder = new NodeFinder();
-        /** @var array<\PhpParser\Node\Expr\MethodCall> $calledMethods */
-        $calledMethods = $nodeFinder->findInstanceOf($node, MethodCall::class);
-        foreach ($calledMethods as $method) {
+        /** @var array<\PhpParser\Node\Expr\ArrayItem> $arrayItems */
+        $arrayItems = $nodeFinder->findInstanceOf($node, ArrayItem::class);
+        foreach ($arrayItems as $arrayItem) {
+            if (!$arrayItem->value instanceof MethodCall) {
+                continue;
+            }
             /** @var \PhpParser\Node\Identifier $methodName */
-            $methodName = $method->name;
-            $result[] = $methodName->name;
+            $methodName = $arrayItem->value->name;
+
+            if (!$arrayItem->key instanceof String_) {
+                $result[] = $methodName->name;
+
+                continue;
+            }
+
+            $result[$arrayItem->key->value] = $methodName->name;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param \PhpParser\Node $node
+     *
+     * @return array<string|int, string>
+     */
+    protected function getCalledMethodsFromArrayMergeFunc(Node $node): array
+    {
+        $result = [];
+        $nodeFinder = new NodeFinder();
+        $args = $nodeFinder->findInstanceOf($node, Arg::class);
+        /** @var \PhpParser\Node\Arg $arg */
+        foreach ($args as $arg) {
+            if ($arg->value instanceof Array_) {
+                $calledMethodsFromArray = $this->getCalledMethodsFromArray($arg->value);
+                $result = array_merge($result, $calledMethodsFromArray);
+            }
+
+            if ($arg->value instanceof MethodCall) {
+                /** @var \PhpParser\Node\Identifier $methodName */
+                $methodName = $arg->value->name;
+                $result[] = $methodName->name;
+            }
         }
 
         return $result;
@@ -179,7 +223,15 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
         $methodName = $this->classMetadataTransfer->getTargetMethodNameOrFail();
         $methodCall = new MethodCall($var, $methodName);
 
-        return new Arg($methodCall);
+        $index = $this->classMetadataTransfer->getCall() ? $this->classMetadataTransfer->getCall()->getIndex() : null;
+        if (!$index) {
+            return new Arg($methodCall);
+        }
+
+        $arrayItem = new ArrayItem($methodCall, new String_($index));
+        $array = new Array_([$arrayItem]);
+
+        return new Arg($array);
     }
 
     /**
@@ -228,8 +280,8 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
      */
     protected function addNewCallIntoArray(Array_ $node, CallMetadataTransfer $callMetadataTransfer): Node
     {
-        $calledMethods = $this->getCalledMethods($node);
-        if (in_array($this->classMetadataTransfer->getTargetMethodNameOrFail(), $calledMethods)) {
+        $calledMethods = $this->getCalledMethodsFromArray($node);
+        if ($this->hasTargetMethodCalled($calledMethods)) {
             return $node;
         }
 
@@ -255,6 +307,27 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
     }
 
     /**
+     * @param array<string|int, string> $calledMethods
+     *
+     * @return bool
+     */
+    protected function hasTargetMethodCalled(array $calledMethods): bool
+    {
+        foreach ($calledMethods as $key => $method) {
+            if (is_string($key)) {
+                $index = $this->classMetadataTransfer->getCall() ? $this->classMetadataTransfer->getCall()->getIndex() : null;
+
+                return $method === $this->classMetadataTransfer->getTargetMethodNameOrFail() && $key === $index;
+            }
+            if ($method === $this->classMetadataTransfer->getTargetMethodNameOrFail()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param \PhpParser\Node\Expr\Array_ $node
      * @param int $position
      *
@@ -275,6 +348,11 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
         $var = new Variable(static::THIS_KEY);
         $methodName = $this->classMetadataTransfer->getTargetMethodNameOrFail();
         $methodCall = new MethodCall($var, $methodName);
+
+        $index = $this->classMetadataTransfer->getCall() ? $this->classMetadataTransfer->getCall()->getIndex() : null;
+        if ($index) {
+            return new ArrayItem($methodCall, new String_($index));
+        }
 
         return new ArrayItem($methodCall);
     }

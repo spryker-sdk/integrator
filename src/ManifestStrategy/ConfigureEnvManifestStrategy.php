@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Exception\ManifestApplyingException;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
@@ -49,6 +50,8 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
+     * @throws \SprykerSdk\Integrator\Exception\ManifestApplyingException
+     *
      * @return bool
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
@@ -69,12 +72,10 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
 
         $configFileName = $this->config->getConfigPath();
         if (!file_exists($configFileName)) {
-            $inputOutput->writeln(sprintf(
+            throw new ManifestApplyingException(sprintf(
                 'File `%s` does not exist. Please check file path or customize using `IntegratorConfig::getConfigPath()`.',
                 $configFileName,
-            ), InputOutputInterface::DEBUG);
-
-            return false;
+            ));
         }
         if (!$isDry && !$this->targetExists($target)) {
             file_put_contents($configFileName, $this->getConfigAppendData($target, $value), FILE_APPEND);

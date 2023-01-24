@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Exception\ManifestApplyingException;
+use SprykerSdk\Integrator\IntegratorConfig;
 
 class GlossaryManifestStrategy extends AbstractManifestStrategy
 {
@@ -29,6 +31,13 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     protected const GLOSSARY_INDEX_LANGUAGE = 2;
 
     /**
+     * $var array<string>
+     *
+     * @var array
+     */
+    protected const EXCEPTION_KEY_LIST = [IntegratorConfig::MODULE_KEY, IntegratorConfig::MODULE_VERSION_KEY];
+
+    /**
      * @return string
      */
     public function getType(): string
@@ -42,18 +51,18 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
+     * @throws \SprykerSdk\Integrator\Exception\ManifestApplyingException
+     *
      * @return bool
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
         $glossaryFilePath = $this->config->getGlossaryFilePath();
         if (!file_exists($glossaryFilePath)) {
-            $inputOutput->writeln(sprintf(
+            throw new ManifestApplyingException(sprintf(
                 'File `%s` does not exist. Please check file path or customize using `IntegratorConfig::getGlossaryFilePath()`.',
                 $glossaryFilePath,
-            ), InputOutputInterface::DEBUG);
-
-            return false;
+            ));
         }
 
         $existingGlossaryFileLines = $this->getGlossaryExistingFileLines();
@@ -88,6 +97,9 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
         );
         $glossaryFileLinesForAdd = [];
         foreach ($manifest as $glossaryKey => $glossaryValues) {
+            if (in_array($glossaryKey, static::EXCEPTION_KEY_LIST)) {
+                continue;
+            }
             $glossaryKeyFileLinesForAdd = $this->getGlossaryKeyFileLinesFromGlossaryKey(
                 $glossaryKey,
                 $glossaryValues,

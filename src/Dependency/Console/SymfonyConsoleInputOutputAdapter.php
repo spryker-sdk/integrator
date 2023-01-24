@@ -59,6 +59,16 @@ class SymfonyConsoleInputOutputAdapter implements InputOutputInterface
     }
 
     /**
+     * @param string $message
+     *
+     * @return void
+     */
+    public function warning(string $message): void
+    {
+        $this->symfonyStyle->warning($message);
+    }
+
+    /**
      * Asks a question.
      *
      * @param string $question

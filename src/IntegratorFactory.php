@@ -85,6 +85,7 @@ use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface;
+use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSniffStyleFileNormalizer;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutor;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface;
@@ -104,6 +105,8 @@ use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
+use SprykerSdk\Integrator\Executor\ProcessExecutor;
+use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReader;
@@ -440,6 +443,7 @@ class IntegratorFactory
             $this->createFileStorage(),
             [
                 $this->createPhpCSFixerNormalizer(),
+                $this->createCodeSniffStyleFileNormalizer(),
             ],
         );
     }
@@ -447,9 +451,25 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface
      */
+    public function createCodeSniffStyleFileNormalizer(): FileNormalizerInterface
+    {
+        return new CodeSniffStyleFileNormalizer($this->getConfig(), $this->createProcessExecutor());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface
+     */
     public function createPhpCSFixerNormalizer(): FileNormalizerInterface
     {
-        return new PhpCSFixerFileNormalizer($this->getConfig());
+        return new PhpCSFixerFileNormalizer($this->getConfig(), $this->createProcessExecutor());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Executor\ProcessExecutorInterface
+     */
+    public function createProcessExecutor(): ProcessExecutorInterface
+    {
+        return new ProcessExecutor();
     }
 
     /**

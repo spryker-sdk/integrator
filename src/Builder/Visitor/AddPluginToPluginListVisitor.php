@@ -394,6 +394,8 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         );
         foreach ($node->items as $item) {
             if ($item === null || !($item->value instanceof New_)) {
+                $items[] = $item;
+
                 continue;
             }
 

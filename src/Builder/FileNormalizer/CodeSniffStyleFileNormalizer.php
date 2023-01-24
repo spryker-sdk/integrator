@@ -13,12 +13,17 @@ use RuntimeException;
 use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
-class PhpCSFixerFileNormalizer implements FileNormalizerInterface
+class CodeSniffStyleFileNormalizer implements FileNormalizerInterface
 {
     /**
      * @var string
      */
-    protected const PHP_CS_FIX_RELATIVE_PATH = 'vendor/bin/phpcbf';
+    protected const PROJECT_CONSOLE_PATH = 'vendor/bin/console';
+
+    /**
+     * @var string
+     */
+    protected const PHP_CS_FIX_COMMAND = 'code:sniff:style -f';
 
     /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
@@ -45,7 +50,7 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
      */
     public function isApplicable(): bool
     {
-        return is_file($this->config->getPhpCsConfigPath()) && is_file($this->getCSFixPath());
+        return !is_file($this->config->getPhpCsConfigPath()) && is_file($this->getProjectConsolePath());
     }
 
     /**
@@ -57,9 +62,13 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
      */
     public function normalize(array $filePaths): void
     {
-        $process = $this->processExecutor->execute([$this->getCSFixPath(), ...$this->getAbsoluteFilePaths($filePaths)]);
-        if ($process->getExitCode() > 0 && $process->getErrorOutput() !== '') {
-            throw new RuntimeException($process->getErrorOutput());
+        $projectConsolePath = $this->getProjectConsolePath();
+        foreach ($this->getProjectRelativeFilePaths($filePaths) as $filePath) {
+            $process = $this->processExecutor->execute([$projectConsolePath, static::PHP_CS_FIX_COMMAND, $filePath]);
+
+            if ($process->getExitCode() > 0 && $process->getErrorOutput() !== '') {
+                throw new RuntimeException($process->getErrorOutput());
+            }
         }
     }
 
@@ -68,7 +77,7 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
      *
      * @return array
      */
-    protected function getAbsoluteFilePaths(array $filePaths): array
+    protected function getProjectRelativeFilePaths(array $filePaths): array
     {
         $projectDir = $this->config->getProjectRootDirectory();
         if (!$projectDir) {
@@ -77,8 +86,8 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
 
         return array_map(
             static fn (string $filepath): string => strpos($filepath, $projectDir) === 0
-                ? $filepath
-                : $projectDir . DIRECTORY_SEPARATOR . ltrim($filepath, DIRECTORY_SEPARATOR),
+                ? str_replace($projectDir, ' ', $filepath)
+                : $filepath,
             $filePaths,
         );
     }
@@ -86,8 +95,8 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
     /**
      * @return string
      */
-    protected function getCSFixPath(): string
+    protected function getProjectConsolePath(): string
     {
-        return $this->config->getProjectRootDirectory() . static::PHP_CS_FIX_RELATIVE_PATH;
+        return $this->config->getProjectRootDirectory() . static::PROJECT_CONSOLE_PATH;
     }
 }

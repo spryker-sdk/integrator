@@ -109,6 +109,16 @@ class IntegratorConfig
     /**
      * @var string
      */
+    public const MODULE_KEY = 'module';
+
+    /**
+     * @var string
+     */
+    public const MODULE_VERSION_KEY = 'module-version';
+
+    /**
+     * @var string
+     */
     protected const MANIFESTS_DIRECTORY = 'vendor/spryker-sdk/integrator/data/manifests/';
 
     /**
@@ -125,6 +135,11 @@ class IntegratorConfig
      * @var string
      */
     protected const PATH_GLOSSARY = 'data/import/common/common/glossary.csv';
+
+    /**
+     * @var string
+     */
+    protected const PHPCS_XML_FILE_NAME = 'phpcs.xml';
 
     /**
      * @var array<string, mixed>|null
@@ -429,5 +444,13 @@ class IntegratorConfig
         }
 
         return $organizationPaths;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhpCsConfigPath(): string
+    {
+        return $this->getProjectRootDirectory() . static::PHPCS_XML_FILE_NAME;
     }
 }

@@ -21,12 +21,22 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
     /**
      * @var string
      */
+    public const FORMAT = 'format';
+
+    /**
+     * @var string
+     */
     public const IS_DRY = 'isDry';
 
     /**
      * @var string|null
      */
     protected $source;
+
+    /**
+     * @var string|null
+     */
+    protected $format;
 
     /**
      * @var bool
@@ -39,6 +49,8 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
     protected $transferPropertyNameMap = [
         'source' => 'source',
         'Source' => 'source',
+        'format' => 'format',
+        'Format' => 'format',
         'is_dry' => 'isDry',
         'isDry' => 'isDry',
         'IsDry' => 'isDry',
@@ -52,6 +64,18 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
             'type' => 'string',
             'type_shim' => null,
             'name_underscore' => 'name',
+            'is_collection' => false,
+            'is_transfer' => false,
+            'is_value_object' => false,
+            'rest_request_parameter' => 'no',
+            'is_associative' => false,
+            'is_nullable' => true,
+            'is_strict' => false,
+        ],
+        self::FORMAT => [
+            'type' => 'string',
+            'type_shim' => null,
+            'name_underscore' => 'fromat',
             'is_collection' => false,
             'is_transfer' => false,
             'is_value_object' => false,
@@ -115,6 +139,27 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
         $this->assertPropertyIsSet(static::SOURCE);
 
         return $this;
+    }
+
+    /**
+     * @param string|null $format
+     *
+     * @return $this
+     */
+    public function setFormat(?string $format)
+    {
+        $this->format = $format;
+        $this->modifiedProperties[static::FORMAT] = true;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFormat(): ?string
+    {
+        return $this->format;
     }
 
     /**
@@ -300,6 +345,7 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
             }
             switch ($property) {
                 case 'source':
+                case 'format':
                 case 'isDry':
                     $values[$arrayKey] = $value;
 
@@ -328,6 +374,7 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
             }
             switch ($property) {
                 case 'source':
+                case 'format':
                 case 'isDry':
                     $values[$arrayKey] = $value;
 
@@ -386,6 +433,7 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
     {
         return [
             'source' => $this->source,
+            'format' => $this->format,
             'isDry' => $this->isDry,
         ];
     }
@@ -397,6 +445,7 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
     {
         return [
             'source' => $this->source,
+            'format' => $this->format,
             'is_dry' => $this->isDry,
         ];
     }
@@ -408,6 +457,7 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
     {
         return [
             'source' => $this->source,
+            'format' => $this->format,
             'is_dry' => $this->isDry,
         ];
     }
@@ -419,6 +469,7 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
     {
         return [
             'source' => $this->source,
+            'format' => $this->format,
             'isDry' => $this->isDry,
         ];
     }

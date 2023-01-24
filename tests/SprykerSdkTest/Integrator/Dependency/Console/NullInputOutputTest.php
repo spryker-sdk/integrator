@@ -62,6 +62,15 @@ class NullInputOutputTest extends TestCase
     /**
      * @return void
      */
+    public function testWarning(): void
+    {
+        $this->expectOutputString('Output message 1<br>');
+        $this->command->warning('Output message 1');
+    }
+
+    /**
+     * @return void
+     */
     public function testAsk(): void
     {
         $this->assertSame(

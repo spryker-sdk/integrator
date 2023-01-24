@@ -9,9 +9,11 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Executor;
 
+use Exception;
 use RuntimeException;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
 use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
@@ -98,17 +100,7 @@ class ManifestExecutor implements ManifestExecutorInterface
 
         foreach ($unappliedManifests as $moduleName => $moduleManifests) {
             foreach ($moduleManifests as $manifestType => $unappliedManifestByType) {
-                try {
-                    $manifestExecutor = $this->resolveExecutor($manifestType);
-                } catch (RuntimeException $runtimeException) {
-                    continue;
-                }
-
-                foreach ($unappliedManifestByType as $manifestHash => $unappliedManifest) {
-                    if ($manifestExecutor->apply($unappliedManifest, $moduleName, $inputOutput, $isDry)) {
-                        $lockedModules[$moduleName][$manifestType][$manifestHash] = $unappliedManifest;
-                    }
-                }
+                $this->applyManifestsByType($unappliedManifestByType, $manifestType, $moduleName, $inputOutput, $isDry);
             }
         }
 
@@ -119,6 +111,46 @@ class ManifestExecutor implements ManifestExecutorInterface
         }
 
         return $this->integratorLockWriter->storeLock($lockedModules);
+    }
+
+    /**
+     * @param array<mixed> $unappliedManifestByType
+     * @param string $manifestType
+     * @param string $moduleName
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
+     * @param bool $isDry
+     *
+     * @return void
+     */
+    protected function applyManifestsByType(
+        array $unappliedManifestByType,
+        string $manifestType,
+        string $moduleName,
+        InputOutputInterface $inputOutput,
+        bool $isDry
+    ): void {
+        try {
+            $manifestExecutor = $this->resolveExecutor($manifestType);
+        } catch (RuntimeException $runtimeException) {
+            $inputOutput->warning($runtimeException->getMessage());
+
+            return;
+        }
+
+        foreach ($unappliedManifestByType as $manifestHash => $unappliedManifest) {
+            try {
+                if ($manifestExecutor->apply($unappliedManifest, $moduleName, $inputOutput, $isDry)) {
+                    $lockedModules[$moduleName][$manifestType][$manifestHash] = $unappliedManifest;
+                }
+            } catch (Exception $exception) {
+                $inputOutput->warning(sprintf(
+                    'Manifest for %s:%s was skipped. %s',
+                    $unappliedManifest[IntegratorConfig::MODULE_KEY],
+                    $unappliedManifest[IntegratorConfig::MODULE_VERSION_KEY],
+                    $exception->getMessage(),
+                ));
+            }
+        }
     }
 
     /**
