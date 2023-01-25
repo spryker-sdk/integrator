@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\FileStorage;
 
 use Aws\Credentials\Credentials;
-use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
 use RuntimeException;
 use SprykerSdk\Integrator\IntegratorConfig;
@@ -55,12 +54,12 @@ class BucketFileStorage implements BucketFileStorageInterface
     /**
      * @var string
      */
-    protected const NO_SUCH_KEY_ERROR_CODE = 'NoSuchKey';
+    protected const CONTENT_LENGTH_KEY = 'ContentLength';
 
     /**
-     * @var string
+     * @var \Aws\S3\S3Client $s3Client
      */
-    protected const CONTENT_LENGTH_KEY = 'ContentLength';
+    protected ?S3Client $s3Client = null;
 
     /**
      * @var \SprykerSdk\Integrator\IntegratorConfig $config
@@ -78,27 +77,21 @@ class BucketFileStorage implements BucketFileStorageInterface
     /**
      * @param string $filePath
      *
-     * @throws \RuntimeException
-     *
      * @return string|null
      */
     public function getFile(string $filePath): ?string
     {
         $client = $this->getS3Client();
-        try {
-            $result = $client->getObject([
-                static::BUCKET_KEY => $this->config->getFileBucketName(),
-                static::OBJECT_KEY => $filePath,
-            ]);
-        } catch (S3Exception $exception) {
-            $awsErrorCode = $exception->getAwsErrorCode();
-            if ($awsErrorCode === static::NO_SUCH_KEY_ERROR_CODE) {
-                return null;
-            }
+        $bucketName = $this->config->getFileBucketName();
 
-            throw $exception;
+        if (!$client->doesObjectExist($bucketName, $filePath)) {
+            return null;
         }
 
+        $result = $client->getObject([
+            static::BUCKET_KEY => $bucketName,
+            static::OBJECT_KEY => $filePath,
+        ]);
         /** @var \GuzzleHttp\Psr7\Stream $body */
         $body = $result->get(static::BODY_KEY);
 
@@ -125,17 +118,23 @@ class BucketFileStorage implements BucketFileStorageInterface
      */
     protected function getS3Client(): S3Client
     {
+        if ($this->s3Client) {
+            return $this->s3Client;
+        }
+
         $this->validateCredentials();
         $credentials = new Credentials(
             $this->config->getFileBucketCredentialsKey(),
             $this->config->getFileBucketCredentialsSecret(),
         );
 
-        return new S3Client([
+        $this->s3Client = new S3Client([
             static::VERSION_KEY => static::LATEST_KEY,
             static::REGION_KEY => $this->config->getFileBucketRegion(),
             static::CREDENTIALS_KEY => $credentials,
         ]);
+
+        return $this->s3Client;
     }
 
     /**
