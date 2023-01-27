@@ -16,7 +16,7 @@ use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
-use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
+use SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface;
 use SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 
@@ -28,7 +28,7 @@ class ManifestExecutor implements ManifestExecutorInterface
     protected $integratorLockReader;
 
     /**
-     * @var \SprykerSdk\Integrator\Manifest\ManifestReaderInterface
+     * @var \SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface
      */
     protected $manifestReader;
 
@@ -49,14 +49,14 @@ class ManifestExecutor implements ManifestExecutorInterface
 
     /**
      * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface $integratorLockReader
-     * @param \SprykerSdk\Integrator\Manifest\ManifestReaderInterface $manifestReader
+     * @param \SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface $manifestReader
      * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface $integratorLockWriter
      * @param \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface $fileNormalizersExecutor
      * @param array<\SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface> $manifestExecutors
      */
     public function __construct(
         IntegratorLockReaderInterface $integratorLockReader,
-        ManifestReaderInterface $manifestReader,
+        RepositoryManifestReaderInterface $manifestReader,
         IntegratorLockWriterInterface $integratorLockWriter,
         FileNormalizersExecutorInterface $fileNormalizersExecutor,
         array $manifestExecutors

@@ -119,6 +119,26 @@ class IntegratorConfig
     /**
      * @var string
      */
+    public const INTEGRATOR_FILE_BUCKET_NAME = 'INTEGRATOR_FILE_BUCKET_NAME';
+
+    /**
+     * @var string
+     */
+    public const INTEGRATOR_FILE_BUCKET_CREDENTIALS_KEY = 'INTEGRATOR_FILE_BUCKET_CREDENTIALS_KEY';
+
+    /**
+     * @var string
+     */
+    public const INTEGRATOR_FILE_BUCKET_CREDENTIALS_SECRET = 'INTEGRATOR_FILE_BUCKET_CREDENTIALS_SECRET';
+
+    /**
+     * @var string
+     */
+    public const INTEGRATOR_FILE_BUCKET_REGION = 'INTEGRATOR_FILE_BUCKET_REGION';
+
+    /**
+     * @var string
+     */
     protected const MANIFESTS_DIRECTORY = 'vendor/spryker-sdk/integrator/data/manifests/';
 
     /**
@@ -452,5 +472,37 @@ class IntegratorConfig
     public function getPhpCsConfigPath(): string
     {
         return $this->getProjectRootDirectory() . static::PHPCS_XML_FILE_NAME;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileBucketName(): string
+    {
+        return (string)getenv(static::INTEGRATOR_FILE_BUCKET_NAME);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileBucketCredentialsKey(): string
+    {
+        return (string)getenv(static::INTEGRATOR_FILE_BUCKET_CREDENTIALS_KEY);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileBucketCredentialsSecret(): string
+    {
+        return (string)getenv(static::INTEGRATOR_FILE_BUCKET_CREDENTIALS_SECRET);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileBucketRegion(): string
+    {
+        return (string)getenv(static::INTEGRATOR_FILE_BUCKET_REGION);
     }
 }
