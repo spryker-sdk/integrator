@@ -79,7 +79,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorConfigureModule'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -104,7 +104,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorWirePlugin'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -128,7 +128,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorUnwirePlugin'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -152,7 +152,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorWireConsole'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -176,7 +176,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorUnwireConsole'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -200,7 +200,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorCopyModuleFile'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -220,7 +220,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorWireWidget'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -245,7 +245,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorUnwireWidget'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -270,7 +270,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorConfigureEnv'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -307,7 +307,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->createMockSymfonyConsoleChoiceInputOutput('Value choice 1');
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorConfigureEnv'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -355,7 +355,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorWireGlueRelationship'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -380,7 +380,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorUnwireGlueRelationship'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -405,7 +405,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorWireNavigation'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -429,7 +429,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorUnwireNavigation'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -453,7 +453,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorAddConfigArrayElement'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),
@@ -477,7 +477,7 @@ class IntegratorFacadeTest extends BaseTestCase
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
         // Act
-        $this->createIntegratorFacade()->runInstallation(
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
             $this->getModuleList('TestIntegratorGlossary'),
             $ioAdapter,
             $this->createCommandArgumentsTransfer(),

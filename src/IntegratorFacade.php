@@ -23,10 +23,30 @@ class IntegratorFacade implements IntegratorFacadeInterface
      *
      * @return int
      */
-    public function runInstallation(array $moduleTransfers, InputOutputInterface $input, IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): int
-    {
+    public function runModuleManifestInstallation(
+        array $moduleTransfers,
+        InputOutputInterface $input,
+        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+    ): int {
         return $this->getFactory()
-            ->creatManifestExecutor()
+            ->createModuleManifestExecutor()
             ->runModuleManifestExecution($moduleTransfers, $input, $commandArgumentsTransfer);
+    }
+
+    /**
+     * @param int $releaseGroupId
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
+     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+     *
+     * @return int
+     */
+    public function runReleaseGroupManifestInstallation(
+        int $releaseGroupId,
+        InputOutputInterface $input,
+        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+    ): int {
+        return $this->getFactory()
+            ->createReleaseGroupManifestExecutor()
+            ->runReleaseGroupManifestExecution($releaseGroupId, $input, $commandArgumentsTransfer);
     }
 }

@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator;
 
+use CzProject\GitPhp\Runners\CliRunner;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
 use PhpParser\Lexer\Emulative;
@@ -105,8 +106,11 @@ use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
+use SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutor;
+use SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutorInterface;
 use SprykerSdk\Integrator\Executor\ProcessExecutor;
 use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
+use SprykerSdk\Integrator\Executor\ReleaseGroup\ReleaseGroupManifestExecutor;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorage;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface;
 use SprykerSdk\Integrator\Helper\ClassHelper;
@@ -136,6 +140,7 @@ use SprykerSdk\Integrator\ManifestStrategy\WirePluginManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireWidgetManifestStrategy;
 use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacade;
 use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacadeInterface;
+use SprykerSdk\Integrator\VersionControlSystem\GitRepository;
 
 class IntegratorFactory
 {
@@ -148,14 +153,47 @@ class IntegratorFactory
     }
 
     /**
+     * @return \SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutorInterface
+     */
+    public function createModuleManifestExecutor(): ModuleManifestExecutorInterface
+    {
+        return new ModuleManifestExecutor(
+            $this->createIntegratorLockReader(),
+            $this->createIntegratorLockWriter(),
+            $this->createRepositoryManifestReader(),
+            $this->createManifestExecutor(),
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Executor\ReleaseGroup\ReleaseGroupManifestExecutor
+     */
+    public function createReleaseGroupManifestExecutor(): ReleaseGroupManifestExecutor
+    {
+        return new ReleaseGroupManifestExecutor(
+            $this->createFileBucketManifestReader(),
+            $this->createBucketFileStorage(),
+            $this->createManifestExecutor(),
+            $this->createGitRepository(),
+        );
+    }
+
+    /**
+     * @param string|null $pathToRepository
+     *
+     * @return \SprykerSdk\Integrator\VersionControlSystem\GitRepository
+     */
+    public function createGitRepository(?string $pathToRepository = null): GitRepository
+    {
+        return new GitRepository($pathToRepository ?? (string)getcwd(), new CliRunner());
+    }
+
+    /**
      * @return \SprykerSdk\Integrator\Executor\ManifestExecutorInterface
      */
-    public function creatManifestExecutor(): ManifestExecutorInterface
+    public function createManifestExecutor(): ManifestExecutorInterface
     {
         return new ManifestExecutor(
-            $this->createIntegratorLockReader(),
-            $this->createRepositoryManifestReader(),
-            $this->createIntegratorLockWriter(),
             $this->createFileNormalizersExecutor(),
             $this->getManifestStrategies(),
         );

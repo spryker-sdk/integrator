@@ -145,7 +145,7 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
         $commandArgumentsTransfer = (new IntegratorCommandArgumentsTransfer())
             ->setIsDry(false);
 
-        $this->getIntegratorFacade()->runInstallation($updatedModules, new ComposerInputOutputAdapter($this->io), $commandArgumentsTransfer);
+        $this->getIntegratorFacade()->runModuleManifestInstallation($updatedModules, new ComposerInputOutputAdapter($this->io), $commandArgumentsTransfer);
         $this->io->write('runInstallerEnd' . PHP_EOL);
     }
 
