@@ -24,12 +24,17 @@ class ReleaseGroupInstallerConsole extends AbstractInstallerConsole
     /**
      * @var string
      */
-    protected const ARGUMENT_RELEASE_GROUP_IDS_DESCRIPTION = 'Id of release group, manifest of which should be executed';
+    protected const ARGUMENT_RELEASE_GROUP_IDS_DESCRIPTION = 'ID of release group manifest of which should be executed';
 
     /**
      * @var string
      */
     protected const COMMAND_NAME = 'release-group:manifest:run';
+
+    /**
+     * @var string
+     */
+    protected const COMMAND_DESCRIPTION = 'The command applies manifests for specific release group and upload dill to S3 bucket.';
 
     /**
      * @return void
@@ -39,7 +44,7 @@ class ReleaseGroupInstallerConsole extends AbstractInstallerConsole
         parent::configure();
 
         $this->setName(static::COMMAND_NAME)
-            ->setDescription('')
+            ->setDescription(static::COMMAND_DESCRIPTION)
             ->addArgument(
                 static::ARGUMENT_RELEASE_GROUP_ID,
                 InputArgument::OPTIONAL,
@@ -77,10 +82,10 @@ class ReleaseGroupInstallerConsole extends AbstractInstallerConsole
     {
         $argumentValue = $input->getArgument(static::ARGUMENT_RELEASE_GROUP_ID);
         if (!$argumentValue) {
-            throw new InvalidArgumentException('Release group id is required');
+            throw new InvalidArgumentException('Release group ID is required');
         }
         if (!is_numeric($argumentValue)) {
-            throw new InvalidArgumentException(sprintf('Invalid release group id `%s`', $argumentValue));
+            throw new InvalidArgumentException(sprintf('Invalid release group ID `%s`', $argumentValue));
         }
 
         return (int)$argumentValue;

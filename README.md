@@ -22,7 +22,7 @@ Available options:
 ### module:manifest:run
 
 Running the integrator in basic mode. Unapplied manifests will be downloaded from the [repo](https://github.com/spryker-sdk/integrator-manifests).
-The command expects not required argument `module-list`. With the argument, manifests will be applied only for modules that were specified.
+The command expects optional argument `module-list` to be set. With the argument, manifests will be applied only for modules that were specified.
 ```
 integrator module:manifest:run <moduleNameA, moduleNameB (not required)>
 ```
@@ -32,7 +32,7 @@ integrator module:manifest:run <moduleNameA, moduleNameB (not required)>
 
 Running the integrator for specific release group. Unapplied manifests will be downloaded from the S3 bucket.
 Result of manifest applying (git diff) will be uploaded to the same bucket.
-The command expects required argument `release-froup-id`.
+The command expects required argument `release-group-id`.
 ```
 integrator release-group:manifest:run <release-group-id (required)>
 ```

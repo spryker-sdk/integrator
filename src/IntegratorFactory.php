@@ -185,7 +185,7 @@ class IntegratorFactory
      */
     public function createGitRepository(?string $pathToRepository = null): GitRepository
     {
-        return new GitRepository($pathToRepository ?? (string)getcwd(), new CliRunner());
+        return new GitRepository($pathToRepository ?? APPLICATION_ROOT_DIR, new CliRunner());
     }
 
     /**

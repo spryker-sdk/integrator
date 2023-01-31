@@ -21,17 +21,17 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
     /**
      * @var \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface
      */
-    protected $integratorLockReader;
+    protected IntegratorLockReaderInterface $integratorLockReader;
 
     /**
      * @var \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface
      */
-    protected $integratorLockWriter;
+    protected IntegratorLockWriterInterface $integratorLockWriter;
 
     /**
      * @var \SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface
      */
-    protected $manifestReader;
+    protected RepositoryManifestReaderInterface $manifestReader;
 
     /**
      * @var \SprykerSdk\Integrator\Executor\ManifestExecutorInterface

@@ -46,7 +46,7 @@ class FileBucketManifestReader implements FileBucketManifestReaderInterface
         $manifests = json_decode($fileContent, true);
         if (!is_array($manifests)) {
             throw new RuntimeException(
-                sprintf('Invalis manifest data, release group ID `%s`, data `%s`', $releaseGroupId, $fileContent),
+                sprintf('Invalid manifest data, release group ID `%s`', $releaseGroupId),
             );
         }
 
