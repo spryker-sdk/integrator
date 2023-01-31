@@ -15,12 +15,21 @@ use PhpParser\NodeVisitor\NameResolver;
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
+use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use ZipArchive;
 
@@ -107,12 +116,14 @@ class BaseTestCase extends PHPUnitTestCase
     }
 
     /**
+     * @param bool $isDry
+     *
      * @return \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer
      */
-    public function createCommandArgumentsTransfer(): IntegratorCommandArgumentsTransfer
+    public function createCommandArgumentsTransfer(bool $isDry = false): IntegratorCommandArgumentsTransfer
     {
         $commandArgumentsTransfer = new IntegratorCommandArgumentsTransfer();
-        $commandArgumentsTransfer->setIsDry(false);
+        $commandArgumentsTransfer->setIsDry($isDry);
 
         return $commandArgumentsTransfer;
     }
@@ -180,5 +191,38 @@ class BaseTestCase extends PHPUnitTestCase
         }
 
         return $moduleFilterTransfer;
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter
+     */
+    protected function buildSymfonyConsoleInputOutputAdapter(): SymfonyConsoleInputOutputAdapter
+    {
+        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
+        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
+        $ioAdapter->setNoIteration();
+
+        return $ioAdapter;
+    }
+
+    /**
+     * @return \Symfony\Component\Console\Input\InputInterface
+     */
+    protected function buildInput(): InputInterface
+    {
+        $verboseOption = new InputOption('verboseOption', null, InputOutputInterface::DEBUG);
+        $inputDefinition = new InputDefinition();
+
+        $inputDefinition->addOption($verboseOption);
+
+        return new ArrayInput([], $inputDefinition);
+    }
+
+    /**
+     * @return \Symfony\Component\Console\Output\OutputInterface
+     */
+    protected function buildOutput(): OutputInterface
+    {
+        return new BufferedOutput(OutputInterface::VERBOSITY_DEBUG);
     }
 }

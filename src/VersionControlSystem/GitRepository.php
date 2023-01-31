@@ -15,11 +15,11 @@ class GitRepository extends CzGitRepository
 {
     /**
      * @param string $currentBranch
-     * @param string|null $originalBranch
+     * @param string $originalBranch
      *
      * @return string
      */
-    public function getDiff(string $currentBranch, ?string $originalBranch = null): string
+    public function getDiff(string $currentBranch, string $originalBranch): string
     {
         $gitDiffOutput = $this->execute(
             ['diff', $originalBranch, $currentBranch],

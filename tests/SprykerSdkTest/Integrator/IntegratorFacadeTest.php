@@ -12,13 +12,6 @@ namespace SprykerSdkTest\Integrator;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFacade;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 
 class IntegratorFacadeTest extends BaseTestCase
@@ -509,39 +502,6 @@ class IntegratorFacadeTest extends BaseTestCase
                 '$config[' . $target . '] = \'' . $value . '\';',
             ),
         );
-    }
-
-    /**
-     * @return \SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter
-     */
-    private function buildSymfonyConsoleInputOutputAdapter(): SymfonyConsoleInputOutputAdapter
-    {
-        $io = new SymfonyStyle($this->buildInput(), $this->buildOutput());
-        $ioAdapter = new SymfonyConsoleInputOutputAdapter($io);
-        $ioAdapter->setNoIteration();
-
-        return $ioAdapter;
-    }
-
-    /**
-     * @return \Symfony\Component\Console\Input\InputInterface
-     */
-    private function buildInput(): InputInterface
-    {
-        $verboseOption = new InputOption('verboseOption', null, InputOutputInterface::DEBUG);
-        $inputDefinition = new InputDefinition();
-
-        $inputDefinition->addOption($verboseOption);
-
-        return new ArrayInput([], $inputDefinition);
-    }
-
-    /**
-     * @return \Symfony\Component\Console\Output\OutputInterface
-     */
-    private function buildOutput(): OutputInterface
-    {
-        return new BufferedOutput(OutputInterface::VERBOSITY_DEBUG);
     }
 
     /**

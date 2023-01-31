@@ -1,0 +1,10 @@
+{
+    "Spryker.GlueBackendApiApplicationGlueJsonApiConventionConnector": {
+        "wire-plugin": [
+            {
+                "target": "\\Spryker\\Glue\\GlueJsonApiConvention\\GlueJsonApiConventionDependencyProvider::getRelationshipProviderPlugins",
+                "source": "\\Spryker\\Glue\\GlueBackendApiApplicationGlueJsonApiConventionConnector\\Plugin\\GlueJsonApiConvention\\BackendApiRelationshipProviderPlugin"
+            }
+        ]
+    }
+}

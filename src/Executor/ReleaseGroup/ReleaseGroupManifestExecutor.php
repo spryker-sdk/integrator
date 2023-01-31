@@ -130,7 +130,10 @@ class ReleaseGroupManifestExecutor implements ReleaseGroupManifestExecutorInterf
         $this->gitRepository->addAllChanges();
         $this->gitRepository->commit('The commit was created by integrator');
 
-        $gitDiffOutput = $this->gitRepository->getDiff(static::INTEGRATOR_RESULT_BRANCH_NAME);
+        $gitDiffOutput = $this->gitRepository->getDiff(
+            static::INTEGRATOR_RESULT_BRANCH_NAME,
+            static::MASTER_BRANCH_NAME,
+        );
 
         $this->bucketFileStorage->addFile($releaseGroupId . DIRECTORY_SEPARATOR . static::DIFF_TO_DISPLAY_FILE_NAME, $gitDiffOutput);
         $inputOutput->writeln($gitDiffOutput, InputOutputInterface::VERBOSE);
