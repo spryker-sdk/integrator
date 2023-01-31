@@ -110,7 +110,7 @@ use SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutor;
 use SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutorInterface;
 use SprykerSdk\Integrator\Executor\ProcessExecutor;
 use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
-use SprykerSdk\Integrator\Executor\ReleaseGroup\ReleaseGroupManifestExecutor;
+use SprykerSdk\Integrator\Executor\ReleaseGroup\DiffGenerator;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorage;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface;
 use SprykerSdk\Integrator\Helper\ClassHelper;
@@ -166,11 +166,11 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Executor\ReleaseGroup\ReleaseGroupManifestExecutor
+     * @return \SprykerSdk\Integrator\Executor\ReleaseGroup\DiffGenerator
      */
-    public function createReleaseGroupManifestExecutor(): ReleaseGroupManifestExecutor
+    public function createReleaseGroupManifestExecutor(): DiffGenerator
     {
-        return new ReleaseGroupManifestExecutor(
+        return new DiffGenerator(
             $this->createFileBucketManifestReader(),
             $this->createBucketFileStorage(),
             $this->createManifestExecutor(),

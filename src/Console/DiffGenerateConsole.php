@@ -14,7 +14,12 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ReleaseGroupInstallerConsole extends AbstractInstallerConsole
+/**
+ * Only for Spryker internal usage
+ *
+ * @internal
+ */
+class DiffGenerateConsole extends AbstractInstallerConsole
 {
     /**
      * @var string
@@ -29,7 +34,7 @@ class ReleaseGroupInstallerConsole extends AbstractInstallerConsole
     /**
      * @var string
      */
-    protected const COMMAND_NAME = 'release-group:manifest:run';
+    protected const COMMAND_NAME = 'integrator:diff:generate';
 
     /**
      * @var string
@@ -63,7 +68,7 @@ class ReleaseGroupInstallerConsole extends AbstractInstallerConsole
         $releaseGroupIdList = $this->getReleaseGroupIdOrFail($input);
         $commandArgumentsTransfer = $this->buildCommandArgumentsTransfer($input);
         $io = $this->createInputOutputAdapter($input, $output, $commandArgumentsTransfer->getFormat());
-        $this->getFacade()->runReleaseGroupManifestInstallation($releaseGroupIdList, $io, $commandArgumentsTransfer);
+        $this->getFacade()->generateDiff($releaseGroupIdList, $io, $commandArgumentsTransfer);
 
         return 0;
     }

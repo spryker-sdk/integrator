@@ -17,7 +17,7 @@ use SprykerSdk\Integrator\Manifest\FileBucketManifestReaderInterface;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use SprykerSdk\Integrator\VersionControlSystem\GitRepository;
 
-class ReleaseGroupManifestExecutor implements ReleaseGroupManifestExecutorInterface
+class DiffGenerator implements DiffGeneratorInterface
 {
     /**
      * @var string
@@ -81,7 +81,7 @@ class ReleaseGroupManifestExecutor implements ReleaseGroupManifestExecutorInterf
      *
      * @return void
      */
-    public function runReleaseGroupManifestExecution(
+    public function generateDiff(
         int $releaseGroupId,
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer

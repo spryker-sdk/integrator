@@ -34,7 +34,7 @@ interface IntegratorFacadeInterface
      *
      * @return void
      */
-    public function runReleaseGroupManifestInstallation(
+    public function generateDiff(
         int $releaseGroupId,
         InputOutputInterface $input,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer

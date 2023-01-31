@@ -12,7 +12,7 @@ namespace SprykerSdk\Integrator\Executor\ReleaseGroup;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 
-interface ReleaseGroupManifestExecutorInterface
+interface DiffGeneratorInterface
 {
     /**
      * @param int $releaseGroupId
@@ -21,7 +21,7 @@ interface ReleaseGroupManifestExecutorInterface
      *
      * @return void
      */
-    public function runReleaseGroupManifestExecution(
+    public function generateDiff(
         int $releaseGroupId,
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer

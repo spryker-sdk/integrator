@@ -12,7 +12,7 @@ namespace SprykerSdkTest\Integrator\Executor\ReleaseGroup;
 use RuntimeException;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
-use SprykerSdk\Integrator\Executor\ReleaseGroup\ReleaseGroupManifestExecutor;
+use SprykerSdk\Integrator\Executor\ReleaseGroup\DiffGenerator;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorage;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface;
 use SprykerSdk\Integrator\Manifest\FileBucketManifestReader;
@@ -39,7 +39,7 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $gitMock->method('hasChanges')->willReturn(true);
 
         $executorMock = $this->createManifestExecutorMock();
-        $manifestExecutor = new ReleaseGroupManifestExecutor($reader, $fileStorageMock, $executorMock, $gitMock);
+        $manifestExecutor = new DiffGenerator($reader, $fileStorageMock, $executorMock, $gitMock);
 
         // Assert
         $gitMock->expects($this->atLeastOnce())->method('checkout');
@@ -47,7 +47,7 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $fileStorageMock->expects($this->once())->method('addFile');
 
         // Act
-        $exitCode = $manifestExecutor->runReleaseGroupManifestExecution(
+        $exitCode = $manifestExecutor->generateDiff(
             1,
             $this->buildSymfonyConsoleInputOutputAdapter(),
             $this->createCommandArgumentsTransfer(),
@@ -67,7 +67,7 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $gitMock->method('hasChanges')->willReturn(true);
 
         $executorMock = $this->createManifestExecutorMock();
-        $manifestExecutor = new ReleaseGroupManifestExecutor($reader, $fileStorageMock, $executorMock, $gitMock);
+        $manifestExecutor = new DiffGenerator($reader, $fileStorageMock, $executorMock, $gitMock);
 
         // Assert
         $gitMock->expects($this->never())->method('checkout');
@@ -75,7 +75,7 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $fileStorageMock->expects($this->never())->method('addFile');
 
         // Act
-        $exitCode = $manifestExecutor->runReleaseGroupManifestExecution(
+        $exitCode = $manifestExecutor->generateDiff(
             1,
             $this->buildSymfonyConsoleInputOutputAdapter(),
             $this->createCommandArgumentsTransfer(true),
@@ -93,13 +93,13 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $fileStorageMock = $this->createFileStorageMock('invalid json string');
         $reader = new FileBucketManifestReader($fileStorageMock);
 
-        $manifestExecutor = new ReleaseGroupManifestExecutor($reader, $fileStorageMock, $executorMock, $gitMock);
+        $manifestExecutor = new DiffGenerator($reader, $fileStorageMock, $executorMock, $gitMock);
 
         // Assert
         $this->expectException(RuntimeException::class);
 
         // Act
-        $manifestExecutor->runReleaseGroupManifestExecution(
+        $manifestExecutor->generateDiff(
             1,
             $this->buildSymfonyConsoleInputOutputAdapter(),
             $this->createCommandArgumentsTransfer(),
@@ -119,13 +119,13 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $gitMock->method('hasChanges')->willReturn(false);
 
         $executorMock = $this->createManifestExecutorMock();
-        $manifestExecutor = new ReleaseGroupManifestExecutor($reader, $fileStorageMock, $executorMock, $gitMock);
+        $manifestExecutor = new DiffGenerator($reader, $fileStorageMock, $executorMock, $gitMock);
 
         // Assert
         $this->expectException(RuntimeException::class);
 
         // Act
-        $manifestExecutor->runReleaseGroupManifestExecution(
+        $manifestExecutor->generateDiff(
             1,
             $this->buildSymfonyConsoleInputOutputAdapter(),
             $this->createCommandArgumentsTransfer(),

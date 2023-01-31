@@ -12,7 +12,7 @@ namespace SprykerSdkTest\Integrator\Console;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use SprykerSdk\Integrator\Console\ReleaseGroupInstallerConsole;
+use SprykerSdk\Integrator\Console\DiffGenerateConsole;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ReleaseGroupInstallerConsoleTest extends TestCase
+class DiffGenerateConsoleTest extends TestCase
 {
     /**
      * @return void
@@ -32,7 +32,7 @@ class ReleaseGroupInstallerConsoleTest extends TestCase
         // Arrange
         $releaseGroupIdArgument = new InputArgument('release-group-id');
         $releaseGroupIdArgument->setDefault(10);
-        $console = new ReleaseGroupInstallerConsole();
+        $console = new DiffGenerateConsole();
 
         // Act
         $releaseGroupId = $this->invokeMethod(
@@ -53,7 +53,7 @@ class ReleaseGroupInstallerConsoleTest extends TestCase
     public function testGetReleaseGroupFailedNoArgument(): void
     {
         // Arrange
-        $console = new ReleaseGroupInstallerConsole();
+        $console = new DiffGenerateConsole();
 
         // Assert
         $this->expectException(InvalidArgumentException::class);
@@ -76,7 +76,7 @@ class ReleaseGroupInstallerConsoleTest extends TestCase
         // Arrange
         $releaseGroupIdArgument = new InputArgument('release-group-id');
         $releaseGroupIdArgument->setDefault('invalid-id');
-        $console = new ReleaseGroupInstallerConsole();
+        $console = new DiffGenerateConsole();
 
         // Assert
         $this->expectException(InvalidArgumentException::class);

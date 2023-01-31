@@ -40,13 +40,13 @@ class IntegratorFacade implements IntegratorFacadeInterface
      *
      * @return void
      */
-    public function runReleaseGroupManifestInstallation(
+    public function generateDiff(
         int $releaseGroupId,
         InputOutputInterface $input,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
     ): void {
         $this->getFactory()
             ->createReleaseGroupManifestExecutor()
-            ->runReleaseGroupManifestExecution($releaseGroupId, $input, $commandArgumentsTransfer);
+            ->generateDiff($releaseGroupId, $input, $commandArgumentsTransfer);
     }
 }
