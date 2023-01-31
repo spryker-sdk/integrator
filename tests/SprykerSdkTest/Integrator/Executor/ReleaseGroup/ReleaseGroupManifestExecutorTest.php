@@ -52,9 +52,6 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
             $this->buildSymfonyConsoleInputOutputAdapter(),
             $this->createCommandArgumentsTransfer(),
         );
-
-        // Assert
-        $this->assertSame(0, $exitCode);
     }
 
     /**
@@ -83,9 +80,6 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
             $this->buildSymfonyConsoleInputOutputAdapter(),
             $this->createCommandArgumentsTransfer(true),
         );
-
-        // Assert
-        $this->assertSame(0, $exitCode);
     }
 
     /**

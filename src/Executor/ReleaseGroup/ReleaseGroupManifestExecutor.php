@@ -79,13 +79,13 @@ class ReleaseGroupManifestExecutor implements ReleaseGroupManifestExecutorInterf
      *
      * @throws \RuntimeException
      *
-     * @return int
+     * @return void
      */
     public function runReleaseGroupManifestExecution(
         int $releaseGroupId,
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
-    ): int {
+    ): void {
         $manifests = $this->manifestReader->readManifests($releaseGroupId);
         $unappliedManifests = $this->manifestExecutor->findUnappliedManifests($manifests, []);
         if (!count($unappliedManifests)) {
@@ -102,13 +102,13 @@ class ReleaseGroupManifestExecutor implements ReleaseGroupManifestExecutorInterf
         $this->manifestExecutor->applyManifestList($unappliedManifests, $inputOutput, $commandArgumentsTransfer);
 
         if ($dry) {
-            return 0;
+            return;
         }
 
         $this->storeDiff($releaseGroupId, $inputOutput);
         $this->gitClean();
 
-        return 0;
+        return;
     }
 
     /**

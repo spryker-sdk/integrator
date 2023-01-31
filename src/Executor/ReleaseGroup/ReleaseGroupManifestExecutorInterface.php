@@ -19,11 +19,11 @@ interface ReleaseGroupManifestExecutorInterface
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
-     * @return int
+     * @return void
      */
     public function runReleaseGroupManifestExecution(
         int $releaseGroupId,
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
-    ): int;
+    ): void;
 }

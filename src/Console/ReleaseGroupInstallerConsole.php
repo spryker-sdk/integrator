@@ -34,7 +34,7 @@ class ReleaseGroupInstallerConsole extends AbstractInstallerConsole
     /**
      * @var string
      */
-    protected const COMMAND_DESCRIPTION = 'The command applies manifests for specific release group and upload dill to S3 bucket.';
+    protected const COMMAND_DESCRIPTION = 'The command applies manifests for specific release group and upload diff to S3 bucket.';
 
     /**
      * @return void
@@ -63,12 +63,9 @@ class ReleaseGroupInstallerConsole extends AbstractInstallerConsole
         $releaseGroupIdList = $this->getReleaseGroupIdOrFail($input);
         $commandArgumentsTransfer = $this->buildCommandArgumentsTransfer($input);
         $io = $this->createInputOutputAdapter($input, $output, $commandArgumentsTransfer->getFormat());
+        $this->getFacade()->runReleaseGroupManifestInstallation($releaseGroupIdList, $io, $commandArgumentsTransfer);
 
-        return $this->getFacade()->runReleaseGroupManifestInstallation(
-            $releaseGroupIdList,
-            $io,
-            $commandArgumentsTransfer,
-        );
+        return 0;
     }
 
     /**
