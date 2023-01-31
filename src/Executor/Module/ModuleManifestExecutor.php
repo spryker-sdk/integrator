@@ -61,13 +61,13 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
-     * @return int
+     * @return void
      */
     public function runModuleManifestExecution(
         array $moduleTransfers,
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
-    ): int {
+    ): void {
         $this->assertModuleData($moduleTransfers);
 
         $manifests = $this->manifestReader->readManifests($moduleTransfers, $commandArgumentsTransfer);
@@ -79,10 +79,10 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
         $this->manifestExecutor->applyManifestList($unappliedManifests, $inputOutput, $commandArgumentsTransfer);
 
         if ($commandArgumentsTransfer->getIsDryOrFail()) {
-            return 0;
+            return;
         }
 
-        return $this->integratorLockWriter->storeLock($lockedModules);
+        $this->integratorLockWriter->storeLock($lockedModules);
     }
 
     /**

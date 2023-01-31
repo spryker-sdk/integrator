@@ -19,11 +19,11 @@ interface ModuleManifestExecutorInterface
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
-     * @return int
+     * @return void
      */
     public function runModuleManifestExecution(
         array $moduleTransfers,
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
-    ): int;
+    ): void;
 }
