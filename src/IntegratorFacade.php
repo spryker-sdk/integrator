@@ -34,19 +34,17 @@ class IntegratorFacade implements IntegratorFacadeInterface
     }
 
     /**
-     * @param int $releaseGroupId
-     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
      *
      * @return void
      */
     public function generateDiff(
-        int $releaseGroupId,
-        InputOutputInterface $input,
-        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer,
+        InputOutputInterface $input
     ): void {
         $this->getFactory()
             ->createReleaseGroupManifestExecutor()
-            ->generateDiff($releaseGroupId, $input, $commandArgumentsTransfer);
+            ->generateDiff($commandArgumentsTransfer, $input);
     }
 }

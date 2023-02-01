@@ -14,12 +14,12 @@ use CzProject\GitPhp\GitRepository as CzGitRepository;
 class GitRepository extends CzGitRepository
 {
     /**
-     * @param string $currentBranch
      * @param string $originalBranch
+     * @param string $currentBranch
      *
      * @return string
      */
-    public function getDiff(string $currentBranch, string $originalBranch): string
+    public function getDiff(string $originalBranch, string $currentBranch): string
     {
         $gitDiffOutput = $this->execute(
             ['diff', $originalBranch, $currentBranch],

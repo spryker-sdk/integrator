@@ -15,15 +15,13 @@ use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 interface DiffGeneratorInterface
 {
     /**
-     * @param int $releaseGroupId
-     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      *
      * @return void
      */
     public function generateDiff(
-        int $releaseGroupId,
-        InputOutputInterface $inputOutput,
-        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer,
+        InputOutputInterface $inputOutput
     ): void;
 }

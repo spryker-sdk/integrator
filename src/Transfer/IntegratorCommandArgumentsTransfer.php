@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Transfer;
 
-use InvalidArgumentException;
+use Exception;
 
-class IntegratorCommandArgumentsTransfer extends AbstractTransfer
+class IntegratorCommandArgumentsTransfer
 {
     /**
      * @var string
@@ -29,74 +29,39 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
     public const IS_DRY = 'isDry';
 
     /**
-     * @var string|null
+     * @var string
      */
-    protected $source;
+    public const RELEASE_GROUP_ID = 'releaseGroupId';
+
+    /**
+     * @var string
+     */
+    public const BRANCH_TO_COMPARE = 'branchToCompare';
 
     /**
      * @var string|null
      */
-    protected $format;
+    protected ?string $source = null;
+
+    /**
+     * @var string|null
+     */
+    protected ?string $format = null;
 
     /**
      * @var bool
      */
-    protected $isDry;
+    protected bool $isDry = false;
 
     /**
-     * @var array<string, string>
+     * @var int|null
      */
-    protected $transferPropertyNameMap = [
-        'source' => 'source',
-        'Source' => 'source',
-        'format' => 'format',
-        'Format' => 'format',
-        'is_dry' => 'isDry',
-        'isDry' => 'isDry',
-        'IsDry' => 'isDry',
-    ];
+    protected ?int $releaseGroupId = null;
 
     /**
-     * @var array
+     * @var string|null
      */
-    protected $transferMetadata = [
-        self::SOURCE => [
-            'type' => 'string',
-            'type_shim' => null,
-            'name_underscore' => 'name',
-            'is_collection' => false,
-            'is_transfer' => false,
-            'is_value_object' => false,
-            'rest_request_parameter' => 'no',
-            'is_associative' => false,
-            'is_nullable' => true,
-            'is_strict' => false,
-        ],
-        self::FORMAT => [
-            'type' => 'string',
-            'type_shim' => null,
-            'name_underscore' => 'fromat',
-            'is_collection' => false,
-            'is_transfer' => false,
-            'is_value_object' => false,
-            'rest_request_parameter' => 'no',
-            'is_associative' => false,
-            'is_nullable' => true,
-            'is_strict' => false,
-        ],
-        self::IS_DRY => [
-            'type' => 'boolean',
-            'type_shim' => null,
-            'name_underscore' => 'name',
-            'is_collection' => false,
-            'is_transfer' => false,
-            'is_value_object' => false,
-            'rest_request_parameter' => 'no',
-            'is_associative' => false,
-            'is_nullable' => false,
-            'is_strict' => false,
-        ],
-    ];
+    protected ?string $branchToCompare = null;
 
     /**
      * @param string|null $source
@@ -106,7 +71,6 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
     public function setSource(?string $source)
     {
         $this->source = $source;
-        $this->modifiedProperties[static::SOURCE] = true;
 
         return $this;
     }
@@ -128,17 +92,7 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
             $this->throwNullValueException(static::SOURCE);
         }
 
-        return $this->source;
-    }
-
-    /**
-     * @return $this
-     */
-    public function requireSource()
-    {
-        $this->assertPropertyIsSet(static::SOURCE);
-
-        return $this;
+        return (string)$this->source;
     }
 
     /**
@@ -149,7 +103,6 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
     public function setFormat(?string $format)
     {
         $this->format = $format;
-        $this->modifiedProperties[static::FORMAT] = true;
 
         return $this;
     }
@@ -163,6 +116,18 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
     }
 
     /**
+     * @return string
+     */
+    public function getFormatOrFail(): string
+    {
+        if ($this->format === null) {
+            $this->throwNullValueException(static::FORMAT);
+        }
+
+        return (string)$this->format;
+    }
+
+    /**
      * @param bool $isDry
      *
      * @return $this
@@ -170,15 +135,14 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
     public function setIsDry(bool $isDry)
     {
         $this->isDry = $isDry;
-        $this->modifiedProperties[static::IS_DRY] = true;
 
         return $this;
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function getIsDry(): bool
+    public function getIsDry(): ?bool
     {
         return $this->isDry;
     }
@@ -188,289 +152,80 @@ class IntegratorCommandArgumentsTransfer extends AbstractTransfer
      */
     public function getIsDryOrFail(): bool
     {
-        if ($this->isDry === null) {
-            $this->throwNullValueException(static::IS_DRY);
-        }
-
         return $this->isDry;
     }
 
     /**
-     * @return $this
+     * @return int|null
      */
-    public function requireIsDry()
+    public function getReleaseGroupId(): ?int
     {
-        $this->assertPropertyIsSet(static::IS_DRY);
-
-        return $this;
+        return $this->releaseGroupId;
     }
 
     /**
-     * @param array $data
-     * @param bool $ignoreMissingProperty
+     * @param int|null $releaseGroupId
      *
-     * @throws \InvalidArgumentException
-     *
-     * @return $this
-     */
-    public function fromArray(array $data, bool $ignoreMissingProperty = false)
-    {
-        foreach ($data as $property => $value) {
-            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? '';
-
-            switch ($normalizedPropertyName) {
-                case 'source':
-                case 'isDry':
-                    $this->$normalizedPropertyName = $value;
-                    $this->modifiedProperties[$normalizedPropertyName] = true;
-
-                    break;
-                default:
-                    if (!$ignoreMissingProperty) {
-                        throw new InvalidArgumentException(sprintf('Missing property `%s` in `%s`', $property, static::class));
-                    }
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param bool $isRecursive
-     * @param bool $camelCasedKeys
-     *
-     * @return array
-     */
-    public function modifiedToArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
-    {
-        if ($isRecursive && !$camelCasedKeys) {
-            return $this->modifiedToArrayRecursiveNotCamelCased();
-        }
-        if ($isRecursive && $camelCasedKeys) {
-            return $this->modifiedToArrayRecursiveCamelCased();
-        }
-        if (!$isRecursive && $camelCasedKeys) {
-            return $this->modifiedToArrayNotRecursiveCamelCased();
-        }
-        if (!$isRecursive && !$camelCasedKeys) {
-            return $this->modifiedToArrayNotRecursiveNotCamelCased();
-        }
-
-        return [];
-    }
-
-    /**
-     * @param bool $isRecursive
-     * @param bool $camelCasedKeys
-     *
-     * @return array
-     */
-    public function toArray(bool $isRecursive = true, bool $camelCasedKeys = false): array
-    {
-        if ($isRecursive && !$camelCasedKeys) {
-            return $this->toArrayRecursiveNotCamelCased();
-        }
-        if ($isRecursive && $camelCasedKeys) {
-            return $this->toArrayRecursiveCamelCased();
-        }
-        if (!$isRecursive && !$camelCasedKeys) {
-            return $this->toArrayNotRecursiveNotCamelCased();
-        }
-        if (!$isRecursive && $camelCasedKeys) {
-            return $this->toArrayNotRecursiveCamelCased();
-        }
-
-        return [];
-    }
-
-    /**
-     * @param mixed $value
-     * @param bool $isRecursive
-     * @param bool $camelCasedKeys
-     *
-     * @return array
-     */
-    protected function addValuesToCollectionModified($value, bool $isRecursive, bool $camelCasedKeys): array
-    {
-        $result = [];
-        foreach ($value as $elementKey => $arrayElement) {
-            if ($arrayElement instanceof AbstractTransfer) {
-                $result[$elementKey] = $arrayElement->modifiedToArray($isRecursive, $camelCasedKeys);
-
-                continue;
-            }
-            $result[$elementKey] = $arrayElement;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param mixed $value
-     * @param bool $isRecursive
-     * @param bool $camelCasedKeys
-     *
-     * @return array
-     */
-    protected function addValuesToCollection($value, bool $isRecursive, bool $camelCasedKeys): array
-    {
-        $result = [];
-        foreach ($value as $elementKey => $arrayElement) {
-            if ($arrayElement instanceof AbstractTransfer) {
-                $result[$elementKey] = $arrayElement->toArray($isRecursive, $camelCasedKeys);
-
-                continue;
-            }
-            $result[$elementKey] = $arrayElement;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @return array
-     */
-    public function modifiedToArrayRecursiveCamelCased(): array
-    {
-        $values = [];
-        foreach ($this->modifiedProperties as $property => $_) {
-            $value = $this->$property;
-
-            $arrayKey = $property;
-
-            if ($value instanceof AbstractTransfer) {
-                $values[$arrayKey] = $value->modifiedToArray(true, true);
-
-                continue;
-            }
-            switch ($property) {
-                case 'source':
-                case 'format':
-                case 'isDry':
-                    $values[$arrayKey] = $value;
-
-                    break;
-            }
-        }
-
-        return $values;
-    }
-
-    /**
-     * @return array
-     */
-    public function modifiedToArrayRecursiveNotCamelCased(): array
-    {
-        $values = [];
-        foreach ($this->modifiedProperties as $property => $_) {
-            $value = $this->$property;
-
-            $arrayKey = $this->transferMetadata[$property]['name_underscore'];
-
-            if ($value instanceof AbstractTransfer) {
-                $values[$arrayKey] = $value->modifiedToArray(true, false);
-
-                continue;
-            }
-            switch ($property) {
-                case 'source':
-                case 'format':
-                case 'isDry':
-                    $values[$arrayKey] = $value;
-
-                    break;
-            }
-        }
-
-        return $values;
-    }
-
-    /**
-     * @return array
-     */
-    public function modifiedToArrayNotRecursiveNotCamelCased(): array
-    {
-        $values = [];
-        foreach ($this->modifiedProperties as $property => $_) {
-            $value = $this->$property;
-
-            $arrayKey = $this->transferMetadata[$property]['name_underscore'];
-
-            $values[$arrayKey] = $value;
-        }
-
-        return $values;
-    }
-
-    /**
-     * @return array
-     */
-    public function modifiedToArrayNotRecursiveCamelCased(): array
-    {
-        $values = [];
-        foreach ($this->modifiedProperties as $property => $_) {
-            $value = $this->$property;
-
-            $arrayKey = $property;
-
-            $values[$arrayKey] = $value;
-        }
-
-        return $values;
-    }
-
-    /**
      * @return void
      */
-    protected function initCollectionProperties(): void
+    public function setReleaseGroupId(?int $releaseGroupId): void
     {
+        $this->releaseGroupId = $releaseGroupId;
     }
 
     /**
-     * @return array
+     * @return int
      */
-    public function toArrayNotRecursiveCamelCased(): array
+    public function getReleaseGroupIdOrFail(): int
     {
-        return [
-            'source' => $this->source,
-            'format' => $this->format,
-            'isDry' => $this->isDry,
-        ];
+        if ($this->releaseGroupId === null) {
+            $this->throwNullValueException(static::RELEASE_GROUP_ID);
+        }
+
+        return (int)$this->releaseGroupId;
     }
 
     /**
-     * @return array
+     * @return string|null
      */
-    public function toArrayNotRecursiveNotCamelCased(): array
+    public function getBranchToCompare(): ?string
     {
-        return [
-            'source' => $this->source,
-            'format' => $this->format,
-            'is_dry' => $this->isDry,
-        ];
+        return $this->branchToCompare;
     }
 
     /**
-     * @return array
+     * @param string|null $branchToCompare
+     *
+     * @return void
      */
-    public function toArrayRecursiveNotCamelCased(): array
+    public function setBranchToCompare(?string $branchToCompare): void
     {
-        return [
-            'source' => $this->source,
-            'format' => $this->format,
-            'is_dry' => $this->isDry,
-        ];
+        $this->branchToCompare = $branchToCompare;
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function toArrayRecursiveCamelCased(): array
+    public function getBranchToCompareOrFail(): string
     {
-        return [
-            'source' => $this->source,
-            'format' => $this->format,
-            'isDry' => $this->isDry,
-        ];
+        if ($this->branchToCompare === null) {
+            $this->throwNullValueException(static::BRANCH_TO_COMPARE);
+        }
+
+        return (string)$this->branchToCompare;
+    }
+
+    /**
+     * @param string $propertyName
+     *
+     * @throws \Exception
+     *
+     * @return void
+     */
+    protected function throwNullValueException(string $propertyName): void
+    {
+        throw new Exception(
+            sprintf('Property "%s" of transfer `%s` is null.', $propertyName, static::class),
+        );
     }
 }

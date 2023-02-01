@@ -33,8 +33,9 @@ integrator module:manifest:run <moduleNameA, moduleNameB (not required)>
 Running the integrator for specific release group. Unapplied manifests will be downloaded from the S3 bucket.
 Result of manifest applying (git diff) will be uploaded to the same bucket.
 The command expects required argument `release-group-id`.
+The command expects optional argument `branch-to-compare`.
 ```
-integrator release-group:manifest:run <release-group-id (required)>
+integrator release-group:manifest:run <release-group-id (required)> <branch-to-compare (optional)>
 ```
 Please specify the next S3 credentials:
 ```

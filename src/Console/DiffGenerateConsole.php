@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Console;
 
 use InvalidArgumentException;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -34,6 +35,21 @@ class DiffGenerateConsole extends AbstractInstallerConsole
     /**
      * @var string
      */
+    protected const ARGUMENT_BRANCH_TO_COMPARE = 'branch-to-compare';
+
+    /**
+     * @var string
+     */
+    protected const ARGUMENT_BRANCH_TO_COMPARE_DESCRIPTION = 'Name of branch to compare with manifest applying results. By default it is `master`';
+
+    /**
+     * @var string
+     */
+    protected const ARGUMENT_BRANCH_TO_COMPARE_DEFAULT = 'master';
+
+    /**
+     * @var string
+     */
     protected const COMMAND_NAME = 'integrator:diff:generate';
 
     /**
@@ -52,8 +68,14 @@ class DiffGenerateConsole extends AbstractInstallerConsole
             ->setDescription(static::COMMAND_DESCRIPTION)
             ->addArgument(
                 static::ARGUMENT_RELEASE_GROUP_ID,
-                InputArgument::OPTIONAL,
+                InputArgument::REQUIRED,
                 static::ARGUMENT_RELEASE_GROUP_IDS_DESCRIPTION,
+            )
+            ->addArgument(
+                static::ARGUMENT_BRANCH_TO_COMPARE,
+                InputArgument::OPTIONAL,
+                static::ARGUMENT_BRANCH_TO_COMPARE_DESCRIPTION,
+                static::ARGUMENT_BRANCH_TO_COMPARE_DEFAULT,
             );
     }
 
@@ -65,10 +87,9 @@ class DiffGenerateConsole extends AbstractInstallerConsole
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $releaseGroupIdList = $this->getReleaseGroupIdOrFail($input);
         $commandArgumentsTransfer = $this->buildCommandArgumentsTransfer($input);
         $io = $this->createInputOutputAdapter($input, $output, $commandArgumentsTransfer->getFormat());
-        $this->getFacade()->generateDiff($releaseGroupIdList, $io, $commandArgumentsTransfer);
+        $this->getFacade()->generateDiff($commandArgumentsTransfer, $io);
 
         return 0;
     }
@@ -91,5 +112,19 @@ class DiffGenerateConsole extends AbstractInstallerConsole
         }
 
         return (int)$argumentValue;
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     *
+     * @return \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer
+     */
+    protected function buildCommandArgumentsTransfer(InputInterface $input): IntegratorCommandArgumentsTransfer
+    {
+        $transfer = parent::buildCommandArgumentsTransfer($input);
+        $transfer->setReleaseGroupId($this->getReleaseGroupIdOrFail($input));
+        $transfer->setBranchToCompare($input->getArgument(static::ARGUMENT_BRANCH_TO_COMPARE));
+
+        return $transfer;
     }
 }

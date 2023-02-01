@@ -73,19 +73,18 @@ class DiffGenerator implements DiffGeneratorInterface
     }
 
     /**
-     * @param int $releaseGroupId
-     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      *
      * @throws \RuntimeException
      *
      * @return void
      */
     public function generateDiff(
-        int $releaseGroupId,
-        InputOutputInterface $inputOutput,
-        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer,
+        InputOutputInterface $inputOutput
     ): void {
+        $releaseGroupId = $commandArgumentsTransfer->getReleaseGroupIdOrFail();
         $manifests = $this->manifestReader->readManifests($releaseGroupId);
         $unappliedManifests = $this->manifestExecutor->findUnappliedManifests($manifests, []);
         if (!count($unappliedManifests)) {
@@ -105,22 +104,24 @@ class DiffGenerator implements DiffGeneratorInterface
             return;
         }
 
-        $this->storeDiff($releaseGroupId, $inputOutput);
+        $this->storeDiff($releaseGroupId, $commandArgumentsTransfer->getBranchToCompareOrFail(), $inputOutput);
         $this->gitClean();
-
-        return;
     }
 
     /**
      * @param int $releaseGroupId
+     * @param string $branchToCompare
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      *
      * @throws \RuntimeException
      *
      * @return void
      */
-    protected function storeDiff(int $releaseGroupId, InputOutputInterface $inputOutput): void
-    {
+    protected function storeDiff(
+        int $releaseGroupId,
+        string $branchToCompare,
+        InputOutputInterface $inputOutput
+    ): void {
         if (!$this->gitRepository->hasChanges()) {
             $this->gitClean();
 
@@ -130,10 +131,7 @@ class DiffGenerator implements DiffGeneratorInterface
         $this->gitRepository->addAllChanges();
         $this->gitRepository->commit('The commit was created by integrator');
 
-        $gitDiffOutput = $this->gitRepository->getDiff(
-            static::INTEGRATOR_RESULT_BRANCH_NAME,
-            static::MASTER_BRANCH_NAME,
-        );
+        $gitDiffOutput = $this->gitRepository->getDiff($branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
 
         $this->bucketFileStorage->addFile($releaseGroupId . DIRECTORY_SEPARATOR . static::DIFF_TO_DISPLAY_FILE_NAME, $gitDiffOutput);
         $inputOutput->writeln($gitDiffOutput, InputOutputInterface::VERBOSE);

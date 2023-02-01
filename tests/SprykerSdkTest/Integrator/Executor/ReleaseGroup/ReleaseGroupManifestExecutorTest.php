@@ -16,6 +16,7 @@ use SprykerSdk\Integrator\Executor\ReleaseGroup\DiffGenerator;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorage;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface;
 use SprykerSdk\Integrator\Manifest\FileBucketManifestReader;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use SprykerSdk\Integrator\VersionControlSystem\GitRepository;
 use SprykerSdkTest\Integrator\BaseTestCase;
 
@@ -47,10 +48,9 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $fileStorageMock->expects($this->once())->method('addFile');
 
         // Act
-        $exitCode = $manifestExecutor->generateDiff(
-            1,
-            $this->buildSymfonyConsoleInputOutputAdapter(),
+        $manifestExecutor->generateDiff(
             $this->createCommandArgumentsTransfer(),
+            $this->buildSymfonyConsoleInputOutputAdapter(),
         );
     }
 
@@ -75,10 +75,9 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $fileStorageMock->expects($this->never())->method('addFile');
 
         // Act
-        $exitCode = $manifestExecutor->generateDiff(
-            1,
-            $this->buildSymfonyConsoleInputOutputAdapter(),
+        $manifestExecutor->generateDiff(
             $this->createCommandArgumentsTransfer(true),
+            $this->buildSymfonyConsoleInputOutputAdapter(),
         );
     }
 
@@ -100,9 +99,8 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
 
         // Act
         $manifestExecutor->generateDiff(
-            1,
-            $this->buildSymfonyConsoleInputOutputAdapter(),
             $this->createCommandArgumentsTransfer(),
+            $this->buildSymfonyConsoleInputOutputAdapter(),
         );
     }
 
@@ -126,9 +124,8 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
 
         // Act
         $manifestExecutor->generateDiff(
-            1,
-            $this->buildSymfonyConsoleInputOutputAdapter(),
             $this->createCommandArgumentsTransfer(),
+            $this->buildSymfonyConsoleInputOutputAdapter(),
         );
     }
 
@@ -154,5 +151,19 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
             ->onlyMethods(['applyManifestList'])
             ->disableOriginalConstructor()
             ->getMock();
+    }
+
+    /**
+     * @param bool $isDry
+     *
+     * @return \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer
+     */
+    public function createCommandArgumentsTransfer(bool $isDry = false): IntegratorCommandArgumentsTransfer
+    {
+        $transfer = parent::createCommandArgumentsTransfer($isDry);
+        $transfer->setReleaseGroupId(1);
+        $transfer->setBranchToCompare('master');
+
+        return $transfer;
     }
 }
