@@ -28,7 +28,7 @@ integrator module:manifest:run <moduleNameA, moduleNameB (not required)>
 ```
 
 
-### release-group:manifest:run
+### integrator:diff:generate
 
 Running the integrator for specific release group. Unapplied manifests will be downloaded from the S3 bucket.
 Result of manifest applying (git diff) will be uploaded to the same bucket.
