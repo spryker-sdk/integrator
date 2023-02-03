@@ -14,24 +14,11 @@ use RuntimeException;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
-use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
-use SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface;
 use SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 
 class ManifestExecutor implements ManifestExecutorInterface
 {
-    /**
-     * @var \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface
-     */
-    protected $integratorLockReader;
-
-    /**
-     * @var \SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface
-     */
-    protected $manifestReader;
-
     /**
      * @var array<\SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface>
      */
@@ -43,57 +30,35 @@ class ManifestExecutor implements ManifestExecutorInterface
     protected $fileNormalizersExecutor;
 
     /**
-     * @var \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface
-     */
-    protected $integratorLockWriter;
-
-    /**
-     * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface $integratorLockReader
-     * @param \SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface $manifestReader
-     * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface $integratorLockWriter
      * @param \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface $fileNormalizersExecutor
      * @param array<\SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface> $manifestExecutors
      */
     public function __construct(
-        IntegratorLockReaderInterface $integratorLockReader,
-        RepositoryManifestReaderInterface $manifestReader,
-        IntegratorLockWriterInterface $integratorLockWriter,
         FileNormalizersExecutorInterface $fileNormalizersExecutor,
         array $manifestExecutors
     ) {
-        $this->integratorLockReader = $integratorLockReader;
-        $this->manifestReader = $manifestReader;
         $this->manifestExecutors = $manifestExecutors;
-        $this->integratorLockWriter = $integratorLockWriter;
         $this->fileNormalizersExecutor = $fileNormalizersExecutor;
     }
 
     /**
-     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
+     * @param array<string, array<string, array<string, array<string>>>> $unappliedManifests
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
-     * @return int
+     * @return void
      */
-    public function runModuleManifestExecution(
-        array $moduleTransfers,
+    public function applyManifestList(
+        array $unappliedManifests,
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
-    ): int {
-        $this->assertModuleData($moduleTransfers);
-
-        $manifests = $this->manifestReader->readManifests($moduleTransfers, $commandArgumentsTransfer);
-
-        $lockedModules = $this->integratorLockReader->getLockFileData();
-
-        $unappliedManifests = $this->findUnappliedManifests($manifests, $lockedModules);
-
+    ): void {
         if (!$unappliedManifests) {
-            return 0;
+            return;
         }
 
         if (!$inputOutput->confirm('There are unapplied manifests found for your modules. Do you want to apply them?')) {
-            return 0;
+            return;
         }
 
         $isDry = $commandArgumentsTransfer->getIsDryOrFail();
@@ -105,12 +70,6 @@ class ManifestExecutor implements ManifestExecutorInterface
         }
 
         $this->fileNormalizersExecutor->execute($inputOutput, $isDry);
-
-        if ($isDry) {
-            return 0;
-        }
-
-        return $this->integratorLockWriter->storeLock($lockedModules);
     }
 
     /**
@@ -159,7 +118,7 @@ class ManifestExecutor implements ManifestExecutorInterface
      *
      * @return array<string, array<string, array<string, array<string>>>>
      */
-    protected function findUnappliedManifests(array $manifests, array $lockedModules): array
+    public function findUnappliedManifests(array $manifests, array $lockedModules): array
     {
         $unappliedManifests = [];
         foreach ($manifests as $moduleName => $manifestList) {
@@ -195,22 +154,5 @@ class ManifestExecutor implements ManifestExecutorInterface
         }
 
         throw new RuntimeException("Executor $manifestType not found");
-    }
-
-    /**
-     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
-     *
-     * @return void
-     */
-    protected function assertModuleData(array $moduleTransfers): void
-    {
-        foreach ($moduleTransfers as $moduleTransfer) {
-            $moduleTransfer->requireName()
-                ->requireNameDashed()
-                ->requireOrganization();
-            $moduleTransfer->getOrganizationOrFail()
-                ->requireNameDashed()
-                ->requireName();
-        }
     }
 }

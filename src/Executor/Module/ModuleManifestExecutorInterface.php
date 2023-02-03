@@ -7,34 +7,23 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator;
+namespace SprykerSdk\Integrator\Executor\Module;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 
-interface IntegratorFacadeInterface
+interface ModuleManifestExecutorInterface
 {
     /**
      * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
-     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return void
      */
-    public function runModuleManifestInstallation(
+    public function runModuleManifestExecution(
         array $moduleTransfers,
-        InputOutputInterface $input,
+        InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
-    ): void;
-
-    /**
-     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
-     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
-     *
-     * @return void
-     */
-    public function generateDiff(
-        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer,
-        InputOutputInterface $input
     ): void;
 }

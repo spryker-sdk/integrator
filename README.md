@@ -17,6 +17,34 @@ composer require --dev spryker-sdk/integrator
 Available options:
 - `--format` - Define the format of the command output, example: json
 
+## Available commands
+
+### module:manifest:run
+
+Running the integrator in basic mode. Unapplied manifests will be downloaded from the [repo](https://github.com/spryker-sdk/integrator-manifests).
+The command expects optional argument `module-list` to be set. With the argument, manifests will be applied only for modules that were specified.
+```
+integrator module:manifest:run <moduleNameA, moduleNameB (not required)>
+```
+
+
+### integrator:diff:generate
+
+Running the integrator for specific release group. Unapplied manifests will be downloaded from the S3 bucket.
+Result of manifest applying (git diff) will be uploaded to the same bucket.
+The command expects required argument `release-group-id`.
+The command expects optional argument `branch-to-compare`.
+```
+integrator release-group:manifest:run <release-group-id (required)> <branch-to-compare (optional)>
+```
+Please specify the next S3 credentials:
+```
+export INTEGRATOR_FILE_BUCKET_NAME=<>
+export INTEGRATOR_FILE_BUCKET_CREDENTIALS_KEY=<>
+export INTEGRATOR_FILE_BUCKET_CREDENTIALS_SECRET=<>
+export INTEGRATOR_FILE_BUCKET_REGION=<>
+```
+
 ## Documentation
 
 See [Documentation](docs/).

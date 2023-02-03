@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Manifest;
 
+use RuntimeException;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface;
 
 class FileBucketManifestReader implements FileBucketManifestReaderInterface
@@ -31,6 +32,8 @@ class FileBucketManifestReader implements FileBucketManifestReaderInterface
     /**
      * @param int $releaseGroupId
      *
+     * @throws \RuntimeException
+     *
      * @return array<string, array<string, array<string>>>
      */
     public function readManifests(int $releaseGroupId): array
@@ -40,7 +43,14 @@ class FileBucketManifestReader implements FileBucketManifestReaderInterface
             return [];
         }
 
-        return json_decode($fileContent, true);
+        $manifests = json_decode($fileContent, true);
+        if (!is_array($manifests)) {
+            throw new RuntimeException(
+                sprintf('Invalid manifest data, release group ID `%s`', $releaseGroupId),
+            );
+        }
+
+        return $manifests;
     }
 
     /**

@@ -14,16 +14,24 @@ use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 
 interface ManifestExecutorInterface
 {
-    /**
-     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
-     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
-     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
-     *
-     * @return int
-     */
-    public function runModuleManifestExecution(
-        array $moduleTransfers,
+ /**
+  * @param array<string, array<string, array<string, array<string>>>> $unappliedManifests
+  * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
+  * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+  *
+  * @return void
+  */
+    public function applyManifestList(
+        array $unappliedManifests,
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
-    ): int;
+    ): void;
+
+    /**
+     * @param array<string, array<string, array<string>>> $manifests
+     * @param array<string, array<string, array<string>>> $lockedModules
+     *
+     * @return array<string, array<string, array<string, array<string>>>>
+     */
+    public function findUnappliedManifests(array $manifests, array $lockedModules): array;
 }

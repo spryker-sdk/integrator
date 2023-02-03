@@ -18,13 +18,15 @@ if (APPLICATION_VENDOR_DIR !== INTEGRATOR_ROOT_DIR) {
 }
 
 use SprykerSdk\Integrator\Console\ModuleInstallerConsole;
+use SprykerSdk\Integrator\Console\DiffGenerateConsole;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 
 $application->addCommands([
     new ModuleInstallerConsole(),
+    new DiffGenerateConsole(),
 ]);
-$application->setDefaultCommand('integrator:manifest:run', true);
+$application->setDefaultCommand('module:manifest:run');
 
 $application->run();
