@@ -127,6 +127,7 @@ class DiffGenerator implements DiffGeneratorInterface
 
             throw new RuntimeException(sprintf('No changes from manifests related to release group %s', $releaseGroupId));
         }
+        $branchToCompare = $this->resolveBranch($branchToCompare);
 
         $this->gitRepository->addAllChanges();
         $this->gitRepository->commit('The commit was created by integrator');
@@ -157,5 +158,26 @@ class DiffGenerator implements DiffGeneratorInterface
     {
         $this->gitRepository->checkout(static::MASTER_BRANCH_NAME);
         $this->gitRepository->deleteBranch(static::INTEGRATOR_RESULT_BRANCH_NAME);
+    }
+
+    /**
+     * @param string $branch
+     *
+     * @throws \RuntimeException
+     *
+     * @return string
+     */
+    protected function resolveBranch(string $branch): string
+    {
+        if (in_array($branch, (array)$this->gitRepository->getBranches())) {
+            return $branch;
+        }
+
+        $branch = sprintf('origin/%s', $branch);
+        if (in_array($branch, (array)$this->gitRepository->getRemoteBranches())) {
+            return $branch;
+        }
+
+        throw new RuntimeException(sprintf('Branch `%s` not exists', $branch));
     }
 }

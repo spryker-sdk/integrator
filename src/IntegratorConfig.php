@@ -219,6 +219,7 @@ class IntegratorConfig
     protected function prepareSharedConfigDependencies(): void
     {
         defined('APPLICATION_STORE') || define('APPLICATION_STORE', 'DE');
+        defined('APPLICATION_CODE_BUCKET') || define('APPLICATION_CODE_BUCKET', '');
     }
 
     /**
