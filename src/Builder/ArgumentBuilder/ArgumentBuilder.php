@@ -129,16 +129,54 @@ class ArgumentBuilder implements ArgumentBuilderInterface
         $args = [];
         foreach ($classArgumentMetadataTransfers as $classArgumentMetadataTransfer) {
             if ($classArgumentMetadataTransfer->getIsLiteral()) {
+                if (is_iterable($classArgumentMetadataTransfer->getValue())) {
+                    $args = array_merge(
+                        $args,
+                        $this->builderFactory->args([array_map(
+                            fn ($value) => $this->getMetadataValue($value),
+                            $classArgumentMetadataTransfer->getValue(),
+                        )]),
+                    );
+
+                    continue;
+                }
                 $metadataValue = json_decode((string)$classArgumentMetadataTransfer->getValue());
                 if (is_string($metadataValue)) {
                     $metadataValue = $this->expressionPartialParser->parse($metadataValue)->getExpression()->expr;
                 }
 
                 $args = array_merge($args, $this->builderFactory->args([$metadataValue]));
+
+                continue;
+            }
+
+            if (is_array($classArgumentMetadataTransfer->getValue())) {
+                $args = array_merge(
+                    $args,
+                    $this->builderFactory->args([array_map(
+                        fn ($value) => $this->getMetadataValue($value),
+                        $classArgumentMetadataTransfer->getValue(),
+                    )]),
+                );
             }
         }
 
         return $args;
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    protected function getMetadataValue($value)
+    {
+        $metadataValue = json_decode((string)$value);
+        if (is_string($metadataValue)) {
+            $metadataValue = $this->expressionPartialParser->parse($metadataValue)->getExpression()->expr;
+        }
+
+        return $metadataValue;
     }
 
     /**
@@ -151,9 +189,22 @@ class ArgumentBuilder implements ArgumentBuilderInterface
         $args = [];
         foreach ($classArgumentMetadataTransfers as $classArgumentMetadataTransfer) {
             if ($classArgumentMetadataTransfer->getIsLiteral()) {
+                if (is_iterable($classArgumentMetadataTransfer->getValue())) {
+                    $args = array_merge(
+                        $args,
+                        $this->builderFactory->args([array_map(
+                            fn ($value) => $this->getMetadataValue($value),
+                            $classArgumentMetadataTransfer->getValue(),
+                        )]),
+                    );
+
+                    continue;
+                }
                 $metadataValue = json_decode((string)$classArgumentMetadataTransfer->getValue());
 
                 $args = array_merge($args, is_array($metadataValue) ? $metadataValue : [$metadataValue]);
+
+                continue;
             }
         }
 

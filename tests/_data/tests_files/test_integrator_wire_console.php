@@ -7,6 +7,7 @@
 
 namespace Pyz\Zed\TestIntegratorWireConsoleCommands;
 
+use Pyz\Zed\DataImport\DataImportConfig;
 use Pyz\Zed\DependencyCollectionTest\DataImportConsole;
 use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestClassExistsConsole;
 use Spryker\Zed\TestIntegratorWireConsoleCommands\Console\TestDevConsole;
