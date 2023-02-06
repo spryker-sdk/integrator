@@ -11,7 +11,7 @@ namespace SprykerSdk\Integrator\Manifest;
 
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 
-interface ManifestReaderInterface
+interface RepositoryManifestReaderInterface
 {
     /**
      * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers

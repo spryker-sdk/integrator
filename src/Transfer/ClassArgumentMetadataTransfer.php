@@ -77,11 +77,11 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
     /**
      * @module App
      *
-     * @param string|null $value
+     * @param array|string|null $value
      *
      * @return $this
      */
-    public function setValue(?string $value)
+    public function setValue($value)
     {
         $this->value = $value;
         $this->modifiedProperties[static::VALUE] = true;
@@ -92,9 +92,9 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
     /**
      * @module App
      *
-     * @return string|null
+     * @return array|string|null
      */
-    public function getValue(): ?string
+    public function getValue()
     {
         return $this->value;
     }

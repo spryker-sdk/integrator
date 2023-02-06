@@ -85,6 +85,7 @@ use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface;
+use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSniffStyleFileNormalizer;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutor;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface;
@@ -104,14 +105,20 @@ use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
+use SprykerSdk\Integrator\Executor\ProcessExecutor;
+use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
+use SprykerSdk\Integrator\FileStorage\BucketFileStorage;
+use SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReader;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriter;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
-use SprykerSdk\Integrator\Manifest\ManifestReader;
-use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
+use SprykerSdk\Integrator\Manifest\FileBucketManifestReader;
+use SprykerSdk\Integrator\Manifest\FileBucketManifestReaderInterface;
+use SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface;
+use SprykerSdk\Integrator\Manifest\RepositoryRepositoryManifestReader;
 use SprykerSdk\Integrator\ManifestStrategy\AddConfigArrayElementManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureEnvManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\ConfigureModuleManifestStrategy;
@@ -147,7 +154,7 @@ class IntegratorFactory
     {
         return new ManifestExecutor(
             $this->createIntegratorLockReader(),
-            $this->createManifestReader(),
+            $this->createRepositoryManifestReader(),
             $this->createIntegratorLockWriter(),
             $this->createFileNormalizersExecutor(),
             $this->getManifestStrategies(),
@@ -179,11 +186,29 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Manifest\ManifestReaderInterface
+     * @return \SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface
      */
-    public function createManifestReader(): ManifestReaderInterface
+    public function createRepositoryManifestReader(): RepositoryManifestReaderInterface
     {
-        return new ManifestReader($this->createComposerLockReader(), $this->getConfig());
+        return new RepositoryRepositoryManifestReader($this->createComposerLockReader(), $this->getConfig());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Manifest\FileBucketManifestReaderInterface
+     */
+    public function createFileBucketManifestReader(): FileBucketManifestReaderInterface
+    {
+        return new FileBucketManifestReader(
+            $this->createBucketFileStorage(),
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface
+     */
+    public function createBucketFileStorage(): BucketFileStorageInterface
+    {
+        return new BucketFileStorage($this->getConfig());
     }
 
     /**
@@ -440,6 +465,7 @@ class IntegratorFactory
             $this->createFileStorage(),
             [
                 $this->createPhpCSFixerNormalizer(),
+                $this->createCodeSniffStyleFileNormalizer(),
             ],
         );
     }
@@ -447,9 +473,25 @@ class IntegratorFactory
     /**
      * @return \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface
      */
+    public function createCodeSniffStyleFileNormalizer(): FileNormalizerInterface
+    {
+        return new CodeSniffStyleFileNormalizer($this->getConfig(), $this->createProcessExecutor());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface
+     */
     public function createPhpCSFixerNormalizer(): FileNormalizerInterface
     {
-        return new PhpCSFixerFileNormalizer($this->getConfig());
+        return new PhpCSFixerFileNormalizer($this->getConfig(), $this->createProcessExecutor());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Executor\ProcessExecutorInterface
+     */
+    public function createProcessExecutor(): ProcessExecutorInterface
+    {
+        return new ProcessExecutor();
     }
 
     /**

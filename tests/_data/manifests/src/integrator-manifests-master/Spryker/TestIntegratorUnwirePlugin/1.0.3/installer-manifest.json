@@ -17,6 +17,20 @@
             "source": "\\Spryker\\Zed\\TestIntegratorUnwirePlugin\\Communication\\Plugin\\WebProfilerApplicationPlugin"
         },
         {
+            "target": "\\Pyz\\Zed\\TestIntegratorUnwirePlugin\\TestIntegratorUnwirePluginDependencyProvider::getConditionPlugins",
+            "source": "\\Spryker\\Zed\\TestIntegratorUnwirePlugin\\Communication\\Plugin\\CustomerUnsubscribePlugin",
+            "arguments": {
+                "constructor-arguments": [
+                    {
+                        "value": [
+                            "\\Spryker\\Zed\\TestIntegratorUnwirePlugin\\Communication\\Plugin\\NewsletterConstants::DEFAULT_NEWSLETTER_TYPE"
+                        ],
+                        "is_literal": false
+                    }
+                ]
+            }
+        },
+        {
             "target": "\\Pyz\\Zed\\TestIntegratorUnwirePlugin\\TestIntegratorUnwirePluginDependencyProvider::testNotExistedMethod",
             "source": "\\Spryker\\Zed\\TestIntegratorUnwirePlugin\\Communication\\Plugin\\TestIntegratorUnwirePlugin"
         },

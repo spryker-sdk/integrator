@@ -17,8 +17,10 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AfterTestBarCondit
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\AvailabilityStorageEventSubscriber;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\BeforeAllPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\BeforeAllPluginsSubscriber;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\CustomerUnsubscribePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FirstPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\FooStorageEventSubscriber;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\NewsletterConstants;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\Plugin1;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\Plugin2;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SecondPlugin;
@@ -45,7 +47,11 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
 
     public function getConditionPlugins(): array
     {
-        $plugins = [];
+        $plugins = [
+            new CustomerUnsubscribePlugin([
+                NewsletterConstants::DEFAULT_NEWSLETTER_TYPE,
+            ]),
+        ];
         if (class_exists(WebProfilerApplicationPlugin::class)) {
             $plugins[] = new WebProfilerApplicationPlugin();
         }

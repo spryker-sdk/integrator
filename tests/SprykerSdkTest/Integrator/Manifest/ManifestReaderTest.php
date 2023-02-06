@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdkTest\Integrator\Manifest;
 
-use SprykerSdk\Integrator\Manifest\ManifestReaderInterface;
+use SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface;
 use SprykerSdkTest\Integrator\BaseTestCase;
 
 class ManifestReaderTest extends BaseTestCase
@@ -96,11 +96,11 @@ class ManifestReaderTest extends BaseTestCase
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Manifest\ManifestReaderInterface
+     * @return \SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface
      */
-    protected function createManifestReader(): ManifestReaderInterface
+    protected function createManifestReader(): RepositoryManifestReaderInterface
     {
-        return $this->getFactory()->createManifestReader();
+        return $this->getFactory()->createRepositoryManifestReader();
     }
 
     /**
