@@ -24,7 +24,7 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
     public const IS_LITERAL = 'isLiteral';
 
     /**
-     * @var string|null
+     * @var mixed|null
      */
     protected $value;
 
