@@ -84,6 +84,7 @@ class DiffGenerator implements DiffGeneratorInterface
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer,
         InputOutputInterface $inputOutput
     ): void {
+        $currentBranchName = $this->gitRepository->getCurrentBranchName();
         $releaseGroupId = $commandArgumentsTransfer->getReleaseGroupIdOrFail();
         $manifests = $this->manifestReader->readManifests($releaseGroupId);
         $unappliedManifests = $this->manifestExecutor->findUnappliedManifests($manifests, []);
@@ -104,12 +105,13 @@ class DiffGenerator implements DiffGeneratorInterface
             return;
         }
 
-        $this->storeDiff($releaseGroupId, $commandArgumentsTransfer->getBranchToCompareOrFail(), $inputOutput);
-        $this->gitClean();
+        $this->storeDiff($releaseGroupId, $currentBranchName, $commandArgumentsTransfer->getBranchToCompareOrFail(), $inputOutput);
+        $this->gitClean($currentBranchName);
     }
 
     /**
      * @param int $releaseGroupId
+     * @param string $currentBranchName
      * @param string $branchToCompare
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      *
@@ -119,11 +121,12 @@ class DiffGenerator implements DiffGeneratorInterface
      */
     protected function storeDiff(
         int $releaseGroupId,
+        string $currentBranchName,
         string $branchToCompare,
         InputOutputInterface $inputOutput
     ): void {
         if (!$this->gitRepository->hasChanges()) {
-            $this->gitClean();
+            $this->gitClean($currentBranchName);
 
             throw new RuntimeException(sprintf('No changes from manifests related to release group %s', $releaseGroupId));
         }
@@ -144,7 +147,6 @@ class DiffGenerator implements DiffGeneratorInterface
      */
     protected function prepareBranch(): void
     {
-        $this->gitRepository->checkout(static::MASTER_BRANCH_NAME);
         if (in_array(static::INTEGRATOR_RESULT_BRANCH_NAME, (array)$this->gitRepository->getBranches())) {
             $this->gitRepository->deleteBranch(static::INTEGRATOR_RESULT_BRANCH_NAME);
         }
@@ -152,11 +154,14 @@ class DiffGenerator implements DiffGeneratorInterface
     }
 
     /**
+     * @param string $currentBranchName
+     *
+     * @throws \CzProject\GitPhp\GitException
      * @return void
      */
-    protected function gitClean(): void
+    protected function gitClean(string $currentBranchName): void
     {
-        $this->gitRepository->checkout(static::MASTER_BRANCH_NAME);
+        $this->gitRepository->checkout($currentBranchName);
         $this->gitRepository->deleteBranch(static::INTEGRATOR_RESULT_BRANCH_NAME);
     }
 
