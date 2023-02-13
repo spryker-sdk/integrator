@@ -156,7 +156,6 @@ class DiffGenerator implements DiffGeneratorInterface
     /**
      * @param string $currentBranchName
      *
-     * @throws \CzProject\GitPhp\GitException
      * @return void
      */
     protected function gitClean(string $currentBranchName): void
