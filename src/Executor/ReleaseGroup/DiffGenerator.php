@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Executor\ReleaseGroup;
 
+use CzProject\GitPhp\GitException;
 use RuntimeException;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
@@ -130,12 +131,15 @@ class DiffGenerator implements DiffGeneratorInterface
 
             throw new RuntimeException(sprintf('No changes from manifests related to release group %s', $releaseGroupId));
         }
-        $branchToCompare = $this->resolveBranch($branchToCompare);
 
         $this->gitRepository->addAllChanges();
         $this->gitRepository->commit('The commit was created by integrator');
 
-        $gitDiffOutput = $this->gitRepository->getDiff($branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
+        try {
+            $gitDiffOutput = $this->gitRepository->getDiff($branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
+        } catch (GitException $e) {
+            $gitDiffOutput = $this->gitRepository->getDiff('origin/' . $branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
+        }
 
         $this->bucketFileStorage->addFile($releaseGroupId . DIRECTORY_SEPARATOR . static::DIFF_TO_DISPLAY_FILE_NAME, $gitDiffOutput);
         $inputOutput->writeln($gitDiffOutput, InputOutputInterface::VERBOSE);
@@ -162,26 +166,5 @@ class DiffGenerator implements DiffGeneratorInterface
     {
         $this->gitRepository->checkout($currentBranchName);
         $this->gitRepository->deleteBranch(static::INTEGRATOR_RESULT_BRANCH_NAME);
-    }
-
-    /**
-     * @param string $branch
-     *
-     * @throws \RuntimeException
-     *
-     * @return string
-     */
-    protected function resolveBranch(string $branch): string
-    {
-        if (in_array($branch, (array)$this->gitRepository->getBranches())) {
-            return $branch;
-        }
-
-        $branch = sprintf('origin/%s', $branch);
-        if (in_array($branch, (array)$this->gitRepository->getRemoteBranches())) {
-            return $branch;
-        }
-
-        throw new RuntimeException(sprintf('Branch `%s` not exists', $branch));
     }
 }
