@@ -42,7 +42,7 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $gitMock->method('getCurrentBranchName')->willReturn('testBranch');
         $gitMock->expects($this->exactly(2))->method('getDiff')
             ->will($this->onConsecutiveCalls(
-                $this->throwException(new GitException('')),
+                $this->throwException(new GitException('', 128)),
                 'diff',
             ));
 
