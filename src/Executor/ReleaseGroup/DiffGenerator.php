@@ -138,6 +138,9 @@ class DiffGenerator implements DiffGeneratorInterface
         try {
             $gitDiffOutput = $this->gitRepository->getDiff($branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
         } catch (GitException $e) {
+            if ($e->getCode() !== 128) {
+                throw $e;
+            }
             $gitDiffOutput = $this->gitRepository->getDiff('origin/' . $branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
         }
 
