@@ -23,6 +23,11 @@ class ModuleInstallerConsole extends AbstractInstallerConsole
     /**
      * @var string
      */
+    public const COMMAND_NAME = 'module:manifest:run';
+
+    /**
+     * @var string
+     */
     protected const ARGUMENT_MODULE_NAMES = 'module-names';
 
     /**
@@ -39,11 +44,6 @@ class ModuleInstallerConsole extends AbstractInstallerConsole
      * @var string
      */
     protected const OPTION_SOURCE_DESCRIPTION = 'Source branch of the manifests to be applied';
-
-    /**
-     * @var string
-     */
-    protected const COMMAND_NAME = 'module:manifest:run';
 
     /**
      * @return void

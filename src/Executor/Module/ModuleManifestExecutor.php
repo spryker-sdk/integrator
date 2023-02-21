@@ -71,12 +71,9 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
         $this->assertModuleData($moduleTransfers);
 
         $manifests = $this->manifestReader->readManifests($moduleTransfers, $commandArgumentsTransfer);
-
         $lockedModules = $this->integratorLockReader->getLockFileData();
-
         $unappliedManifests = $this->manifestExecutor->findUnappliedManifests($manifests, $lockedModules);
-
-        $this->manifestExecutor->applyManifestList($unappliedManifests, $inputOutput, $commandArgumentsTransfer);
+        $lockedModules = $this->manifestExecutor->applyManifestList($lockedModules, $unappliedManifests, $inputOutput, $commandArgumentsTransfer);
 
         if ($commandArgumentsTransfer->getIsDryOrFail()) {
             return;
