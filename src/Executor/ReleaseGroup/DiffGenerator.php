@@ -36,6 +36,11 @@ class DiffGenerator implements DiffGeneratorInterface
     protected const DIFF_TO_DISPLAY_FILE_NAME = 'diff_to_display.diff';
 
     /**
+     * @var int
+     */
+    protected const GIT_ERROR_CODE_BRANCH_NOT_EXISTS = 128;
+
+    /**
      * @var \SprykerSdk\Integrator\Manifest\FileBucketManifestReaderInterface
      */
     protected FileBucketManifestReaderInterface $manifestReader;
@@ -138,7 +143,7 @@ class DiffGenerator implements DiffGeneratorInterface
         try {
             $gitDiffOutput = $this->gitRepository->getDiff($branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
         } catch (GitException $e) {
-            if ($e->getCode() !== 128) {
+            if ($e->getCode() !== static::GIT_ERROR_CODE_BRANCH_NOT_EXISTS) {
                 throw $e;
             }
             $gitDiffOutput = $this->gitRepository->getDiff('origin/' . $branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
