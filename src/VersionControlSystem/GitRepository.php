@@ -22,7 +22,7 @@ class GitRepository extends CzGitRepository
     public function getDiff(string $originalBranch, string $currentBranch): string
     {
         $gitDiffOutput = $this->execute(
-            ['diff', $originalBranch, $currentBranch],
+            ['diff', $originalBranch . '..' . $currentBranch],
         );
 
         return implode(PHP_EOL, $gitDiffOutput);

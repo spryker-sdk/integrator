@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdkTest\Integrator\Executor\ReleaseGroup;
 
+use CzProject\GitPhp\GitException;
 use RuntimeException;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
@@ -39,6 +40,11 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $gitMock = $this->createMock(GitRepository::class);
         $gitMock->method('hasChanges')->willReturn(true);
         $gitMock->method('getCurrentBranchName')->willReturn('testBranch');
+        $gitMock->expects($this->exactly(2))->method('getDiff')
+            ->will($this->onConsecutiveCalls(
+                $this->throwException(new GitException('', 128)),
+                'diff',
+            ));
 
         $executorMock = $this->createManifestExecutorMock();
         $manifestExecutor = new DiffGenerator($reader, $fileStorageMock, $executorMock, $gitMock);
