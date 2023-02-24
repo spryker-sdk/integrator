@@ -84,6 +84,32 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
 
     /**
      * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
+     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+     *
+     * @return void
+     */
+    public function runUpdateLock(
+        array $moduleTransfers,
+        InputOutputInterface $input,
+        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+    ): void {
+        $this->assertModuleData($moduleTransfers);
+        $manifests = $this->manifestReader->readManifests($moduleTransfers, $commandArgumentsTransfer);
+
+        $lockedModules = [];
+        $unappliedManifests = $this->manifestExecutor->findUnappliedManifests($manifests, $lockedModules);
+
+        if ($commandArgumentsTransfer->getIsDryOrFail()) {
+            return;
+        }
+
+        $this->integratorLockWriter->storeLock($unappliedManifests);
+        $input->write('<info>The integration lock file has been updated according to the project state.</info>', true);
+    }
+
+    /**
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      *
      * @return void
      */

@@ -74,7 +74,7 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
                 continue;
             }
 
-            $filePath = $this->resolveManifestVersion($moduleManifestsDir, $version);
+            [$version, $filePath] = $this->resolveManifestVersion($moduleManifestsDir, $version);
 
             if (!$filePath) {
                 continue;
@@ -124,9 +124,9 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
      * @param string $moduleManifestsDir
      * @param string $moduleVersion
      *
-     * @return string|null
+     * @return array<string|null>
      */
-    protected function resolveManifestVersion(string $moduleManifestsDir, string $moduleVersion): ?string
+    protected function resolveManifestVersion(string $moduleManifestsDir, string $moduleVersion): array
     {
         // Recipe path with module name and expected version
         $filePath = $moduleManifestsDir . sprintf(
@@ -135,19 +135,22 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
         );
 
         if (file_exists($filePath)) {
-            return $filePath;
+            return [$moduleVersion, $filePath];
         }
 
         $nextSuitableVersion = $this->findNextSuitableVersion($moduleManifestsDir, $moduleVersion);
 
         if (!$nextSuitableVersion) {
-            return null;
+            return [$moduleVersion, null];
         }
 
-        return $moduleManifestsDir . sprintf(
-            '%s/installer-manifest.json',
+        return [
             $nextSuitableVersion,
-        );
+            $moduleManifestsDir . sprintf(
+                '%s/installer-manifest.json',
+                $nextSuitableVersion,
+            ),
+        ];
     }
 
     /**

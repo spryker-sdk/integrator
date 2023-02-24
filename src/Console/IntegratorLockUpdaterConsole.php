@@ -38,6 +38,14 @@ class IntegratorLockUpdaterConsole extends AbstractInstallerConsole
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $commandArgumentsTransfer = $this->buildCommandArgumentsTransfer($input);
+        $io = $this->createInputOutputAdapter($input, $output, $commandArgumentsTransfer->getFormat());
+        $this->getFacade()->runUpdateLock(
+            $this->getFactory()->getModuleFinderFacade()->getModules(),
+            $io,
+            $commandArgumentsTransfer,
+        );
+
         return 0;
     }
 }
