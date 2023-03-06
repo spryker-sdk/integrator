@@ -81,3 +81,5 @@ $config[\Spryker\Shared\Kernel\KernelConstants::STORAGE_REDIS_CONNECTION_OPTIONS
 $config[\Spryker\Shared\Kernel\KernelConstants::LOGGER_CONFIG_GLUE] = \Spryker\Shared\Kernel\KernelConstants::class;
 
 $config[\Spryker\Shared\Kernel\KernelConstants::OAUTH_PROVIDER_NAME] = \Spryker\Zed\OauthAuth0\OauthAuth0Config::PROVIDER_NAME;
+
+$config[\Pyz\Client\TestIntegratorAddConfigArrayElement\TestIntegratorAddConfigArrayElementConfig::TEST_VAR_VALUE] = $config;
