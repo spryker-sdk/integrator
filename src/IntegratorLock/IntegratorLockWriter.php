@@ -39,6 +39,7 @@ class IntegratorLockWriter implements IntegratorLockWriterInterface
     public function storeLock(array $lockData): int
     {
         $lockFilePath = $this->config->getIntegratorLockFilePath();
+
         $json = json_encode($lockData, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
         if (!$json) {
             return 0;

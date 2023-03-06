@@ -14,18 +14,20 @@ use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 
 interface ManifestExecutorInterface
 {
- /**
-  * @param array<string, array<string, array<string, array<string>>>> $unappliedManifests
-  * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
-  * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
-  *
-  * @return void
-  */
+    /**
+     * @param array<string, array<string, array<string, mixed>>> $lockedModules
+     * @param array<string, array<string, array<string, mixed>>> $unappliedManifests
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
+     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+     *
+     * @return array<string, array<string, array<string, mixed>>>
+     */
     public function applyManifestList(
+        array $lockedModules,
         array $unappliedManifests,
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
-    ): void;
+    ): array;
 
     /**
      * @param array<string, array<string, array<string>>> $manifests

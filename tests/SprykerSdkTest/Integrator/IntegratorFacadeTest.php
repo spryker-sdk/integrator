@@ -583,4 +583,26 @@ class IntegratorFacadeTest extends BaseTestCase
     {
         $this->removeTmpDirectory();
     }
+
+    /**
+     * @return void
+     */
+    public function testRunUpdateLock(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runUpdateLock(
+            $this->getModuleList('TestIntegratorConfigureModule'),
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(),
+        );
+
+        // Assert
+        $integratorLock = './tests/tmp/integrator.lock';
+        $this->assertFileExists($integratorLock);
+
+        $this->assertNotEmpty(trim(file_get_contents($integratorLock)));
+    }
 }

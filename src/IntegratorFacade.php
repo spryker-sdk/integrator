@@ -34,6 +34,23 @@ class IntegratorFacade implements IntegratorFacadeInterface
     }
 
     /**
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
+     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+     *
+     * @return void
+     */
+    public function runUpdateLock(
+        array $moduleTransfers,
+        InputOutputInterface $input,
+        IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+    ): void {
+        $this->getFactory()
+            ->createModuleManifestExecutor()
+            ->runUpdateLock($moduleTransfers, $input, $commandArgumentsTransfer);
+    }
+
+    /**
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
      *
