@@ -14,9 +14,6 @@ use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFacade;
 use Symfony\Component\Filesystem\Filesystem;
 
-/**
- * @group test1
- */
 class IntegratorFacadeTest extends BaseTestCase
 {
     /**
@@ -92,8 +89,6 @@ class IntegratorFacadeTest extends BaseTestCase
     }
 
     /**
-     * @group test2
-     *
      * @return void
      */
     public function testRunInstallationWirePlugin(): void
