@@ -9,6 +9,8 @@ namespace Pyz\Zed\TestIntegratorWirePlugin;
 
 use Pyz\Shared\Scheduler\SchedulerConfig;
 use Pyz\Zed\CustomNamespace\PluginParam;
+use Pyz\Zed\CustomNamespace\PluginParam1;
+use Pyz\Zed\CustomNamespace\PluginParam2;
 use Pyz\Zed\TestIntegratorWirePlugin\Plugin\ChildPlugin;
 use Spryker\Shared\Config\Config;
 use Spryker\Shared\Log\LogConstants;
@@ -208,7 +210,10 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
     {
         return array_merge(
             $this->getWrappedFunctionDefault(), $this->getWrappedFunctionA(), $this->getWrappedFunctionB(), [
-                new TestIntegratorWirePlugin(new PluginParam()),
+                new TestIntegratorWirePlugin(new PluginParam(), [
+                    new PluginParam1(),
+                    new PluginParam2(),
+                ]),
             ]
         );
     }

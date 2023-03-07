@@ -77,6 +77,12 @@
                 "constructor-arguments": [
                     {
                         "source": "\\Pyz\\Zed\\CustomNamespace\\PluginParam"
+                    },
+                    {
+                        "source": [
+                            "\\Pyz\\Zed\\CustomNamespace\\PluginParam1",
+                            "\\Pyz\\Zed\\CustomNamespace\\PluginParam2"
+                        ]
                     }
                 ]
             }
