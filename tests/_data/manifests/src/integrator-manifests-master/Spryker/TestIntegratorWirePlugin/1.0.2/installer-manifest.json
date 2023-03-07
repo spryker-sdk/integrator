@@ -76,7 +76,7 @@
             "arguments": {
                 "constructor-arguments": [
                     {
-                        "source": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\PluginParam"
+                        "source": "\\Pyz\\Zed\\CustomNamespace\\PluginParam"
                     }
                 ]
             }

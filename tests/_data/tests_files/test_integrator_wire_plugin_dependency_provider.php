@@ -8,6 +8,7 @@
 namespace Pyz\Zed\TestIntegratorWirePlugin;
 
 use Pyz\Shared\Scheduler\SchedulerConfig;
+use Pyz\Zed\CustomNamespace\PluginParam;
 use Pyz\Zed\TestIntegratorWirePlugin\Plugin\ChildPlugin;
 use Spryker\Shared\Config\Config;
 use Spryker\Shared\Log\LogConstants;

@@ -103,14 +103,10 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
 
         /** @var \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer $constructorArgument */
         foreach ($classMetadataTransfer->getConstructorArguments() as $constructorArgument) {
-            if (!is_array($constructorArgument->getValue())) {
-                $usedClasses[] = $this->nodeExpressionPartialParser->parse(json_decode((string)$constructorArgument->getValue()))->getUsedClasses()->getArrayCopy();
-
-                continue;
-            }
-
-            foreach ($constructorArgument->getValue() as $value) {
-                $usedClasses[] = $this->nodeExpressionPartialParser->parse(json_decode((string)$value))->getUsedClasses()->getArrayCopy();
+            $values = is_array($constructorArgument->getValue()) ? $constructorArgument->getValue() : [$constructorArgument->getValue()];
+            $isSource = $constructorArgument->getIsSource();
+            foreach ($values as $value) {
+                $usedClasses[] = $isSource ? [json_decode((string)$value)] : $this->nodeExpressionPartialParser->parse(json_decode((string)$value))->getUsedClasses()->getArrayCopy();
             }
         }
         if ($usedClasses) {
