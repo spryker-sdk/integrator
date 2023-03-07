@@ -105,7 +105,7 @@ class DiffGenerator implements DiffGeneratorInterface
             $this->prepareBranch();
         }
 
-        $this->manifestExecutor->applyManifestList($unappliedManifests, $inputOutput, $commandArgumentsTransfer);
+        $this->manifestExecutor->applyManifestList([], $unappliedManifests, $inputOutput, $commandArgumentsTransfer);
 
         if ($dry) {
             return;

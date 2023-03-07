@@ -42,58 +42,64 @@ class ManifestExecutor implements ManifestExecutorInterface
     }
 
     /**
-     * @param array<string, array<string, array<string, array<string>>>> $unappliedManifests
+     * @param array<string, array<string, array<string, mixed>>> $lockedModules
+     * @param array<string, array<string, array<string, mixed>>> $unappliedManifests
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
-     * @return void
+     * @return array<string, array<string, array<string, mixed>>>
      */
     public function applyManifestList(
+        array $lockedModules,
         array $unappliedManifests,
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
-    ): void {
+    ): array {
         if (!$unappliedManifests) {
-            return;
+            return $lockedModules;
         }
 
         if (!$inputOutput->confirm('There are unapplied manifests found for your modules. Do you want to apply them?')) {
-            return;
+            return $lockedModules;
         }
 
         $isDry = $commandArgumentsTransfer->getIsDryOrFail();
 
         foreach ($unappliedManifests as $moduleName => $moduleManifests) {
             foreach ($moduleManifests as $manifestType => $unappliedManifestByType) {
-                $this->applyManifestsByType($unappliedManifestByType, $manifestType, $moduleName, $inputOutput, $isDry);
+                $lockedModules = $this->applyManifestsByType($lockedModules, $unappliedManifestByType, $manifestType, $moduleName, $inputOutput, $isDry);
             }
         }
 
         $this->fileNormalizersExecutor->execute($inputOutput, $isDry);
+
+        return $lockedModules;
     }
 
     /**
-     * @param array<mixed> $unappliedManifestByType
+     * @param array<string, array<string, array<string, mixed>>> $lockedModules
+     * @param array $unappliedManifestByType
      * @param string $manifestType
      * @param string $moduleName
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
-     * @return void
+     * @return array<string, array<string, array<string, mixed>>>
      */
     protected function applyManifestsByType(
+        array $lockedModules,
         array $unappliedManifestByType,
         string $manifestType,
         string $moduleName,
         InputOutputInterface $inputOutput,
         bool $isDry
-    ): void {
+    ): array {
         try {
             $manifestExecutor = $this->resolveExecutor($manifestType);
         } catch (RuntimeException $runtimeException) {
             $inputOutput->warning($runtimeException->getMessage());
 
-            return;
+            return $lockedModules;
         }
 
         foreach ($unappliedManifestByType as $manifestHash => $unappliedManifest) {
@@ -110,6 +116,8 @@ class ManifestExecutor implements ManifestExecutorInterface
                 ));
             }
         }
+
+        return $lockedModules;
     }
 
     /**
