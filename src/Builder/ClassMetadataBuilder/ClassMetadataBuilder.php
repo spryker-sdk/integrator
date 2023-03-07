@@ -110,7 +110,8 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
      */
     protected function createClassArgumentMetadataTransfer(array $argumentData): ClassArgumentMetadataTransfer
     {
-        $value = $argumentData['value'];
+        /** @var array|string $value */
+        $value = $argumentData['source'] ?? $argumentData['value'];
 
         if (is_array($value)) {
             foreach ($value as $key => $val) {
@@ -122,7 +123,8 @@ class ClassMetadataBuilder implements ClassMetadataBuilderInterface
 
         return (new ClassArgumentMetadataTransfer())
             ->setValue($value)
-            ->setIsLiteral((bool)$argumentData['is_literal']);
+            ->setIsLiteral(!empty($argumentData['is_literal']) ? true : false)
+            ->setIsSource(isset($argumentData['source']) ? true : false);
     }
 
     /**

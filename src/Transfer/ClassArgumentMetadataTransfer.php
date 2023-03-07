@@ -21,12 +21,22 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
     /**
      * @var string
      */
+    public const IS_SOURCE = 'isSource';
+
+    /**
+     * @var string
+     */
     public const IS_LITERAL = 'isLiteral';
 
     /**
      * @var mixed|null
      */
     protected $value;
+
+    /**
+     * @var bool|null
+     */
+    protected $isSource;
 
     /**
      * @var bool|null
@@ -42,6 +52,9 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
         'is_literal' => 'isLiteral',
         'isLiteral' => 'isLiteral',
         'IsLiteral' => 'isLiteral',
+        'is_source' => 'isSource',
+        'isSource' => 'isSource',
+        'IsSource' => 'isSource',
     ];
 
     /**
@@ -52,6 +65,18 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
             'type' => 'string',
             'type_shim' => null,
             'name_underscore' => 'value',
+            'is_collection' => false,
+            'is_transfer' => false,
+            'is_value_object' => false,
+            'rest_request_parameter' => 'no',
+            'is_associative' => false,
+            'is_nullable' => false,
+            'is_strict' => false,
+        ],
+        self::IS_SOURCE => [
+            'type' => 'boolean',
+            'type_shim' => null,
+            'name_underscore' => 'is_source',
             'is_collection' => false,
             'is_transfer' => false,
             'is_value_object' => false,
@@ -128,6 +153,57 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
     /**
      * @module App
      *
+     * @param bool|null $isSource
+     *
+     * @return $this
+     */
+    public function setIsSource(?bool $isSource)
+    {
+        $this->isSource = $isSource;
+        $this->modifiedProperties[static::IS_SOURCE] = true;
+
+        return $this;
+    }
+
+    /**
+     * @module App
+     *
+     * @return bool|null
+     */
+    public function getIsSource(): ?bool
+    {
+        return $this->isSource;
+    }
+
+    /**
+     * @module App
+     *
+     * @return bool
+     */
+    public function getIsSourceOrFail(): bool
+    {
+        if ($this->isSource === null) {
+            $this->throwNullValueException(static::IS_SOURCE);
+        }
+
+        return $this->isSource;
+    }
+
+    /**
+     * @module App
+     *
+     * @return $this
+     */
+    public function requireIsSource()
+    {
+        $this->assertPropertyIsSet(static::IS_SOURCE);
+
+        return $this;
+    }
+
+    /**
+     * @module App
+     *
      * @param bool|null $isLiteral
      *
      * @return $this
@@ -192,6 +268,7 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
             switch ($normalizedPropertyName) {
                 case 'value':
                 case 'isLiteral':
+                case 'isSource':
                     $this->$normalizedPropertyName = $value;
                     $this->modifiedProperties[$normalizedPropertyName] = true;
 
@@ -317,6 +394,7 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
             switch ($property) {
                 case 'value':
                 case 'isLiteral':
+                case 'isSource':
                     $values[$arrayKey] = $value;
 
                     break;
@@ -346,6 +424,7 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
             switch ($property) {
                 case 'value':
                 case 'isLiteral':
+                case 'isSource':
                     $values[$arrayKey] = $value;
 
                     break;
@@ -404,6 +483,7 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
     {
         return [
             'value' => $this->value,
+            'isSource' => $this->isSource,
             'isLiteral' => $this->isLiteral,
         ];
     }
@@ -415,6 +495,7 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
     {
         return [
             'value' => $this->value,
+            'is_source' => $this->isSource,
             'is_literal' => $this->isLiteral,
         ];
     }
@@ -426,6 +507,7 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
     {
         return [
             'value' => $this->value,
+            'is_source' => $this->isSource,
             'is_literal' => $this->isLiteral,
         ];
     }
@@ -437,6 +519,7 @@ class ClassArgumentMetadataTransfer extends AbstractTransfer
     {
         return [
             'value' => $this->value,
+            'isSource' => $this->isSource,
             'isLiteral' => $this->isLiteral,
         ];
     }

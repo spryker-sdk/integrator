@@ -23,6 +23,15 @@ interface ArgumentBuilderInterface
     public function createAddPluginArguments(ClassMetadataTransfer $classMetadataTransfer, bool $withSource = true): array;
 
     /**
+     * @param array<int, \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $classArgumentMetadataTransfers
+     *
+     * @return array<\PhpParser\Node\Arg>
+     */
+    public function getArguments(array $classArgumentMetadataTransfers): array;
+
+    /**
+     * @TODO Can be removed after removing UseVisitor
+     *
      * @param \ArrayObject<int, \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $classArgumentMetadataTransfers
      *
      * @return array<string>
