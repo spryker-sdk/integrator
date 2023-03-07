@@ -233,7 +233,7 @@
                 "prepend-arguments": [
                     {
                         "value": "Oms/SendOrderShipped",
-                        "is_literal": false
+                        "is_literal": true
                     }
                 ]
             }
