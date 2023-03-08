@@ -56,8 +56,7 @@
                     {
                         "value": [
                             "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\NewsletterConstants::DEFAULT_NEWSLETTER_TYPE"
-                        ],
-                        "is_literal": false
+                        ]
                     }
                 ]
             }
@@ -73,7 +72,20 @@
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getWrappedPlugins",
-            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestIntegratorWirePlugin"
+            "source": "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\TestIntegratorWirePlugin",
+            "arguments": {
+                "constructor-arguments": [
+                    {
+                        "source": "\\Pyz\\Zed\\CustomNamespace\\PluginParam"
+                    },
+                    {
+                        "source": [
+                            "\\Pyz\\Zed\\CustomNamespace\\PluginParam1",
+                            "\\Pyz\\Zed\\CustomNamespace\\PluginParam2"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorWirePlugin\\TestIntegratorWirePluginDependencyProvider::getOrderedTestPlugins",

@@ -120,66 +120,8 @@ class ArgumentBuilder implements ArgumentBuilderInterface
     }
 
     /**
-     * @param array<int, \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $classArgumentMetadataTransfers
+     * @TODO Can be removed after removing UseVisitor
      *
-     * @return array<\PhpParser\Node\Arg>
-     */
-    protected function getArguments(array $classArgumentMetadataTransfers): array
-    {
-        $args = [];
-        foreach ($classArgumentMetadataTransfers as $classArgumentMetadataTransfer) {
-            if ($classArgumentMetadataTransfer->getIsLiteral()) {
-                if (is_iterable($classArgumentMetadataTransfer->getValue())) {
-                    $args = array_merge(
-                        $args,
-                        $this->builderFactory->args([array_map(
-                            fn ($value) => $this->getMetadataValue($value),
-                            $classArgumentMetadataTransfer->getValue(),
-                        )]),
-                    );
-
-                    continue;
-                }
-                $metadataValue = json_decode((string)$classArgumentMetadataTransfer->getValue());
-                if (is_string($metadataValue)) {
-                    $metadataValue = $this->expressionPartialParser->parse($metadataValue)->getExpression()->expr;
-                }
-
-                $args = array_merge($args, $this->builderFactory->args([$metadataValue]));
-
-                continue;
-            }
-
-            if (is_array($classArgumentMetadataTransfer->getValue())) {
-                $args = array_merge(
-                    $args,
-                    $this->builderFactory->args([array_map(
-                        fn ($value) => $this->getMetadataValue($value),
-                        $classArgumentMetadataTransfer->getValue(),
-                    )]),
-                );
-            }
-        }
-
-        return $args;
-    }
-
-    /**
-     * @param mixed $value
-     *
-     * @return mixed
-     */
-    protected function getMetadataValue($value)
-    {
-        $metadataValue = json_decode((string)$value);
-        if (is_string($metadataValue)) {
-            $metadataValue = $this->expressionPartialParser->parse($metadataValue)->getExpression()->expr;
-        }
-
-        return $metadataValue;
-    }
-
-    /**
      * @param \ArrayObject<int, \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $classArgumentMetadataTransfers
      *
      * @return array<string>
@@ -192,16 +134,12 @@ class ArgumentBuilder implements ArgumentBuilderInterface
                 if (is_iterable($classArgumentMetadataTransfer->getValue())) {
                     $args = array_merge(
                         $args,
-                        $this->builderFactory->args([array_map(
-                            fn ($value) => $this->getMetadataValue($value),
-                            $classArgumentMetadataTransfer->getValue(),
-                        )]),
+                        $this->builderFactory->args([$classArgumentMetadataTransfer->getValue()]),
                     );
 
                     continue;
                 }
                 $metadataValue = json_decode((string)$classArgumentMetadataTransfer->getValue());
-
                 $args = array_merge($args, is_array($metadataValue) ? $metadataValue : [$metadataValue]);
 
                 continue;
@@ -209,5 +147,53 @@ class ArgumentBuilder implements ArgumentBuilderInterface
         }
 
         return $args;
+    }
+
+    /**
+     * @param array<int, \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $classArgumentMetadataTransfers
+     *
+     * @return array<\PhpParser\Node\Arg>
+     */
+    public function getArguments(array $classArgumentMetadataTransfers): array
+    {
+        $args = [];
+        foreach ($classArgumentMetadataTransfers as $classArgumentMetadataTransfer) {
+            $value = $classArgumentMetadataTransfer->getValue();
+            if (is_iterable($value)) {
+                $args = array_merge(
+                    $args,
+                    $this->builderFactory->args([array_map(
+                        fn ($value) => $this->getMetadataValue($value, (bool)$classArgumentMetadataTransfer->getIsSource()),
+                        $value,
+                    )]),
+                );
+
+                continue;
+            }
+
+            $args = array_merge($args, $this->builderFactory->args([$this->getMetadataValue($value, (bool)$classArgumentMetadataTransfer->getIsSource())]));
+        }
+
+        return $args;
+    }
+
+    /**
+     * @param mixed $value
+     * @param bool $isSource
+     *
+     * @return mixed
+     */
+    protected function getMetadataValue($value, bool $isSource)
+    {
+        $metadataValue = json_decode((string)$value);
+        if ($isSource) {
+            return $this->builderFactory->new((new ClassHelper())->getShortClassName($metadataValue));
+        }
+
+        if (is_string($metadataValue)) {
+            return $this->expressionPartialParser->parse($metadataValue)->getExpression()->expr;
+        }
+
+        return $metadataValue;
     }
 }
