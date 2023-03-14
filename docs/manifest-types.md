@@ -1,5 +1,7 @@
 # Manifest types
 
+[Public documentation]([Public documentation](https://docs.spryker.com/docs/scos/dev/guidelines/keeping-a-project-upgradable/code-upgrader-supported-extension-scenarios.html)) for the section
+
 The integrator tool is working basing on JSON manifests. It looks in the  directory based on the defined folder structure and takes required manifests from there. File structure must be as shown below.
 
 ```
