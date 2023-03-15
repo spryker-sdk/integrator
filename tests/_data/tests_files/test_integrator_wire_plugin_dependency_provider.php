@@ -31,6 +31,7 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SinglePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestAppendArgumentArrayValue;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestBarConditionPlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestFooConditionPlugin;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorAfterAndBeforeWirePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorSingleWirePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePlugin;
 use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\TestIntegratorWirePluginExpressionIndex;
@@ -79,6 +80,7 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
             new BeforeAllPluginsSubscriber(),
             new FirstPlugin(),
             new AfterFirstPluginSubscriber(),
+            new TestIntegratorAfterAndBeforeWirePlugin(),
             new TestIntegratorWirePlugin(),
             new SecondPlugin(),
             new ChildPlugin(),
