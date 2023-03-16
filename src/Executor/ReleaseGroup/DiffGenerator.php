@@ -134,7 +134,7 @@ class DiffGenerator implements DiffGeneratorInterface
         if (!$this->gitRepository->hasChanges()) {
             $this->gitClean($currentBranchName);
 
-            throw new RuntimeException(sprintf('No changes from manifests related to release group %s', $releaseGroupId));
+            return;
         }
 
         $this->gitRepository->addAllChanges();
