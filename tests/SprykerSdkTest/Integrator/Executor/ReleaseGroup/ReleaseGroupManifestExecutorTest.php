@@ -113,7 +113,6 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
     }
 
     /**
-     * @group test1
      * @return void
      */
     public function testRunReleaseGroupManifestExecutionFailedNoChangesHappened(): void
