@@ -120,7 +120,7 @@ class DiffGenerator implements DiffGeneratorInterface
                     'Git error %s %s %s',
                     $exception->getCode(),
                     $exception->getMessage(),
-                    $exception->getRunnerResult()? implode(PHP_EOL, $exception->getRunnerResult()->getErrorOutput()) : '',
+                    $exception->getRunnerResult() ? implode(PHP_EOL, $exception->getRunnerResult()->getErrorOutput()) : '',
                 ),
             );
         }
