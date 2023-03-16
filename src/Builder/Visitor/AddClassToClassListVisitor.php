@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
@@ -222,7 +223,10 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
         $itemAdded = false;
 
         foreach ($node->items as $item) {
-            $nodeValue = sprintf('%s::%s', $item->value->class->toString(), $item->value->name->toString());
+            $nodeValue = $item->value->name->toString();
+            if (!($item->value instanceof MethodCall)) {
+                $nodeValue = sprintf('%s::%s', $item->value->class->toString(), $item->value->name->toString());
+            }
             if ($nodeValue === $this->before && !$itemAdded) {
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $items[] = $item;
