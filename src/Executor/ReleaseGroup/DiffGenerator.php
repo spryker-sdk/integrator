@@ -138,7 +138,7 @@ class DiffGenerator implements DiffGeneratorInterface
         }
 
         $this->gitRepository->addAllChanges();
-        $this->gitRepository->commit('The commit was created by integrator', '-n');
+        $this->gitRepository->commit('The commit was created by integrator', ['-n']);
 
         try {
             $gitDiffOutput = $this->gitRepository->getDiff($branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
