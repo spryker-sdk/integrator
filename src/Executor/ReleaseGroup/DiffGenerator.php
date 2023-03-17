@@ -100,19 +100,31 @@ class DiffGenerator implements DiffGeneratorInterface
             );
         }
 
-        $dry = $commandArgumentsTransfer->getIsDryOrFail();
-        if (!$dry) {
-            $this->prepareBranch();
+        try {
+            $dry = $commandArgumentsTransfer->getIsDryOrFail();
+            if (!$dry) {
+                $this->prepareBranch();
+            }
+
+            $this->manifestExecutor->applyManifestList([], $unappliedManifests, $inputOutput, $commandArgumentsTransfer);
+
+            if ($dry) {
+                return;
+            }
+
+            $this->storeDiff($releaseGroupId, $currentBranchName, $commandArgumentsTransfer->getBranchToCompareOrFail(), $inputOutput);
+            $this->gitClean($currentBranchName);
+        } catch (GitException $exception) {
+            throw new RuntimeException(
+                sprintf(
+                    'Git error %s %s %s %s',
+                    $exception->getCode(),
+                    $exception->getMessage(),
+                    $exception->getRunnerResult() ? implode(PHP_EOL, $exception->getRunnerResult()->getOutput()) : '',
+                    $exception->getRunnerResult() ? implode(PHP_EOL, $exception->getRunnerResult()->getErrorOutput()) : '',
+                ),
+            );
         }
-
-        $this->manifestExecutor->applyManifestList([], $unappliedManifests, $inputOutput, $commandArgumentsTransfer);
-
-        if ($dry) {
-            return;
-        }
-
-        $this->storeDiff($releaseGroupId, $currentBranchName, $commandArgumentsTransfer->getBranchToCompareOrFail(), $inputOutput);
-        $this->gitClean($currentBranchName);
     }
 
     /**
