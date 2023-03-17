@@ -117,9 +117,10 @@ class DiffGenerator implements DiffGeneratorInterface
         } catch (GitException $exception) {
             throw new RuntimeException(
                 sprintf(
-                    'Git error %s %s %s',
+                    'Git error %s %s %s %s',
                     $exception->getCode(),
                     $exception->getMessage(),
+                    $exception->getRunnerResult() ? implode(PHP_EOL, $exception->getRunnerResult()->getOutput()) : '',
                     $exception->getRunnerResult() ? implode(PHP_EOL, $exception->getRunnerResult()->getErrorOutput()) : '',
                 ),
             );
