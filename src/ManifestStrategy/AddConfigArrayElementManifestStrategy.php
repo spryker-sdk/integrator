@@ -53,12 +53,24 @@ class AddConfigArrayElementManifestStrategy extends AbstractManifestStrategy
         $targetClassInfo = (new ReflectionClass($targetClassName));
 
         if (!$targetClassInfo->hasMethod($targetMethodName)) {
-            throw new ManifestApplyingException(sprintf(
-                'Your version of module `%s.%s` does not contain required configuration method `%s()`. Please, update it to use full functionality.',
-                $this->classHelper->getOrganisationName($targetClassName),
-                $this->classHelper->getModuleName($targetClassName),
-                $targetMethodName,
-            ));
+            $targetMethodNameExistOnProjectLayer = false;
+            foreach ($this->config->getProjectNamespaces() as $namespace) {
+                $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass($targetClassName, $namespace);
+                if ($classInformationTransfer) {
+                    $targetMethodNameExistOnProjectLayer = true;
+
+                    break;
+                }
+            }
+
+            if (!$targetMethodNameExistOnProjectLayer) {
+                throw new ManifestApplyingException(sprintf(
+                    'Your version of module `%s.%s` does not contain required configuration method `%s()`. Please, update it to use full functionality.',
+                    $this->classHelper->getOrganisationName($targetClassName),
+                    $this->classHelper->getModuleName($targetClassName),
+                    $targetMethodName,
+                ));
+            }
         }
 
         foreach ($this->config->getProjectNamespaces() as $namespace) {

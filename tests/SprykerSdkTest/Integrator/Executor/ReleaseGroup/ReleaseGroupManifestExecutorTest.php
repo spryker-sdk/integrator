@@ -124,12 +124,12 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $gitMock = $this->createMock(GitRepository::class);
         $gitMock->method('hasChanges')->willReturn(false);
         $gitMock->method('getCurrentBranchName')->willReturn('testBranch');
+        $gitMock->expects($this->exactly(2))->method('deleteBranch');
+        $gitMock->expects($this->exactly(2))->method('checkout')->withAnyParameters('testBranch');
+        $gitMock->expects($this->never())->method('addAllChanges');
 
         $executorMock = $this->createManifestExecutorMock();
         $manifestExecutor = new DiffGenerator($reader, $fileStorageMock, $executorMock, $gitMock);
-
-        // Assert
-        $this->expectException(RuntimeException::class);
 
         // Act
         $manifestExecutor->generateDiff(

@@ -10,6 +10,13 @@ class TestIntegratorAddConfigArrayElementConfig extends SprykerTestIntegratorAdd
 
     protected function getTestConfiguration(): array
     {
+        return [
+            $this->getTestConfigurationStack1(),
+        ];
+    }
+
+    protected function getTestConfigurationStack1(): array
+    {
         return [];
     }
 

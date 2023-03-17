@@ -146,11 +146,11 @@ class DiffGenerator implements DiffGeneratorInterface
         if (!$this->gitRepository->hasChanges()) {
             $this->gitClean($currentBranchName);
 
-            throw new RuntimeException(sprintf('No changes from manifests related to release group %s', $releaseGroupId));
+            return;
         }
 
         $this->gitRepository->addAllChanges();
-        $this->gitRepository->commit('The commit was created by integrator');
+        $this->gitRepository->commit('The commit was created by integrator', ['-n']);
 
         try {
             $gitDiffOutput = $this->gitRepository->getDiff($branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
