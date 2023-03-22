@@ -66,13 +66,25 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
         $targetClassInfo = (new ReflectionClass($targetClassName));
 
         if (!$targetClassInfo->hasMethod($targetMethodName)) {
-            $inputOutput->writeln(sprintf(
-                'Your version of module %s/%s does not support needed plugin stack. Please, update it to use full functionality.',
-                $this->classHelper->getOrganisationName($targetClassName),
-                $this->classHelper->getModuleName($targetClassName),
-            ), InputOutputInterface::DEBUG);
+            $targetMethodNameExistOnProjectLayer = false;
+            foreach ($this->config->getProjectNamespaces() as $namespace) {
+                $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass($targetClassName, $namespace);
+                if ($classInformationTransfer) {
+                    $targetMethodNameExistOnProjectLayer = true;
 
-            return false;
+                    break;
+                }
+            }
+
+            if (!$targetMethodNameExistOnProjectLayer) {
+                $inputOutput->writeln(sprintf(
+                    'Your version of module %s/%s does not support needed plugin stack. Please, update it to use full functionality.',
+                    $this->classHelper->getOrganisationName($targetClassName),
+                    $this->classHelper->getModuleName($targetClassName),
+                ), InputOutputInterface::DEBUG);
+
+                return false;
+            }
         }
 
         $applied = false;

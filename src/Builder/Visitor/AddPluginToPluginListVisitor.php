@@ -400,14 +400,14 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             }
 
             $nodeClassName = $item->value->class->toString();
-            if ($nodeClassName === $beforePlugin) {
+            if ($nodeClassName === $beforePlugin && !$itemAdded) {
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $items[] = $item;
                 $itemAdded = true;
 
                 continue;
             }
-            if ($nodeClassName === $afterPlugin) {
+            if ($nodeClassName === $afterPlugin && !$itemAdded) {
                 $items[] = $item;
                 $items[] = $this->createArrayItemWithInstanceOf();
                 $itemAdded = true;
