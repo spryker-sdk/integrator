@@ -109,9 +109,10 @@ class ManifestExecutor implements ManifestExecutorInterface
                 }
             } catch (Exception $exception) {
                 $inputOutput->warning(sprintf(
-                    'Manifest for %s:%s was skipped. %s',
-                    $unappliedManifest[IntegratorConfig::MODULE_KEY],
-                    $unappliedManifest[IntegratorConfig::MODULE_VERSION_KEY],
+                    'Manifest for %s was skipped. %s',
+                    empty($unappliedManifest[IntegratorConfig::MODULE_KEY]) || empty($unappliedManifest[IntegratorConfig::MODULE_VERSION_KEY]) ?
+                    $moduleName :
+                    $unappliedManifest[IntegratorConfig::MODULE_KEY] . ':' . $unappliedManifest[IntegratorConfig::MODULE_VERSION_KEY],
                     $exception->getMessage(),
                 ));
             }

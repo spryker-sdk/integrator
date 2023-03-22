@@ -100,19 +100,31 @@ class DiffGenerator implements DiffGeneratorInterface
             );
         }
 
-        $dry = $commandArgumentsTransfer->getIsDryOrFail();
-        if (!$dry) {
-            $this->prepareBranch();
+        try {
+            $dry = $commandArgumentsTransfer->getIsDryOrFail();
+            if (!$dry) {
+                $this->prepareBranch();
+            }
+
+            $this->manifestExecutor->applyManifestList([], $unappliedManifests, $inputOutput, $commandArgumentsTransfer);
+
+            if ($dry) {
+                return;
+            }
+
+            $this->storeDiff($releaseGroupId, $currentBranchName, $commandArgumentsTransfer->getBranchToCompareOrFail(), $inputOutput);
+            $this->gitClean($currentBranchName);
+        } catch (GitException $exception) {
+            throw new RuntimeException(
+                sprintf(
+                    'Git error %s %s %s %s',
+                    $exception->getCode(),
+                    $exception->getMessage(),
+                    $exception->getRunnerResult() ? implode(PHP_EOL, $exception->getRunnerResult()->getOutput()) : '',
+                    $exception->getRunnerResult() ? implode(PHP_EOL, $exception->getRunnerResult()->getErrorOutput()) : '',
+                ),
+            );
         }
-
-        $this->manifestExecutor->applyManifestList([], $unappliedManifests, $inputOutput, $commandArgumentsTransfer);
-
-        if ($dry) {
-            return;
-        }
-
-        $this->storeDiff($releaseGroupId, $currentBranchName, $commandArgumentsTransfer->getBranchToCompareOrFail(), $inputOutput);
-        $this->gitClean($currentBranchName);
     }
 
     /**
@@ -134,11 +146,11 @@ class DiffGenerator implements DiffGeneratorInterface
         if (!$this->gitRepository->hasChanges()) {
             $this->gitClean($currentBranchName);
 
-            throw new RuntimeException(sprintf('No changes from manifests related to release group %s', $releaseGroupId));
+            return;
         }
 
         $this->gitRepository->addAllChanges();
-        $this->gitRepository->commit('The commit was created by integrator');
+        $this->gitRepository->commit('The commit was created by integrator', ['-n']);
 
         try {
             $gitDiffOutput = $this->gitRepository->getDiff($branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
