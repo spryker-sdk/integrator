@@ -50,6 +50,8 @@ For common types, all manifests have the following structure.
 Generation is currently handled internally in the Spryker release app, whereas integration is done through this code base directly with
 [Strategy classes](//github.com/spryker-sdk/integrator/tree/master/src/ManifestStrategy/).
 
+Description of the supported extension scenarios can be found [here](https://docs.spryker.com/docs/scos/dev/guidelines/keeping-a-project-upgradable/code-upgrader-supported-extension-scenarios.html)
+
 ### Wire Plugin Manifest
 
 This manifest type adds a plugin to a required place in the code, by defining its exact method. To add the plugin to an associative array, set the array key in the `index` setting.
