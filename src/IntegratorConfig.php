@@ -9,6 +9,10 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator;
 
+use PhpParser\ParserFactory;
+use RuntimeException;
+use SprykerSdk\Integrator\ConfigReader\ConfigReader;
+
 class IntegratorConfig
 {
     /**
@@ -99,12 +103,12 @@ class IntegratorConfig
     /**
      * @var string
      */
-    public const CORE_NAMESPACES = 'CORE_NAMESPACES';
+    public const CORE_NAMESPACES_CONFIG_KEY = 'KernelConstants::CORE_NAMESPACES';
 
     /**
      * @var string
      */
-    public const PROJECT_NAMESPACES = 'PROJECT_NAMESPACES';
+    public const PROJECT_NAMESPACES_CONFIG_KEY = 'KernelConstants::PROJECT_NAMESPACES';
 
     /**
      * @var string
@@ -182,8 +186,14 @@ class IntegratorConfig
      */
     protected static $instance;
 
+    /**
+     * @var \SprykerSdk\Integrator\ConfigReader\ConfigReaderInterface
+     */
+    protected $configReader;
+
     final protected function __construct()
     {
+        $this->configReader = new ConfigReader(new ParserFactory());
     }
 
     /**
@@ -210,49 +220,53 @@ class IntegratorConfig
             return;
         }
 
-        $this->config = array_merge($this->loadSharedConfig(), $this->loadIntegratorConfig());
+        $this->config = array_merge(
+            $this->readConfigFile($this->getSharedConfigPath()),
+            $this->readConfigFile($this->getDefaultConfigPath()),
+        );
     }
 
     /**
-     * @return void
+     * @param string $fileName
+     *
+     * @return array<string, mixed>
      */
-    protected function prepareSharedConfigDependencies(): void
+    protected function readConfigFile(string $fileName): array
     {
-        defined('APPLICATION_STORE') || define('APPLICATION_STORE', 'DE');
-        defined('APPLICATION_CODE_BUCKET') || define('APPLICATION_CODE_BUCKET', '');
-    }
-
-    /**
-     * @return array
-     */
-    protected function loadSharedConfig(): array
-    {
-        $this->prepareSharedConfigDependencies();
-
-        $fileName = $this->getSharedConfigPath();
         if (!file_exists($fileName)) {
             return [];
         }
 
-        include $fileName;
-
-        return ${$this->getConfigVariableName()};
+        return $this->readConfig($fileName, $this->getConfigKeys());
     }
 
     /**
+     * @param string $configPath
+     * @param array $configKeys
+     *
+     * @throws \RuntimeException
+     *
      * @return array
      */
-    protected function loadIntegratorConfig(): array
+    protected function readConfig(string $configPath, array $configKeys): array
     {
-        $fileName = $this->getDefaultConfigPath();
+        $configValues = $this->configReader->read($configPath, $configKeys);
 
-        if (!file_exists($fileName)) {
-            return [];
+        $missedConfigKeys = array_diff($configKeys, array_keys($configValues));
+
+        if ($missedConfigKeys) {
+            throw new RuntimeException(sprintf('Unable to read config keys %s', implode(', ', $missedConfigKeys)));
         }
 
-        include $fileName;
+        return $configValues;
+    }
 
-        return ${$this->getConfigVariableName()};
+    /**
+     * @return array<string>
+     */
+    protected function getConfigKeys(): array
+    {
+        return [static::CORE_NAMESPACES_CONFIG_KEY, static::PROJECT_NAMESPACES_CONFIG_KEY];
     }
 
     /**
@@ -263,7 +277,7 @@ class IntegratorConfig
         /** @var array<string, mixed> $config */
         $config = $this->config;
 
-        return $config[static::PROJECT_NAMESPACES];
+        return $config[static::PROJECT_NAMESPACES_CONFIG_KEY];
     }
 
     /**
@@ -274,7 +288,7 @@ class IntegratorConfig
         /** @var array<string, mixed> $config */
         $config = $this->config;
 
-        return $config[static::CORE_NAMESPACES];
+        return $config[static::CORE_NAMESPACES_CONFIG_KEY];
     }
 
     /**
