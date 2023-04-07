@@ -10,6 +10,7 @@ namespace Pyz\Zed\TestIntegratorDefault;
 use App\Manifest\Generator\ArrayConfigElementManifestStrategy;
 use App\Manifest\Generator\ArrayConfigElementManifestStrategy2;
 use App\Manifest\Generator\ArrayConfigElementManifestStrategyTest;
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SinglePlugin;
 
 class TestIntegratorDefaultConfig extends BaseConfig
 {
@@ -174,6 +175,16 @@ class TestIntegratorDefaultConfig extends BaseConfig
             $this->getSharedConfig2(),
             parent::getSharedConfig2(),
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function testAlreadyAddedConfigurationValue(): array
+    {
+        return [
+            SinglePlugin::CONST_VALUE,
+        ];
     }
     /**
      * @return bool

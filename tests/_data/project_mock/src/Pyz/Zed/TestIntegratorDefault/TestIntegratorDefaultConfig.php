@@ -7,6 +7,8 @@
 
 namespace Pyz\Zed\TestIntegratorDefault;
 
+use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SinglePlugin;
+
 class TestIntegratorDefaultConfig extends BaseConfig
 {
     public const BOOL_EXISTING_VALUE = 'false';
@@ -162,5 +164,15 @@ class TestIntegratorDefaultConfig extends BaseConfig
             parent::isCartCartItemsViaAjaxLoadEnabled(),
             parent::getSharedConfig(),
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function testAlreadyAddedConfigurationValue(): array
+    {
+        return [
+            SinglePlugin::CONST_VALUE,
+        ];
     }
 }
