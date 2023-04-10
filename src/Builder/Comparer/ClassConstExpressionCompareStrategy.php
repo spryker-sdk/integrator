@@ -57,11 +57,7 @@ class ClassConstExpressionCompareStrategy implements CompareStrategyInterface
             return false;
         }
 
-        if (!$this->isClassNamesEqual($node->class, $nodeToCompare->class, $classTokenTree)) {
-            return false;
-        }
-
-        return true;
+        return $this->isClassNameEqual($node->class, $nodeToCompare->class, $classTokenTree);
     }
 
     /**
@@ -71,7 +67,7 @@ class ClassConstExpressionCompareStrategy implements CompareStrategyInterface
      *
      * @return bool
      */
-    protected function isClassNamesEqual(Name $className, Name $classNameToCompare, array $classTokenTree): bool
+    protected function isClassNameEqual(Name $className, Name $classNameToCompare, array $classTokenTree): bool
     {
         $useClassNames = $this->getUseClassNames($classTokenTree);
 
