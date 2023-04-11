@@ -17,14 +17,10 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
-use SprykerSdk\Integrator\Common\UtilText\TextCaseHelper;
 use SprykerSdk\Integrator\Dependency\Console\ComposerInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFacade;
 use SprykerSdk\Integrator\IntegratorFacadeInterface;
-use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacade;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
-use SprykerSdk\Integrator\Transfer\ModuleTransfer;
-use SprykerSdk\Integrator\Transfer\OrganizationTransfer;
 
 class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterface
 {
@@ -133,39 +129,13 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
      */
     public function runInstaller(Event $event): void
     {
-        //Disable installer on shop pre-install phase
-        if (!class_exists(ModuleTransfer::class)) {
-            return;
-        }
-
         $autoloadFile = $this->composer->getConfig()->get('vendor-dir') . '/autoload.php';
         include $autoloadFile;
-
-        $updatedModules = $this->createModuleFinderFacade()->getModules();
         $commandArgumentsTransfer = (new IntegratorCommandArgumentsTransfer())
             ->setIsDry(false);
 
-        $this->getIntegratorFacade()->runModuleManifestInstallation($updatedModules, new ComposerInputOutputAdapter($this->io), $commandArgumentsTransfer);
+        $this->getIntegratorFacade()->runModuleManifestInstallation(new ComposerInputOutputAdapter($this->io), $commandArgumentsTransfer);
         $this->io->write('runInstallerEnd' . PHP_EOL);
-    }
-
-    /**
-     * @param string $moduleName
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer
-     */
-    protected function createModuleTransfer(string $moduleName): ModuleTransfer
-    {
-        [$moduleName, $organization] = explode('/', $moduleName);
-
-        $organisationTransfer = (new OrganizationTransfer())
-            ->setNameDashed($organization)
-            ->setName(TextCaseHelper::dashToCamelCase($organization, false));
-
-        return (new ModuleTransfer())
-            ->setNameDashed($moduleName)
-            ->setName(TextCaseHelper::dashToCamelCase($moduleName, false))
-            ->setOrganization($organisationTransfer);
     }
 
     /**
@@ -174,13 +144,5 @@ class InstallerComposerPlugin implements PluginInterface, EventSubscriberInterfa
     protected function getIntegratorFacade(): IntegratorFacadeInterface
     {
         return new IntegratorFacade();
-    }
-
-    /**
-     * @return \SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacade
-     */
-    protected function createModuleFinderFacade(): ModuleFinderFacade
-    {
-        return new ModuleFinderFacade();
     }
 }

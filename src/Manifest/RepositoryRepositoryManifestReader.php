@@ -12,7 +12,7 @@ namespace SprykerSdk\Integrator\Manifest;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
-use SprykerSdk\Integrator\Transfer\ModuleTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
 use ZipArchive;
 
 class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInterface
@@ -43,12 +43,11 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
     }
 
     /**
-     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return array<string, array<string, array<string>>>
      */
-    public function readManifests(array $moduleTransfers, IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): array
+    public function readManifests(IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): array
     {
         // Do not update repository folder when in local development
         if (!is_dir($this->config->getLocalRecipesDirectory()) && $commandArgumentsTransfer->getSource() === null) {
@@ -57,18 +56,17 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
 
         $manifests = [];
         $moduleComposerData = $this->composerLockReader->getModuleVersions();
-
-        foreach ($moduleTransfers as $moduleTransfer) {
-            $moduleFullName = $moduleTransfer->getOrganizationOrFail()->getNameOrFail() . '.' . $moduleTransfer->getNameOrFail();
-
-            // Get the version from installed packages or the CLI passed one (e.g. Spryker.Acl:3.6.0).
-            $version = $moduleComposerData[$moduleFullName] ?? $moduleTransfer->getVersion();
-
-            if (!$version) {
+        $filterModules = array_map(
+            function (ModuleFilterTransfer $moduleFilterTransfer): string {
+                return sprintf('%s.%s', $moduleFilterTransfer->getOrganization(), $moduleFilterTransfer->getModule());
+            },
+            $commandArgumentsTransfer->getModules(),
+        );
+        foreach ($moduleComposerData as $moduleFullName => $version) {
+            if ($filterModules && !in_array($moduleFullName, $filterModules)) {
                 continue;
             }
-
-            $moduleManifestsDir = $this->getModuleManifestsDir($moduleTransfer, $commandArgumentsTransfer);
+            $moduleManifestsDir = $this->getModuleManifestsDir($moduleFullName, $commandArgumentsTransfer);
 
             if (!is_dir($moduleManifestsDir)) {
                 continue;
@@ -154,23 +152,23 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $moduleTransfer
+     * @param string $moduleFullName
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return string
      */
     protected function getModuleManifestsDir(
-        ModuleTransfer $moduleTransfer,
+        string $moduleFullName,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
     ): string {
-        $organization = $moduleTransfer->getOrganizationOrFail();
+        [$organization, $moduleName] = explode('.', $moduleFullName);
 
         if ($commandArgumentsTransfer->getSource() !== null) {
             return sprintf(
                 '%s/%s/%s/',
                 $commandArgumentsTransfer->getSource(),
-                $organization->getName(),
-                $moduleTransfer->getName(),
+                $organization,
+                $moduleName,
             );
         }
 
@@ -178,13 +176,13 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
             '%s%s%s/%s/',
             $this->config->getManifestsDirectory(),
             static::ARCHIVE_DIR,
-            $organization->getName(),
-            $moduleTransfer->getName(),
+            $organization,
+            $moduleName,
         );
 
         // When the recipes installed for local development use those instead of the one from the archive.
         if (is_dir($this->config->getLocalRecipesDirectory())) {
-            $moduleManifestsDir = sprintf('%s%s/', $this->config->getLocalRecipesDirectory(), $moduleTransfer->getName());
+            $moduleManifestsDir = sprintf('%s%s/', $this->config->getLocalRecipesDirectory(), $moduleName);
         }
 
         return $moduleManifestsDir;

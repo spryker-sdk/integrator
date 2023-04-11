@@ -39,6 +39,11 @@ class IntegratorCommandArgumentsTransfer
     public const BRANCH_TO_COMPARE = 'branchToCompare';
 
     /**
+     * @var string
+     */
+    public const MODULES = 'modules';
+
+    /**
      * @var string|null
      */
     protected ?string $source = null;
@@ -62,6 +67,11 @@ class IntegratorCommandArgumentsTransfer
      * @var string|null
      */
     protected ?string $branchToCompare = null;
+
+    /**
+     * @var array<\SprykerSdk\Integrator\Transfer\ModuleFilterTransfer>
+     */
+    protected array $modules = [];
 
     /**
      * @param string|null $source
@@ -213,6 +223,34 @@ class IntegratorCommandArgumentsTransfer
         }
 
         return (string)$this->branchToCompare;
+    }
+
+    /**
+     * @return array<\SprykerSdk\Integrator\Transfer\ModuleFilterTransfer>
+     */
+    public function getModules(): array
+    {
+        return $this->modules;
+    }
+
+    /**
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleFilterTransfer> $modules
+     *
+     * @return void
+     */
+    public function setModules(array $modules): void
+    {
+        $this->modules = $modules;
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer $module
+     *
+     * @return void
+     */
+    public function addModule(ModuleFilterTransfer $module): void
+    {
+        $this->modules[] = $module;
     }
 
     /**

@@ -17,37 +17,33 @@ class IntegratorFacade implements IntegratorFacadeInterface
     use IntegratorFactoryAwareTrait;
 
     /**
-     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return void
      */
     public function runModuleManifestInstallation(
-        array $moduleTransfers,
         InputOutputInterface $input,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
     ): void {
         $this->getFactory()
             ->createModuleManifestExecutor()
-            ->runModuleManifestExecution($moduleTransfers, $input, $commandArgumentsTransfer);
+            ->runModuleManifestExecution($input, $commandArgumentsTransfer);
     }
 
     /**
-     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return void
      */
     public function runUpdateLock(
-        array $moduleTransfers,
         InputOutputInterface $input,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
     ): void {
         $this->getFactory()
             ->createModuleManifestExecutor()
-            ->runUpdateLock($moduleTransfers, $input, $commandArgumentsTransfer);
+            ->runUpdateLock($input, $commandArgumentsTransfer);
     }
 
     /**
