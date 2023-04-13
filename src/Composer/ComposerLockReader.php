@@ -50,7 +50,7 @@ class ComposerLockReader implements ComposerLockReaderInterface
                     continue;
                 }
                 [$packageName, $aliasedVersion] = $this->getPackageVersion($packageData);
-                if (stripos(static::REFIX_ORGANIZATION, $packageName) !== false) {
+                if (stripos($packageName, static::REFIX_ORGANIZATION) === false) {
                     continue;
                 }
                 $packages[$packageName] = $aliasedVersion;
