@@ -170,6 +170,13 @@
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testChangeMissingValue"
+        },
+        {
+            "previousValue": "",
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testAlreadyAddedConfigurationValue",
+            "value": [
+                "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\SinglePlugin::CONST_VALUE"
+            ]
         }
     ]
 }
