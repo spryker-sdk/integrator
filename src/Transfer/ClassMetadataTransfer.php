@@ -1010,11 +1010,8 @@ class ClassMetadataTransfer extends AbstractTransfer
      */
     protected function initCollectionProperties(): void
     {
-        /** @phpstan-ignore-next-line */
         $this->prependArguments = $this->prependArguments ?: new ArrayObject();
-        /** @phpstan-ignore-next-line */
         $this->appendArguments = $this->appendArguments ?: new ArrayObject();
-        /** @phpstan-ignore-next-line */
         $this->constructorArguments = $this->constructorArguments ?: new ArrayObject();
     }
 

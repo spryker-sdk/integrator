@@ -15,7 +15,7 @@ use SprykerSdk\Integrator\IntegratorConfig;
 class ComposerLockReader implements ComposerLockReaderInterface
 {
     /**
-     * @var static
+     * @var string
      */
     protected const REFIX_ORGANIZATION = 'Spryker';
 
