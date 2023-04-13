@@ -164,12 +164,13 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
 
     /**
      * @param bool $isDry
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleFilterTransfer> $moduleFilterTransfers
      *
      * @return \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer
      */
-    public function createCommandArgumentsTransfer(bool $isDry = false): IntegratorCommandArgumentsTransfer
+    public function createCommandArgumentsTransfer(bool $isDry = false, array $moduleFilterTransfers = []): IntegratorCommandArgumentsTransfer
     {
-        $transfer = parent::createCommandArgumentsTransfer($isDry);
+        $transfer = parent::createCommandArgumentsTransfer($isDry, $moduleFilterTransfers);
         $transfer->setReleaseGroupId(1);
         $transfer->setBranchToCompare('master');
 

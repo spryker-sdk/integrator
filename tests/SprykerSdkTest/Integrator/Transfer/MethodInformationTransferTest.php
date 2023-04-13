@@ -11,9 +11,9 @@ namespace SprykerSdkTest\Integrator\Transfer;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 use SprykerSdk\Integrator\Transfer\MethodInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
-use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 
 class MethodInformationTransferTest extends TestCase
 {
@@ -28,9 +28,7 @@ class MethodInformationTransferTest extends TestCase
             [
                 'name' => 'test val 1',
                 'Name' => 'test val 2',
-                'return_type' => new ModuleTransfer(),
-                'returnType' => new MethodInformationTransfer(),
-                'ReturnType' => new ModuleFilterTransfer(),
+                'ReturnType' => new ClassMetadataTransfer(),
                 'invalidPropertyName' => '',
             ],
             true,
@@ -40,10 +38,10 @@ class MethodInformationTransferTest extends TestCase
         $this->assertEquals('test val 2', $transfer->getNameOrFail());
 
         $res = $transfer->getReturnType();
-        $this->assertInstanceOf(ModuleFilterTransfer::class, $res);
+        $this->assertInstanceOf(ClassMetadataTransfer::class, $res);
 
         $res = $transfer->getReturnTypeOrFail();
-        $this->assertInstanceOf(ModuleFilterTransfer::class, $res);
+        $this->assertInstanceOf(ClassMetadataTransfer::class, $res);
 
         $transfer->setName(null);
         $this->assertNull($transfer->getName());
@@ -71,9 +69,8 @@ class MethodInformationTransferTest extends TestCase
                 'Name' => [
                     'name' => 'test val 2',
                 ],
-                'return_type' => new ModuleTransfer(),
                 'returnType' => new MethodInformationTransfer(),
-                'ReturnType' => new ModuleFilterTransfer(),
+                'ReturnType' => new ClassMetadataTransfer(),
             ],
         );
 
@@ -98,14 +95,14 @@ class MethodInformationTransferTest extends TestCase
         ];
         $res3 = $transfer->modifiedToArray(false, true);
         $this->assertSame($expResName3, $res3['name']);
-        $this->assertInstanceOf(ModuleFilterTransfer::class, $res3['returnType']);
+        $this->assertInstanceOf(ClassMetadataTransfer::class, $res3['returnType']);
 
         $expResName4 = [
             'name' => 'test val 2',
         ];
         $res4 = $transfer->modifiedToArray(false, false);
         $this->assertSame($expResName4, $res4['name']);
-        $this->assertInstanceOf(ModuleFilterTransfer::class, $res4['return_type']);
+        $this->assertInstanceOf(ClassMetadataTransfer::class, $res4['return_type']);
     }
 
     /**
@@ -123,7 +120,6 @@ class MethodInformationTransferTest extends TestCase
                 'Name' => [
                     'name' => 'test val 2',
                 ],
-                'return_type' => new ModuleTransfer(),
                 'returnType' => new MethodInformationTransfer(),
                 'ReturnType' => new ModuleFilterTransfer(),
             ],
