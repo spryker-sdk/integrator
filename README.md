@@ -24,7 +24,7 @@ Available options:
 Running the integrator in basic mode. Unapplied manifests will be downloaded from the [repo](https://github.com/spryker-sdk/integrator-manifests).
 The command expects optional argument `module-list` to be set. With the argument, manifests will be applied only for modules that were specified.
 ```
-integrator module:manifest:run <Organisation.moduleNameA,Organisation.moduleNameB (not required)>
+integrator module:manifest:run <Organization.moduleNameA,Organization.moduleNameB (not required)>
 ```
 
 
