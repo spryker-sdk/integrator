@@ -74,7 +74,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorConfigureModule')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorConfigureModule')]),
         );
 
         // Assert
@@ -98,7 +98,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorWirePlugin')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin')]),
         );
 
         // Assert
@@ -121,7 +121,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorUnwirePlugin')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorUnwirePlugin')]),
         );
 
         // Assert
@@ -144,7 +144,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorWireConsole')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWireConsole')]),
         );
 
         // Assert
@@ -167,7 +167,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorUnwireConsole')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorUnwireConsole')]),
         );
 
         // Assert
@@ -190,7 +190,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorCopyModuleFile')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorCopyModuleFile')]),
         );
 
         // Assert
@@ -209,7 +209,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorWireWidget')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWireWidget')]),
         );
 
         // Assert
@@ -233,7 +233,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorUnwireWidget')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorUnwireWidget')]),
         );
 
         // Assert
@@ -257,7 +257,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorConfigureEnv')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorConfigureEnv')]),
         );
 
         // Assert
@@ -293,7 +293,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorConfigureEnv')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorConfigureEnv')]),
         );
 
         // Assert
@@ -340,7 +340,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorWireGlueRelationship')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWireGlueRelationship')]),
         );
 
         // Assert
@@ -364,7 +364,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorUnwireGlueRelationship')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorUnwireGlueRelationship')]),
         );
 
         // Assert
@@ -388,7 +388,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorWireNavigation')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWireNavigation')]),
         );
 
         // Assert
@@ -411,7 +411,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorUnwireNavigation')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorUnwireNavigation')]),
         );
 
         // Assert
@@ -434,7 +434,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorAddConfigArrayElement')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorAddConfigArrayElement')]),
         );
 
         // Assert
@@ -457,7 +457,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorGlossary')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorGlossary')]),
         );
 
         // Assert
@@ -579,7 +579,7 @@ class IntegratorFacadeTest extends BaseTestCase
         // Act
         $this->createIntegratorFacade()->runUpdateLock(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleFilterTransfer('Spryker.TestIntegratorConfigureModule')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorConfigureModule')]),
         );
 
         // Assert

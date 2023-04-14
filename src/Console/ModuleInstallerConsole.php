@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Console;
 
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
-use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -97,7 +97,7 @@ class ModuleInstallerConsole extends AbstractInstallerConsole
                 [$organization, $module] = explode('.', $moduleArgument);
 
                 $commandArgumentsTransfer->addModule(
-                    (new ModuleFilterTransfer())
+                    (new ModuleTransfer())
                         ->setModule($module)
                         ->setOrganization($organization),
                 );

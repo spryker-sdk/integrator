@@ -17,7 +17,17 @@ class ComposerLockReader implements ComposerLockReaderInterface
     /**
      * @var string
      */
-    protected const REFIX_ORGANIZATION = 'Spryker';
+    protected const PREFIX_DEV_PACKAGE = 'dev-';
+
+    /**
+     * @var string
+     */
+    protected const PREFIX_ORGANIZATION = 'Spryker';
+
+    /**
+     * @var array<string>
+     */
+    protected const GROUP_PACKAGES = ['packages', 'packages-dev'];
 
     /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
@@ -40,17 +50,17 @@ class ComposerLockReader implements ComposerLockReaderInterface
         $composerLockData = $this->getProjectComposerLockData();
         $packages = [];
 
-        foreach (['packages', 'packages-dev'] as $packagesKey) {
+        foreach (static::GROUP_PACKAGES as $packagesKey) {
             if (!isset($composerLockData[$packagesKey])) {
                 continue;
             }
             /** @var array $packageData */
             foreach ($composerLockData[$packagesKey] as $packageData) {
-                if ($packageData['version'] === 'dev-master') {
+                if (strpos($packageData['version'], static::PREFIX_DEV_PACKAGE) === 0) {
                     continue;
                 }
                 [$packageName, $aliasedVersion] = $this->getPackageVersion($packageData);
-                if (stripos($packageName, static::REFIX_ORGANIZATION) === false) {
+                if (stripos($packageName, static::PREFIX_ORGANIZATION) === false) {
                     continue;
                 }
                 $packages[$packageName] = $aliasedVersion;
@@ -68,7 +78,7 @@ class ComposerLockReader implements ComposerLockReaderInterface
     protected function getPackageVersion(array $packageData): array
     {
         [$org, $module] = explode('/', $packageData['name']);
-        $packageName = TextCaseHelper::dashToCamelCase($org) . '.' . TextCaseHelper::dashToCamelCase($module);
+        $packageName = sprintf('%s.%s', TextCaseHelper::dashToCamelCase($org), TextCaseHelper::dashToCamelCase($module));
 
         if (strpos($packageData['version'], 'dev-') !== false) {
             $versionFromExtra = $packageData['extra']['branch-alias']['dev-master'] ?? false;

@@ -21,7 +21,7 @@ use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
-use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -116,14 +116,14 @@ class BaseTestCase extends PHPUnitTestCase
 
     /**
      * @param bool $isDry
-     * @param array<\SprykerSdk\Integrator\Transfer\ModuleFilterTransfer> $moduleFilterTransfers
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $ModuleTransfers
      *
      * @return \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer
      */
-    public function createCommandArgumentsTransfer(bool $isDry = false, array $moduleFilterTransfers = []): IntegratorCommandArgumentsTransfer
+    public function createCommandArgumentsTransfer(bool $isDry = false, array $ModuleTransfers = []): IntegratorCommandArgumentsTransfer
     {
         $commandArgumentsTransfer = new IntegratorCommandArgumentsTransfer();
-        $commandArgumentsTransfer->setModules($moduleFilterTransfers);
+        $commandArgumentsTransfer->setModules($ModuleTransfers);
         $commandArgumentsTransfer->setIsDry($isDry);
 
         return $commandArgumentsTransfer;
@@ -169,13 +169,13 @@ class BaseTestCase extends PHPUnitTestCase
     /**
      * @param string|null $moduleName
      *
-     * @return \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer
+     * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer
      */
-    protected function getModuleFilterTransfer(?string $moduleName = null): ModuleFilterTransfer
+    protected function getModuleTransfer(?string $moduleName = null): ModuleTransfer
     {
         [$organization, $moduleName] = explode('.', $moduleName);
 
-        return (new ModuleFilterTransfer())
+        return (new ModuleTransfer())
             ->setModule($moduleName)
             ->setOrganization($organization);
     }

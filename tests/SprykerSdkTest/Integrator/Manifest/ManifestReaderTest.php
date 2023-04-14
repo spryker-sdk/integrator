@@ -65,7 +65,7 @@ class ManifestReaderTest extends BaseTestCase
     public function testReadsManifestsFromDefaultSource(): void
     {
         $commandArgumentsTransfer = $this->createCommandArgumentsTransfer();
-        $commandArgumentsTransfer->setModules([$this->getModuleFilterTransfer('Spryker.TestIntegratorWirePlugin')]);
+        $commandArgumentsTransfer->setModules([$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin')]);
         $manifestReader = $this->createManifestReader();
 
         $manifests = $manifestReader->readManifests(
@@ -84,7 +84,7 @@ class ManifestReaderTest extends BaseTestCase
     {
         $commandArgumentsTransfer = $this->createCommandArgumentsTransfer();
         $commandArgumentsTransfer->setSource(static::MANIFESTS_CUSTOM_SOURCE);
-        $commandArgumentsTransfer->setModules([$this->getModuleFilterTransfer('Spryker.TestIntegratorWirePlugin')]);
+        $commandArgumentsTransfer->setModules([$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin')]);
         $manifestReader = $this->createManifestReader();
 
         $manifests = $manifestReader->readManifests(

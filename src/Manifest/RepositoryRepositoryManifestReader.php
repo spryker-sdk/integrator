@@ -12,7 +12,7 @@ namespace SprykerSdk\Integrator\Manifest;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
-use SprykerSdk\Integrator\Transfer\ModuleFilterTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use ZipArchive;
 
 class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInterface
@@ -57,8 +57,8 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
         $manifests = [];
         $moduleComposerData = $this->composerLockReader->getModuleVersions();
         $filterModules = array_map(
-            function (ModuleFilterTransfer $moduleFilterTransfer): string {
-                return sprintf('%s.%s', $moduleFilterTransfer->getOrganization(), $moduleFilterTransfer->getModule());
+            function (ModuleTransfer $moduleTransfer): string {
+                return sprintf('%s.%s', $moduleTransfer->getOrganization(), $moduleTransfer->getModule());
             },
             $commandArgumentsTransfer->getModules(),
         );

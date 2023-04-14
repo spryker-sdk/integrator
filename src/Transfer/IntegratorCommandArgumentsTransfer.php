@@ -69,7 +69,7 @@ class IntegratorCommandArgumentsTransfer
     protected ?string $branchToCompare = null;
 
     /**
-     * @var array<\SprykerSdk\Integrator\Transfer\ModuleFilterTransfer>
+     * @var array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
      */
     protected array $modules = [];
 
@@ -226,7 +226,7 @@ class IntegratorCommandArgumentsTransfer
     }
 
     /**
-     * @return array<\SprykerSdk\Integrator\Transfer\ModuleFilterTransfer>
+     * @return array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
      */
     public function getModules(): array
     {
@@ -234,7 +234,7 @@ class IntegratorCommandArgumentsTransfer
     }
 
     /**
-     * @param array<\SprykerSdk\Integrator\Transfer\ModuleFilterTransfer> $modules
+     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $modules
      *
      * @return void
      */
@@ -244,11 +244,11 @@ class IntegratorCommandArgumentsTransfer
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ModuleFilterTransfer $module
+     * @param \SprykerSdk\Integrator\Transfer\ModuleTransfer $module
      *
      * @return void
      */
-    public function addModule(ModuleFilterTransfer $module): void
+    public function addModule(ModuleTransfer $module): void
     {
         $this->modules[] = $module;
     }

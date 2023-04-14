@@ -11,7 +11,7 @@ namespace SprykerSdk\Integrator\Transfer;
 
 use Exception;
 
-class ModuleFilterTransfer
+class ModuleTransfer
 {
     /**
      * @var string
