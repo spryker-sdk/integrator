@@ -20,6 +20,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use SprykerSdk\Integrator\Builder\Checker\ClassMethodCheckerInterface;
+use SprykerSdk\Integrator\Builder\Comparer\NodeComparerFactory;
 use SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
@@ -229,7 +230,8 @@ class CommonClassModifier implements CommonClassModifierInterface
     ): ClassInformationTransfer {
         $arrayItems = $this->methodStatementsCreator->createMethodStatementsFromValue($classInformationTransfer, $value);
         $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new AddStatementToStatementListVisitor($methodName, $arrayItems));
+        $nodeComparer = (new NodeComparerFactory())->createNodeComparer();
+        $nodeTraverser->addVisitor(new AddStatementToStatementListVisitor($methodName, $arrayItems, $nodeComparer));
 
         return $classInformationTransfer
                 ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));

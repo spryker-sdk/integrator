@@ -62,6 +62,10 @@
             "target": "\\Pyz\\Zed\\TestIntegratorUnwirePlugin\\TestIntegratorUnwirePluginDependencyProvider::getSchedulerAdapterPlugins",
             "source": "\\Spryker\\Zed\\SchedulerJenkins\\Communication\\Plugin\\Adapter\\SchedulerJenkinsAdapterPlugin",
             "index": "\\Pyz\\Shared\\Scheduler\\SchedulerConfig::PYZ_SCHEDULER_JENKINS"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorUnwirePlugin\\TestIntegratorUnwirePluginDependencyProvider::getSubArrayPlugins",
+            "source": "\\Spryker\\Zed\\SchedulerJenkins\\Communication\\Plugin\\Adapter\\SchedulerJenkinsAdapterPlugin"
         }
     ]
 }

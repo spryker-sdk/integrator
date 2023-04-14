@@ -9,7 +9,10 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\Visitor;
 
+use InvalidArgumentException;
 use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Expression;
@@ -77,7 +80,7 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
             $node = $this->filterStatements($node, $classNameToRemove);
         }
 
-        if ($this->methodFound && $node->getType() === static::STATEMENT_ARRAY) {
+        if ($this->methodFound && $node instanceof Array_) {
             $arrayItemsCount = count($node->items);
             $node = $this->removePluginFromArrayNode($node, $classNameToRemove);
             if ($arrayItemsCount !== count($node->items)) {
@@ -150,19 +153,42 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param \PhpParser\Node $node
+     * @param \PhpParser\Node\Expr\Array_ $node
      * @param string $classNameToRemove
      *
-     * @return \PhpParser\Node
+     * @throws \InvalidArgumentException
+     *
+     * @return \PhpParser\Node\Expr\Array_
      */
-    protected function removePluginFromArrayNode(Node $node, string $classNameToRemove): Node
+    protected function removePluginFromArrayNode(Array_ $node, string $classNameToRemove): Array_
     {
         $items = [];
         foreach ($node->items as $item) {
-            $nodeClassName = $item->value->class->toString();
-            if ($nodeClassName !== $classNameToRemove) {
-                $items[] = $item;
+            if ($item === null) {
+                continue;
             }
+
+            if ($item->value instanceof Array_) {
+                $subArrayNode = $this->removePluginFromArrayNode($item->value, $classNameToRemove);
+
+                if (!$subArrayNode->items) {
+                    continue;
+                }
+
+                $items[] = new ArrayItem($subArrayNode, $item->key);
+
+                continue;
+            }
+
+            if ($item->value instanceof New_) {
+                if ($item->value->class->toString() !== $classNameToRemove) {
+                    $items[] = $item;
+                }
+
+                continue;
+            }
+
+            throw new InvalidArgumentException(sprintf('Unsupported un-wire type `%s`', get_class($item->value)));
         }
 
         $node->items = $items;

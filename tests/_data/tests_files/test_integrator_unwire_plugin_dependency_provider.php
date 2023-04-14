@@ -99,4 +99,17 @@ class TestIntegratorUnwirePluginDependencyProvider extends ParentTestIntegratorU
 
         return $container;
     }
+
+    protected function getSubArrayPlugins(): array
+    {
+        return [
+            SchedulerConfig::PYZ_SCHEDULER_JENKINS => [
+                new TestIntegratorDefault1Plugin(),
+            ],
+            [
+                new TestIntegratorDefault2Plugin(),
+            ],
+            new TestIntegratorDefault2Plugin()
+        ];
+    }
 }
