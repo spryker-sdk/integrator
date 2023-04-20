@@ -14,10 +14,9 @@ use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 interface RepositoryManifestReaderInterface
 {
     /**
-     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return array<string, array<string, array<string>>>
      */
-    public function readManifests(array $moduleTransfers, IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): array;
+    public function readManifests(IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): array;
 }

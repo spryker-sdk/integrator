@@ -57,20 +57,16 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
     }
 
     /**
-     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return void
      */
     public function runModuleManifestExecution(
-        array $moduleTransfers,
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
     ): void {
-        $this->assertModuleData($moduleTransfers);
-
-        $manifests = $this->manifestReader->readManifests($moduleTransfers, $commandArgumentsTransfer);
+        $manifests = $this->manifestReader->readManifests($commandArgumentsTransfer);
         $lockedModules = $this->integratorLockReader->getLockFileData();
         $unappliedManifests = $this->manifestExecutor->findUnappliedManifests($manifests, $lockedModules);
         $lockedModules = $this->manifestExecutor->applyManifestList($lockedModules, $unappliedManifests, $inputOutput, $commandArgumentsTransfer);
@@ -83,19 +79,16 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
     }
 
     /**
-     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
      * @return void
      */
     public function runUpdateLock(
-        array $moduleTransfers,
         InputOutputInterface $input,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
     ): void {
-        $this->assertModuleData($moduleTransfers);
-        $manifests = $this->manifestReader->readManifests($moduleTransfers, $commandArgumentsTransfer);
+        $manifests = $this->manifestReader->readManifests($commandArgumentsTransfer);
 
         $lockedModules = [];
         $unappliedManifests = $this->manifestExecutor->findUnappliedManifests($manifests, $lockedModules);
@@ -106,22 +99,5 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
 
         $this->integratorLockWriter->storeLock($unappliedManifests);
         $input->write('<info>The integration lock file has been updated according to the project state.</info>', true);
-    }
-
-    /**
-     * @param array<\SprykerSdk\Integrator\Transfer\ModuleTransfer> $moduleTransfers
-     *
-     * @return void
-     */
-    protected function assertModuleData(array $moduleTransfers): void
-    {
-        foreach ($moduleTransfers as $moduleTransfer) {
-            $moduleTransfer->requireName()
-                ->requireNameDashed()
-                ->requireOrganization();
-            $moduleTransfer->getOrganizationOrFail()
-                ->requireNameDashed()
-                ->requireName();
-        }
     }
 }

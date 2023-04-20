@@ -18,7 +18,7 @@ class ComposerLockReaderTest extends BaseTestCase
     /**
      * @var string
      */
-    private const DEFAULT_PACKAGE_NAME = 'Nikic.PhpParser';
+    private const DEFAULT_PACKAGE_NAME = 'Spryker.AwsCrtPhp';
 
     /**
      * @return void
@@ -27,7 +27,7 @@ class ComposerLockReaderTest extends BaseTestCase
     {
         $composerLockReader = $this->createComposerLockReadr();
 
-        $this->assertTrue(count($composerLockReader->getModuleVersions()) > 0);
+        $this->assertCount(4, $composerLockReader->getModuleVersions());
         $this->assertArrayHasKey(static::DEFAULT_PACKAGE_NAME, $composerLockReader->getModuleVersions());
     }
 
@@ -37,7 +37,7 @@ class ComposerLockReaderTest extends BaseTestCase
     private function createComposerLockReadr(): ComposerLockReader
     {
         $integratorConfigMock = $this->createMock(IntegratorConfig::class);
-        $integratorConfigMock->method('getComposerLockFilePath')->willReturn('./composer.lock');
+        $integratorConfigMock->method('getComposerLockFilePath')->willReturn('./tests/_data/composer/composer.lock');
 
         return new ComposerLockReader($integratorConfigMock);
     }

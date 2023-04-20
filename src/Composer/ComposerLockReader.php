@@ -15,6 +15,21 @@ use SprykerSdk\Integrator\IntegratorConfig;
 class ComposerLockReader implements ComposerLockReaderInterface
 {
     /**
+     * @var string
+     */
+    protected const PREFIX_DEV_PACKAGE = 'dev-';
+
+    /**
+     * @var string
+     */
+    protected const PREFIX_ORGANIZATION = 'Spryker';
+
+    /**
+     * @var array<string>
+     */
+    protected const GROUP_PACKAGES = ['packages', 'packages-dev'];
+
+    /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
     protected $config;
@@ -33,31 +48,48 @@ class ComposerLockReader implements ComposerLockReaderInterface
     public function getModuleVersions(): array
     {
         $composerLockData = $this->getProjectComposerLockData();
-        if (!isset($composerLockData['packages'])) {
-            return [];
-        }
-
         $packages = [];
 
-        /** @var array $packageData */
-        foreach ($composerLockData['packages'] as $packageData) {
-            if ($packageData['version'] === 'dev-master') {
+        foreach (static::GROUP_PACKAGES as $packagesKey) {
+            if (!isset($composerLockData[$packagesKey])) {
                 continue;
             }
-            [$org, $module] = explode('/', $packageData['name']);
-            $packageName = TextCaseHelper::dashToCamelCase($org) . '.' . TextCaseHelper::dashToCamelCase($module);
-            $packages[$packageName] = $packageData['version'];
-
-            if (strpos($packageData['version'], 'dev-') !== false) {
-                $versionFromExtra = $packageData['extra']['branch-alias']['dev-master'] ?? false;
-                if ($versionFromExtra) {
-                    $aliasedVersion = str_replace('x-dev', '0', $versionFromExtra);
-                    $packages[$packageName] = $aliasedVersion;
+            /** @var array $packageData */
+            foreach ($composerLockData[$packagesKey] as $packageData) {
+                if (strpos($packageData['version'], static::PREFIX_DEV_PACKAGE) === 0) {
+                    continue;
                 }
+                [$packageName, $aliasedVersion] = $this->getPackageVersion($packageData);
+                if (stripos($packageName, static::PREFIX_ORGANIZATION) === false) {
+                    continue;
+                }
+                $packages[$packageName] = $aliasedVersion;
             }
         }
 
         return $packages;
+    }
+
+    /**
+     * @param array<string, mixed> $packageData
+     *
+     * @return array<int, string>
+     */
+    protected function getPackageVersion(array $packageData): array
+    {
+        [$org, $module] = explode('/', $packageData['name']);
+        $packageName = sprintf('%s.%s', TextCaseHelper::dashToCamelCase($org), TextCaseHelper::dashToCamelCase($module));
+
+        if (strpos($packageData['version'], 'dev-') !== false) {
+            $versionFromExtra = $packageData['extra']['branch-alias']['dev-master'] ?? false;
+            if ($versionFromExtra) {
+                $aliasedVersion = str_replace('x-dev', '0', $versionFromExtra);
+
+                return [$packageName, $aliasedVersion];
+            }
+        }
+
+        return [$packageName, $packageData['version']];
     }
 
     /**

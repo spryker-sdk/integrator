@@ -41,7 +41,6 @@ class IntegratorLockUpdaterConsole extends AbstractInstallerConsole
         $commandArgumentsTransfer = $this->buildCommandArgumentsTransfer($input);
         $io = $this->createInputOutputAdapter($input, $output, $commandArgumentsTransfer->getFormat());
         $this->getFacade()->runUpdateLock(
-            $this->getFactory()->getModuleFinderFacade()->getModules(),
             $io,
             $commandArgumentsTransfer,
         );

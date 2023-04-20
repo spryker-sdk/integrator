@@ -138,8 +138,6 @@ use SprykerSdk\Integrator\ManifestStrategy\WireGlueRelationshipManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireNavigationManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WirePluginManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireWidgetManifestStrategy;
-use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacade;
-use SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacadeInterface;
 use SprykerSdk\Integrator\VersionControlSystem\GitRepository;
 
 class IntegratorFactory
@@ -819,14 +817,6 @@ class IntegratorFactory
                 'startTokenPos', 'endTokenPos',
             ],
         ]);
-    }
-
-    /**
-     * @return \SprykerSdk\Integrator\ModuleFinder\ModuleFinderFacadeInterface
-     */
-    public function getModuleFinderFacade(): ModuleFinderFacadeInterface
-    {
-        return new ModuleFinderFacade();
     }
 
     /**

@@ -22,6 +22,7 @@ vendor/
 !tests/_data/project_mock/vendor/
 composer.lock
 !tests/_data/project_mock/composer.lock
+!tests/_data/composer/composer.lock
 .phpunit.result.cache
 
 # tests
