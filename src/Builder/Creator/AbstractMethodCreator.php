@@ -84,8 +84,7 @@ class AbstractMethodCreator
     }
 
     /**
-     * @param string $className
-     * @param string $constantName
+     * @param string $value
      *
      * @return \PhpParser\Node\Expr
      */

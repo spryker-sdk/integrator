@@ -134,11 +134,11 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
         if (count($itemParts) === static::SIMPLE_VARIABLE_SEMICOLON_COUNT) {
             return $this->createSingleSemicolonVariableArrayItem($itemParts, $keyParts);
         }
-        
+
         if (!$keyParts) {
             return new ArrayItem($this->createClassConstantExpression($itemParts[static::CONSTANT_TYPE_INDEX], $itemParts[static::CONSTANT_NAME_INDEX]));
         }
-        
+
         $key = (count($keyParts) == 1) ?
             $this->createValueExpression($keyParts[static::CONSTANT_TYPE_INDEX]) :
             $this->createClassConstantExpression($keyParts[static::CONSTANT_TYPE_INDEX], $keyParts[static::CONSTANT_NAME_INDEX]);
