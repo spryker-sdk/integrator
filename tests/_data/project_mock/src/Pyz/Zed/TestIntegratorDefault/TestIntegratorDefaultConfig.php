@@ -175,4 +175,16 @@ class TestIntegratorDefaultConfig extends BaseConfig
             SinglePlugin::CONST_VALUE,
         ];
     }
+
+    /**
+     * @return array
+     */
+    public function getProtectedPaths(): array
+    {
+        return [
+            '/categories' => [
+                'isRegularExpression' => false,
+            ],
+        ];
+    }
 }

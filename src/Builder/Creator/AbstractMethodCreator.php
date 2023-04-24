@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\Creator;
 
 use PhpParser\BuilderFactory;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\NodeTraverser;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
@@ -80,5 +81,15 @@ class AbstractMethodCreator
             (new ClassHelper())->getShortClassName($className),
             $constantName,
         );
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return \PhpParser\Node\Expr
+     */
+    protected function createValueExpression(string $value): Expr
+    {
+        return (new BuilderFactory())->val($value);
     }
 }

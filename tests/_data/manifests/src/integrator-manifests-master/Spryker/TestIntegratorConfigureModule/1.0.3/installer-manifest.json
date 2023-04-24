@@ -177,6 +177,25 @@
             "value": [
                 "\\Spryker\\Zed\\TestIntegratorWirePlugin\\Communication\\Plugin\\SinglePlugin::CONST_VALUE"
             ]
+        },
+        {
+            "previousValue": {
+                "\/categories": {
+                    "isRegularExpression": false
+                }
+            },
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getProtectedPaths",
+            "value": {
+                "#\/product-attributes.*#": {
+                    "isRegularExpression": true,
+                    "methods": [
+                        "get",
+                        "getCollection",
+                        "post",
+                        "patch"
+                    ]
+                }
+            }
         }
     ]
 }
