@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -91,29 +92,30 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
         $arrayItems = [];
         foreach ($value as $key => $item) {
             $itemParts = [];
+            $keyParts = [];
 
-            if (is_string($item)) {
-                $item = $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $item);
-                $itemParts = explode('::', $item);
+            if (!is_int($key)) {
+                $keyShrot = $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $key);
+                $keyParts = explode('::', $keyShrot);
             }
-            if (is_bool($item)) {
-                $itemParts = [$item];
-            }
-
-            if (is_int($key)) {
-                $arrayItems[] = $this->createArrayItem($itemParts);
-
-                continue;
-            }
-
-            $key = $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $key);
-            $keyParts = explode('::', $key);
 
             if (is_array($item)) {
                 $insideArrayItems = $this->createMethodStatementsFromValue($classInformationTransfer, $item);
                 $arrayItems[] = $this->createArrayItem([], $keyParts, $insideArrayItems);
 
                 continue;
+            }
+
+            if (is_string($item)) {
+                $item = $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $item);
+                $itemParts = explode('::', $item);
+            }
+
+            if (is_bool($item) || is_int($item)) {
+                $itemParts = [$item];
+            }
+            if (!isset($itemParts[0]) && !isset($itemParts[1])) {
+                \var_dump($key, $item, $classInformationTransfer->getClassName());
             }
 
             $arrayItems[] = $this->createArrayItem($itemParts, $keyParts);
@@ -135,13 +137,19 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
             return $this->createSingleSemicolonVariableArrayItem($itemParts, $keyParts);
         }
 
-        if (!$keyParts) {
+        if (!$keyParts && !$insideArrayItems) {
             return new ArrayItem($this->createClassConstantExpression($itemParts[static::CONSTANT_TYPE_INDEX], $itemParts[static::CONSTANT_NAME_INDEX]));
         }
+        $countKeyParts = count($keyParts);
+        $key = null;
 
-        $key = (count($keyParts) == 1) ?
-            $this->createValueExpression($keyParts[static::CONSTANT_TYPE_INDEX]) :
-            $this->createClassConstantExpression($keyParts[static::CONSTANT_TYPE_INDEX], $keyParts[static::CONSTANT_NAME_INDEX]);
+        if ($countKeyParts === 1) {
+            $key = $this->createValueExpression($keyParts[static::CONSTANT_TYPE_INDEX]);
+        }
+
+        if ($countKeyParts === 2) {
+            $key = $this->createClassConstantExpression($keyParts[static::CONSTANT_TYPE_INDEX], $keyParts[static::CONSTANT_NAME_INDEX]);
+        }
 
         if ($insideArrayItems) {
             return new ArrayItem(
@@ -172,9 +180,13 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
                     $this->createClassConstantExpression($keyParts[static::CONSTANT_TYPE_INDEX], $keyParts[static::CONSTANT_NAME_INDEX]),
             );
         }
+        $singleItemParts = [];
 
-        $singleItemParts = explode('->', trim($itemParts[0], '$()'));
-        if (count($singleItemParts) !== static::SIMPLE_VARIABLE_SEMICOLON_COUNT) {
+        if (is_string($itemParts[0])) {
+            $singleItemParts = explode('->', trim($itemParts[0], '$()'));
+        }
+        $countSingleItemParts = count($singleItemParts);
+        if ($countSingleItemParts && $countSingleItemParts !== static::SIMPLE_VARIABLE_SEMICOLON_COUNT) {
             return new ArrayItem(
                 (new BuilderFactory())->methodCall(
                     new Variable($singleItemParts[static::METHOD_TYPE_INDEX]),
@@ -191,7 +203,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
         }
 
         return new ArrayItem(
-            new String_($itemParts[0]),
+            is_string($itemParts[0]) ? new String_($itemParts[0]) : new LNumber($itemParts[0]),
             $key,
         );
     }
