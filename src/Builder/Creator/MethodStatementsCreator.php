@@ -115,7 +115,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
                 $itemParts = [$item];
             }
             if (!isset($itemParts[0]) && !isset($itemParts[1])) {
-                \var_dump($key, $item, $classInformationTransfer->getClassName());
+                var_dump($key, $item, $classInformationTransfer->getClassName());
             }
 
             $arrayItems[] = $this->createArrayItem($itemParts, $keyParts);
@@ -159,8 +159,8 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
         }
 
         return new ArrayItem(
-            $key,
             $this->createClassConstantExpression($itemParts[static::CONSTANT_TYPE_INDEX], $itemParts[static::CONSTANT_NAME_INDEX]),
+            $key,
         );
     }
 
