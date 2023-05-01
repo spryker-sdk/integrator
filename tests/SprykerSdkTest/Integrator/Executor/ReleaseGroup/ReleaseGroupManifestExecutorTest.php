@@ -65,6 +65,41 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
     /**
      * @return void
      */
+    public function testRunReleaseGroupManifestExecutionForHashSuccess(): void
+    {
+        // Arrange
+        $fileStorageMock = $this->createFileStorageMock(file_get_contents(static::INSTALLER_MANIFEST_JSON_PATH));
+        $reader = new FileBucketManifestReader($fileStorageMock);
+
+        $gitMock = $this->createMock(GitRepository::class);
+        $gitMock->method('hasChanges')->willReturn(true);
+        $gitMock->method('getCurrentBranchName')->willReturn('HEAD detached at');
+        $gitMock->expects($this->once())->method('getHeadHashCommit')->willReturn('testBranch');
+        $gitMock->expects($this->exactly(2))->method('getDiff')
+            ->will($this->onConsecutiveCalls(
+                $this->throwException(new GitException('', 128)),
+                'diff',
+            ));
+
+        $executorMock = $this->createManifestExecutorMock();
+        $manifestExecutor = new DiffGenerator($reader, $fileStorageMock, $executorMock, $gitMock);
+
+        // Assert
+        $gitMock->expects($this->atLeastOnce())->method('getBranches')->willReturn('master');
+        $gitMock->expects($this->atLeastOnce())->method('checkout');
+        $gitMock->expects($this->once())->method('commit');
+        $fileStorageMock->expects($this->once())->method('addFile');
+
+        // Act
+        $manifestExecutor->generateDiff(
+            $this->createCommandArgumentsTransfer(),
+            $this->buildSymfonyConsoleInputOutputAdapter(),
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testRunReleaseGroupManifestExecutionSuccessDry(): void
     {
         // Arrange
