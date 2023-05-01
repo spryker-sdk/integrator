@@ -22,7 +22,6 @@ class GitRepository extends CzGitRepository
     public function getHeadHashCommit(): string
     {
         $branch = $this->extractFromCommand(['rev-parse', 'HEAD'], 'trim');
-        
         if (is_array($branch)) {
             return $branch[0];
         }
