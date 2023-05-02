@@ -95,8 +95,8 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
             $keyParts = [];
 
             if (!is_int($key)) {
-                $keyShrot = $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $key);
-                $keyParts = explode('::', $keyShrot);
+                $keyShort = $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $key);
+                $keyParts = explode('::', $keyShort);
             }
 
             if (is_array($item)) {
@@ -113,9 +113,6 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
 
             if (is_bool($item) || is_int($item)) {
                 $itemParts = [$item];
-            }
-            if (!isset($itemParts[0]) && !isset($itemParts[1])) {
-                var_dump($key, $item, $classInformationTransfer->getClassName());
             }
 
             $arrayItems[] = $this->createArrayItem($itemParts, $keyParts);
