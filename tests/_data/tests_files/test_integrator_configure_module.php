@@ -56,7 +56,7 @@ class TestIntegratorDefaultConfig extends BaseConfig
     public function testChange3(): array
     {
         return [
-            static::TEST_VARIABLE => static::ANOTHER_TEST_VARIABLE, static::TEST_VALUE5_CHANGE => static::TEST_VALUE_CHANGE,
+            static::TEST_VARIABLE => static::ANOTHER_TEST_VARIABLE, static::TEST_VALUE_CHANGE => static::TEST_VALUE5_CHANGE,
         ];
     }
 
@@ -71,8 +71,8 @@ class TestIntegratorDefaultConfig extends BaseConfig
             ], static::TEST_VALUE6 => [
                 ArrayConfigElementManifestStrategy::TEST_VALUE5,
             ], static::TEST_VALUE7 => [
-                ArrayConfigElementManifestStrategy::MANIFEST_KEY => ArrayConfigElementManifestStrategy::TEST_VALUE3,
-                ArrayConfigElementManifestStrategy::MANIFEST_KEY => ArrayConfigElementManifestStrategy2::TEST_VALUE4,
+                ArrayConfigElementManifestStrategy::MANIFEST_KEY1 => ArrayConfigElementManifestStrategy::TEST_VALUE,
+                ArrayConfigElementManifestStrategy::MANIFEST_KEY2 => ArrayConfigElementManifestStrategy2::TEST_VALUE,
             ],
         ];
     }
@@ -254,7 +254,7 @@ class TestIntegratorDefaultConfig extends BaseConfig
     public function testNewMethod5() : array
     {
         return [
-            ArrayConfigElementManifestStrategy::TEST_VALUE2 => ArrayConfigElementManifestStrategy::MANIFEST_KEY,
+            ArrayConfigElementManifestStrategy::MANIFEST_KEY => ArrayConfigElementManifestStrategy::TEST_VALUE2,
             static::TEST_VALUE3 => static::TEST_VALUE2,
             static::TEST_VALUE5 => static::TEST_VALUE3,
         ];
@@ -285,5 +285,27 @@ class TestIntegratorDefaultConfig extends BaseConfig
                 \Pyz\Yves\CartPage\CartPageConfig::IS_CART_CART_ITEMS_VIA_AJAX_LOAD_ENABLED => 'test',
             ],
         ]);
+    }
+    /**
+     * @return array
+     */
+    public function getInstallerUsers() : array
+    {
+        return [
+            [
+                'firstName' => 'Admin',
+                'lastName' => 'Spryker',
+                'username' => 'admin@spryker.com',
+                'password' => 'test',
+                'localeName' => 'en_US',
+            ],
+            [
+                'firstName' => 'Admin',
+                'lastName' => 'German',
+                'password' => 'test',
+                'username' => 'admin_de@spryker.com',
+                'localeName' => 'de_DE',
+            ],
+        ];
     }
 }

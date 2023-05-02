@@ -9,10 +9,26 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\VersionControlSystem;
 
+use CzProject\GitPhp\GitException;
 use CzProject\GitPhp\GitRepository as CzGitRepository;
 
 class GitRepository extends CzGitRepository
 {
+    /**
+     * @throws \CzProject\GitPhp\GitException
+     *
+     * @return string
+     */
+    public function getHeadHashCommit(): string
+    {
+        $branch = $this->extractFromCommand(['rev-parse', 'HEAD'], 'trim');
+        if (is_array($branch)) {
+            return $branch[0];
+        }
+
+        throw new GitException('Getting of current hash failed.');
+    }
+
     /**
      * @param string $originalBranch
      * @param string $currentBranch

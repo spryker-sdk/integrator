@@ -71,8 +71,8 @@
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::testNewMethod5",
             "value": {
                 "\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY": "\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE2",
-                "static::TEST_VALUE2": "static::TEST_VALUE3",
-                "static::TEST_VALUE3": "static::TEST_VALUE5"
+                "static::TEST_VALUE3": "static::TEST_VALUE2",
+                "static::TEST_VALUE5": "static::TEST_VALUE3"
             }
         },
         {
@@ -121,8 +121,8 @@
                 ],
                 "static::TEST_VALUE7":
                 {
-                    "\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE3": "\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY",
-                    "\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy2::TEST_VALUE4": "\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY"
+                    "\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY1": "\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::TEST_VALUE",
+                    "\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy::MANIFEST_KEY2": "\\App\\Manifest\\Generator\\ArrayConfigElementManifestStrategy2::TEST_VALUE"
                 }
             }
         },
@@ -196,6 +196,26 @@
                     ]
                 }
             }
+        },
+        {
+            "previousValue": "",
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getInstallerUsers",
+            "value": [
+                {
+                    "firstName": "Admin",
+                    "lastName": "Spryker",
+                    "username": "admin@spryker.com",
+                    "password": "test",
+                    "localeName": "en_US"
+                },
+                {
+                    "firstName": "Admin",
+                    "lastName": "German",
+                    "password": "test",
+                    "username": "admin_de@spryker.com",
+                    "localeName": "de_DE"
+                }
+            ]
         }
     ]
 }

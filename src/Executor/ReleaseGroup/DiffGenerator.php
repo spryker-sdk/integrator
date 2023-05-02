@@ -91,6 +91,9 @@ class DiffGenerator implements DiffGeneratorInterface
         InputOutputInterface $inputOutput
     ): void {
         $currentBranchName = $this->gitRepository->getCurrentBranchName();
+        if ($currentBranchName && strpos($currentBranchName, 'HEAD detached at') !== false) {
+            $currentBranchName = $this->gitRepository->getHeadHashCommit();
+        }
         $releaseGroupId = $commandArgumentsTransfer->getReleaseGroupIdOrFail();
         $manifests = $this->manifestReader->readManifests($releaseGroupId);
         $unappliedManifests = $this->manifestExecutor->findUnappliedManifests($manifests, []);
