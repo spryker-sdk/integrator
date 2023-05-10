@@ -146,14 +146,10 @@ class DiffGenerator implements DiffGeneratorInterface
         string $branchToCompare,
         InputOutputInterface $inputOutput
     ): void {
-        if (!$this->gitRepository->hasChanges()) {
-            $this->gitClean($currentBranchName);
-
-            return;
+        if ($this->gitRepository->hasChanges()) {
+            $this->gitRepository->addAllChanges();
+            $this->gitRepository->commit('The commit was created by integrator', ['-n']);
         }
-
-        $this->gitRepository->addAllChanges();
-        $this->gitRepository->commit('The commit was created by integrator', ['-n']);
 
         try {
             $gitDiffOutput = $this->gitRepository->getDiff($branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
