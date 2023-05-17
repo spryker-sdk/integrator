@@ -74,6 +74,17 @@ class TestIntegratorWirePluginDependencyProvider extends TestParentIntegratorWir
         ];
     }
 
+    public function getTestAlreadyAddedPlugins(): array
+    {
+        return [
+            new TestIntegratorWirePlugin(),
+            TestIntegratorWirePluginConfig::TEST_INTEGRATOR_WIRE_PLUGIN => new TestIntegratorWirePluginIndex(),
+            static::TEST_INTEGRATOR_WIRE_PLUGIN_STATIC_INDEX => new TestIntegratorWirePluginStaticIndex(),
+            'TEST_INTEGRATOR_WIRE_PLUGIN_STRING_INDEX' => new TestIntegratorWirePluginStringIndex(),
+            Config::get(LogConstants::LOG_QUEUE_NAME) => new TestIntegratorWirePluginExpressionIndex(),
+        ];
+    }
+
     public function getOrderedTestPlugins(): array
     {
         return [
