@@ -511,7 +511,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             return $node->key->value;
         }
 
-        return null;
+        return (new Standard())->prettyPrintExpr($node->key);
     }
 
     /**
