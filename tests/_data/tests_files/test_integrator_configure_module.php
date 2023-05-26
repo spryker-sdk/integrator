@@ -195,7 +195,20 @@ class TestIntegratorDefaultConfig extends BaseConfig
         return [
             '/categories' => [
                 'isRegularExpression' => false,
-            ], '#/product-attributes.*#' => [
+            ],
+            '#^/categories/.*#' => [
+                'isRegularExpression' => true,
+            ],
+            '/\/product-attributes.*/' => [
+                'isRegularExpression' => true,
+                'methods' => [
+                    'get',
+                    'getCollection',
+                    'post',
+                    'patch',
+                ],
+            ],
+            '/\/product-abstract.*/' => [
                 'isRegularExpression' => true,
                 'methods' => [
                     'get',

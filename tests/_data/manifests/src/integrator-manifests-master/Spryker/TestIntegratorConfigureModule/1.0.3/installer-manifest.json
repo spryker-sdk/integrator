@@ -182,11 +182,23 @@
             "previousValue": {
                 "\/categories": {
                     "isRegularExpression": false
+                },
+                "#^/categories/.*#": {
+                    "isRegularExpression": true
                 }
             },
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::getProtectedPaths",
             "value": {
-                "#\/product-attributes.*#": {
+                "\/\\\/product-attributes.*\/": {
+                    "isRegularExpression": true,
+                    "methods": [
+                        "get",
+                        "getCollection",
+                        "post",
+                        "patch"
+                    ]
+                },
+                "\/\\\/product-abstract.*\/": {
                     "isRegularExpression": true,
                     "methods": [
                         "get",
