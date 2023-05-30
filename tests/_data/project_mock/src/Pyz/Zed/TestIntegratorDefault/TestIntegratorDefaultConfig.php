@@ -185,6 +185,9 @@ class TestIntegratorDefaultConfig extends BaseConfig
             '/categories' => [
                 'isRegularExpression' => false,
             ],
+            '#^/categories/.*#' => [
+                'isRegularExpression' => true,
+            ],
         ];
     }
 }

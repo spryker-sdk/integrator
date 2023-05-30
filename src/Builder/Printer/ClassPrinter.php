@@ -71,4 +71,14 @@ class ClassPrinter extends Standard
 
         return $result;
     }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    protected function pSingleQuotedString(string $string): string
+    {
+        return '\'' . preg_replace("/'|\\\\(?=[\\\\']|$)/", '\\\\$0', $string) . '\'';
+    }
 }
