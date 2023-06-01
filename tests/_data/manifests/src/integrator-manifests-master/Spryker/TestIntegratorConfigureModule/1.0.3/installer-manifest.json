@@ -35,7 +35,19 @@
         },
         {
             "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::BOOL_VALUE",
+            "value": { "value":  "true", "is_literal":  true }
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::STRING_BOOL_VALUE",
             "value": "true"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::STRAIGHT_BOOL_VALUE",
+            "value": true
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::OTHER_CONSTANT",
+            "value": { "value":  "PHP_EOL", "is_literal":  true }
         },
         {
             "value": false,
@@ -228,6 +240,18 @@
                     "localeName": "de_DE"
                 }
             ]
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::returnConstantCase1",
+            "value": "PHP_EOL"
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::returnConstantCase2",
+            "value": { "value": "PHP_EOL", "is_literal":  true }
+        },
+        {
+            "target": "\\Pyz\\Zed\\TestIntegratorDefault\\TestIntegratorDefaultConfig::returnConstantCase3",
+            "value": { "value": "return PHP_EOL", "is_literal":  true }
         }
     ]
 }

@@ -17,8 +17,9 @@ interface ClassConstantModifierInterface
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $constantName
      * @param mixed $value
+     * @param bool $isLiteral
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function setConstant(ClassInformationTransfer $classInformationTransfer, string $constantName, $value): ClassInformationTransfer;
+    public function setConstant(ClassInformationTransfer $classInformationTransfer, string $constantName, $value, bool $isLiteral): ClassInformationTransfer;
 }

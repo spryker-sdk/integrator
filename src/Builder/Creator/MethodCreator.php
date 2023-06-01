@@ -10,6 +10,8 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\Creator;
 
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -69,12 +71,13 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param array|string|float|int|bool|null $value
+     * @param bool $isLiteral
      *
      * @throws \SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException
      *
      * @return array<array-key, \PhpParser\Node\Stmt>
      */
-    public function createMethodBody(ClassInformationTransfer $classInformationTransfer, $value): array
+    public function createMethodBody(ClassInformationTransfer $classInformationTransfer, $value, bool $isLiteral = false): array
     {
         if (is_array($value)) {
             return $this->createReturnArrayStatement($classInformationTransfer, $value);
@@ -87,7 +90,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         }
 
         if ($this->isSingleReturnStatement($tree)) {
-            return $this->createSingleStatementMethodBody($classInformationTransfer, $tree, $value);
+            return $this->createSingleStatementMethodBody($classInformationTransfer, $tree, $value, $isLiteral);
         }
 
         return $tree;
@@ -159,12 +162,13 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param array<\PhpParser\Node\Stmt> $tree
      * @param mixed $value
+     * @param bool $isLiteral
      *
      * @throws \SprykerSdk\Integrator\Builder\Exception\NotFoundReturnExpressionException
      *
      * @return array<\PhpParser\Node\Stmt\Return_>
      */
-    protected function createSingleStatementMethodBody(ClassInformationTransfer $classInformationTransfer, array $tree, $value): array
+    protected function createSingleStatementMethodBody(ClassInformationTransfer $classInformationTransfer, array $tree, $value, bool $isLiteral): array
     {
         /** @var \PhpParser\Node\Stmt\Expression|null $returnExpression */
         $returnExpression = $tree[0] ?? null;
@@ -175,7 +179,11 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
             return $this->createClassConstantReturnStatement($classInformationTransfer, $returnExpression);
         }
 
-        return [new Return_($returnExpression->expr)];
+        $returnExpression = !$isLiteral && $returnExpression->expr instanceof ConstFetch && !in_array((string)$returnExpression->expr->name, ['true', 'false'], true)
+            ? new String_((string)$returnExpression->expr->name)
+            : $returnExpression->expr;
+
+        return [new Return_($returnExpression)];
     }
 
     /**

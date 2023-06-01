@@ -209,7 +209,7 @@ class CommonClassModifier implements CommonClassModifierInterface
         if (!$this->classMethodChecker->isMethodNodeSameAsValue($methodNode, $previousValue)) {
             return $classInformationTransfer;
         }
-        $methodBody = $this->methodCreator->createMethodBody($classInformationTransfer, $value);
+        $methodBody = $this->methodCreator->createMethodBody($classInformationTransfer, $value, $isLiteral);
 
         $methodNodeProperties = [ReplaceNodePropertiesByNameVisitor::STMTS => $methodBody];
 

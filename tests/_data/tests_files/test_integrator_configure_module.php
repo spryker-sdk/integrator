@@ -14,7 +14,10 @@ use Spryker\Zed\TestIntegratorWirePlugin\Communication\Plugin\SinglePlugin;
 
 class TestIntegratorDefaultConfig extends BaseConfig
 {
-    public const BOOL_VALUE = 'true';
+    public const OTHER_CONSTANT = PHP_EOL;
+    public const STRAIGHT_BOOL_VALUE = true;
+    public const STRING_BOOL_VALUE = 'true';
+    public const BOOL_VALUE = true;
     public const ASSOC_ARRAY_VALUE = [
         'key_1' => 'key_1_value',
         'key_2' => 'key_2_value',
@@ -320,5 +323,26 @@ class TestIntegratorDefaultConfig extends BaseConfig
                 'localeName' => 'de_DE',
             ],
         ];
+    }
+    /**
+     * @return string
+     */
+    public function returnConstantCase1() : string
+    {
+        return 'PHP_EOL';
+    }
+    /**
+     * @return string
+     */
+    public function returnConstantCase2() : string
+    {
+        return PHP_EOL;
+    }
+    /**
+     * @return string
+     */
+    public function returnConstantCase3() : string
+    {
+        return PHP_EOL;
     }
 }

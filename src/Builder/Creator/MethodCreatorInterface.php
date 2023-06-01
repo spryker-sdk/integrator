@@ -16,10 +16,11 @@ interface MethodCreatorInterface
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param array|string|float|int|bool|null $value
+     * @param bool $isLiteral
      *
      * @return array<array-key, \PhpParser\Node\Stmt>
      */
-    public function createMethodBody(ClassInformationTransfer $classInformationTransfer, $value): array;
+    public function createMethodBody(ClassInformationTransfer $classInformationTransfer, $value, bool $isLiteral = false): array;
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
