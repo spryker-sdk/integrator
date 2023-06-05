@@ -34,8 +34,8 @@ class ManifestReaderTest extends BaseTestCase
      */
     public static function setUpBeforeClass(): void
     {
-        $zipPath = APPLICATION_VENDOR_DIR . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider' . DIRECTORY_SEPARATOR . static::ZIP_PATH;
-        $dirPath = APPLICATION_VENDOR_DIR . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider' . DIRECTORY_SEPARATOR . static::MANIFESTS_DIR_PATH;
+        $dirPath = ROOT . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider' . DIRECTORY_SEPARATOR . static::MANIFESTS_DIR_PATH;
+        $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
 
         parent::zipDir($dirPath, $zipPath);
     }
