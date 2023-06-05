@@ -73,7 +73,7 @@ class BaseTestCase extends PHPUnitTestCase
      */
     public function getDataDirectoryPath(): string
     {
-        return APPLICATION_VENDOR_DIR . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider';
+        return ROOT_TESTS . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider';
     }
 
     /**

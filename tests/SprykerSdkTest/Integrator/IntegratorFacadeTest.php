@@ -31,8 +31,8 @@ class IntegratorFacadeTest extends BaseTestCase
      */
     public static function setUpBeforeClass(): void
     {
-        $zipPath = APPLICATION_VENDOR_DIR . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider' . DIRECTORY_SEPARATOR . static::ZIP_PATH;
-        $dirPath = APPLICATION_VENDOR_DIR . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider' . DIRECTORY_SEPARATOR . static::MANIFESTS_DIR_PATH;
+        $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
+        $dirPath = ROOT_TESTS . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider' . DIRECTORY_SEPARATOR . static::MANIFESTS_DIR_PATH;
 
         parent::zipDir($dirPath, $zipPath);
     }
@@ -43,7 +43,7 @@ class IntegratorFacadeTest extends BaseTestCase
     public static function tearDownAfterClass(): void
     {
         $fs = new Filesystem();
-        $zipPath = APPLICATION_VENDOR_DIR . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider' . DIRECTORY_SEPARATOR . static::ZIP_PATH;
+        $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
         $fs->remove($zipPath);
     }
 
