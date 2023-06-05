@@ -66,8 +66,12 @@ class ClassConstantModifier implements ClassConstantModifierInterface
             }
         }
 
+        if ($isLiteral) {
+            $value = $this->parseSingleValue((string)$value);
+        }
+
         $visitors = [
-            new AddConstantVisitor($constantName, $isLiteral ? $this->parseSingleValue((string)$value) : $value, $modifier),
+            new AddConstantVisitor($constantName, $value, $modifier),
         ];
 
         return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
