@@ -17,25 +17,25 @@ class ManifestReaderTest extends BaseTestCase
     /**
      * @var string
      */
-    protected const MANIFESTS_CUSTOM_SOURCE = './tests/_data/manifests/src/integrator-manifests-master/';
+    protected const MANIFESTS_CUSTOM_SOURCE = './vendor/spryker-sdk/manifest-test-data-provider/manifests/src/integrator-manifests-master/';
 
     /**
      * @var string
      */
-    protected const MANIFESTS_DIR_PATH = '_data/manifests/src';
+    protected const MANIFESTS_DIR_PATH = 'manifests/src';
 
     /**
      * @var string
      */
-    protected const ZIP_PATH = '_data/manifests/archive.zip';
+    protected const ZIP_PATH = 'manifests/archive.zip';
 
     /**
      * @return void
      */
     public static function setUpBeforeClass(): void
     {
-        $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
-        $dirPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::MANIFESTS_DIR_PATH;
+        $zipPath = APPLICATION_VENDOR_DIR . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider' . DIRECTORY_SEPARATOR . static::ZIP_PATH;
+        $dirPath = APPLICATION_VENDOR_DIR . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider' . DIRECTORY_SEPARATOR . static::MANIFESTS_DIR_PATH;
 
         parent::zipDir($dirPath, $zipPath);
     }

@@ -21,7 +21,7 @@ class IntegratorLockTest extends BaseTestCase
      */
     public function testWriteFileLock(): void
     {
-        $compareFilePath = './tests/_data/tests_files/spryker_lock_test_write_lock.json';
+        $compareFilePath = './vendor/spryker-sdk/manifest-test-data-provider/tests_files/spryker_lock_test_write_lock.json';
         $lockData = [
             'Spryker.Test' => [
                 'wire-plugin' => [
@@ -51,7 +51,7 @@ class IntegratorLockTest extends BaseTestCase
     public function testReadFileLock(): void
     {
         $tmpIntegratorLockFilePath = tempnam(sys_get_temp_dir(), 'integrator.lock.');
-        $compareFilePath = './tests/_data/tests_files/spryker_lock_test_write_lock.json';
+        $compareFilePath = './vendor/spryker-sdk/manifest-test-data-provider/tests_files/spryker_lock_test_write_lock.json';
 
         file_put_contents($tmpIntegratorLockFilePath, file_get_contents($compareFilePath));
 
