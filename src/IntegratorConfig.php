@@ -425,7 +425,7 @@ class IntegratorConfig
     public function getManifestsRepository(): string
     {
         if (defined('TEST_INTEGRATOR_MODE')) {
-            return 'tests/_data/manifests/archive.zip';
+            return 'tests/_data/archive.zip';
         }
 
         return static::MANIFESTS_URL;
