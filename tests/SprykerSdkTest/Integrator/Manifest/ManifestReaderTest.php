@@ -68,8 +68,9 @@ class ManifestReaderTest extends BaseTestCase
         $commandArgumentsTransfer->setModules([$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin')]);
         $manifestReader = $this->createManifestReader();
 
-        $manifests = $manifestReader->readManifests(
+        $manifests = $manifestReader->readUnappliedManifests(
             $commandArgumentsTransfer,
+            [],
         );
 
         $this->assertNotEmpty($manifests);
@@ -87,8 +88,9 @@ class ManifestReaderTest extends BaseTestCase
         $commandArgumentsTransfer->setModules([$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin')]);
         $manifestReader = $this->createManifestReader();
 
-        $manifests = $manifestReader->readManifests(
+        $manifests = $manifestReader->readUnappliedManifests(
             $commandArgumentsTransfer,
+            [],
         );
 
         $this->assertNotEmpty($manifests);

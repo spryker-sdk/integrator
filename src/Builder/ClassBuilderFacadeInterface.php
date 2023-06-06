@@ -144,4 +144,34 @@ interface ClassBuilderFacadeInterface
         bool $isLiteral,
         $previousValue
     ): ClassInformationTransfer;
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param string $targetMethodName
+     * @param string $key
+     * @param string $classNameToAdd
+     *
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
+     */
+    public function unwireGlueRelationship(
+        ClassInformationTransfer $classInformationTransfer,
+        string $targetMethodName,
+        string $key,
+        string $classNameToAdd
+    ): ClassInformationTransfer;
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param string $targetMethodName
+     * @param string $key
+     * @param string $classNameToAdd
+     *
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
+     */
+    public function wireGlueRelationship(
+        ClassInformationTransfer $classInformationTransfer,
+        string $targetMethodName,
+        string $key,
+        string $classNameToAdd
+    ): ClassInformationTransfer;
 }

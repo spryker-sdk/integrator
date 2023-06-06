@@ -25,6 +25,11 @@ class ComposerLockReader implements ComposerLockReaderInterface
     protected const PREFIX_ORGANIZATION = 'Spryker';
 
     /**
+     * @var string
+     */
+    protected const PREFIX_FEATURE_ORGANIZATION = 'SprykerFeature';
+
+    /**
      * @var array<string>
      */
     protected const GROUP_PACKAGES = ['packages', 'packages-dev'];
@@ -60,7 +65,10 @@ class ComposerLockReader implements ComposerLockReaderInterface
                     continue;
                 }
                 [$packageName, $aliasedVersion] = $this->getPackageVersion($packageData);
-                if (stripos($packageName, static::PREFIX_ORGANIZATION) === false) {
+                if (
+                    stripos($packageName, static::PREFIX_ORGANIZATION) === false ||
+                    stripos($packageName, static::PREFIX_FEATURE_ORGANIZATION) !== false
+                ) {
                     continue;
                 }
                 $packages[$packageName] = $aliasedVersion;

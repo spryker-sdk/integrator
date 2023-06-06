@@ -160,6 +160,7 @@ class IntegratorFactory
             $this->createIntegratorLockWriter(),
             $this->createRepositoryManifestReader(),
             $this->createManifestExecutor(),
+            $this->createComposerLockReader(),
         );
     }
 

@@ -33,10 +33,6 @@
         {
             "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestArrayMergeConfiguration",
             "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddConfigArrayElement::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST"
-        },
-        {
-            "target": "\\Pyz\\Client\\TestIntegratorAddConfigArrayElement\\TestIntegratorAddConfigArrayElementConfig::getTestArrayMergeConfiguration",
-            "value": "Spryker\\Shared\\TestIntegrator\\TestIntegratorAddConfigArrayElement::TEST_INTEGRATION_ADD_CONFIG_ARRAY_ELEMENT_CONST"
         }
     ]
 }

@@ -15,8 +15,9 @@ interface RepositoryManifestReaderInterface
 {
     /**
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+     * @param array<string, string> $lockedModules
      *
      * @return array<string, array<string, array<string>>>
      */
-    public function readManifests(IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): array;
+    public function readUnappliedManifests(IntegratorCommandArgumentsTransfer $commandArgumentsTransfer, array $lockedModules): array;
 }
