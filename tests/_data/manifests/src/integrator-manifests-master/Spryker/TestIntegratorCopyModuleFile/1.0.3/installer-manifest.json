@@ -1,8 +1,0 @@
-{
-    "copy-module-file": [
-        {
-            "target": "data/import_test.csv",
-            "source": "data/import_test.csv"
-        }
-    ]
-}

@@ -20,7 +20,7 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
     /**
      * @var string
      */
-    protected const ARCHIVE_DIR = 'integrator-manifests-master/';
+    public const ARCHIVE_DIR = 'integrator-manifests-master/';
 
     /**
      * @var \SprykerSdk\Integrator\IntegratorConfig

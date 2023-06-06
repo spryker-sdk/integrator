@@ -1,11 +1,13 @@
 <?php
 define('TEST_INTEGRATOR_MODE', 'true');
 define('TMP_DIRECTORY_NAME', 'tmp');
-define('DATA_DIRECTORY_NAME', '_data');
 define('ROOT_TESTS', __DIR__);
 
 defined('ROOT')
     || define('ROOT', dirname(__DIR__));
+
+defined('DATA_PROVIDER_DIR')
+    || define('DATA_PROVIDER_DIR', ROOT . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider');
 
 defined('APPLICATION_ROOT_DIR')
     || define('APPLICATION_ROOT_DIR', ROOT_TESTS . DIRECTORY_SEPARATOR . TMP_DIRECTORY_NAME);
