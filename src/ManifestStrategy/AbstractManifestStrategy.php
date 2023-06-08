@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Builder\ClassBuilderFacade;
+use SprykerSdk\Integrator\Builder\ClassBuilderFacadeInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
@@ -37,9 +38,9 @@ abstract class AbstractManifestStrategy implements ManifestStrategyInterface
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\ClassBuilderFacade
+     * @return \SprykerSdk\Integrator\Builder\ClassBuilderFacadeInterface
      */
-    protected function createClassBuilderFacade(): ClassBuilderFacade
+    protected function createClassBuilderFacade(): ClassBuilderFacadeInterface
     {
         return new ClassBuilderFacade();
     }
