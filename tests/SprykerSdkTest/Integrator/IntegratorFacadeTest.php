@@ -78,8 +78,8 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_configure_module.php';
-        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorDefault/TestIntegratorDefaultConfig.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Zed/TestIntegratorConfigureModule/TestIntegratorDefaultConfig.php';
+        $classPath = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorDefault/TestIntegratorDefaultConfig.php';
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -171,8 +171,9 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_unwire_console.php';
-        $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorUnwireConsoleCommands/ConsoleDependencyProvider.php';
+        $consoleDependencyProviderPath = '/src/Pyz/Zed/TestIntegratorUnwireConsoleCommands/ConsoleDependencyProvider.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . $consoleDependencyProviderPath;
+        $classPath = $this->getTestTmpDirPath() . $consoleDependencyProviderPath;
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -261,8 +262,9 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_configure_env.php';
-        $classPath = './tests/tmp/config/Shared/config_default.php';
+        $configPath = '/config/Shared/config_default.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . $configPath;
+        $classPath = $this->getTestTmpDirPath() . $configPath;
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -283,9 +285,9 @@ class IntegratorFacadeTest extends BaseTestCase
         // Arrange
         $fileSystem = $this->createFilesystem();
         if ($fileSystem->exists($this->getTempDirectoryPath())) {
-            $fileSystem->copy($this->getDataDirectoryPath() . '/project_mock/config/Shared/config_default.php', './tests/tmp/config/Shared/config_default.php');
-            $fileSystem->copy($this->getDataDirectoryPath() . '/project_mock/composer.json', './tests/tmp/composer.json');
-            $fileSystem->copy($this->getDataDirectoryPath() . '/project_mock/composer.lock', './tests/tmp/composer.lock');
+            $fileSystem->copy($this->getProjectMockOriginalPath() . '/config/Shared/config_default.php', './tests/tmp/config/Shared/config_default.php');
+            $fileSystem->copy($this->getProjectMockOriginalPath() . '/composer.json', './tests/tmp/composer.json');
+            $fileSystem->copy($this->getProjectMockOriginalPath() . '/composer.lock', './tests/tmp/composer.lock');
         }
 
         $ioAdapter = $this->createMockSymfonyConsoleChoiceInputOutput('Value choice 1');
@@ -297,8 +299,8 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_configure_env_choices.php';
-        $classPath = './tests/tmp/config/Shared/config_default.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/config/Shared/config_default_choices.php';
+        $classPath = $this->getTestTmpDirPath() . '/config/Shared/config_default.php';
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -438,8 +440,9 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_add_config_array_element_config.php';
-        $classPath = './tests/tmp/src/Pyz/Client/TestIntegratorAddConfigArrayElement/TestIntegratorAddConfigArrayElementConfig.php';
+        $testConfig = '/src/Pyz/Client/TestIntegratorAddConfigArrayElement/TestIntegratorAddConfigArrayElementConfig.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . $testConfig;
+        $classPath = $this->getTestTmpDirPath() . $testConfig;
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -461,13 +464,16 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $projectGlossaryFilePath = $this->getDataDirectoryPath() . '/project_mock/data/import/common/common/glossary.csv';
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_glossary.csv';
-        $testResultFile = './tests/tmp/data/import/common/common/glossary.csv';
+        $glossaryPath = '/data/import/common/common/glossary.csv';
+        $testFilePath = $this->getProjectMockCurrentPath() . $glossaryPath;
+        $testResultFile = $this->getTestTmpDirPath() . $glossaryPath;
 
         $this->assertFileExists($testFilePath);
         $this->assertFileExists($testResultFile);
-        $this->assertStringContainsString(trim(file_get_contents($projectGlossaryFilePath)), trim(file_get_contents($testResultFile)));
+        $this->assertStringContainsString(
+            trim(file_get_contents($this->getProjectMockOriginalPath() . $glossaryPath)),
+            trim(file_get_contents($testResultFile)),
+        );
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($testResultFile)));
     }
 
@@ -542,7 +548,7 @@ class IntegratorFacadeTest extends BaseTestCase
     {
         $fileSystem = $this->createFilesystem();
         $tmpPath = $this->getTempDirectoryPath();
-        $projectMockPath = $this->getProjectMockPath();
+        $projectMockPath = $this->getProjectMockOriginalPath();
 
         if ($fileSystem->exists($this->getTempDirectoryPath())) {
             $fileSystem->mirror($projectMockPath, $tmpPath);

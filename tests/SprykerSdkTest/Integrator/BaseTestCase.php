@@ -80,9 +80,25 @@ class BaseTestCase extends PHPUnitTestCase
     /**
      * @return string
      */
-    public function getProjectMockPath(): string
+    public function getProjectMockOriginalPath(): string
     {
-        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'project_mock';
+        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'project_original';
+    }
+
+    /**
+     * @return string
+     */
+    public function getProjectMockCurrentPath(): string
+    {
+        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'project_current';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTestTmpDirPath(): string
+    {
+        return ROOT_TESTS . DIRECTORY_SEPARATOR . 'tmp';
     }
 
     /**

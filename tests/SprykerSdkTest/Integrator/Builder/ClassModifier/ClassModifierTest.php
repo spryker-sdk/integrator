@@ -16,6 +16,11 @@ use SprykerSdkTest\Integrator\BaseTestCase;
 class ClassModifierTest extends BaseTestCase
 {
     /**
+     * @var string
+     */
+    protected const TEST_INTEGRATOR_DEFAULT_CONFIG_PATH = '/src/Pyz/Zed/TestIntegratorDefault/TestIntegratorDefaultConfig.php';
+
+    /**
      * @return void
      */
     public function testSetMethodReturnValueSetScalarValue(): void
@@ -23,7 +28,7 @@ class ClassModifierTest extends BaseTestCase
         //Arrange
         $classInformationTransfer = $this->createClassInformationTransfer(
             '\Pyz\Zed\TestIntegratorDefault\TestIntegratorDefaultConfig',
-            $this->getDataDirectoryPath() . '/tests_files/test_integrator_config_module_class_modifier.php',
+            $this->getProjectMockCurrentPath() . static::TEST_INTEGRATOR_DEFAULT_CONFIG_PATH,
         );
         $classModifier = $this->getFactory()->createCommonClassModifier();
         $finder = $this->getFactory()->createClassNodeFinder();
@@ -47,7 +52,7 @@ class ClassModifierTest extends BaseTestCase
         //Arrange
         $classInformationTransfer = $this->createClassInformationTransfer(
             '\Pyz\Zed\TestIntegratorDefault\TestIntegratorDefaultConfig',
-            $this->getDataDirectoryPath() . '/tests_files/test_integrator_config_module_class_modifier.php',
+            $this->getProjectMockCurrentPath() . static::TEST_INTEGRATOR_DEFAULT_CONFIG_PATH,
         );
         $classModifier = $this->getFactory()->createCommonClassModifier();
         $finder = $this->getFactory()->createClassNodeFinder();
