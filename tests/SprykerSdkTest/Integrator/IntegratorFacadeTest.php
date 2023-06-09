@@ -102,7 +102,7 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_wire_plugin_dependency_provider.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
 
         $this->assertFileExists($classPath);
@@ -125,7 +125,7 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_unwire_plugin_dependency_provider.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Zed/TestIntegratorUnwirePlugin/TestIntegratorUnwirePluginDependencyProvider.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorUnwirePlugin/TestIntegratorUnwirePluginDependencyProvider.php';
 
         $this->assertFileExists($classPath);
@@ -148,7 +148,7 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_wire_console.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Zed/TestIntegratorWireConsoleCommands/ConsoleDependencyProvider.php';
         $classPath = './tests/tmp/src/Pyz/Zed/TestIntegratorWireConsoleCommands/ConsoleDependencyProvider.php';
 
         $this->assertFileExists($classPath);
@@ -238,7 +238,7 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_unwire_widget.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Yves/ShopApplication/ShopApplicationDependencyProvider.php';
         $classPath = './tests/tmp/src/Pyz/Yves/ShopApplication/ShopApplicationDependencyProvider.php';
 
         $this->assertFileExists($classPath);
@@ -370,7 +370,7 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_unwire_glue_relationship.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php';
         $classPath = './tests/tmp/src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php';
 
         $this->assertFileExists($classPath);
