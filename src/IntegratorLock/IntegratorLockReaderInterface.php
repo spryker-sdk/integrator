@@ -12,7 +12,7 @@ namespace SprykerSdk\Integrator\IntegratorLock;
 interface IntegratorLockReaderInterface
 {
     /**
-     * @return array<string, array<string, array<string>>>
+     * @return array<string, string>
      */
     public function getLockFileData(): array;
 }
