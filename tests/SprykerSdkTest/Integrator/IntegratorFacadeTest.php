@@ -214,8 +214,8 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Yves/ShopApplication/ShopApplicationDependencyProvider.php';
-        $classPath = './tests/tmp/src/Pyz/Yves/ShopApplication/ShopApplicationDependencyProvider.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Yves/ShopApplication/TestIntegratorWireWidget/ShopApplicationDependencyProvider.php';
+        $classPath = './tests/tmp/src/Pyz/Yves/ShopApplication/TestIntegratorWireWidget/ShopApplicationDependencyProvider.php';
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -238,8 +238,8 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Yves/ShopApplication/ShopApplicationDependencyProvider.php';
-        $classPath = './tests/tmp/src/Pyz/Yves/ShopApplication/ShopApplicationDependencyProvider.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Yves/ShopApplication/TestIntegratorUnwireWidget/ShopApplicationDependencyProvider.php';
+        $classPath = './tests/tmp/src/Pyz/Yves/ShopApplication/TestIntegratorUnwireWidget/ShopApplicationDependencyProvider.php';
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -346,8 +346,8 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php';
-        $classPath = './tests/tmp/src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Glue/GlueApplication/TestIntegratorWireGlueRelationship/GlueApplicationDependencyProvider.php';
+        $classPath = './tests/tmp/src/Pyz/Glue/GlueApplication/TestIntegratorWireGlueRelationship/GlueApplicationDependencyProvider.php';
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -370,8 +370,8 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php';
-        $classPath = './tests/tmp/src/Pyz/Glue/GlueApplication/GlueApplicationDependencyProvider.php';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Glue/GlueApplication/TestIntegratorUnwireGlueRelationship/GlueApplicationDependencyProvider.php';
+        $classPath = './tests/tmp/src/Pyz/Glue/GlueApplication/TestIntegratorUnwireGlueRelationship/GlueApplicationDependencyProvider.php';
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
