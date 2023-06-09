@@ -394,7 +394,7 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_wire_navigation.xml';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/config/Zed/TestIntegratorWireNavigation/navigation.xml';
         $resultFilePath = './tests/tmp/config/Zed/navigation.xml';
 
         $this->assertFileExists($resultFilePath);
@@ -417,7 +417,7 @@ class IntegratorFacadeTest extends BaseTestCase
         );
 
         // Assert
-        $testFilePath = $this->getDataDirectoryPath() . '/tests_files/test_integrator_unwire_navigation.xml';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/config/Zed/TestIntegratorUnwireNavigation/navigation.xml';
         $resultFilePath = './tests/tmp/config/Zed/navigation.xml';
 
         $this->assertFileExists($resultFilePath);
