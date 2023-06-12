@@ -23,11 +23,6 @@ class DiffGenerator implements DiffGeneratorInterface
     /**
      * @var string
      */
-    protected const MASTER_BRANCH_NAME = 'master';
-
-    /**
-     * @var string
-     */
     protected const INTEGRATOR_RESULT_BRANCH_NAME = 'integrator/release-group-manifest-run';
 
     /**
@@ -95,8 +90,7 @@ class DiffGenerator implements DiffGeneratorInterface
             $currentBranchName = $this->gitRepository->getHeadHashCommit();
         }
         $releaseGroupId = $commandArgumentsTransfer->getReleaseGroupIdOrFail();
-        $manifests = $this->manifestReader->readManifests($releaseGroupId);
-        $unappliedManifests = $this->manifestExecutor->findUnappliedManifests($manifests, []);
+        $unappliedManifests = $this->manifestReader->readManifests($releaseGroupId);
         if (!count($unappliedManifests)) {
             throw new RuntimeException(
                 sprintf('No unapplied manifests found for release group id: %s', $releaseGroupId),
@@ -115,7 +109,7 @@ class DiffGenerator implements DiffGeneratorInterface
                 return;
             }
 
-            $this->storeDiff($releaseGroupId, $currentBranchName, $commandArgumentsTransfer->getBranchToCompareOrFail(), $inputOutput);
+            $this->storeDiff($releaseGroupId, $commandArgumentsTransfer->getBranchToCompareOrFail(), $inputOutput);
             $this->gitClean($currentBranchName);
         } catch (GitException $exception) {
             throw new RuntimeException(
@@ -132,7 +126,6 @@ class DiffGenerator implements DiffGeneratorInterface
 
     /**
      * @param int $releaseGroupId
-     * @param string $currentBranchName
      * @param string $branchToCompare
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      *
@@ -142,7 +135,6 @@ class DiffGenerator implements DiffGeneratorInterface
      */
     protected function storeDiff(
         int $releaseGroupId,
-        string $currentBranchName,
         string $branchToCompare,
         InputOutputInterface $inputOutput
     ): void {

@@ -17,17 +17,17 @@ class ManifestReaderTest extends BaseTestCase
     /**
      * @var string
      */
-    protected const MANIFESTS_CUSTOM_SOURCE = './tests/_data/manifests/src/integrator-manifests-master/';
+    protected const MANIFESTS_CUSTOM_SOURCE = DATA_PROVIDER_DIR . '/manifests/src/integrator-manifests-master/';
 
     /**
      * @var string
      */
-    protected const MANIFESTS_DIR_PATH = '_data/manifests/src';
+    protected const MANIFESTS_DIR_PATH = DATA_PROVIDER_DIR . '/manifests/src';
 
     /**
      * @var string
      */
-    protected const ZIP_PATH = '_data/manifests/archive.zip';
+    protected const ZIP_PATH = '_data/archive.zip';
 
     /**
      * @return void
@@ -35,9 +35,8 @@ class ManifestReaderTest extends BaseTestCase
     public static function setUpBeforeClass(): void
     {
         $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
-        $dirPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::MANIFESTS_DIR_PATH;
 
-        parent::zipDir($dirPath, $zipPath);
+        parent::zipDir(static::MANIFESTS_DIR_PATH, $zipPath);
     }
 
     /**
@@ -68,8 +67,9 @@ class ManifestReaderTest extends BaseTestCase
         $commandArgumentsTransfer->setModules([$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin')]);
         $manifestReader = $this->createManifestReader();
 
-        $manifests = $manifestReader->readManifests(
+        $manifests = $manifestReader->readUnappliedManifests(
             $commandArgumentsTransfer,
+            [],
         );
 
         $this->assertNotEmpty($manifests);
@@ -87,8 +87,9 @@ class ManifestReaderTest extends BaseTestCase
         $commandArgumentsTransfer->setModules([$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin')]);
         $manifestReader = $this->createManifestReader();
 
-        $manifests = $manifestReader->readManifests(
+        $manifests = $manifestReader->readUnappliedManifests(
             $commandArgumentsTransfer,
+            [],
         );
 
         $this->assertNotEmpty($manifests);
@@ -172,7 +173,7 @@ class ManifestReaderTest extends BaseTestCase
     {
         $fileSystem = $this->createFilesystem();
         $tmpPath = $this->getTempDirectoryPath();
-        $projectMockPath = $this->getProjectMockPath();
+        $projectMockPath = $this->getProjectMockOriginalPath();
 
         if ($fileSystem->exists($this->getTempDirectoryPath())) {
             $fileSystem->mirror($projectMockPath, $tmpPath);

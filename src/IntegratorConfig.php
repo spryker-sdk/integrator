@@ -171,17 +171,6 @@ class IntegratorConfig
     protected $config;
 
     /**
-     * @var array<string>
-     */
-    protected $organizationPathFragments = [
-        'spryker',
-        'spryker-shop',
-        'spryker-eco',
-        'spryker-sdk',
-        'spryker-merchant-portal',
-    ];
-
-    /**
      * @var static|null
      */
     protected static $instance;
@@ -335,14 +324,6 @@ class IntegratorConfig
     /**
      * @return string
      */
-    public function getApplicationSourceDir(): string
-    {
-        return APPLICATION_SOURCE_DIR;
-    }
-
-    /**
-     * @return string
-     */
     public function getConfigVariableName(): string
     {
         return 'config';
@@ -425,60 +406,10 @@ class IntegratorConfig
     public function getManifestsRepository(): string
     {
         if (defined('TEST_INTEGRATOR_MODE')) {
-            return 'tests/_data/manifests/archive.zip';
+            return 'tests/_data/archive.zip';
         }
 
         return static::MANIFESTS_URL;
-    }
-
-    /**
-     * @return array
-     */
-    public function getApplications(): array
-    {
-        return [
-            'Client',
-            'Service',
-            'Shared',
-            'Yves',
-            'Zed',
-            'Glue',
-        ];
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getInternalPackagePathFragments(): array
-    {
-        return [
-            'spryker',
-            'spryker-shop',
-            'spryker-merchant-portal',
-        ];
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getPathsToInternalOrganizations(): array
-    {
-        $organizationPaths = [];
-        foreach ($this->organizationPathFragments as $organizationPathFragment) {
-            $nonsplitDirectory = sprintf('%s/vendor/spryker/%s/Bundles/', APPLICATION_ROOT_DIR, $organizationPathFragment);
-            if (is_dir($nonsplitDirectory)) {
-                $organizationPaths[] = $nonsplitDirectory;
-
-                continue;
-            }
-
-            $splitDirectory = sprintf('%s/vendor/%s/', APPLICATION_ROOT_DIR, $organizationPathFragment);
-            if (is_dir($splitDirectory)) {
-                $organizationPaths[] = $splitDirectory;
-            }
-        }
-
-        return $organizationPaths;
     }
 
     /**

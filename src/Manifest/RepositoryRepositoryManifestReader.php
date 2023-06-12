@@ -20,7 +20,7 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
     /**
      * @var string
      */
-    protected const ARCHIVE_DIR = 'integrator-manifests-master/';
+    public const ARCHIVE_DIR = 'integrator-manifests-master/';
 
     /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
@@ -36,18 +36,21 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
      * @param \SprykerSdk\Integrator\Composer\ComposerLockReaderInterface $composerLockReader
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
      */
-    public function __construct(ComposerLockReaderInterface $composerLockReader, IntegratorConfig $config)
-    {
-        $this->config = $config;
+    public function __construct(
+        ComposerLockReaderInterface $composerLockReader,
+        IntegratorConfig $config
+    ) {
         $this->composerLockReader = $composerLockReader;
+        $this->config = $config;
     }
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+     * @param array<string, string> $lockedModules
      *
      * @return array<string, array<string, array<string>>>
      */
-    public function readManifests(IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): array
+    public function readUnappliedManifests(IntegratorCommandArgumentsTransfer $commandArgumentsTransfer, array $lockedModules): array
     {
         // Do not update repository folder when in local development
         if (!is_dir($this->config->getLocalRecipesDirectory()) && $commandArgumentsTransfer->getSource() === null) {
@@ -62,37 +65,60 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
             },
             $commandArgumentsTransfer->getModules(),
         );
-        foreach ($moduleComposerData as $moduleFullName => $version) {
-            if ($filterModules && !in_array($moduleFullName, $filterModules)) {
+        foreach ($moduleComposerData as $moduleFullName => $currentVersion) {
+            $fromVersion = $lockedModules[$moduleFullName] ?? '0.0.0';
+            if (
+                ($filterModules && !in_array($moduleFullName, $filterModules)) ||
+                version_compare($fromVersion, $currentVersion, '>=')
+            ) {
                 continue;
             }
+
             $moduleManifestsDir = $this->getModuleManifestsDir($moduleFullName, $commandArgumentsTransfer);
 
             if (!is_dir($moduleManifestsDir)) {
                 continue;
             }
 
-            [$version, $filePath] = $this->resolveManifestVersion($moduleManifestsDir, $version);
+            $versions = $this->resolveManifestVersions($moduleManifestsDir, $fromVersion, $currentVersion);
 
-            if (!$filePath) {
-                continue;
+            foreach ($versions as $version) {
+                $manifests = $this->appendManifests($moduleManifestsDir, $moduleFullName, $version, $manifests);
             }
+        }
 
-            $json = file_get_contents($filePath);
-            if (!$json) {
-                continue;
+        return $manifests;
+    }
+
+    /**
+     * @param string $moduleManifestsDir
+     * @param string $moduleFullName
+     * @param string $currentVersion
+     * @param array $manifests
+     *
+     * @return array
+     */
+    protected function appendManifests(string $moduleManifestsDir, string $moduleFullName, string $currentVersion, array $manifests): array
+    {
+        $json = file_get_contents($moduleManifestsDir . sprintf('%s/installer-manifest.json', $currentVersion));
+        if (!$json) {
+            return $manifests;
+        }
+        $manifestFileData = json_decode($json, true);
+
+        if ($manifestFileData) {
+            if (!isset($manifests[$moduleFullName])) {
+                $manifests[$moduleFullName] = [];
             }
-
-            $manifestFileData = json_decode($json, true);
-            if ($manifestFileData) {
-                foreach ($manifestFileData as &$strategy) {
-                    foreach ($strategy as &$manifest) {
-                        $manifest[IntegratorConfig::MODULE_KEY] = $moduleFullName;
-                        $manifest[IntegratorConfig::MODULE_VERSION_KEY] = $version;
-                    }
+            foreach ($manifestFileData as $strategy => $strategyManifests) {
+                if (!isset($manifests[$moduleFullName][$strategy])) {
+                    $manifests[$moduleFullName][$strategy] = [];
                 }
-                unset($strategy, $manifest);
-                $manifests[$moduleFullName] = $manifestFileData;
+                foreach ($strategyManifests as $manifest) {
+                    $manifest[IntegratorConfig::MODULE_KEY] = $moduleFullName;
+                    $manifest[IntegratorConfig::MODULE_VERSION_KEY] = $currentVersion;
+                    $manifests[$moduleFullName][$strategy][] = $manifest;
+                }
             }
         }
 
@@ -120,35 +146,28 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
 
     /**
      * @param string $moduleManifestsDir
+     * @param string $fromVersion
      * @param string $moduleVersion
      *
-     * @return array<string|null>
+     * @return array<string>
      */
-    protected function resolveManifestVersion(string $moduleManifestsDir, string $moduleVersion): array
+    protected function resolveManifestVersions(string $moduleManifestsDir, string $fromVersion, string $moduleVersion): array
     {
-        // Recipe path with module name and expected version
-        $filePath = $moduleManifestsDir . sprintf(
-            '%s/installer-manifest.json',
-            $moduleVersion,
-        );
+        $versions = [];
 
-        if (file_exists($filePath)) {
-            return [$moduleVersion, $filePath];
+        foreach ($this->getValidModuleVersions($moduleManifestsDir) as $version) {
+            if (
+                version_compare($version, $fromVersion, '<=') ||
+                version_compare($version, $moduleVersion, '>')
+            ) {
+                continue;
+            }
+
+            $versions[] = $version;
         }
+        usort($versions, fn ($v1, $v2) => version_compare($v1, $v2));
 
-        $nextSuitableVersion = $this->findNextSuitableVersion($moduleManifestsDir, $moduleVersion);
-
-        if (!$nextSuitableVersion) {
-            return [$moduleVersion, null];
-        }
-
-        return [
-            $nextSuitableVersion,
-            $moduleManifestsDir . sprintf(
-                '%s/installer-manifest.json',
-                $nextSuitableVersion,
-            ),
-        ];
+        return $versions;
     }
 
     /**
@@ -190,34 +209,6 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
 
     /**
      * @param string $moduleManifestsDir
-     * @param string $moduleVersion
-     *
-     * @return string|null
-     */
-    protected function findNextSuitableVersion(string $moduleManifestsDir, string $moduleVersion): ?string
-    {
-        $versions = [];
-
-        foreach ($this->getValidModuleVersions($moduleManifestsDir) as $version) {
-            if (version_compare($version, $moduleVersion, 'gt')) {
-                continue;
-            }
-
-            $versions[] = $version;
-        }
-
-        if (!$versions) {
-            return null;
-        }
-
-        $versions = $this->sortArray($versions);
-        $end = end($versions);
-
-        return $end ?: null;
-    }
-
-    /**
-     * @param string $moduleManifestsDir
      *
      * @return array<string>
      */
@@ -236,40 +227,5 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
         }
 
         return $validModuleVersions;
-    }
-
-    /**
-     * @param array<string> $versions
-     *
-     * @return array<string>
-     */
-    protected function sortArray(array $versions): array
-    {
-        if (count($versions) === 0) {
-            return [];
-        }
-
-        $pivotArray = array_splice(
-            $versions,
-            (int)floor((count($versions) - 1) / 2),
-            1,
-        );
-
-        $smaller = [];
-        $greater = [];
-
-        foreach ($versions as $version) {
-            if (version_compare($version, $pivotArray[0], 'gt')) {
-                $greater[] = $version;
-            } else {
-                $smaller[] = $version;
-            }
-        }
-
-        return array_merge(
-            $this->sortArray($smaller),
-            $pivotArray,
-            $this->sortArray($greater),
-        );
     }
 }

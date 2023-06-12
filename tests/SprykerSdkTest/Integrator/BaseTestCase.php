@@ -19,6 +19,7 @@ use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
+use SprykerSdk\Integrator\Manifest\RepositoryRepositoryManifestReader;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
@@ -73,15 +74,31 @@ class BaseTestCase extends PHPUnitTestCase
      */
     public function getDataDirectoryPath(): string
     {
-        return ROOT_TESTS . DIRECTORY_SEPARATOR . DATA_DIRECTORY_NAME;
+        return DATA_PROVIDER_DIR;
     }
 
     /**
      * @return string
      */
-    public function getProjectMockPath(): string
+    public function getProjectMockOriginalPath(): string
     {
-        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'project_mock';
+        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'project_original';
+    }
+
+    /**
+     * @return string
+     */
+    public function getProjectMockCurrentPath(): string
+    {
+        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'project_current';
+    }
+
+    /**
+     * @return string
+     */
+    public function getTestTmpDirPath(): string
+    {
+        return ROOT_TESTS . DIRECTORY_SEPARATOR . 'tmp';
     }
 
     /**
@@ -105,8 +122,7 @@ class BaseTestCase extends PHPUnitTestCase
             // Skip directories (they would be added automatically)
             if (!$file->isDir()) {
                 $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strlen($dirPath) + 1);
-
+                $relativePath = substr($filePath, strpos($filePath, RepositoryRepositoryManifestReader::ARCHIVE_DIR));
                 $zip->addFile($filePath, $relativePath);
             }
         }

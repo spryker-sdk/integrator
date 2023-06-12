@@ -15,12 +15,12 @@ use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 interface ManifestExecutorInterface
 {
     /**
-     * @param array<string, array<string, array<string, mixed>>> $lockedModules
+     * @param array<string, string> $lockedModules
      * @param array<string, array<string, array<string, mixed>>> $unappliedManifests
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
-     * @return array<string, array<string, array<string, mixed>>>
+     * @return array<string, string>
      */
     public function applyManifestList(
         array $lockedModules,
@@ -28,12 +28,4 @@ interface ManifestExecutorInterface
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
     ): array;
-
-    /**
-     * @param array<string, array<string, array<string>>> $manifests
-     * @param array<string, array<string, array<string>>> $lockedModules
-     *
-     * @return array<string, array<string, array<string, array<string>>>>
-     */
-    public function findUnappliedManifests(array $manifests, array $lockedModules): array;
 }

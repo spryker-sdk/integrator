@@ -42,12 +42,12 @@ class ManifestExecutor implements ManifestExecutorInterface
     }
 
     /**
-     * @param array<string, array<string, array<string, mixed>>> $lockedModules
+     * @param array<string, string> $lockedModules
      * @param array<string, array<string, array<string, mixed>>> $unappliedManifests
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      *
-     * @return array<string, array<string, array<string, mixed>>>
+     * @return array<string, string>
      */
     public function applyManifestList(
         array $lockedModules,
@@ -77,14 +77,14 @@ class ManifestExecutor implements ManifestExecutorInterface
     }
 
     /**
-     * @param array<string, array<string, array<string, mixed>>> $lockedModules
+     * @param array<string, string> $lockedModules
      * @param array $unappliedManifestByType
      * @param string $manifestType
      * @param string $moduleName
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      * @param bool $isDry
      *
-     * @return array<string, array<string, array<string, mixed>>>
+     * @return array<string, string>
      */
     protected function applyManifestsByType(
         array $lockedModules,
@@ -102,11 +102,12 @@ class ManifestExecutor implements ManifestExecutorInterface
             return $lockedModules;
         }
 
-        foreach ($unappliedManifestByType as $manifestHash => $unappliedManifest) {
+        foreach ($unappliedManifestByType as $unappliedManifest) {
+            if (!isset($lockedModules[$moduleName]) || version_compare($unappliedManifest[IntegratorConfig::MODULE_VERSION_KEY], $lockedModules[$moduleName], '>')) {
+                $lockedModules[$moduleName] = $unappliedManifest[IntegratorConfig::MODULE_VERSION_KEY];
+            }
             try {
-                if ($manifestExecutor->apply($unappliedManifest, $moduleName, $inputOutput, $isDry)) {
-                    $lockedModules[$moduleName][$manifestType][$manifestHash] = $unappliedManifest;
-                }
+                $manifestExecutor->apply($unappliedManifest, $moduleName, $inputOutput, $isDry);
             } catch (Exception $exception) {
                 $inputOutput->warning(sprintf(
                     'Manifest for %s was skipped. %s',
@@ -119,32 +120,6 @@ class ManifestExecutor implements ManifestExecutorInterface
         }
 
         return $lockedModules;
-    }
-
-    /**
-     * @param array<string, array<string, array<string>>> $manifests
-     * @param array<string, array<string, array<string>>> $lockedModules
-     *
-     * @return array<string, array<string, array<string, array<string>>>>
-     */
-    public function findUnappliedManifests(array $manifests, array $lockedModules): array
-    {
-        $unappliedManifests = [];
-        foreach ($manifests as $moduleName => $manifestList) {
-            foreach ($manifestList as $manifestType => $moduleManifests) {
-                /** @var array<string> $moduleManifest */
-                foreach ($moduleManifests as $moduleManifest) {
-                    $manifestHash = sha1(json_encode($moduleManifest) . $manifestType . $moduleName);
-                    if (isset($lockedModules[$moduleName][$manifestType][$manifestHash])) {
-                        continue;
-                    }
-
-                    $unappliedManifests[$moduleName][$manifestType][$manifestHash] = $moduleManifest;
-                }
-            }
-        }
-
-        return $unappliedManifests;
     }
 
     /**

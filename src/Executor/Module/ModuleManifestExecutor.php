@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Executor\Module;
 
+use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
@@ -18,11 +19,6 @@ use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 
 class ModuleManifestExecutor implements ModuleManifestExecutorInterface
 {
-    /**
-     * @var \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface
-     */
-    protected IntegratorLockReaderInterface $integratorLockReader;
-
     /**
      * @var \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface
      */
@@ -39,21 +35,34 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
     protected ManifestExecutorInterface $manifestExecutor;
 
     /**
+     * @var \SprykerSdk\Integrator\Composer\ComposerLockReaderInterface
+     */
+    protected $composerLockReader;
+
+    /**
+     * @var \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface
+     */
+    private IntegratorLockReaderInterface $integratorLockReader;
+
+    /**
      * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface $integratorLockReader
      * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface $integratorLockWriter
      * @param \SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface $manifestReader
      * @param \SprykerSdk\Integrator\Executor\ManifestExecutorInterface $manifestExecutor
+     * @param \SprykerSdk\Integrator\Composer\ComposerLockReaderInterface $composerLockReader
      */
     public function __construct(
         IntegratorLockReaderInterface $integratorLockReader,
         IntegratorLockWriterInterface $integratorLockWriter,
         RepositoryManifestReaderInterface $manifestReader,
-        ManifestExecutorInterface $manifestExecutor
+        ManifestExecutorInterface $manifestExecutor,
+        ComposerLockReaderInterface $composerLockReader
     ) {
+        $this->integratorLockReader = $integratorLockReader;
         $this->manifestExecutor = $manifestExecutor;
         $this->integratorLockWriter = $integratorLockWriter;
-        $this->integratorLockReader = $integratorLockReader;
         $this->manifestReader = $manifestReader;
+        $this->composerLockReader = $composerLockReader;
     }
 
     /**
@@ -66,9 +75,8 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
         InputOutputInterface $inputOutput,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
     ): void {
-        $manifests = $this->manifestReader->readManifests($commandArgumentsTransfer);
         $lockedModules = $this->integratorLockReader->getLockFileData();
-        $unappliedManifests = $this->manifestExecutor->findUnappliedManifests($manifests, $lockedModules);
+        $unappliedManifests = $this->manifestReader->readUnappliedManifests($commandArgumentsTransfer, $lockedModules);
         $lockedModules = $this->manifestExecutor->applyManifestList($lockedModules, $unappliedManifests, $inputOutput, $commandArgumentsTransfer);
 
         if ($commandArgumentsTransfer->getIsDryOrFail()) {
@@ -88,16 +96,9 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
         InputOutputInterface $input,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
     ): void {
-        $manifests = $this->manifestReader->readManifests($commandArgumentsTransfer);
+        $moduleVersions = $this->composerLockReader->getModuleVersions();
 
-        $lockedModules = [];
-        $unappliedManifests = $this->manifestExecutor->findUnappliedManifests($manifests, $lockedModules);
-
-        if ($commandArgumentsTransfer->getIsDryOrFail()) {
-            return;
-        }
-
-        $this->integratorLockWriter->storeLock($unappliedManifests);
+        $this->integratorLockWriter->storeLock($moduleVersions);
         $input->write('<info>The integration lock file has been updated according to the project state.</info>', true);
     }
 }

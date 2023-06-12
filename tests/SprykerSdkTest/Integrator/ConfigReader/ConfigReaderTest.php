@@ -21,7 +21,7 @@ class ConfigReaderTest extends BaseTestCase
     public function testReadShouldReturnParsedValues(): void
     {
         // Arrange
-        $configFilePath = __DIR__ . '/../../../_data/project_config/config_default.php';
+        $configFilePath = './tests/_data/project_config/config_default.php';
         $configReader = new ConfigReader(new ParserFactory());
         $configKeys = ['KernelConstants::PROJECT_NAMESPACES', 'KernelConstants::CORE_NAMESPACES'];
 
