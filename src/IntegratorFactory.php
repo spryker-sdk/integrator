@@ -91,6 +91,7 @@ use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutor;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterface;
 use SprykerSdk\Integrator\Builder\FileNormalizer\PhpCSFixerFileNormalizer;
+use SprykerSdk\Integrator\Builder\FileNormalizer\TestPhpCSFixerFileNormalizer;
 use SprykerSdk\Integrator\Builder\FileStorage\FileStorageFactory;
 use SprykerSdk\Integrator\Builder\FileStorage\FileStorageInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
@@ -502,6 +503,7 @@ class IntegratorFactory
             $this->createFileStorage(),
             [
                 $this->createPhpCSFixerNormalizer(),
+                $this->createTestPhpCSFixerNormalizer(),
                 $this->createCodeSniffStyleFileNormalizer(),
             ],
         );
@@ -521,6 +523,14 @@ class IntegratorFactory
     public function createPhpCSFixerNormalizer(): FileNormalizerInterface
     {
         return new PhpCSFixerFileNormalizer($this->getConfig(), $this->createProcessExecutor());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface
+     */
+    public function createTestPhpCSFixerNormalizer(): FileNormalizerInterface
+    {
+        return new TestPhpCSFixerFileNormalizer($this->getConfig(), $this->createProcessExecutor());
     }
 
     /**

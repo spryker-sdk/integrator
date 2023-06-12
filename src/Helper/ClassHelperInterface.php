@@ -23,6 +23,13 @@ interface ClassHelperInterface
      *
      * @return string
      */
+    public function getAbsoluteClassname(string $className): string;
+
+    /**
+     * @param string $className
+     *
+     * @return string
+     */
     public function getClassNamespace(string $className): string;
 
     /**

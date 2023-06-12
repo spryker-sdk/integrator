@@ -26,6 +26,16 @@ class ClassHelper implements ClassHelperInterface
      *
      * @return string
      */
+    public function getAbsoluteClassname(string $className): string
+    {
+        return strrpos($className, '\\') === 0 ? $className : '\\' . $className;
+    }
+
+    /**
+     * @param string $className
+     *
+     * @return string
+     */
     public function getClassNamespace(string $className): string
     {
         return ($pos = strrpos($className, '\\')) ? substr($className, 0, $pos) : '';

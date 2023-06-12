@@ -96,7 +96,6 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
     protected function getWireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
     {
         $visitors = [
-            new AddUseVisitor($classMetadataTransfer->getSourceOrFail()),
             new AddMethodCallToCallListVisitor($classMetadataTransfer),
         ];
         $usedClasses = [];

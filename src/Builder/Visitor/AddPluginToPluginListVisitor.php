@@ -523,7 +523,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
         return new ArrayItem(
             (new BuilderFactory())->new(
-                (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
+                (new ClassHelper())->getAbsoluteClassname($this->classMetadataTransfer->getSourceOrFail()),
                 $args,
             ),
             $this->indexExpr !== null ? $this->indexExpr->expr : null,

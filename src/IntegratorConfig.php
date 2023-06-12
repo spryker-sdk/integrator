@@ -18,6 +18,11 @@ class IntegratorConfig
     /**
      * @var string
      */
+    protected const TEST_ENV = 'test';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_TARGET = 'target';
 
     /**
@@ -450,5 +455,21 @@ class IntegratorConfig
     public function getFileBucketRegion(): string
     {
         return (string)getenv(static::INTEGRATOR_FILE_BUCKET_REGION);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTestEnvironment(): bool
+    {
+        return getenv('APPLICATION_ENV') === static::TEST_ENV;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntegratorRootPath(): string
+    {
+        return dirname(__DIR__);
     }
 }
