@@ -98,6 +98,6 @@ class AddConstantVisitor extends NodeVisitorAbstract
      */
     protected function prepareValue(): Expr
     {
-        return (new BuilderFactory())->val($this->constantValue);
+        return $this->constantValue instanceof Expr ? $this->constantValue : (new BuilderFactory())->val($this->constantValue);
     }
 }

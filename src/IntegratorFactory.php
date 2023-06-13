@@ -696,6 +696,7 @@ class IntegratorFactory
     {
         return new ClassConstantModifier(
             $this->createClassNodeFinder(),
+            new ParserFactory(),
         );
     }
 

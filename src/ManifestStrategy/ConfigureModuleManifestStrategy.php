@@ -43,8 +43,9 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
         $defaultValue = $manifest[IntegratorConfig::MANIFEST_KEY_DEFAULT_VALUE] ?? null;
         $isLiteral = false;
         if ($this->isLiteralManifestValue($value)) {
-            $value = $value[IntegratorConfig::MANIFEST_KEY_VALUE];
-            $isLiteral = $value[IntegratorConfig::MANIFEST_KEY_IS_LITERAL] ?? false;
+            $valueDefinition = $value;
+            $value = $valueDefinition[IntegratorConfig::MANIFEST_KEY_VALUE];
+            $isLiteral = $valueDefinition[IntegratorConfig::MANIFEST_KEY_IS_LITERAL] ?? false;
         }
 
         $applied = false;
@@ -74,7 +75,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
 
             if ($this->isConstant($targetPointName)) {
                 $classInformationTransfer = $this->createClassBuilderFacade()
-                    ->setConstant($classInformationTransfer, $targetPointName, $value);
+                    ->setConstant($classInformationTransfer, $targetPointName, $value, $isLiteral);
             } else {
                 $classInformationTransfer = $this->createClassBuilderFacade()->createClassMethod(
                     $classInformationTransfer,

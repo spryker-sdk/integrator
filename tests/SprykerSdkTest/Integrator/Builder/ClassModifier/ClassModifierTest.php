@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdkTest\Integrator\Builder\ClassModifier;
 
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use SprykerSdkTest\Integrator\BaseTestCase;
 
@@ -40,8 +41,9 @@ class ClassModifierTest extends BaseTestCase
 
         //Assert
         $this->assertTrue(isset($stmts[0]));
-        $this->assertTrue(get_class($stmts[0]) === Return_::class);
-        $this->assertSame($stmts[0]->expr->name->parts[0], $value);
+        $this->assertInstanceOf(Return_::class, $stmts[0]);
+        $this->assertInstanceOf(String_::class, $stmts[0]->expr);
+        $this->assertSame($stmts[0]->expr->value, $value);
     }
 
     /**
