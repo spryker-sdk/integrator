@@ -14,7 +14,7 @@ use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFacade;
 use Symfony\Component\Filesystem\Filesystem;
 
-class IntegratorFacadeTest extends BaseTestCase
+class IntegratorFacadeTest extends AbstractIntegratorFacadeTest
 {
     /**
      * @var string
@@ -45,22 +45,6 @@ class IntegratorFacadeTest extends BaseTestCase
         $fs = new Filesystem();
         $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
         $fs->remove($zipPath);
-    }
-
-    /**
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        $this->prepareTestEnv();
-    }
-
-    /**
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        $this->clearTestEnv();
     }
 
     /**
@@ -450,34 +434,6 @@ class IntegratorFacadeTest extends BaseTestCase
     }
 
     /**
-     * @return void
-     */
-    public function testRunInstallationGlossary(): void
-    {
-        // Arrange
-        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
-
-        // Act
-        $this->createIntegratorFacade()->runModuleManifestInstallation(
-            $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorGlossary')]),
-        );
-
-        // Assert
-        $glossaryPath = '/data/import/common/common/glossary.csv';
-        $testFilePath = $this->getProjectGeneralMockCurrentPath() . $glossaryPath;
-        $testResultFile = $this->getTestTmpDirPath() . $glossaryPath;
-
-        $this->assertFileExists($testFilePath);
-        $this->assertFileExists($testResultFile);
-        $this->assertStringContainsString(
-            trim(file_get_contents($this->getProjectGeneralMockOriginalPath() . $glossaryPath)),
-            trim(file_get_contents($testResultFile)),
-        );
-        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($testResultFile)));
-    }
-
-    /**
      * @param string $target
      * @param string $value
      * @param string $filePath
@@ -492,86 +448,6 @@ class IntegratorFacadeTest extends BaseTestCase
                 '$config[' . $target . '] = \'' . $value . '\';',
             ),
         );
-    }
-
-    /**
-     * @return \SprykerSdk\Integrator\Business\IntegratorFacade
-     */
-    private function createIntegratorFacade(): IntegratorFacade
-    {
-        return new IntegratorFacade();
-    }
-
-    /**
-     * @return void
-     */
-    private function createTmpDirectory(): void
-    {
-        $fileSystem = $this->createFilesystem();
-        $tmpPath = $this->getTempDirectoryPath();
-
-        if (!$fileSystem->exists($tmpPath)) {
-            $fileSystem->mkdir($tmpPath, 0700);
-        }
-    }
-
-    /**
-     * @return void
-     */
-    private function createTmpStandaloneModulesDirectory(): void
-    {
-        $fileSystem = $this->createFilesystem();
-        $path = $this->getTempStandaloneModulesDirectoryPath();
-
-        if (!$fileSystem->exists($path)) {
-            $fileSystem->mkdir($path, 0700);
-        }
-    }
-
-    /**
-     * @return void
-     */
-    private function removeTmpDirectory(): void
-    {
-        $fileSystem = $this->createFilesystem();
-        $tmpPath = $this->getTempDirectoryPath();
-
-        if ($fileSystem->exists($tmpPath)) {
-            $fileSystem->remove($tmpPath);
-        }
-    }
-
-    /**
-     * @return void
-     */
-    private function copyProjectMockToTmpDirectory(): void
-    {
-        $fileSystem = $this->createFilesystem();
-        $tmpPath = $this->getTempDirectoryPath();
-        $projectMockPath = $this->getProjectMockOriginalPath();
-
-        if ($fileSystem->exists($this->getTempDirectoryPath())) {
-            $fileSystem->mirror($projectMockPath, $tmpPath);
-        }
-    }
-
-    /**
-     * @return void
-     */
-    private function prepareTestEnv(): void
-    {
-        $this->removeTmpDirectory();
-        $this->createTmpDirectory();
-        $this->createTmpStandaloneModulesDirectory();
-        $this->copyProjectMockToTmpDirectory();
-    }
-
-    /**
-     * @return void
-     */
-    private function clearTestEnv(): void
-    {
-        $this->removeTmpDirectory();
     }
 
     /**
