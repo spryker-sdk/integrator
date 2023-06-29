@@ -11,7 +11,6 @@ namespace SprykerSdkTest\Integrator;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
-use SprykerSdk\Integrator\IntegratorFacade;
 use Symfony\Component\Filesystem\Filesystem;
 
 class IntegratorFacadeTest extends AbstractIntegratorFacadeTest

@@ -11,7 +11,7 @@ namespace SprykerSdkTest\Integrator;
 
 use SprykerSdk\Integrator\IntegratorFacade;
 
-class AbstractIntegratorFacadeTest extends BaseTestCase
+abstract class AbstractIntegratorFacadeTest extends BaseTestCase
 {
     /**
      * @return void
