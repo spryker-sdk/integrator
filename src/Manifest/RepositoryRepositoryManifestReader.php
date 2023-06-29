@@ -192,9 +192,8 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
         }
 
         $moduleManifestsDir = sprintf(
-            '%s%s%s/%s/',
+            '%s%s/%s/',
             $this->config->getManifestsDirectory(),
-            static::ARCHIVE_DIR,
             $organization,
             $moduleName,
         );

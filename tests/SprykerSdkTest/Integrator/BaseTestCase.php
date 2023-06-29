@@ -82,7 +82,7 @@ class BaseTestCase extends PHPUnitTestCase
      */
     public function getProjectMockOriginalPath(): string
     {
-        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'project_original';
+        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'integrator' . DIRECTORY_SEPARATOR . 'project_original';
     }
 
     /**
@@ -90,7 +90,7 @@ class BaseTestCase extends PHPUnitTestCase
      */
     public function getProjectMockCurrentPath(): string
     {
-        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'project_current';
+        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'integrator' . DIRECTORY_SEPARATOR . 'project_current';
     }
 
     /**
@@ -122,7 +122,7 @@ class BaseTestCase extends PHPUnitTestCase
             // Skip directories (they would be added automatically)
             if (!$file->isDir()) {
                 $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strpos($filePath, RepositoryRepositoryManifestReader::ARCHIVE_DIR));
+                $relativePath = substr($filePath, strpos($filePath, 'Spryker/'));
                 $zip->addFile($filePath, $relativePath);
             }
         }

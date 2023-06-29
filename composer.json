@@ -20,7 +20,7 @@
         "ext-zip": "*",
         "phpstan/phpstan": "^1.0.0",
         "phpunit/phpunit": "^9.5.0",
-        "spryker-sdk/manifest-test-data-provider": "dev-master",
+        "spryker-sdk/manifest-test-data-provider": "dev-feature/SDK-2870",
         "spryker/code-sniffer": "dev-master",
         "symfony/filesystem": "^5.3.0 || ^6.0"
     },
