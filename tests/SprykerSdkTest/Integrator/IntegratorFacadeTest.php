@@ -19,7 +19,7 @@ class IntegratorFacadeTest extends BaseTestCase
     /**
      * @var string
      */
-    protected const MANIFESTS_DIR_PATH = 'manifests/src';
+    protected const MANIFESTS_DIR_PATH = 'integrator/manifests/src';
 
     /**
      * @var string
