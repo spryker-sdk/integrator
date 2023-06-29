@@ -465,13 +465,13 @@ class IntegratorFacadeTest extends BaseTestCase
 
         // Assert
         $glossaryPath = '/data/import/common/common/glossary.csv';
-        $testFilePath = $this->getProjectMockCurrentPath() . $glossaryPath;
+        $testFilePath = $this->getProjectGeneralMockCurrentPath() . $glossaryPath;
         $testResultFile = $this->getTestTmpDirPath() . $glossaryPath;
 
         $this->assertFileExists($testFilePath);
         $this->assertFileExists($testResultFile);
         $this->assertStringContainsString(
-            trim(file_get_contents($this->getProjectMockOriginalPath() . $glossaryPath)),
+            trim(file_get_contents($this->getProjectGeneralMockOriginalPath() . $glossaryPath)),
             trim(file_get_contents($testResultFile)),
         );
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($testResultFile)));
