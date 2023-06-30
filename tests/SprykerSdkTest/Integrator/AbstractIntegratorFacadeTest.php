@@ -53,20 +53,6 @@ abstract class AbstractIntegratorFacadeTest extends BaseTestCase
     /**
      * @return void
      */
-    private function copyProjectMockToTmpDirectory(): void
-    {
-        $fileSystem = $this->createFilesystem();
-        $tmpPath = $this->getTempDirectoryPath();
-        $projectMockPath = $this->getProjectMockOriginalPath();
-
-        if ($fileSystem->exists($this->getTempDirectoryPath())) {
-            $fileSystem->mirror($projectMockPath, $tmpPath);
-        }
-    }
-
-    /**
-     * @return void
-     */
     private function createTmpDirectory(): void
     {
         $fileSystem = $this->createFilesystem();

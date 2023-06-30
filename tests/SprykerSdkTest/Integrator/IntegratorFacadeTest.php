@@ -469,4 +469,18 @@ class IntegratorFacadeTest extends AbstractIntegratorFacadeTest
 
         $this->assertNotEmpty(trim(file_get_contents($integratorLock)));
     }
+
+    /**
+     * @return void
+     */
+    protected function copyProjectMockToTmpDirectory(): void
+    {
+        $fileSystem = $this->createFilesystem();
+        $tmpPath = $this->getTempDirectoryPath();
+        $projectMockPath = $this->getProjectMockOriginalPath();
+
+        if ($fileSystem->exists($this->getTempDirectoryPath())) {
+            $fileSystem->mirror($projectMockPath, $tmpPath);
+        }
+    }
 }

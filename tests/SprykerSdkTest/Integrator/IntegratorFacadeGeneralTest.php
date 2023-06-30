@@ -71,4 +71,18 @@ class IntegratorFacadeGeneralTest extends AbstractIntegratorFacadeTest
         );
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($testResultFile)));
     }
+
+    /**
+     * @return void
+     */
+    protected function copyProjectMockToTmpDirectory(): void
+    {
+        $fileSystem = $this->createFilesystem();
+        $tmpPath = $this->getTempDirectoryPath();
+        $projectMockPath = $this->getProjectGeneralMockOriginalPath();
+
+        if ($fileSystem->exists($this->getTempDirectoryPath())) {
+            $fileSystem->mirror($projectMockPath, $tmpPath);
+        }
+    }
 }
