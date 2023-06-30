@@ -13,7 +13,7 @@ use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use Symfony\Component\Filesystem\Filesystem;
 
-class IntegratorFacadeTest extends AbstractIntegratorFacadeTest
+class IntegratorFacadeTest extends AbstractIntegratorFacade
 {
     /**
      * @var string
