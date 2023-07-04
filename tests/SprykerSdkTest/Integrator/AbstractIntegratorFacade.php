@@ -10,9 +10,20 @@ declare(strict_types=1);
 namespace SprykerSdkTest\Integrator;
 
 use SprykerSdk\Integrator\IntegratorFacade;
+use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractIntegratorFacade extends BaseTestCase
 {
+    /**
+     * @var string
+     */
+    protected const MANIFESTS_DIR_PATH = '';
+
+    /**
+     * @var string
+     */
+    protected const ZIP_PATH = '';
+
     /**
      * @return void
      */
@@ -27,6 +38,27 @@ abstract class AbstractIntegratorFacade extends BaseTestCase
     protected function tearDown(): void
     {
         $this->clearTestEnv();
+    }
+
+    /**
+     * @return void
+     */
+    public static function setUpBeforeClass(): void
+    {
+        $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
+        $dirPath = DATA_PROVIDER_DIR . DIRECTORY_SEPARATOR . static::MANIFESTS_DIR_PATH;
+
+        static::zipDir($dirPath, $zipPath);
+    }
+
+    /**
+     * @return void
+     */
+    public static function tearDownAfterClass(): void
+    {
+        $fs = new Filesystem();
+        $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
+        $fs->remove($zipPath);
     }
 
     /**
@@ -73,6 +105,20 @@ abstract class AbstractIntegratorFacade extends BaseTestCase
 
         if (!$fileSystem->exists($path)) {
             $fileSystem->mkdir($path, 0700);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    protected function copyProjectMockToTmpDirectory(): void
+    {
+        $fileSystem = $this->createFilesystem();
+        $tmpPath = $this->getTempDirectoryPath();
+        $projectMockPath = $this->getProjectMockOriginalPath();
+
+        if ($fileSystem->exists($this->getTempDirectoryPath())) {
+            $fileSystem->mirror($projectMockPath, $tmpPath);
         }
     }
 

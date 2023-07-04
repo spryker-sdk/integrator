@@ -24,24 +24,23 @@ class IntegratorFacadeGeneralTest extends AbstractIntegratorFacade
     protected const ZIP_PATH = '_data/archive.zip';
 
     /**
-     * @return void
+     * Rewrite the path to mock project
+     *
+     * @return string
      */
-    public static function setUpBeforeClass(): void
+    public function getProjectMockOriginalPath(): string
     {
-        $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
-        $dirPath = DATA_PROVIDER_DIR . DIRECTORY_SEPARATOR . static::MANIFESTS_DIR_PATH;
-
-        parent::zipDir($dirPath, $zipPath);
+        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'general' . DIRECTORY_SEPARATOR . 'project_original';
     }
 
     /**
-     * @return void
+     * Rewrite the path to mock project after integration
+     *
+     * @return string
      */
-    public static function tearDownAfterClass(): void
+    public function getProjectMockCurrentPath(): string
     {
-        $fs = new Filesystem();
-        $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
-        $fs->remove($zipPath);
+        return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'general' . DIRECTORY_SEPARATOR . 'project_current';
     }
 
     /**
@@ -60,29 +59,15 @@ class IntegratorFacadeGeneralTest extends AbstractIntegratorFacade
 
         // Assert
         $glossaryPath = '/data/import/common/common/glossary.csv';
-        $testFilePath = $this->getProjectGeneralMockCurrentPath() . $glossaryPath;
+        $testFilePath = $this->getProjectMockCurrentPath() . $glossaryPath;
         $testResultFile = $this->getTestTmpDirPath() . $glossaryPath;
 
         $this->assertFileExists($testFilePath);
         $this->assertFileExists($testResultFile);
         $this->assertStringContainsString(
-            trim(file_get_contents($this->getProjectGeneralMockOriginalPath() . $glossaryPath)),
+            trim(file_get_contents($this->getProjectMockOriginalPath() . $glossaryPath)),
             trim(file_get_contents($testResultFile)),
         );
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($testResultFile)));
-    }
-
-    /**
-     * @return void
-     */
-    protected function copyProjectMockToTmpDirectory(): void
-    {
-        $fileSystem = $this->createFilesystem();
-        $tmpPath = $this->getTempDirectoryPath();
-        $projectMockPath = $this->getProjectGeneralMockOriginalPath();
-
-        if ($fileSystem->exists($this->getTempDirectoryPath())) {
-            $fileSystem->mirror($projectMockPath, $tmpPath);
-        }
     }
 }

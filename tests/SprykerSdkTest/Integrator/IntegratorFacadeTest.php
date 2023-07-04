@@ -11,7 +11,6 @@ namespace SprykerSdkTest\Integrator;
 
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
-use Symfony\Component\Filesystem\Filesystem;
 
 class IntegratorFacadeTest extends AbstractIntegratorFacade
 {
@@ -24,27 +23,6 @@ class IntegratorFacadeTest extends AbstractIntegratorFacade
      * @var string
      */
     protected const ZIP_PATH = '_data/archive.zip';
-
-    /**
-     * @return void
-     */
-    public static function setUpBeforeClass(): void
-    {
-        $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
-        $dirPath = DATA_PROVIDER_DIR . DIRECTORY_SEPARATOR . static::MANIFESTS_DIR_PATH;
-
-        parent::zipDir($dirPath, $zipPath);
-    }
-
-    /**
-     * @return void
-     */
-    public static function tearDownAfterClass(): void
-    {
-        $fs = new Filesystem();
-        $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
-        $fs->remove($zipPath);
-    }
 
     /**
      * @return void
@@ -468,19 +446,5 @@ class IntegratorFacadeTest extends AbstractIntegratorFacade
         $this->assertFileExists($integratorLock);
 
         $this->assertNotEmpty(trim(file_get_contents($integratorLock)));
-    }
-
-    /**
-     * @return void
-     */
-    protected function copyProjectMockToTmpDirectory(): void
-    {
-        $fileSystem = $this->createFilesystem();
-        $tmpPath = $this->getTempDirectoryPath();
-        $projectMockPath = $this->getProjectMockOriginalPath();
-
-        if ($fileSystem->exists($this->getTempDirectoryPath())) {
-            $fileSystem->mirror($projectMockPath, $tmpPath);
-        }
     }
 }
