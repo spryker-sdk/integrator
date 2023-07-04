@@ -32,7 +32,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use ZipArchive;
 
-class BaseTestCase extends PHPUnitTestCase
+abstract class BaseTestCase extends PHPUnitTestCase
 {
     use IntegratorFactoryAwareTrait;
 

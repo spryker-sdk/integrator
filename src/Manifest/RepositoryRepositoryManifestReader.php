@@ -18,11 +18,6 @@ use ZipArchive;
 class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInterface
 {
     /**
-     * @var string
-     */
-    public const ARCHIVE_DIR = 'integrator-manifests-master/';
-
-    /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
     protected $config;

@@ -12,7 +12,7 @@ namespace SprykerSdkTest\Integrator;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 
-class IntegratorFacadeTest extends AbstractIntegratorFacade
+class IntegratorFacadeTest extends AbstractIntegratorTestCase
 {
     /**
      * @var string

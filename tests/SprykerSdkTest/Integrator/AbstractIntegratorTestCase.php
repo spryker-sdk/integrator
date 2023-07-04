@@ -12,7 +12,7 @@ namespace SprykerSdkTest\Integrator;
 use SprykerSdk\Integrator\IntegratorFacade;
 use Symfony\Component\Filesystem\Filesystem;
 
-abstract class AbstractIntegratorFacade extends BaseTestCase
+abstract class AbstractIntegratorTestCase extends BaseTestCase
 {
     /**
      * @var string

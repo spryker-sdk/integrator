@@ -159,7 +159,7 @@ class ManifestReaderTest extends BaseTestCase
     private function removeTmpManifestsArchive(): void
     {
         $fileSystem = $this->createFilesystem();
-        $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_PATH;
+        $zipPath = ROOT_TESTS . DIRECTORY_SEPARATOR . static::ZIP_DIR;
 
         if ($fileSystem->exists($zipPath)) {
             $fileSystem->remove($zipPath);
