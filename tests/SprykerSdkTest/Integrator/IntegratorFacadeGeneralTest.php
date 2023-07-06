@@ -28,7 +28,7 @@ class IntegratorFacadeGeneralTest extends AbstractIntegratorTestCase
      *
      * @return string
      */
-    public function getProjectMockOriginalPath(): string
+    protected function getProjectMockOriginalPath(): string
     {
         return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'general' . DIRECTORY_SEPARATOR . 'project_original';
     }
@@ -38,7 +38,7 @@ class IntegratorFacadeGeneralTest extends AbstractIntegratorTestCase
      *
      * @return string
      */
-    public function getProjectMockCurrentPath(): string
+    protected function getProjectMockCurrentPath(): string
     {
         return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'general' . DIRECTORY_SEPARATOR . 'project_current';
     }

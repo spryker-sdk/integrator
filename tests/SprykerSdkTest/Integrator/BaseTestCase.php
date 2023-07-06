@@ -37,17 +37,9 @@ abstract class BaseTestCase extends PHPUnitTestCase
     use IntegratorFactoryAwareTrait;
 
     /**
-     * @return \SprykerSdk\Integrator\IntegratorConfig
-     */
-    public function getIntegratorConfig(): IntegratorConfig
-    {
-        return IntegratorConfig::getInstance();
-    }
-
-    /**
      * @return \Symfony\Component\Filesystem\Filesystem
      */
-    public function createFilesystem(): Filesystem
+    protected function createFilesystem(): Filesystem
     {
         return new Filesystem();
     }
@@ -55,7 +47,7 @@ abstract class BaseTestCase extends PHPUnitTestCase
     /**
      * @return string
      */
-    public function getTempDirectoryPath(): string
+    protected function getTempDirectoryPath(): string
     {
         return APPLICATION_ROOT_DIR;
     }
@@ -63,7 +55,7 @@ abstract class BaseTestCase extends PHPUnitTestCase
     /**
      * @return string
      */
-    public function getTempStandaloneModulesDirectoryPath(): string
+    protected function getTempStandaloneModulesDirectoryPath(): string
     {
         return APPLICATION_STANDALONE_MODULES_DIR;
     }
@@ -71,7 +63,7 @@ abstract class BaseTestCase extends PHPUnitTestCase
     /**
      * @return string
      */
-    public function getDataDirectoryPath(): string
+    protected function getDataDirectoryPath(): string
     {
         return DATA_PROVIDER_DIR;
     }
@@ -79,7 +71,7 @@ abstract class BaseTestCase extends PHPUnitTestCase
     /**
      * @return string
      */
-    public function getProjectMockOriginalPath(): string
+    protected function getProjectMockOriginalPath(): string
     {
         return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'integrator' . DIRECTORY_SEPARATOR . 'project_original';
     }
@@ -87,7 +79,7 @@ abstract class BaseTestCase extends PHPUnitTestCase
     /**
      * @return string
      */
-    public function getProjectMockCurrentPath(): string
+    protected function getProjectMockCurrentPath(): string
     {
         return $this->getDataDirectoryPath() . DIRECTORY_SEPARATOR . 'integrator' . DIRECTORY_SEPARATOR . 'project_current';
     }
@@ -95,7 +87,7 @@ abstract class BaseTestCase extends PHPUnitTestCase
     /**
      * @return string
      */
-    public function getTestTmpDirPath(): string
+    protected function getTestTmpDirPath(): string
     {
         return ROOT_TESTS . DIRECTORY_SEPARATOR . 'tmp';
     }
@@ -106,7 +98,7 @@ abstract class BaseTestCase extends PHPUnitTestCase
      *
      * @return void
      */
-    public static function zipDir(string $dirPath, string $zipPath): void
+    protected static function zipDir(string $dirPath, string $zipPath): void
     {
         $zip = new ZipArchive();
         $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
@@ -135,7 +127,7 @@ abstract class BaseTestCase extends PHPUnitTestCase
      *
      * @return \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer
      */
-    public function createCommandArgumentsTransfer(bool $isDry = false, array $ModuleTransfers = []): IntegratorCommandArgumentsTransfer
+    protected function createCommandArgumentsTransfer(bool $isDry = false, array $ModuleTransfers = []): IntegratorCommandArgumentsTransfer
     {
         $commandArgumentsTransfer = new IntegratorCommandArgumentsTransfer();
         $commandArgumentsTransfer->setModules($ModuleTransfers);
