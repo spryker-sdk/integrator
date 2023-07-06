@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 namespace SprykerSdkTest\Integrator;
 
-use Symfony\Component\Filesystem\Filesystem;
-
 class IntegratorFacadeGeneralTest extends AbstractIntegratorTestCase
 {
     /**
