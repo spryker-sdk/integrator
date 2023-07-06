@@ -17,7 +17,6 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
-use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
