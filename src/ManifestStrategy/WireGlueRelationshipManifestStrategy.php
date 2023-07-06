@@ -65,7 +65,7 @@ class WireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
             $classInformationTransfer = $this->createClassBuilderFacade()->wireGlueRelationship(
                 $classInformationTransfer,
                 static::TARGET_METHOD_NAME,
-                $targetClassKey,
+                (string)$targetClassKey,
                 $targetClass,
             );
 

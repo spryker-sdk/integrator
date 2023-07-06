@@ -192,7 +192,10 @@ class IntegratorConfig
      */
     public static function getInstance()
     {
-        if (static::$instance === null) {
+        if (
+            static::$instance === null ||
+            (defined('TEST_INTEGRATOR_MODE') && TEST_INTEGRATOR_MODE === 'true')
+        ) {
             static::$instance = new static();
             static::$instance->loadConfig();
         }
