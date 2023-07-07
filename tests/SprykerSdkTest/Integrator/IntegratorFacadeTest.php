@@ -74,6 +74,52 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
     /**
      * @return void
      */
+    public function testRunInstallationWireTarget(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWireTransfer')]),
+        );
+
+        // Assert
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Shared/TestIntegratorWireTransfer/Transfer/price_product.transfer.xml';
+        $generatedXml = $this->getTestTmpDirPath() . '/src/Pyz/Shared/TestIntegratorWireTransfer/Transfer/price_product.transfer.xml';
+
+        $this->assertFileExists($testFilePath);
+        $this->assertFileExists($generatedXml);
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($generatedXml)));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunInstallationWireSchema(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWireSchema')]),
+        );
+
+        // Assert
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Zed/TestIntegratorWireTransfer/Persistence/Propel/Schema/spy_store.schema.xml';
+        $generatedXml = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorWireTransfer/Persistence/Propel/Schema/spy_store.schema.xml';
+
+        $this->assertFileExists($testFilePath);
+        $this->assertFileExists($generatedXml);
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($generatedXml)));
+    }
+
+    /**
+     * @return void
+     */
     public function testRunInstallationUnwirePlugin(): void
     {
         // Arrange
