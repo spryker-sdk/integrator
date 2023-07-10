@@ -105,12 +105,12 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
         // Act
         $this->createIntegratorFacade()->runModuleManifestInstallation(
             $ioAdapter,
-            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWireSchema')]),
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWireDbSchema')]),
         );
 
         // Assert
-        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Zed/TestIntegratorWireTransfer/Persistence/Propel/Schema/spy_store.schema.xml';
-        $generatedXml = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorWireTransfer/Persistence/Propel/Schema/spy_store.schema.xml';
+        $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Zed/TestIntegratorWireDbSchema/Persistence/Propel/Schema/spy_store.schema.xml';
+        $generatedXml = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorWireDbSchema/Persistence/Propel/Schema/spy_store.schema.xml';
 
         $this->assertFileExists($testFilePath);
         $this->assertFileExists($generatedXml);
