@@ -5,6 +5,8 @@
     "license": "proprietary",
     "require": {
         "php": ">=7.4",
+        "ext-simplexml": "*",
+        "ext-dom": "*",
         "composer-plugin-api": "^1.0.0 || ^2.0.0",
         "aws/aws-sdk-php": "^3.257",
         "composer/composer": "^2.1.0",
