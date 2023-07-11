@@ -65,7 +65,7 @@ class UnwireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
             $classInformationTransfer = $this->createClassBuilderFacade()->unwireGlueRelationship(
                 $classInformationTransfer,
                 static::TARGET_METHOD_NAME,
-                $targetClassKey,
+                (string)$targetClassKey,
                 $targetClass,
             );
 

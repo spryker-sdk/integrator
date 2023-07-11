@@ -17,12 +17,12 @@ class ManifestReaderTest extends BaseTestCase
     /**
      * @var string
      */
-    protected const MANIFESTS_CUSTOM_SOURCE = DATA_PROVIDER_DIR . '/manifests/src/integrator-manifests-master/';
+    protected const MANIFESTS_CUSTOM_SOURCE = DATA_PROVIDER_DIR . '/integrator/manifests/src/';
 
     /**
      * @var string
      */
-    protected const MANIFESTS_DIR_PATH = DATA_PROVIDER_DIR . '/manifests/src';
+    protected const MANIFESTS_DIR_PATH = DATA_PROVIDER_DIR . '/integrator/manifests/src';
 
     /**
      * @var string
