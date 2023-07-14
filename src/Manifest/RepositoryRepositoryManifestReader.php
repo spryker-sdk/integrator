@@ -18,6 +18,11 @@ use ZipArchive;
 class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInterface
 {
     /**
+     * @var string
+     */
+    public const ARCHIVE_DIR = 'integrator-manifests-master/';
+
+    /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
     protected $config;
@@ -187,8 +192,9 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
         }
 
         $moduleManifestsDir = sprintf(
-            '%s%s/%s/',
+            '%s%s%s/%s/',
             $this->config->getManifestsDirectory(),
+            static::ARCHIVE_DIR,
             $organization,
             $moduleName,
         );

@@ -18,6 +18,7 @@ use RecursiveIteratorIterator;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 use SprykerSdk\Integrator\IntegratorFactoryAwareTrait;
+use SprykerSdk\Integrator\Manifest\RepositoryRepositoryManifestReader;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
 use SprykerSdk\Integrator\Transfer\ModuleTransfer;
@@ -112,7 +113,8 @@ abstract class BaseTestCase extends PHPUnitTestCase
             // Skip directories (they would be added automatically)
             if (!$file->isDir()) {
                 $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strpos($filePath, 'Spryker/'));
+                $relativePath = '/' . RepositoryRepositoryManifestReader::ARCHIVE_DIR . '/' . substr($filePath, strpos($filePath, 'Spryker/'));
+
                 $zip->addFile($filePath, $relativePath);
             }
         }
