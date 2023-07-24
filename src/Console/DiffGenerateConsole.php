@@ -50,6 +50,21 @@ class DiffGenerateConsole extends AbstractInstallerConsole
     /**
      * @var string
      */
+    protected const ARGUMENT_INTEGRATION_BRANCH = 'integration-branch';
+
+    /**
+     * @var string
+     */
+    protected const ARGUMENT_INTEGRATION_BRANCH_DESCRIPTION = 'Name of branch with integrated changes. By default it is `integrator/release-group-manifest-run`';
+
+    /**
+     * @var string
+     */
+    protected const ARGUMENT_INTEGRATION_BRANCH_DEFAULT = 'integrator/release-group-manifest-run';
+
+    /**
+     * @var string
+     */
     protected const COMMAND_NAME = 'integrator:diff:generate';
 
     /**
@@ -76,6 +91,12 @@ class DiffGenerateConsole extends AbstractInstallerConsole
                 InputArgument::OPTIONAL,
                 static::ARGUMENT_BRANCH_TO_COMPARE_DESCRIPTION,
                 static::ARGUMENT_BRANCH_TO_COMPARE_DEFAULT,
+            )
+            ->addArgument(
+                static::ARGUMENT_INTEGRATION_BRANCH,
+                InputArgument::OPTIONAL,
+                static::ARGUMENT_INTEGRATION_BRANCH_DESCRIPTION,
+                static::ARGUMENT_INTEGRATION_BRANCH_DEFAULT,
             );
     }
 
@@ -124,6 +145,7 @@ class DiffGenerateConsole extends AbstractInstallerConsole
         $transfer = parent::buildCommandArgumentsTransfer($input);
         $transfer->setReleaseGroupId($this->getReleaseGroupIdOrFail($input));
         $transfer->setBranchToCompare($input->getArgument(static::ARGUMENT_BRANCH_TO_COMPARE));
+        $transfer->setIntegrationBranch($input->getArgument(static::ARGUMENT_INTEGRATION_BRANCH));
 
         return $transfer;
     }

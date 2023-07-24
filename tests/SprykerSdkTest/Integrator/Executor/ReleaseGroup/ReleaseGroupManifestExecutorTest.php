@@ -206,6 +206,7 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $transfer = parent::createCommandArgumentsTransfer($isDry, $ModuleTransfers);
         $transfer->setReleaseGroupId(1);
         $transfer->setBranchToCompare('master');
+        $transfer->setIntegrationBranch('integration-branch');
 
         return $transfer;
     }

@@ -23,11 +23,6 @@ class DiffGenerator implements DiffGeneratorInterface
     /**
      * @var string
      */
-    protected const INTEGRATOR_RESULT_BRANCH_NAME = 'integrator/release-group-manifest-run';
-
-    /**
-     * @var string
-     */
     protected const DIFF_TO_DISPLAY_FILE_NAME = 'diff_to_display.diff';
 
     /**
@@ -100,7 +95,7 @@ class DiffGenerator implements DiffGeneratorInterface
         try {
             $dry = $commandArgumentsTransfer->getIsDryOrFail();
             if (!$dry) {
-                $this->prepareBranch();
+                $this->prepareBranch($commandArgumentsTransfer->getIntegrationBranch());
             }
 
             $this->manifestExecutor->applyManifestList([], $unappliedManifests, $inputOutput, $commandArgumentsTransfer);
@@ -109,7 +104,7 @@ class DiffGenerator implements DiffGeneratorInterface
                 return;
             }
 
-            $this->storeDiff($releaseGroupId, $commandArgumentsTransfer->getBranchToCompareOrFail(), $inputOutput);
+            $this->storeDiff($releaseGroupId, $commandArgumentsTransfer->getBranchToCompareOrFail(), $commandArgumentsTransfer->getIntegrationBranchOrFail(), $inputOutput);
             $this->gitClean($currentBranchName);
         } catch (GitException $exception) {
             throw new RuntimeException(
@@ -127,6 +122,7 @@ class DiffGenerator implements DiffGeneratorInterface
     /**
      * @param int $releaseGroupId
      * @param string $branchToCompare
+     * @param string $integrationBranch
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      *
      * @throws \RuntimeException
@@ -136,6 +132,7 @@ class DiffGenerator implements DiffGeneratorInterface
     protected function storeDiff(
         int $releaseGroupId,
         string $branchToCompare,
+        string $integrationBranch,
         InputOutputInterface $inputOutput
     ): void {
         if ($this->gitRepository->hasChanges()) {
@@ -144,12 +141,12 @@ class DiffGenerator implements DiffGeneratorInterface
         }
 
         try {
-            $gitDiffOutput = $this->gitRepository->getDiff($branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
+            $gitDiffOutput = $this->gitRepository->getDiff($branchToCompare, $integrationBranch);
         } catch (GitException $e) {
             if ($e->getCode() !== static::GIT_ERROR_CODE_BRANCH_NOT_EXISTS) {
                 throw $e;
             }
-            $gitDiffOutput = $this->gitRepository->getDiff('origin/' . $branchToCompare, static::INTEGRATOR_RESULT_BRANCH_NAME);
+            $gitDiffOutput = $this->gitRepository->getDiff('origin/' . $branchToCompare, $integrationBranch);
         }
 
         $this->bucketFileStorage->addFile($releaseGroupId . DIRECTORY_SEPARATOR . static::DIFF_TO_DISPLAY_FILE_NAME, $gitDiffOutput);
@@ -158,14 +155,16 @@ class DiffGenerator implements DiffGeneratorInterface
     }
 
     /**
+     * @param string $integrationBranch
+     *
      * @return void
      */
-    protected function prepareBranch(): void
+    protected function prepareBranch(string $integrationBranch): void
     {
-        if (in_array(static::INTEGRATOR_RESULT_BRANCH_NAME, (array)$this->gitRepository->getBranches())) {
-            $this->gitRepository->deleteBranch(static::INTEGRATOR_RESULT_BRANCH_NAME);
+        if (in_array($integrationBranch, (array)$this->gitRepository->getBranches())) {
+            $this->gitRepository->deleteBranch($integrationBranch);
         }
-        $this->gitRepository->createBranch(static::INTEGRATOR_RESULT_BRANCH_NAME, true);
+        $this->gitRepository->createBranch($integrationBranch, true);
     }
 
     /**
@@ -176,6 +175,5 @@ class DiffGenerator implements DiffGeneratorInterface
     protected function gitClean(string $currentBranchName): void
     {
         $this->gitRepository->checkout($currentBranchName);
-        $this->gitRepository->deleteBranch(static::INTEGRATOR_RESULT_BRANCH_NAME);
     }
 }
