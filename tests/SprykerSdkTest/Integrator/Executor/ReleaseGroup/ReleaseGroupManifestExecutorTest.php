@@ -50,7 +50,8 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $manifestExecutor = new DiffGenerator($reader, $fileStorageMock, $executorMock, $gitMock);
 
         // Assert
-        $gitMock->expects($this->atLeastOnce())->method('getBranches')->willReturn('master');
+        $gitMock->expects($this->atLeastOnce())->method('getBranches')->willReturn(['integration-branch']);
+        $gitMock->expects($this->atLeastOnce())->method('deleteBranch')->with('integration-branch');
         $gitMock->expects($this->atLeastOnce())->method('checkout');
         $gitMock->expects($this->once())->method('commit');
         $fileStorageMock->expects($this->once())->method('addFile');
