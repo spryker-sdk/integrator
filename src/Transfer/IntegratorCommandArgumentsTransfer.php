@@ -41,6 +41,11 @@ class IntegratorCommandArgumentsTransfer
     /**
      * @var string
      */
+    public const INTEGRATION_BRANCH = 'integrationBranch';
+
+    /**
+     * @var string
+     */
     public const MODULES = 'modules';
 
     /**
@@ -67,6 +72,11 @@ class IntegratorCommandArgumentsTransfer
      * @var string|null
      */
     protected ?string $branchToCompare = null;
+
+    /**
+     * @var string|null
+     */
+    protected ?string $integrationBranch = null;
 
     /**
      * @var array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
@@ -193,6 +203,36 @@ class IntegratorCommandArgumentsTransfer
         }
 
         return (int)$this->releaseGroupId;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIntegrationBranch(): ?string
+    {
+        return $this->integrationBranch;
+    }
+
+    /**
+     * @param string|null $integrationBranch
+     *
+     * @return void
+     */
+    public function setIntegrationBranch(?string $integrationBranch): void
+    {
+        $this->integrationBranch = $integrationBranch;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIntegrationBranchOrFail(): string
+    {
+        if ($this->integrationBranch === null) {
+            $this->throwNullValueException(static::INTEGRATION_BRANCH);
+        }
+
+        return (string)$this->integrationBranch;
     }
 
     /**
