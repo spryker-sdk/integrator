@@ -95,7 +95,7 @@ class DiffGenerator implements DiffGeneratorInterface
         try {
             $dry = $commandArgumentsTransfer->getIsDryOrFail();
             if (!$dry) {
-                $this->prepareBranch($commandArgumentsTransfer->getIntegrationBranch());
+                $this->prepareBranch($commandArgumentsTransfer->getIntegrationBranchOrFail());
             }
 
             $this->manifestExecutor->applyManifestList([], $unappliedManifests, $inputOutput, $commandArgumentsTransfer);
