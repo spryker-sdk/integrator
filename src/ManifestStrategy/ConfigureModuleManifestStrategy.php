@@ -56,7 +56,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
                 continue;
             }
 
-            if (!is_bool($value) && !$value) {
+            if ($this->isEmptyValue($value)) {
                 $value = $this->askValue(
                     'Provide value for ' . $classInformationTransfer->getClassName() . "::$targetPointName() configuration.",
                     $choices,
@@ -65,7 +65,7 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
                 );
             }
 
-            if (!is_bool($value) && !$value) {
+            if ($this->isEmptyValue($value)) {
                 throw new ManifestApplyingException(sprintf(
                     'Value for `%s::%s()` configuration is not provided.',
                     $classInformationTransfer->getClassName(),
@@ -124,5 +124,15 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
     protected function isConstant(string $targetPointName): bool
     {
         return (bool)preg_match('/^[A-Z\_]+$/', $targetPointName);
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    protected function isEmptyValue($value): bool
+    {
+        return !is_bool($value) && !is_array($value) && !$value;
     }
 }
