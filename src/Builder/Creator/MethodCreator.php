@@ -169,11 +169,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      */
     protected function getModifierFromClassMethod(ClassMethod $classMethod): int
     {
-        if ($classMethod->isProtected()) {
-            return Class_::MODIFIER_PROTECTED;
-        }
-
-        return Class_::MODIFIER_PUBLIC;
+        return $classMethod->isProtected() ? Class_::MODIFIER_PROTECTED : Class_::MODIFIER_PUBLIC;
     }
 
     /**
