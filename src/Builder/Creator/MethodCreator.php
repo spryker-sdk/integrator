@@ -9,13 +9,16 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\Creator;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException;
@@ -123,16 +126,50 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         $value
     ): ClassInformationTransfer {
         $nodeTraverser = new NodeTraverser();
-        $returnType = $this->methodReturnTypeCreator->createMethodReturnType($value);
+        $classMethod = null;
+        $parentClassMethod = null;
+        if ($classInformationTransfer->getParent()) {
+            $parentClassMethod = (new NodeFinder())->findFirst($classInformationTransfer->getParent()->getClassTokenTree(), function (Node $node) use ($methodName) {
+                return $node instanceof ClassMethod
+                    && $node->name->toString() === $methodName;
+            });
+        }
+        
+        $returnType = $parentClassMethod && $parentClassMethod->getReturnType() instanceof Identifier ? $parentClassMethod->getReturnType()->name : $this->methodReturnTypeCreator->createMethodReturnType($value);
+        $flags = $parentClassMethod ? $this->getModifierFromClassMethod($parentClassMethod) : Class_::MODIFIER_PUBLIC;
+        $docType = $parentClassMethod && $parentClassMethod->getDocComment() ? clone $parentClassMethod->getDocComment() : $this->methodDocBlockCreator->createMethodDocBlock($value);
         $classMethod = new ClassMethod(
             $methodName,
-            ['flags' => Class_::MODIFIER_PUBLIC, 'returnType' => $returnType],
-            ['comments' => [$this->methodDocBlockCreator->createMethodDocBlock($value)]],
+            [
+                'flags' => $flags,
+                'returnType' => $returnType
+            ],
+            ['comments' =>
+                [
+                    $docType
+                ]
+            ],
         );
+
+        $classMethod->stmts = [];
         $nodeTraverser->addVisitor(new AddMethodVisitor($classMethod));
 
         return $classInformationTransfer
             ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $classMethod
+     *
+     * @return int
+     */
+    protected function getModifierFromClassMethod(ClassMethod $classMethod): int
+    {
+        if ($classMethod->isProtected()) {
+            return Class_::MODIFIER_PROTECTED;
+        }
+
+        return Class_::MODIFIER_PUBLIC;
     }
 
     /**
