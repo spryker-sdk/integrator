@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\Creator;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Identifier;
@@ -18,11 +17,11 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException;
 use SprykerSdk\Integrator\Builder\Exception\NotFoundReturnExpressionException;
+use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -32,6 +31,11 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      * @var int
      */
     protected const SINGLE_TREE_RETURN_STATEMENT_COUNT_ELEMENTS = 1;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
+     */
+    protected ClassNodeFinderInterface $classNodeFinder;
 
     /**
      * @var \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface
@@ -54,17 +58,20 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     protected $parserFactory;
 
     /**
+     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface $methodStatementsCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface $methodDocBlockCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface $methodReturnTypeCreator
      * @param \PhpParser\ParserFactory $parserFactory
      */
     public function __construct(
+        ClassNodeFinderInterface $classNodeFinder,
         MethodStatementsCreatorInterface $methodStatementsCreator,
         MethodDocBlockCreatorInterface $methodDocBlockCreator,
         MethodReturnTypeCreatorInterface $methodReturnTypeCreator,
         ParserFactory $parserFactory
     ) {
+        $this->classNodeFinder = $classNodeFinder;
         $this->methodStatementsCreator = $methodStatementsCreator;
         $this->methodDocBlockCreator = $methodDocBlockCreator;
         $this->methodReturnTypeCreator = $methodReturnTypeCreator;
@@ -126,15 +133,11 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         $value
     ): ClassInformationTransfer {
         $nodeTraverser = new NodeTraverser();
-        $classMethod = null;
         $parentClassMethod = null;
         if ($classInformationTransfer->getParent()) {
-            $parentClassMethod = (new NodeFinder())->findFirst($classInformationTransfer->getParent()->getClassTokenTree(), function (Node $node) use ($methodName) {
-                return $node instanceof ClassMethod
-                    && $node->name->toString() === $methodName;
-            });
+            $parentClassMethod = $this->classNodeFinder->findMethodNode($classInformationTransfer->getParent(), $methodName);
         }
-        
+
         $returnType = $parentClassMethod && $parentClassMethod->getReturnType() instanceof Identifier ? $parentClassMethod->getReturnType()->name : $this->methodReturnTypeCreator->createMethodReturnType($value);
         $flags = $parentClassMethod ? $this->getModifierFromClassMethod($parentClassMethod) : Class_::MODIFIER_PUBLIC;
         $docType = $parentClassMethod && $parentClassMethod->getDocComment() ? clone $parentClassMethod->getDocComment() : $this->methodDocBlockCreator->createMethodDocBlock($value);
@@ -142,12 +145,13 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
             $methodName,
             [
                 'flags' => $flags,
-                'returnType' => $returnType
+                'returnType' => $returnType,
             ],
-            ['comments' =>
+            [
+            'comments' =>
                 [
-                    $docType
-                ]
+                    $docType,
+                ],
             ],
         );
 
