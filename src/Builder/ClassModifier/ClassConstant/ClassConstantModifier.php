@@ -80,10 +80,10 @@ class ClassConstantModifier implements ClassConstantModifierInterface
     }
 
     /**
-     * @param ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $constantName
      *
-     * @return ClassConst|null
+     * @return \PhpParser\Node\Stmt\ClassConst|null
      */
     protected function getFirstParentConstant(ClassInformationTransfer $classInformationTransfer, string $constantName): ?ClassConst
     {
