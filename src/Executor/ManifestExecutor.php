@@ -103,8 +103,14 @@ class ManifestExecutor implements ManifestExecutorInterface
         }
 
         foreach ($unappliedManifestByType as $unappliedManifest) {
-            if (!isset($lockedModules[$moduleName]) || version_compare($unappliedManifest[IntegratorConfig::MODULE_VERSION_KEY], $lockedModules[$moduleName], '>')) {
-                $lockedModules[$moduleName] = $unappliedManifest[IntegratorConfig::MODULE_VERSION_KEY];
+            if (
+                isset($unappliedManifest[IntegratorConfig::MODULE_VERSION_KEY]) &&
+                (
+                    !isset($lockedModules[$moduleName]) ||
+                    version_compare($unappliedManifest[IntegratorConfig::MODULE_VERSION_KEY], $lockedModules[$moduleName], '>')
+                )
+            ) {
+                    $lockedModules[$moduleName] = $unappliedManifest[IntegratorConfig::MODULE_VERSION_KEY];
             }
             try {
                 $manifestExecutor->apply($unappliedManifest, $moduleName, $inputOutput, $isDry);

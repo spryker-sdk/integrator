@@ -137,8 +137,11 @@ use SprykerSdk\Integrator\ManifestStrategy\UnwireWidgetManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireGlueRelationshipManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireNavigationManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WirePluginManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\WireSchemaManifestStrategy;
+use SprykerSdk\Integrator\ManifestStrategy\WireTransferManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireWidgetManifestStrategy;
 use SprykerSdk\Integrator\VersionControlSystem\GitRepository;
+use Symfony\Component\Filesystem\Filesystem;
 
 class IntegratorFactory
 {
@@ -474,6 +477,28 @@ class IntegratorFactory
         return new UnwireNavigationManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
+     */
+    public function createWireTransferManifestStrategy(): ManifestStrategyInterface
+    {
+        return new WireTransferManifestStrategy(
+            $this->getConfig(),
+            new Filesystem(),
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\ManifestStrategy\ManifestStrategyInterface
+     */
+    public function createWireSchemaManifestStrategy(): ManifestStrategyInterface
+    {
+        return new WireSchemaManifestStrategy(
+            $this->getConfig(),
+            new Filesystem(),
         );
     }
 
@@ -841,6 +866,8 @@ class IntegratorFactory
             $this->createWireNavigationManifestStrategy(),
             $this->createUnwireNavigationManifestStrategy(),
             $this->createGlossaryManifestStrategy(),
+            $this->createWireTransferManifestStrategy(),
+            $this->createWireSchemaManifestStrategy(),
         ];
     }
 
