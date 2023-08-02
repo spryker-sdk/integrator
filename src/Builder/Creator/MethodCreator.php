@@ -12,6 +12,7 @@ namespace SprykerSdk\Integrator\Builder\Creator;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -137,8 +138,19 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         if ($classInformationTransfer->getParent()) {
             $parentClassMethod = $this->classNodeFinder->findMethodNode($classInformationTransfer->getParent(), $methodName);
         }
+        $returnType = $this->methodReturnTypeCreator->createMethodReturnType($value);
+        if ($parentClassMethod && $parentClassMethod->getReturnType()) {
+            $parentReturnType = $parentClassMethod->getReturnType();
+            $nullable = '';
+            if ($parentReturnType instanceof NullableType) {
+                $nullable = '?';
+                $parentReturnType = $parentReturnType->type;
+            }
+            if ($parentReturnType instanceof Identifier) {
+                $returnType = $nullable . $parentReturnType->name;
+            }
+        }
 
-        $returnType = $parentClassMethod && $parentClassMethod->getReturnType() instanceof Identifier ? $parentClassMethod->getReturnType()->name : $this->methodReturnTypeCreator->createMethodReturnType($value);
         $flags = $parentClassMethod ? $this->getModifierFromClassMethod($parentClassMethod) : Class_::MODIFIER_PUBLIC;
         $docType = $parentClassMethod && $parentClassMethod->getDocComment() ? clone $parentClassMethod->getDocComment() : $this->methodDocBlockCreator->createMethodDocBlock($value);
         $classMethod = new ClassMethod(
