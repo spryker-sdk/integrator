@@ -32,7 +32,7 @@ class AbstractReflectionClass
     protected const RETURN_TYPE_BOOL = 'bool';
 
     /**
-     * @var int
+     * @var string
      */
     protected const RETURN_TYPE_INT = 'int';
 
