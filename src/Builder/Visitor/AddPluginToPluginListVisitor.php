@@ -178,7 +178,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         ) {
             return $node;
         }
-        
+
         $newStmts[] = $this->getAssignPlugin($returnStmt->expr);
         $newStmts[] = $returnStmt;
         $node->stmts = $newStmts;
