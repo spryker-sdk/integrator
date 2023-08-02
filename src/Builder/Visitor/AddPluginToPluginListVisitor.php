@@ -487,7 +487,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected function getPluginList(Node $node): array
     {
         $plugins = [];
-
         foreach ($node->items as $item) {
             if ($item === null || !($item->value instanceof New_)) {
                 continue;
