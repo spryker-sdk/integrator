@@ -149,9 +149,19 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
     {
         return implode(',', [
             $glossaryKey,
-            $glossaryKeyValue,
+            $this->wrapInQuotes($glossaryKeyValue),
             $glossaryKeyLanguage,
         ]);
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    protected function wrapInQuotes(string $string): string
+    {
+        return sprintf('"%s"', $string);
     }
 
     /**
