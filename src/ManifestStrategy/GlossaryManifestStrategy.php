@@ -161,7 +161,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
      */
     protected function wrapInQuotes(string $string): string
     {
-        return sprintf('"%s"', $string);
+        return (strpos($string, ',')) ? sprintf('"%s"', $string) : $string;
     }
 
     /**
