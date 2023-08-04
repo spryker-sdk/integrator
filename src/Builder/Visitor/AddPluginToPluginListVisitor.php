@@ -533,7 +533,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-    protected  function isEqualArguments(ArrayItem $item): bool
+    protected function isEqualArguments(ArrayItem $item): bool
     {
         return (!$item->value->args && !count($this->classMetadataTransfer->getConstructorArguments())) ||
             ($item->value->args && $this->isArgumentEqual($item->value->args));
