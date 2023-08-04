@@ -518,22 +518,25 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
             if (
                 $this->isKeyEqualsToCurrentOne($item)
-                && ($nodeClassName === $classToAdd
-                || in_array($classToAdd, $usedParentClasses))
-                && (
-                    (!$item->value->args
-                    && !count($this->classMetadataTransfer->getConstructorArguments()))
-                    || (
-                        $item->value->args
-                        && $this->isArgumentEqual($item->value->args)
-                    )
-                )
+                && ($nodeClassName === $classToAdd || in_array($classToAdd, $usedParentClasses))
+                && $this->isEqualArguments($item)
             ) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\ArrayItem $item
+     *
+     * @return bool
+     */
+    protected  function isEqualArguments(ArrayItem $item): bool
+    {
+        return (!$item->value->args && !count($this->classMetadataTransfer->getConstructorArguments())) ||
+            ($item->value->args && $this->isArgumentEqual($item->value->args));
     }
 
     /**
