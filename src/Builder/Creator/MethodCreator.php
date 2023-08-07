@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\Builder\Creator;
 
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -20,6 +21,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException;
 use SprykerSdk\Integrator\Builder\Exception\NotFoundReturnExpressionException;
+use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -29,6 +31,11 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      * @var int
      */
     protected const SINGLE_TREE_RETURN_STATEMENT_COUNT_ELEMENTS = 1;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
+     */
+    protected ClassNodeFinderInterface $classNodeFinder;
 
     /**
      * @var \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface
@@ -51,17 +58,20 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     protected $parserFactory;
 
     /**
+     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface $methodStatementsCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface $methodDocBlockCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface $methodReturnTypeCreator
      * @param \PhpParser\ParserFactory $parserFactory
      */
     public function __construct(
+        ClassNodeFinderInterface $classNodeFinder,
         MethodStatementsCreatorInterface $methodStatementsCreator,
         MethodDocBlockCreatorInterface $methodDocBlockCreator,
         MethodReturnTypeCreatorInterface $methodReturnTypeCreator,
         ParserFactory $parserFactory
     ) {
+        $this->classNodeFinder = $classNodeFinder;
         $this->methodStatementsCreator = $methodStatementsCreator;
         $this->methodDocBlockCreator = $methodDocBlockCreator;
         $this->methodReturnTypeCreator = $methodReturnTypeCreator;
@@ -123,16 +133,43 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         $value
     ): ClassInformationTransfer {
         $nodeTraverser = new NodeTraverser();
-        $returnType = $this->methodReturnTypeCreator->createMethodReturnType($value);
+        $parentClassMethod = null;
+        if ($classInformationTransfer->getParent()) {
+            $parentClassMethod = $this->classNodeFinder->findMethodNode($classInformationTransfer->getParent(), $methodName);
+        }
+
+        $returnType = $parentClassMethod && $parentClassMethod->getReturnType() instanceof Identifier ? $parentClassMethod->getReturnType()->name : $this->methodReturnTypeCreator->createMethodReturnType($value);
+        $flags = $parentClassMethod ? $this->getModifierFromClassMethod($parentClassMethod) : Class_::MODIFIER_PUBLIC;
+        $docType = $parentClassMethod && $parentClassMethod->getDocComment() ? clone $parentClassMethod->getDocComment() : $this->methodDocBlockCreator->createMethodDocBlock($value);
         $classMethod = new ClassMethod(
             $methodName,
-            ['flags' => Class_::MODIFIER_PUBLIC, 'returnType' => $returnType],
-            ['comments' => [$this->methodDocBlockCreator->createMethodDocBlock($value)]],
+            [
+                'flags' => $flags,
+                'returnType' => $returnType,
+            ],
+            [
+            'comments' =>
+                [
+                    $docType,
+                ],
+            ],
         );
+
+        $classMethod->stmts = [];
         $nodeTraverser->addVisitor(new AddMethodVisitor($classMethod));
 
         return $classInformationTransfer
             ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $classMethod
+     *
+     * @return int
+     */
+    protected function getModifierFromClassMethod(ClassMethod $classMethod): int
+    {
+        return $classMethod->isProtected() ? Class_::MODIFIER_PROTECTED : Class_::MODIFIER_PUBLIC;
     }
 
     /**
