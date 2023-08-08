@@ -32,13 +32,18 @@ class AbstractReflectionClass
     protected const RETURN_TYPE_BOOL = 'bool';
 
     /**
+     * @var string
+     */
+    protected const RETURN_TYPE_INT = 'int';
+
+    /**
      * @param mixed $value
      *
      * @return bool
      */
     protected function isValueReturnArray($value): bool
     {
-        return !is_bool($value)
-            && (is_array($value) || strpos($value, static::ARRAY_MERGE_FUNCTION) !== false);
+        return is_iterable($value) ||
+            (is_string($value) && strpos($value, static::ARRAY_MERGE_FUNCTION) !== false);
     }
 }
