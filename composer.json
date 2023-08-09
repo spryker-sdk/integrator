@@ -22,7 +22,7 @@
         "ext-zip": "*",
         "phpstan/phpstan": "^1.0.0",
         "phpunit/phpunit": "^9.5.0",
-        "spryker-sdk/manifest-test-data-provider": "dev-bugfix/sdk-2544-fix-manifests-issues",
+        "spryker-sdk/manifest-test-data-provider": "dev-master",
         "spryker/code-sniffer": "dev-master",
         "symfony/filesystem": "^5.3.0 || ^6.0"
     },
