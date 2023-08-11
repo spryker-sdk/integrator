@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator;
 
 use CzProject\GitPhp\Runners\CliRunner;
+use GuzzleHttp\Client;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
 use PhpParser\Lexer\Emulative;
@@ -102,8 +103,13 @@ use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinterInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolver;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
+use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingFetcher;
+use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingFetcherInterface;
+use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingResponseMapper;
 use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
+use SprykerSdk\Integrator\Configuration\ConfigurationProvider;
+use SprykerSdk\Integrator\Configuration\ConfigurationProviderInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
 use SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutor;
@@ -113,6 +119,9 @@ use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
 use SprykerSdk\Integrator\Executor\ReleaseGroup\DiffGenerator;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorage;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface;
+use SprykerSdk\Integrator\Filter\ManifestsFiltersExecutor;
+use SprykerSdk\Integrator\Filter\ManifestsFiltersExecutorInterface;
+use SprykerSdk\Integrator\Filter\RatingBasedManifestsFilter;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReader;
@@ -164,6 +173,7 @@ class IntegratorFactory
             $this->createRepositoryManifestReader(),
             $this->createManifestExecutor(),
             $this->createComposerLockReader(),
+            $this->createManifestsFiltersExecutor(),
         );
     }
 
@@ -1076,5 +1086,31 @@ class IntegratorFactory
     protected function createPluginPositionResolver(): PluginPositionResolverInterface
     {
         return new PluginPositionResolver();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Filter\ManifestsFiltersExecutorInterface
+     */
+    protected function createManifestsFiltersExecutor(): ManifestsFiltersExecutorInterface
+    {
+        return new ManifestsFiltersExecutor([
+            new RatingBasedManifestsFilter($this->createConfigurationProvider(), $this->createModuleRatingFetcher()),
+        ]);
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingFetcherInterface
+     */
+    protected function createModuleRatingFetcher(): ModuleRatingFetcherInterface
+    {
+        return new ModuleRatingFetcher(new Client(), $this->createConfigurationProvider(), new ModuleRatingResponseMapper());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Configuration\ConfigurationProviderInterface
+     */
+    protected function createConfigurationProvider(): ConfigurationProviderInterface
+    {
+        return new ConfigurationProvider();
     }
 }
