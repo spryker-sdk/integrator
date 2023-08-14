@@ -27,7 +27,7 @@ class RatingBasedManifestsFilterTest extends TestCase
         //Arrange
         $manifests = $this->getManifests();
         $ratingBasedManifestsFilter = new RatingBasedManifestsFilter(
-            $this->createConfigurationProviderMock(RatingBasedManifestsFilter::MAX_RATING_THRESHOLD),
+            $this->createConfigurationProviderMock(RatingBasedManifestsFilter::MIN_RATING_THRESHOLD),
             $this->createModuleRatingFetcherMock(new ModulesRatingResponseDto([]), false),
             new ManifestToModulesRatingRequestMapper(),
         );
@@ -47,7 +47,7 @@ class RatingBasedManifestsFilterTest extends TestCase
         //Arrange
         $manifests = $this->getManifests();
         $ratingBasedManifestsFilter = new RatingBasedManifestsFilter(
-            $this->createConfigurationProviderMock(RatingBasedManifestsFilter::MIN_RATING_THRESHOLD),
+            $this->createConfigurationProviderMock(RatingBasedManifestsFilter::MAX_RATING_THRESHOLD + 1),
             $this->createModuleRatingFetcherMock(new ModulesRatingResponseDto([]), false),
             new ManifestToModulesRatingRequestMapper(),
         );

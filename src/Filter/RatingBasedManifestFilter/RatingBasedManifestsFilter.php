@@ -66,11 +66,11 @@ class RatingBasedManifestsFilter implements ManifestsFilterInterface
     {
         $requiredRating = $this->configurationProvider->getManifestsRatingThreshold();
 
-        if ($requiredRating >= static::MAX_RATING_THRESHOLD) {
+        if ($requiredRating <= static::MIN_RATING_THRESHOLD) {
             return $manifests;
         }
 
-        if ($requiredRating <= static::MIN_RATING_THRESHOLD) {
+        if ($requiredRating > static::MAX_RATING_THRESHOLD) {
             return [];
         }
 
