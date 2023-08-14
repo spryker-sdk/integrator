@@ -7,11 +7,12 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\Filter;
+namespace SprykerSdk\Integrator\Filter\RatingBasedManifestFilter;
 
 use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingFetcherInterface;
-use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingRequestItemDto;
+use SprykerSdk\Integrator\Communication\ReleaseApp\ModulesRatingResponseDto;
 use SprykerSdk\Integrator\Configuration\ConfigurationProviderInterface;
+use SprykerSdk\Integrator\Filter\ManifestsFilterInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 class RatingBasedManifestsFilter implements ManifestsFilterInterface
@@ -19,12 +20,12 @@ class RatingBasedManifestsFilter implements ManifestsFilterInterface
     /**
      * @var int
      */
-    protected const MAX_RATING_THRESHOLD = 100;
+    public const MAX_RATING_THRESHOLD = 100;
 
     /**
      * @var int
      */
-    protected const MIN_RATING_THRESHOLD = 0;
+    public const MIN_RATING_THRESHOLD = 0;
 
     /**
      * @var \SprykerSdk\Integrator\Configuration\ConfigurationProviderInterface
@@ -37,13 +38,23 @@ class RatingBasedManifestsFilter implements ManifestsFilterInterface
     protected ModuleRatingFetcherInterface $moduleRatingFetcher;
 
     /**
+     * @var \SprykerSdk\Integrator\Filter\RatingBasedManifestFilter\ManifestToModulesRatingRequestMapper
+     */
+    protected ManifestToModulesRatingRequestMapper $manifestToModulesRatingRequestMapper;
+
+    /**
      * @param \SprykerSdk\Integrator\Configuration\ConfigurationProviderInterface $configurationProvider
      * @param \SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingFetcherInterface $moduleRatingFetcher
+     * @param \SprykerSdk\Integrator\Filter\RatingBasedManifestFilter\ManifestToModulesRatingRequestMapper $manifestToModulesRatingRequestMapper
      */
-    public function __construct(ConfigurationProviderInterface $configurationProvider, ModuleRatingFetcherInterface $moduleRatingFetcher)
-    {
+    public function __construct(
+        ConfigurationProviderInterface $configurationProvider,
+        ModuleRatingFetcherInterface $moduleRatingFetcher,
+        ManifestToModulesRatingRequestMapper $manifestToModulesRatingRequestMapper
+    ) {
         $this->configurationProvider = $configurationProvider;
         $this->moduleRatingFetcher = $moduleRatingFetcher;
+        $this->manifestToModulesRatingRequestMapper = $manifestToModulesRatingRequestMapper;
     }
 
     /**
@@ -63,44 +74,31 @@ class RatingBasedManifestsFilter implements ManifestsFilterInterface
             return [];
         }
 
-        $modulesRatings = $this->moduleRatingFetcher->fetchModulesRating($this->createModuleRatingFetcherRequest($manifests));
+        $modulesRatingResponse = $this->moduleRatingFetcher->fetchModulesRating(
+            $this->manifestToModulesRatingRequestMapper->mapManifestsToModulesRatingRequest($manifests),
+        );
 
-        $filterdManifests = $this->filterManifestsByModulesRating($manifests, $modulesRatings, $requiredRating);
+        $filteredManifests = $this->filterManifestsByModulesRating(
+            $manifests,
+            $this->indexResponseByModuleIdWithRating($modulesRatingResponse),
+            $requiredRating,
+        );
 
-        return $this->removeEmptyModules($filterdManifests);
+        return $this->removeEmptyModules($filteredManifests);
     }
 
     /**
      * @param array<mixed> $manifests
-     *
-     * @return array<\SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingRequestItemDto>
-     */
-    protected function createModuleRatingFetcherRequest(array $manifests): array
-    {
-        $requestItems = [];
-
-        foreach ($manifests as $strategies) {
-            foreach ($strategies as $strategy) {
-                foreach ($strategy as $manifest) {
-                    [$organization, $moduleName] = explode('.', $manifest[IntegratorConfig::MODULE_KEY]);
-                    $moduleVersionName = $manifest[IntegratorConfig::MODULE_VERSION_KEY];
-                    $requestItems[] = new ModuleRatingRequestItemDto($organization, $moduleName, $moduleVersionName);
-                }
-            }
-        }
-
-        return $requestItems;
-    }
-
-    /**
-     * @param array<mixed> $manifests
-     * @param array<string, \SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingResponseItemDto> $modulesRatings
+     * @param array<string, int> $modulesRatings
      * @param int $requiredRating
      *
      * @return array<mixed>
      */
-    protected function filterManifestsByModulesRating(array $manifests, array $modulesRatings, int $requiredRating): array
-    {
+    protected function filterManifestsByModulesRating(
+        array $manifests,
+        array $modulesRatings,
+        int $requiredRating
+    ): array {
         foreach ($manifests as $fullModuleName => $strategies) {
             foreach ($strategies as $strategyName => $strategy) {
                 foreach ($strategy as $index => $manifest) {
@@ -109,7 +107,7 @@ class RatingBasedManifestsFilter implements ManifestsFilterInterface
 
                     $moduleId = sprintf('%s:%s:%s', $organization, $moduleName, $moduleVersionName);
 
-                    if (!isset($modulesRatings[$moduleId]) || $modulesRatings[$moduleId]->getRating() < $requiredRating) {
+                    if (!isset($modulesRatings[$moduleId]) || $modulesRatings[$moduleId] < $requiredRating) {
                         unset($manifests[$fullModuleName][$strategyName][$index]);
                     }
                 }
@@ -117,6 +115,29 @@ class RatingBasedManifestsFilter implements ManifestsFilterInterface
         }
 
         return $manifests;
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Communication\ReleaseApp\ModulesRatingResponseDto $modulesRatingResponseDto
+     *
+     * @return array<string, int>
+     */
+    protected function indexResponseByModuleIdWithRating(ModulesRatingResponseDto $modulesRatingResponseDto): array
+    {
+        $indexedModuleRating = [];
+
+        foreach ($modulesRatingResponseDto->getModuleRatingResponseDtos() as $moduleRatingResponseDto) {
+            $moduleId = sprintf(
+                '%s:%s:%s',
+                $moduleRatingResponseDto->getOrganization(),
+                $moduleRatingResponseDto->getName(),
+                $moduleRatingResponseDto->getVersion(),
+            );
+
+            $indexedModuleRating[$moduleId] = $moduleRatingResponseDto->getRating();
+        }
+
+        return $indexedModuleRating;
     }
 
     /**
@@ -130,7 +151,11 @@ class RatingBasedManifestsFilter implements ManifestsFilterInterface
             foreach ($strategies as $strategyName => $strategy) {
                 if (count($manifests[$fullModuleName][$strategyName]) === 0) {
                     unset($manifests[$fullModuleName][$strategyName]);
+
+                    continue;
                 }
+
+                $manifests[$fullModuleName][$strategyName] = array_values($manifests[$fullModuleName][$strategyName]);
             }
             if (count($manifests[$fullModuleName]) === 0) {
                 unset($manifests[$fullModuleName]);

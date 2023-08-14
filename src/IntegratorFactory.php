@@ -121,7 +121,8 @@ use SprykerSdk\Integrator\FileStorage\BucketFileStorage;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface;
 use SprykerSdk\Integrator\Filter\ManifestsFiltersExecutor;
 use SprykerSdk\Integrator\Filter\ManifestsFiltersExecutorInterface;
-use SprykerSdk\Integrator\Filter\RatingBasedManifestsFilter;
+use SprykerSdk\Integrator\Filter\RatingBasedManifestFilter\ManifestToModulesRatingRequestMapper;
+use SprykerSdk\Integrator\Filter\RatingBasedManifestFilter\RatingBasedManifestsFilter;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReader;
@@ -1094,7 +1095,11 @@ class IntegratorFactory
     protected function createManifestsFiltersExecutor(): ManifestsFiltersExecutorInterface
     {
         return new ManifestsFiltersExecutor([
-            new RatingBasedManifestsFilter($this->createConfigurationProvider(), $this->createModuleRatingFetcher()),
+            new RatingBasedManifestsFilter(
+                $this->createConfigurationProvider(),
+                $this->createModuleRatingFetcher(),
+                $this->createManifestToModulesRatingRequestMapper(),
+            ),
         ]);
     }
 
@@ -1112,5 +1117,13 @@ class IntegratorFactory
     protected function createConfigurationProvider(): ConfigurationProviderInterface
     {
         return new ConfigurationProvider();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Filter\RatingBasedManifestFilter\ManifestToModulesRatingRequestMapper
+     */
+    protected function createManifestToModulesRatingRequestMapper(): ManifestToModulesRatingRequestMapper
+    {
+        return new ManifestToModulesRatingRequestMapper();
     }
 }

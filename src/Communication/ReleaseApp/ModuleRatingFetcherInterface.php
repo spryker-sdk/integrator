@@ -12,9 +12,9 @@ namespace SprykerSdk\Integrator\Communication\ReleaseApp;
 interface ModuleRatingFetcherInterface
 {
     /**
-     * @param array<\SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingRequestItemDto> $moduleRatingRequestItemDtos
+     * @param \SprykerSdk\Integrator\Communication\ReleaseApp\ModulesRatingRequestDto $modulesRatingRequestDto
      *
-     * @return array<string, \SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingResponseItemDto>
+     * @return \SprykerSdk\Integrator\Communication\ReleaseApp\ModulesRatingResponseDto
      */
-    public function fetchModulesRating(array $moduleRatingRequestItemDtos): array;
+    public function fetchModulesRating(ModulesRatingRequestDto $modulesRatingRequestDto): ModulesRatingResponseDto;
 }

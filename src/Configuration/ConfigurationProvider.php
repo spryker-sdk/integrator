@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Configuration;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ConfigurationProvider implements ConfigurationProviderInterface
 {
     /**

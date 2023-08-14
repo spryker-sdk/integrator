@@ -9,7 +9,10 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Communication\ReleaseApp;
 
-class ModuleRatingResponseItemDto
+/**
+ * @codeCoverageIgnore
+ */
+class ModuleRatingResponseDto
 {
     /**
      * @var string
@@ -27,9 +30,9 @@ class ModuleRatingResponseItemDto
     protected string $version;
 
     /**
-     * @var string
+     * @var int
      */
-    protected string $rating;
+    protected int $rating;
 
     /**
      * @var int
@@ -40,10 +43,10 @@ class ModuleRatingResponseItemDto
      * @param string $name
      * @param string $organization
      * @param string $version
-     * @param string $rating
+     * @param int $rating
      * @param int $releaseGroupId
      */
-    public function __construct(string $name, string $organization, string $version, string $rating, int $releaseGroupId)
+    public function __construct(string $name, string $organization, string $version, int $rating, int $releaseGroupId)
     {
         $this->name = $name;
         $this->organization = $organization;
@@ -77,9 +80,9 @@ class ModuleRatingResponseItemDto
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getRating(): string
+    public function getRating(): int
     {
         return $this->rating;
     }

@@ -18,9 +18,9 @@ class ModuleRatingResponseMapper
      *
      * @throws \InvalidArgumentException
      *
-     * @return array<\SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingResponseItemDto>
+     * @return \SprykerSdk\Integrator\Communication\ReleaseApp\ModulesRatingResponseDto
      */
-    public function mapToResponseItems(string $responseBody): array
+    public function mapToModulesRatingResponseDto(string $responseBody): ModulesRatingResponseDto
     {
         $data = json_decode($responseBody, true, 512, \JSON_THROW_ON_ERROR);
 
@@ -34,7 +34,7 @@ class ModuleRatingResponseMapper
             throw new InvalidArgumentException(sprintf('Invalid rating response: %s', $responseBody));
         }
 
-        return $this->mapModulesToResponse($modules);
+        return new ModulesRatingResponseDto($this->mapModulesToResponse($modules));
     }
 
     /**
@@ -46,14 +46,14 @@ class ModuleRatingResponseMapper
      */
     protected function mapModulesToResponse(array $modules): array
     {
-        $responseItems = [];
+        $moduleRatingResponseDtos = [];
 
-        foreach ($modules as $moduleId => $module) {
+        foreach ($modules as $module) {
             if (!isset($module['name'], $module['version'], $module['rating'], $module['releaseGroupId'], $module['organization'])) {
                 throw new InvalidArgumentException(sprintf('Invalid module data: %s', json_encode($module, \JSON_THROW_ON_ERROR)));
             }
 
-            $responseItems[$moduleId] = new ModuleRatingResponseItemDto(
+            $moduleRatingResponseDtos[] = new ModuleRatingResponseDto(
                 $module['name'],
                 $module['organization'],
                 $module['version'],
@@ -62,6 +62,6 @@ class ModuleRatingResponseMapper
             );
         }
 
-        return $responseItems;
+        return $moduleRatingResponseDtos;
     }
 }

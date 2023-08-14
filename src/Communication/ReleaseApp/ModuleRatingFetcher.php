@@ -55,22 +55,22 @@ class ModuleRatingFetcher implements ModuleRatingFetcherInterface
     }
 
     /**
-     * @param array<\SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingRequestItemDto> $moduleRatingRequestItemDtos
+     * @param \SprykerSdk\Integrator\Communication\ReleaseApp\ModulesRatingRequestDto $modulesRatingRequestDto
      *
-     * @return array<string, \SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingResponseItemDto>
+     * @return \SprykerSdk\Integrator\Communication\ReleaseApp\ModulesRatingResponseDto
      */
-    public function fetchModulesRating(array $moduleRatingRequestItemDtos): array
+    public function fetchModulesRating(ModulesRatingRequestDto $modulesRatingRequestDto): ModulesRatingResponseDto
     {
         $response = $this->client->request(
             'POST',
             rtrim($this->configurationProvider->getReleaseAppUrl(), '/') . static::MANIFEST_RATING_URL,
             [
                 'headers' => ['Content-Type' => 'application/json'],
-                'body' => json_encode($moduleRatingRequestItemDtos, \JSON_THROW_ON_ERROR),
+                'body' => json_encode($modulesRatingRequestDto, \JSON_THROW_ON_ERROR),
                 'timeout' => static::DEFAULT_TIMEOUT,
             ],
         );
 
-        return $this->moduleRatingResponseMapper->mapToResponseItems((string)$response->getBody());
+        return $this->moduleRatingResponseMapper->mapToModulesRatingResponseDto((string)$response->getBody());
     }
 }

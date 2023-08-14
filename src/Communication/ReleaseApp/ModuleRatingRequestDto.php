@@ -11,7 +11,10 @@ namespace SprykerSdk\Integrator\Communication\ReleaseApp;
 
 use JsonSerializable;
 
-class ModuleRatingRequestItemDto implements JsonSerializable
+/**
+ * @codeCoverageIgnore
+ */
+class ModuleRatingRequestDto implements JsonSerializable
 {
     /**
      * @var string
@@ -38,6 +41,30 @@ class ModuleRatingRequestItemDto implements JsonSerializable
         $this->organizationName = $organizationName;
         $this->moduleName = $moduleName;
         $this->moduleVersion = $moduleVersion;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrganizationName(): string
+    {
+        return $this->organizationName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModuleName(): string
+    {
+        return $this->moduleName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModuleVersion(): string
+    {
+        return $this->moduleVersion;
     }
 
     /**
