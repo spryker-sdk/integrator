@@ -40,7 +40,7 @@ class ModuleRatingResponseMapperTest extends TestCase
         return [
             'invalid_json' => ['{invalid json'],
             'no_result_key' => ['{"someVal": 1}'],
-            'result_not_array' => ['{"result" => 1}'],
+            'result_not_array' => ['{"result": 1}'],
             'no_name_key_set' => ['{"result" : {"module1": {"organization": "Spryker", "version": "1.9.0", "rating": 50, "releaseGroupId": 123}}}'],
             'no_organization_key_set' => ['{"result" : {"module1": {"name": "Acl", "version": "1.9.0", "rating": 50, "releaseGroupId": 123}}}'],
             'no_version_key_set' => ['{"result" : {"module1": {"name": "Acl", "organization": "Spryker", "rating": 50, "releaseGroupId": 123}}}'],
