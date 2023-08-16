@@ -1,4 +1,4 @@
-# Manifest types
+# Manifest action types
 
 The integrator tool is working basing on JSON manifests. It looks in the  directory based on the defined folder structure and takes required manifests from there. File structure must be as shown below.
 
@@ -29,7 +29,7 @@ For common types, all manifests have the following structure.
 
  You can find more data for every manifest below.
 
-## Available manifest types
+## Available manifest action types
 
 | Type                                                           | Generation | Integration |
 |----------------------------------------------------------------|------------|-------------|
@@ -54,7 +54,7 @@ Description of the supported extension scenarios can be found [here](https://doc
 
 ### Wire Plugin Manifest
 
-This manifest type adds a plugin to a required place in the code, by defining its exact method. To add the plugin to an associative array, set the array key in the `index` setting.
+This manifest action adds a plugin to a required place in the code, by defining its exact method. To add the plugin to an associative array, set the array key in the `index` setting.
 
 To specify where to put the changes, define a position field with the `before` setting or the `after` setting. `before` and `after` accept values which can be both a string and an array of string. The integrator checks the existing `before` and `after` plugins one by one, and puts a value after or before the first find.
 
@@ -104,7 +104,7 @@ The optional `call` section specifies where the target method should be called.
 
 ### Unwire Plugin Manifest
 
-This manifest type removes a Plugin from a specified place of code.
+This manifest action removes a Plugin from a specified place of code.
 
 If a plugin should be removed from an associative array, the array key can be stored in `index` setting.
 
