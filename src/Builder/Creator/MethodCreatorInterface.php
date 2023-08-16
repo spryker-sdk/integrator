@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\Creator;
 
+use PhpParser\Node\Stmt\ClassMethod;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 interface MethodCreatorInterface
@@ -34,4 +35,11 @@ interface MethodCreatorInterface
         string $methodName,
         $value
     ): ClassInformationTransfer;
+
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $classMethod
+     *
+     * @return mixed
+     */
+    public function getReturnType(ClassMethod $classMethod);
 }
