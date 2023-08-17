@@ -30,11 +30,10 @@ class ExpressionPartialParserTest extends TestCase
 
         // Act
         $parserResult = $parser->parse($code);
-        $expression = $parserResult->getExpression();
 
         // Assert
-        $this->assertInstanceOf(String_::class, $expression->expr);
-        $this->assertSame($code, $expression->expr->value);
+        $this->assertInstanceOf(String_::class, $parserResult->expr);
+        $this->assertSame($code, $parserResult->expr->value);
     }
 
     /**
@@ -48,11 +47,10 @@ class ExpressionPartialParserTest extends TestCase
 
         // Act
         $parserResult = $parser->parse($code);
-        $expression = $parserResult->getExpression();
 
         // Assert
-        $this->assertInstanceOf(String_::class, $expression->expr);
-        $this->assertSame($code, $expression->expr->value);
+        $this->assertInstanceOf(String_::class, $parserResult->expr);
+        $this->assertSame($code, $parserResult->expr->value);
     }
 
     /**
@@ -66,11 +64,10 @@ class ExpressionPartialParserTest extends TestCase
 
         // Act
         $parserResult = $parser->parse($code);
-        $expression = $parserResult->getExpression();
 
         // Assert
-        $this->assertInstanceOf(String_::class, $expression->expr);
-        $this->assertSame($code, $expression->expr->value);
+        $this->assertInstanceOf(String_::class, $parserResult->expr);
+        $this->assertSame($code, $parserResult->expr->value);
     }
 
     /**
@@ -84,11 +81,10 @@ class ExpressionPartialParserTest extends TestCase
 
         // Act
         $parserResult = $parser->parse($code);
-        $expression = $parserResult->getExpression();
 
         // Assert
-        $this->assertInstanceOf(New_::class, $expression->expr);
-        $this->assertSame('ArrayObject', $expression->expr->class->parts[0]);
+        $this->assertInstanceOf(New_::class, $parserResult->expr);
+        $this->assertSame('ArrayObject', $parserResult->expr->class->parts[0]);
     }
 
     /**
@@ -103,7 +99,7 @@ class ExpressionPartialParserTest extends TestCase
 
         // Act
         $parserResult = $parser->parse($code);
-        $dumpedExpr = $dumper->dump($parserResult->getExpression()->expr);
+        $dumpedExpr = $dumper->dump($parserResult->expr);
 
         // Assert
         $this->assertEquals(

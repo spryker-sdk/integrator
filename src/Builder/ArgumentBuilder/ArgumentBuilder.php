@@ -156,7 +156,7 @@ class ArgumentBuilder implements ArgumentBuilderInterface
         }
 
         if (is_string($metadataValue)) {
-            return $this->expressionPartialParser->parse($metadataValue)->getExpression()->expr;
+            return $this->expressionPartialParser->parse($metadataValue)->expr;
         }
 
         return $metadataValue;

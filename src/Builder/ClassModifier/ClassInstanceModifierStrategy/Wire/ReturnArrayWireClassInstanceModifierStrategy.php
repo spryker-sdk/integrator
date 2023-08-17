@@ -102,11 +102,14 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
             return [...$visitors, new AddPluginToPluginListVisitor($classMetadataTransfer, $this->pluginPositionResolver, $this->argumentBuilder)];
         }
 
-        $parsedResult = $this->nodeExpressionPartialParser->parse($classMetadataTransfer->getIndex());
-
         return [
             ...$visitors,
-            new AddPluginToPluginListVisitor($classMetadataTransfer, $this->pluginPositionResolver, $this->argumentBuilder, $parsedResult->getExpression()),
+            new AddPluginToPluginListVisitor(
+                $classMetadataTransfer,
+                $this->pluginPositionResolver,
+                $this->argumentBuilder,
+                $this->nodeExpressionPartialParser->parse($classMetadataTransfer->getIndex()),
+            ),
         ];
     }
 }
