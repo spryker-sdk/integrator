@@ -49,11 +49,7 @@ class ExpressionPartialParser implements ExpressionPartialParserInterface
             return $this->createStringExpr($codeString);
         }
 
-        if ($ast === null) {
-            return $this->createStringExpr($codeString);
-        }
-
-        if (!$this->isAstContainsExpression($ast)) {
+        if ($ast === null || !$this->isAstContainsExpression($ast)) {
             return $this->createStringExpr($codeString);
         }
 

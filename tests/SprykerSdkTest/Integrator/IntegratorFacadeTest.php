@@ -66,10 +66,6 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
         $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
         $classPath = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
 
-//        var_dump($classPath);
-//        var_dump(file_get_contents($classPath));
-//        exit();
-
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));

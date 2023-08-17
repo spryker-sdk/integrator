@@ -566,7 +566,10 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         $standard = new Standard();
         $arguments = $this->classMetadataTransfer->getConstructorArguments()->getArrayCopy();
         foreach ($args as $index => $arg) {
-            $argument = $arguments[$index];
+            $argument = $arguments[$index] ?? null;
+            if (!$argument) {
+                continue;
+            }
             $argumentValue = json_decode($argument->getValue());
             if ($standard->prettyPrintExpr($arg->value) === $argumentValue) {
                 return true;
