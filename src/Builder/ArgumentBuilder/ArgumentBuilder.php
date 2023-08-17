@@ -9,11 +9,9 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ArgumentBuilder;
 
-use ArrayObject;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Arg;
 use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface;
-use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class ArgumentBuilder implements ArgumentBuilderInterface
@@ -74,10 +72,7 @@ class ArgumentBuilder implements ArgumentBuilderInterface
             return $args;
         }
         $mainArgument = new Arg(
-            $this->builderFactory->new(
-                (new ClassHelper())->getShortClassName($classMetadataTransfer->getSourceOrFail()),
-                $args,
-            ),
+            $this->builderFactory->new($classMetadataTransfer->getSourceOrFail(), $args),
         );
 
         return $this->builderFactory->args([$mainArgument]);
@@ -120,36 +115,6 @@ class ArgumentBuilder implements ArgumentBuilderInterface
     }
 
     /**
-     * @TODO Can be removed after removing UseVisitor
-     *
-     * @param \ArrayObject<int, \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $classArgumentMetadataTransfers
-     *
-     * @return array<string>
-     */
-    public function getValueArguments(ArrayObject $classArgumentMetadataTransfers): array
-    {
-        $args = [];
-        foreach ($classArgumentMetadataTransfers as $classArgumentMetadataTransfer) {
-            if ($classArgumentMetadataTransfer->getIsLiteral()) {
-                if (is_iterable($classArgumentMetadataTransfer->getValue())) {
-                    $args = array_merge(
-                        $args,
-                        $this->builderFactory->args([$classArgumentMetadataTransfer->getValue()]),
-                    );
-
-                    continue;
-                }
-                $metadataValue = json_decode((string)$classArgumentMetadataTransfer->getValue());
-                $args = array_merge($args, is_array($metadataValue) ? $metadataValue : [$metadataValue]);
-
-                continue;
-            }
-        }
-
-        return $args;
-    }
-
-    /**
      * @param array<int, \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $classArgumentMetadataTransfers
      *
      * @return array<\PhpParser\Node\Arg>
@@ -187,7 +152,7 @@ class ArgumentBuilder implements ArgumentBuilderInterface
     {
         $metadataValue = json_decode((string)$value);
         if ($isSource) {
-            return $this->builderFactory->new((new ClassHelper())->getShortClassName($metadataValue));
+            return $this->builderFactory->new($metadataValue);
         }
 
         if (is_string($metadataValue)) {

@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use RuntimeException;
 use SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationship\AbstractGlueRelationshipModifier;
-use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\MethodBodyExtendVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -55,10 +54,6 @@ class WireGlueRelationshipModifier extends AbstractGlueRelationshipModifier impl
         }
 
         [$keyClass, $keyConst] = explode('::', $key);
-
-        $this->nodeTraverser->addVisitor(new AddUseVisitor($classNameToAdd));
-        $this->nodeTraverser->addVisitor(new AddUseVisitor($keyClass));
-
         $methodBody = $this->getMethodBody($methodNode, $classNameToAdd, $keyClass, $keyConst);
 
         $this->nodeTraverser->addVisitor(new MethodBodyExtendVisitor($targetMethodName, $methodBody));
@@ -78,8 +73,8 @@ class WireGlueRelationshipModifier extends AbstractGlueRelationshipModifier impl
     protected function getMethodBody(ClassMethod $methodNode, string $classNameToAdd, string $keyClass, string $keyConst): array
     {
         $arguments = [
-            new Arg($this->builderFactory->classConstFetch($this->classHelper->getShortClassName($keyClass), $keyConst)),
-            new Arg($this->builderFactory->new($this->classHelper->getShortClassName($classNameToAdd))),
+            new Arg($this->builderFactory->classConstFetch($keyClass, $keyConst)),
+            new Arg($this->builderFactory->new($classNameToAdd)),
         ];
 
         return [

@@ -106,17 +106,15 @@ class ExpressionPartialParserTest extends TestCase
         $dumpedExpr = $dumper->dump($parserResult->getExpression()->expr);
 
         // Assert
-        $this->assertSame(
-            ['Spryker\\Shared\\Config\\Config', 'Spryker\\Shared\\Log\\LogConstants'],
-            iterator_to_array($parserResult->getUsedClasses()),
-        );
-
         $this->assertEquals(
             <<<'DUMP'
             Expr_StaticCall(
-                class: Name(
+                class: Name_FullyQualified(
                     parts: array(
-                        0: Config
+                        0: Spryker
+                        1: Shared
+                        2: Config
+                        3: Config
                     )
                 )
                 name: Identifier(
@@ -126,9 +124,12 @@ class ExpressionPartialParserTest extends TestCase
                     0: Arg(
                         name: null
                         value: Expr_ClassConstFetch(
-                            class: Name(
+                            class: Name_FullyQualified(
                                 parts: array(
-                                    0: LogConstants
+                                    0: Spryker
+                                    1: Shared
+                                    2: Log
+                                    3: LogConstants
                                 )
                             )
                             name: Identifier(

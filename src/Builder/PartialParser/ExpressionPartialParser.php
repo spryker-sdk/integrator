@@ -15,9 +15,7 @@ use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeTraverser;
 use PhpParser\Parser;
-use SprykerSdk\Integrator\Builder\Visitor\ReplaceAndCollectFullyQualifiedClassNamesVisitor;
 use SprykerSdk\Integrator\Transfer\ExpressionPartialParserResultTransfer;
 
 class ExpressionPartialParser implements ExpressionPartialParserInterface
@@ -57,12 +55,6 @@ class ExpressionPartialParser implements ExpressionPartialParserInterface
             return $this->createStringExprPartialDataResponse($codeString);
         }
 
-        $traverser = new NodeTraverser();
-        $visitor = new ReplaceAndCollectFullyQualifiedClassNamesVisitor(new ArrayObject());
-
-        $traverser->addVisitor($visitor);
-        $traverser->traverse($ast);
-
         if (!$this->isAstContainsExpression($ast)) {
             return $this->createStringExprPartialDataResponse($codeString);
         }
@@ -70,7 +62,7 @@ class ExpressionPartialParser implements ExpressionPartialParserInterface
         /** @var \PhpParser\Node\Stmt\Expression $expr */
         $expr = $ast[0];
 
-        return new ExpressionPartialParserResultTransfer($visitor->getFullyQualifiedClassNames(), $expr);
+        return new ExpressionPartialParserResultTransfer(new ArrayObject(), $expr);
     }
 
     /**

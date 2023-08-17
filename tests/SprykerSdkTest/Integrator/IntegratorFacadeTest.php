@@ -42,6 +42,10 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
         $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Zed/TestIntegratorConfigureModule/TestIntegratorDefaultConfig.php';
         $classPath = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorDefault/TestIntegratorDefaultConfig.php';
 
+//        var_dump($classPath);
+//        exit();
+
+
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
 
@@ -65,6 +69,10 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
         // Assert
         $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
         $classPath = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
+
+//        var_dump($classPath);
+//        var_dump(file_get_contents($classPath));
+//        exit();
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -157,6 +165,9 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
         // Assert
         $testFilePath = $this->getProjectMockCurrentPath() . '/src/Pyz/Zed/TestIntegratorWireConsoleCommands/ConsoleDependencyProvider.php';
         $classPath = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorWireConsoleCommands/ConsoleDependencyProvider.php';
+
+//        var_dump($classPath);
+//        exit();
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
@@ -450,6 +461,9 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
         $testConfig = '/src/Pyz/Client/TestIntegratorAddConfigArrayElement/TestIntegratorAddConfigArrayElementConfig.php';
         $testFilePath = $this->getProjectMockCurrentPath() . $testConfig;
         $classPath = $this->getTestTmpDirPath() . $testConfig;
+
+//        var_dump($classPath);
+//        exit();
 
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);

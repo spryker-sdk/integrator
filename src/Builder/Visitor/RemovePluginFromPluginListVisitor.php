@@ -142,9 +142,11 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
     protected function isArgumentCorrect(array $args): bool
     {
         $standard = new Standard();
-        $arguments = $this->argumentBuilder->getValueArguments($this->classMetadataTransfer->getConstructorArguments());
+        $arguments = $this->classMetadataTransfer->getConstructorArguments()->getArrayCopy();
         foreach ($args as $index => $arg) {
-            if ($standard->prettyPrintExpr($arg->value) !== $arguments[$index]) {
+            $argument = $arguments[$index];
+            $argumentValue = json_decode($argument->getValue());
+            if ($standard->prettyPrintExpr($arg->value) !== $argumentValue) {
                 return false;
             }
         }

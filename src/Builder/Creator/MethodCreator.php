@@ -101,7 +101,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         }
 
         if ($this->isSingleReturnStatement($tree)) {
-            return $this->createSingleStatementMethodBody($classInformationTransfer, $tree, $value, $isLiteral);
+            return $this->createSingleStatementMethodBody($tree, $value, $isLiteral);
         }
 
         return $tree;
@@ -208,7 +208,6 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param array<\PhpParser\Node\Stmt> $tree
      * @param mixed $value
      * @param bool $isLiteral
@@ -217,7 +216,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      *
      * @return array<\PhpParser\Node\Stmt\Return_>
      */
-    protected function createSingleStatementMethodBody(ClassInformationTransfer $classInformationTransfer, array $tree, $value, bool $isLiteral): array
+    protected function createSingleStatementMethodBody(array $tree, $value, bool $isLiteral): array
     {
         /** @var \PhpParser\Node\Stmt\Expression|null $returnExpression */
         $returnExpression = $tree[0] ?? null;
@@ -225,7 +224,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
             throw new NotFoundReturnExpressionException(sprintf('Not found any statements in value: `%s`', $value));
         }
         if (property_exists($returnExpression->expr, 'class')) {
-            return $this->createClassConstantReturnStatement($classInformationTransfer, $returnExpression);
+            return $this->createClassConstantReturnStatement($returnExpression);
         }
 
         $returnExpression = !$isLiteral && $returnExpression->expr instanceof ConstFetch && !in_array((string)$returnExpression->expr->name, ['true', 'false'], true)
@@ -236,30 +235,22 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param \PhpParser\Node\Stmt\Expression $expression
      *
      * @return array<\PhpParser\Node\Stmt\Return_>
      */
-    protected function createClassConstantReturnStatement(
-        ClassInformationTransfer $classInformationTransfer,
-        Expression $expression
-    ): array {
+    protected function createClassConstantReturnStatement(Expression $expression): array
+    {
         /** @var \PhpParser\Node\Expr\ClassConstFetch $expressionStatement */
         $expressionStatement = $expression->expr;
         /** @var \PhpParser\Node\Identifier $expressionName */
         $expressionName = $expressionStatement->name;
         /** @var \PhpParser\Node\Name\FullyQualified $expressionClass */
         $expressionClass = $expressionStatement->class;
-        $returnExpressionClass = $this->getShortClassNameAndAddToClassInformation(
-            $classInformationTransfer,
-            $expressionClass->toString() . '::' . $expressionName->name,
-        );
-        $returnExpressionClassParts = explode('::', $returnExpressionClass);
-        $expressionClass->parts = [$returnExpressionClassParts[0]];
+        $expressionClass->parts = [$expressionClass->toString()];
         $returnClassConstExpression = $this->createClassConstantExpression(
-            $returnExpressionClassParts[0],
-            $returnExpressionClassParts[1],
+            $expressionClass->toString(),
+            $expressionName->name,
         );
 
         return [new Return_($returnClassConstExpression)];

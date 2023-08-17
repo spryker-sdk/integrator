@@ -14,7 +14,6 @@ use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\CommonClass\CommonClassModifierInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveClassFromClassListVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\RemoveUseVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class UnwireClassConstantModifier implements UnwireClassConstantModifierInterface
@@ -73,7 +72,6 @@ class UnwireClassConstantModifier implements UnwireClassConstantModifierInterfac
         }
 
         $visitors = [
-            new RemoveUseVisitor($classNameToRemove),
             new RemoveClassFromClassListVisitor($targetMethodName, $classNameToRemove),
         ];
 
