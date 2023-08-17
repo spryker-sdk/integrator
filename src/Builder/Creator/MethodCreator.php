@@ -176,20 +176,21 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      */
     public function getReturnType(ClassMethod $classMethod)
     {
+        if (!$classMethod->getReturnType()) {
+            return null;
+        }
         $returnType = null;
-        if ($classMethod->getReturnType()) {
-            $parentReturnType = $classMethod->getReturnType();
-            $nullable = '';
-            if ($parentReturnType instanceof NullableType) {
-                $nullable = '?';
-                $parentReturnType = $parentReturnType->type;
-            }
-            if ($parentReturnType instanceof Identifier) {
-                $returnType = $nullable . $parentReturnType->name;
-            }
-            if ($parentReturnType instanceof FullyQualified) {
-                                                return new FullyQualified($parentReturnType->toString());
-            }
+        $parentReturnType = $classMethod->getReturnType();
+        $nullable = '';
+        if ($parentReturnType instanceof NullableType) {
+            $nullable = '?';
+            $parentReturnType = $parentReturnType->type;
+        }
+        if ($parentReturnType instanceof Identifier) {
+            $returnType = $nullable . $parentReturnType->name;
+        }
+        if ($parentReturnType instanceof FullyQualified) {
+            return new FullyQualified($parentReturnType->toString());
         }
 
         return $returnType;
