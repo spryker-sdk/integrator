@@ -16,6 +16,8 @@ use PhpParser\Node\Stmt\Return_;
 use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\CommonClass\CommonClassModifierInterface;
+use SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface;
+use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodePropertiesByNameVisitor;
 use SprykerSdk\Integrator\Helper\ClassHelper;
@@ -32,17 +34,35 @@ class ReturnClassWireClassInstanceModifierStrategy implements WireClassInstanceM
     protected CommonClassModifierInterface $commonClassModifier;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface
+     */
+    protected MethodCreatorInterface $methodCreator;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
+     */
+    protected ClassNodeFinderInterface $classNodeFinder;
+
+    /**
      * @var \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface
      */
     protected ApplicableModifierStrategyInterface $applicableCheck;
 
     /**
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\CommonClass\CommonClassModifierInterface $commonClassModifier
+     * @param \SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface $methodCreator
+     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface $applicableCheck
      */
-    public function __construct(CommonClassModifierInterface $commonClassModifier, ApplicableModifierStrategyInterface $applicableCheck)
-    {
+    public function __construct(
+        CommonClassModifierInterface $commonClassModifier,
+        MethodCreatorInterface $methodCreator,
+        ClassNodeFinderInterface $classNodeFinder,
+        ApplicableModifierStrategyInterface $applicableCheck
+    ) {
         $this->commonClassModifier = $commonClassModifier;
+        $this->methodCreator = $methodCreator;
+        $this->classNodeFinder = $classNodeFinder;
         $this->applicableCheck = $applicableCheck;
     }
 
@@ -69,15 +89,18 @@ class ReturnClassWireClassInstanceModifierStrategy implements WireClassInstanceM
         $visitors = $this->getWireVisitors($classMetadataTransfer);
 
         $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
-
-        $classHelper = new ClassHelper();
-        $shortClassName = $classHelper->getShortClassName($classMetadataTransfer->getSourceOrFail());
-
-        $methodBody = [new Return_((new BuilderFactory())->new($shortClassName))];
-
+        $parentReturnType = null;
+        if ($classInformationTransfer->getParent()) {
+            $parentClassMethod = $this->classNodeFinder->findMethodNode($classInformationTransfer->getParent(), $classMetadataTransfer->getTargetMethodNameOrFail());
+            $parentReturnType = $parentClassMethod ? $this->methodCreator->getReturnType($parentClassMethod) : null;
+        }
+        $shortClassName = (new ClassHelper())->getShortClassName($classMetadataTransfer->getSourceOrFail());
+        $returnType = $parentReturnType ?: new Identifier($shortClassName);
         $methodNodeProperties = [
-            ReplaceNodePropertiesByNameVisitor::STMTS => $methodBody,
-            ReplaceNodePropertiesByNameVisitor::RETURN_TYPE => new Identifier($shortClassName),
+            ReplaceNodePropertiesByNameVisitor::STMTS => [
+                new Return_((new BuilderFactory())->new($shortClassName)),
+            ],
+            ReplaceNodePropertiesByNameVisitor::RETURN_TYPE => $returnType,
         ];
         $this->commonClassModifier->replaceMethodBody(
             $classInformationTransfer,
