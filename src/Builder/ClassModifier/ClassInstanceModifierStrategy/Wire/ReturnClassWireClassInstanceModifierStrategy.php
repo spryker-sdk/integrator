@@ -18,9 +18,7 @@ use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Ap
 use SprykerSdk\Integrator\Builder\ClassModifier\CommonClass\CommonClassModifierInterface;
 use SprykerSdk\Integrator\Builder\Creator\MethodCreatorInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
-use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodePropertiesByNameVisitor;
-use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -86,19 +84,16 @@ class ReturnClassWireClassInstanceModifierStrategy implements WireClassInstanceM
         ClassInformationTransfer $classInformationTransfer,
         ClassMetadataTransfer $classMetadataTransfer
     ): ClassInformationTransfer {
-        $visitors = $this->getWireVisitors($classMetadataTransfer);
-
-        $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
+        $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, []);
         $parentReturnType = null;
         if ($classInformationTransfer->getParent()) {
             $parentClassMethod = $this->classNodeFinder->findMethodNode($classInformationTransfer->getParent(), $classMetadataTransfer->getTargetMethodNameOrFail());
             $parentReturnType = $parentClassMethod ? $this->methodCreator->getReturnType($parentClassMethod) : null;
         }
-        $shortClassName = (new ClassHelper())->getShortClassName($classMetadataTransfer->getSourceOrFail());
-        $returnType = $parentReturnType ?: new Identifier($shortClassName);
+        $returnType = $parentReturnType ?: new Identifier($classMetadataTransfer->getSourceOrFail());
         $methodNodeProperties = [
             ReplaceNodePropertiesByNameVisitor::STMTS => [
-                new Return_((new BuilderFactory())->new($shortClassName)),
+                new Return_((new BuilderFactory())->new($classMetadataTransfer->getSourceOrFail())),
             ],
             ReplaceNodePropertiesByNameVisitor::RETURN_TYPE => $returnType,
         ];
@@ -109,17 +104,5 @@ class ReturnClassWireClassInstanceModifierStrategy implements WireClassInstanceM
         );
 
         return $classInformationTransfer;
-    }
-
-    /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
-     *
-     * @return array<\PhpParser\NodeVisitorAbstract>
-     */
-    protected function getWireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
-    {
-        return [
-            new AddUseVisitor($classMetadataTransfer->getSourceOrFail()),
-        ];
     }
 }

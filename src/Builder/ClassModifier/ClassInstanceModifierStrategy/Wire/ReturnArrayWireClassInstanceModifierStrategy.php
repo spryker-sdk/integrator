@@ -16,7 +16,6 @@ use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Ap
 use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodCallToCallListVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginListVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
@@ -96,47 +95,21 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
     protected function getWireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
     {
         $visitors = [
-            new AddUseVisitor($classMetadataTransfer->getSourceOrFail()),
             new AddMethodCallToCallListVisitor($classMetadataTransfer),
         ];
-        $usedClasses = [];
-
-        /** @var \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer $constructorArgument */
-        foreach ($classMetadataTransfer->getConstructorArguments() as $constructorArgument) {
-            $values = is_array($constructorArgument->getValue()) ? $constructorArgument->getValue() : [$constructorArgument->getValue()];
-            $isSource = $constructorArgument->getIsSource();
-            foreach ($values as $value) {
-                $usedClasses[] = $isSource ? [json_decode((string)$value)] : $this->nodeExpressionPartialParser->parse(json_decode((string)$value))->getUsedClasses()->getArrayCopy();
-            }
-        }
-        if ($usedClasses) {
-            $usedClasses = array_merge(...$usedClasses);
-        }
 
         if ($classMetadataTransfer->getIndex() === null) {
-            return [...$visitors, ...$this->getUseVisitors($usedClasses), new AddPluginToPluginListVisitor($classMetadataTransfer, $this->pluginPositionResolver, $this->argumentBuilder)];
+            return [...$visitors, new AddPluginToPluginListVisitor($classMetadataTransfer, $this->pluginPositionResolver, $this->argumentBuilder)];
         }
-
-        $parsedResult = $this->nodeExpressionPartialParser->parse($classMetadataTransfer->getIndex());
-        $usedClasses = array_merge($usedClasses, $parsedResult->getUsedClasses()->getArrayCopy());
 
         return [
             ...$visitors,
-            ...$this->getUseVisitors($usedClasses),
-            new AddPluginToPluginListVisitor($classMetadataTransfer, $this->pluginPositionResolver, $this->argumentBuilder, $parsedResult->getExpression()),
+            new AddPluginToPluginListVisitor(
+                $classMetadataTransfer,
+                $this->pluginPositionResolver,
+                $this->argumentBuilder,
+                $this->nodeExpressionPartialParser->parse($classMetadataTransfer->getIndex()),
+            ),
         ];
-    }
-
-    /**
-     * @param array $usedClasses
-     *
-     * @return array<\SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor>
-     */
-    protected function getUseVisitors(array $usedClasses): array
-    {
-        return array_map(
-            static fn (string $className): AddUseVisitor => new AddUseVisitor($className),
-            $usedClasses,
-        );
     }
 }

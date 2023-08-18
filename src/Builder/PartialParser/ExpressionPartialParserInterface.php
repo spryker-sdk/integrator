@@ -9,14 +9,14 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\PartialParser;
 
-use SprykerSdk\Integrator\Transfer\ExpressionPartialParserResultTransfer;
+use PhpParser\Node\Stmt\Expression;
 
 interface ExpressionPartialParserInterface
 {
     /**
      * @param string $codeString
      *
-     * @return \SprykerSdk\Integrator\Transfer\ExpressionPartialParserResultTransfer
+     * @return \PhpParser\Node\Stmt\Expression
      */
-    public function parse(string $codeString): ExpressionPartialParserResultTransfer;
+    public function parse(string $codeString): Expression;
 }

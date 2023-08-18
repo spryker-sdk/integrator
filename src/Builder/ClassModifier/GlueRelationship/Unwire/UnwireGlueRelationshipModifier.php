@@ -12,7 +12,6 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationship\Unwire;
 use RuntimeException;
 use SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationship\AbstractGlueRelationshipModifier;
 use SprykerSdk\Integrator\Builder\Visitor\RemoveGlueRelationshipFromClassListVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\RemoveUseVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class UnwireGlueRelationshipModifier extends AbstractGlueRelationshipModifier implements UnwireGlueRelationshipModifierInterface
@@ -52,9 +51,6 @@ class UnwireGlueRelationshipModifier extends AbstractGlueRelationshipModifier im
         }
 
         [$keyClass, $keyConst] = explode('::', $key);
-
-        $this->nodeTraverser->addVisitor(new RemoveUseVisitor($keyClass));
-        $this->nodeTraverser->addVisitor(new RemoveUseVisitor($classNameToRemove));
         $this->nodeTraverser->addVisitor(new RemoveGlueRelationshipFromClassListVisitor($targetMethodName, $keyClass, $keyConst, $classNameToRemove));
         $classInformationTransfer->setClassTokenTree($this->nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
 
