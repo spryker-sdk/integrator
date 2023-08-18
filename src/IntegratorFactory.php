@@ -956,6 +956,8 @@ class IntegratorFactory
     {
         return new ReturnClassWireClassInstanceModifierStrategy(
             $this->createCommonClassModifier(),
+            $this->createMethodCreator(),
+            $this->createClassNodeFinder(),
             $this->createReturnClassModifierApplicableModifierStrategy(),
         );
     }
