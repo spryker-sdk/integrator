@@ -13,10 +13,13 @@ use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeFinder;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
+use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -43,18 +46,26 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
     protected PluginPositionResolverInterface $pluginPositionResolver;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
+     */
+    protected ClassLoaderInterface $classLoader;
+
+    /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
      * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
+     * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface $classLoader
      */
     public function __construct(
         ClassMetadataTransfer $classMetadataTransfer,
         ArgumentBuilderInterface $argumentBuilder,
-        PluginPositionResolverInterface $pluginPositionResolver
+        PluginPositionResolverInterface $pluginPositionResolver,
+        ClassLoaderInterface $classLoader
     ) {
         $this->classMetadataTransfer = $classMetadataTransfer;
         $this->argumentBuilder = $argumentBuilder;
         $this->pluginPositionResolver = $pluginPositionResolver;
+        $this->classLoader = $classLoader;
     }
 
     /**
@@ -131,8 +142,9 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
 
             if ($addPluginCallCount) {
                 $arguments = $this->argumentBuilder->createAddPluginArguments($this->classMetadataTransfer);
+                $lastCall = end($addPluginCalls);
                 $newMethodCall = (new BuilderFactory())
-                    ->methodCall($addPluginCalls[0]->var, $addPluginCalls[0]->name, $arguments);
+                    ->methodCall($lastCall->var, $this->getMethodName($node) ?: $lastCall->name, $arguments);
 
                 array_splice($node->stmts, $newPluginAddCallIndex, 0, [new Expression($newMethodCall)]);
             }
@@ -141,6 +153,47 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
         }
 
         return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node $node
+     *
+     * @return string|null
+     */
+    protected function getMethodName(Node $node): ?string
+    {
+        if (!($node instanceof ClassMethod) || !$node->returnType || !$node->returnType->toString()) {
+            return null;
+        }
+        $sourceClass = $this->classLoader->loadClass($this->classMetadataTransfer->getSourceOrFail());
+        $returnClass = $this->classLoader->loadClass($node->returnType->toString());
+
+        /**
+         * @var array<\PhpParser\Node\Stmt\ClassMethod> $possibleNodeMethods
+         */
+        $possibleNodeMethods = (new NodeFinder())->find($returnClass->getClassTokenTree(), function (Node $node) {
+            return $node instanceof ClassMethod && $node->flags === Class_::MODIFIER_PUBLIC;
+        });
+
+        /**
+         * @var array<\PhpParser\Node\Stmt\Class_> $sourceNodeInterfaces
+         */
+        $sourceNodeInterfaces = (new NodeFinder())->find($sourceClass->getClassTokenTree(), function (Node $node) {
+            return $node instanceof Class_ && $node->implements;
+        });
+        if (!$sourceNodeInterfaces) {
+            return null;
+        }
+                $sourceInterfaces = current($sourceNodeInterfaces)->implements;
+        foreach ($possibleNodeMethods as $possibleMethod) {
+            $methodName = $possibleMethod->name->toString();
+            $interfaces = array_map(static fn (Node\Param $param): string => $param->type ? $param->type->toString() : '', $possibleMethod->params ?: []);
+            if (array_intersect($sourceInterfaces, $interfaces)) {
+                return $methodName;
+            }
+        }
+
+        return null;
     }
 
     /**

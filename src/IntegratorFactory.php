@@ -922,6 +922,7 @@ class IntegratorFactory
             $this->createArgumentBuilder(),
             $this->createReturnCollectionApplicableModifierStrategy(),
             $this->createPluginPositionResolver(),
+            $this->createClassLoader(),
         );
     }
 

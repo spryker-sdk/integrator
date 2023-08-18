@@ -9,12 +9,14 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassLoader;
 
+use Composer\Autoload\ClassLoader as ComposerClassLoader;
 use PhpParser\Lexer;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
-use ReflectionClass;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassLoader implements ClassLoaderInterface
@@ -30,6 +32,11 @@ class ClassLoader implements ClassLoaderInterface
     protected $lexer;
 
     /**
+     * @var \Composer\Autoload\ClassLoader
+     */
+    protected ComposerClassLoader $composerClassLoader;
+
+    /**
      * @param \PhpParser\Parser $parser
      * @param \PhpParser\Lexer $lexer
      */
@@ -37,6 +44,7 @@ class ClassLoader implements ClassLoaderInterface
     {
         $this->parser = $parser;
         $this->lexer = $lexer;
+        $this->composerClassLoader = require INTEGRATOR_ROOT_DIR . '/vendor/autoload.php';
     }
 
     /**
@@ -53,9 +61,7 @@ class ClassLoader implements ClassLoaderInterface
             ->setClassName($className)
             ->setFullyQualifiedClassName('\\' . $className);
 
-        $reflectionClass = new ReflectionClass($className);
-
-        $fileName = $reflectionClass->getFileName();
+        $fileName = $this->composerClassLoader->findFile($className);
         if (!$fileName) {
             return $classInformationTransfer;
         }
@@ -72,14 +78,38 @@ class ClassLoader implements ClassLoaderInterface
             ->setTokens($this->lexer->getTokens())
             ->setFilePath($fileName);
 
-        $parentClass = $reflectionClass->getParentClass();
+        $parentClass = $this->getParent($syntaxTree);
         if ($parentClass) {
             $classInformationTransfer->setParent(
-                $this->loadClass($parentClass->getName()),
+                $this->loadClass($parentClass),
             );
         }
 
         return $classInformationTransfer;
+    }
+
+    /**
+     * @param array $originalSyntaxTree
+     *
+     * @return string|null
+     */
+    protected function getParent(array $originalSyntaxTree): ?string
+    {
+        $namespace = current($originalSyntaxTree);
+        if (!($namespace instanceof Namespace_) || !$namespace->stmts) {
+            return null;
+        }
+
+        foreach ($namespace->stmts as $stmt) {
+            if (!($stmt instanceof Class_)) {
+                continue;
+            }
+            if ($stmt->extends) {
+                return $stmt->extends->toString();
+            }
+        }
+
+        return null;
     }
 
     /**
