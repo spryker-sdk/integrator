@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassLoader;
 
-use PhpParser\Node;
 use Composer\Autoload\ClassLoader as ComposerClassLoader;
 use PhpParser\Lexer;
+use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
