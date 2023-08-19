@@ -911,4 +911,17 @@ class ClassInformationTransfer extends AbstractTransfer
             'methods' => $this->addValuesToCollection($this->methods, true, true),
         ];
     }
+
+    /**
+     * @return array<string>
+     */
+    public function getParentClassNames(): array
+    {
+        if (!$this->getParent() || !$this->getParent()->getFullyQualifiedClassName()) {
+            return [];
+        }
+        $parents = [ltrim($this->getParent()->getFullyQualifiedClassName(), '\\')];
+
+        return array_merge($parents, $this->getParent()->getParentClassNames());
+    }
 }

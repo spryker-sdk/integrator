@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassLoader;
 
-use Composer\Autoload\ClassLoader as ComposerClassLoader;
 use PhpParser\Lexer;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -19,24 +18,20 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
+use SprykerSdk\Integrator\Builder\ComposerClassLoader\ComposerClassLoader;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassLoader implements ClassLoaderInterface
 {
-    /**
-     * @var \PhpParser\Parser
-     */
+ /**
+  * @var \PhpParser\Parser
+  */
     protected $parser;
 
     /**
      * @var \PhpParser\Lexer
      */
     protected $lexer;
-
-    /**
-     * @var \Composer\Autoload\ClassLoader
-     */
-    protected ComposerClassLoader $composerClassLoader;
 
     /**
      * @param \PhpParser\Parser $parser
@@ -46,7 +41,6 @@ class ClassLoader implements ClassLoaderInterface
     {
         $this->parser = $parser;
         $this->lexer = $lexer;
-        $this->composerClassLoader = require INTEGRATOR_ROOT_DIR . '/vendor/autoload.php';
     }
 
     /**
@@ -63,8 +57,8 @@ class ClassLoader implements ClassLoaderInterface
             ->setClassName($className)
             ->setFullyQualifiedClassName('\\' . $className);
 
-        $fileName = $this->composerClassLoader->findFile($className);
-        if ($fileName === false || !realpath($fileName)) {
+        $fileName = ComposerClassLoader::getFilePath($className);
+        if ($fileName === null || !realpath($fileName)) {
             return $classInformationTransfer;
         }
         $fileContents = file_get_contents($fileName);

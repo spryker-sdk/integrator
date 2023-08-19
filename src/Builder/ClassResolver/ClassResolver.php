@@ -12,6 +12,7 @@ namespace SprykerSdk\Integrator\Builder\ClassResolver;
 use RuntimeException;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
+use SprykerSdk\Integrator\Builder\ComposerClassLoader\ComposerClassLoader;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassResolver implements ClassResolverInterface
@@ -59,7 +60,7 @@ class ClassResolver implements ClassResolverInterface
         }
 
         if (!isset(static::$generatedClassList[$resolvedClassName])) {
-            if (class_exists($resolvedClassName)) {
+            if (ComposerClassLoader::classExist($resolvedClassName)) {
                 $classInformationTransfer = $this->classLoader->loadClass($resolvedClassName);
             } else {
                 $classInformationTransfer = $this->classGenerator->generateClass($resolvedClassName, $targetClassName);

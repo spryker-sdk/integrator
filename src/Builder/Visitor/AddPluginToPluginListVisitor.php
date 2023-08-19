@@ -34,6 +34,8 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
+use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
+use SprykerSdk\Integrator\Builder\ComposerClassLoader\ComposerClassLoader;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -53,11 +55,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      * @var string
      */
     protected const PLUGINS_VARIBLE = 'plugins';
-
-    /**
-     * @var string
-     */
-    protected const STATEMENT_ARRAY = 'Expr_Array';
 
     /**
      * @var string
@@ -85,25 +82,33 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected ?Expression $indexExpr;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
+     */
+    protected ClassLoaderInterface $classLoader;
+
+    /**
      * @var \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
      */
-    private ArgumentBuilderInterface $argumentBuilder;
+    protected ArgumentBuilderInterface $argumentBuilder;
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
      * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
+     * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface $classLoader
      * @param \PhpParser\Node\Stmt\Expression|null $indexExpr
      */
     public function __construct(
         ClassMetadataTransfer $classMetadataTransfer,
         PluginPositionResolverInterface $pluginPositionResolver,
         ArgumentBuilderInterface $argumentBuilder,
+        ClassLoaderInterface $classLoader,
         ?Expression $indexExpr = null
     ) {
         $this->classMetadataTransfer = $classMetadataTransfer;
         $this->pluginPositionResolver = $pluginPositionResolver;
         $this->argumentBuilder = $argumentBuilder;
+        $this->classLoader = $classLoader;
         $this->indexExpr = $indexExpr;
     }
 
@@ -527,7 +532,10 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         }
 
         $nodeClassName = $item->value->class->toString();
-        $usedParentClasses = class_exists($nodeClassName) ? (class_parents($nodeClassName) ?: []) : [];
+        $usedParentClasses = [];
+        if (ComposerClassLoader::classExist($nodeClassName)) {
+            $usedParentClasses = $this->classLoader->loadClass($nodeClassName)->getParentClassNames();
+        }
 
         if (
             $this->isKeyEqualsToCurrentOne($item)

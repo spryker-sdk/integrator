@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use ReflectionClass;
+use SprykerSdk\Integrator\Builder\ComposerClassLoader\ComposerClassLoader;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Exception\ManifestApplyingException;
 use SprykerSdk\Integrator\IntegratorConfig;
@@ -40,9 +41,10 @@ class AddConfigArrayElementManifestStrategy extends AbstractManifestStrategy
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
+        /** @phpstan-var class-string $targetClassName */
         [$targetClassName, $targetMethodName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
 
-        if (!class_exists($targetClassName)) {
+        if (!ComposerClassLoader::classExist($targetClassName)) {
             throw new ManifestApplyingException(sprintf(
                 'Target module `%s.%s` does not exists in your system.',
                 $this->classHelper->getOrganisationName($targetClassName),

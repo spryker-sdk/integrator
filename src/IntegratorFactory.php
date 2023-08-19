@@ -910,6 +910,7 @@ class IntegratorFactory
             $this->createPluginPositionResolver(),
             $this->createNodeExpressionPartialParser(),
             $this->createArgumentBuilder(),
+            $this->createClassLoader(),
         );
     }
 

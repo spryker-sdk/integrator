@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use ReflectionClass;
 use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface;
+use SprykerSdk\Integrator\Builder\ComposerClassLoader\ComposerClassLoader;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
@@ -51,9 +52,10 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
      */
     public function apply(array $manifest, string $moduleName, InputOutputInterface $inputOutput, bool $isDry): bool
     {
+        /** @phpstan-var class-string $targetClassName */
         [$targetClassName, $targetMethodName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
 
-        if (!class_exists($targetClassName)) {
+        if (!ComposerClassLoader::classExist($targetClassName)) {
             $inputOutput->writeln(sprintf(
                 'Target module %s/%s does not exists in your system.',
                 $this->classHelper->getOrganisationName($targetClassName),
