@@ -78,7 +78,7 @@ class ClassLoader implements ClassLoaderInterface
         $classInformationTransfer->setClassTokenTree($syntaxTree)
             ->setOriginalClassTokenTree($originalSyntaxTree)
             ->setTokens($this->lexer->getTokens())
-            ->setFilePath($fileName);
+            ->setFilePath(realpath($fileName));
 
         $parentClass = $this->getParent($syntaxTree);
         if ($parentClass) {

@@ -12,9 +12,6 @@ namespace SprykerSdkTest\Integrator;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
 
-/**
- * @group test1
- */
 class IntegratorFacadeTest extends AbstractIntegratorTestCase
 {
     /**
@@ -52,6 +49,7 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
     }
 
     /**
+     * @group test1
      * @return void
      */
     public function testRunInstallationWirePlugin(): void
@@ -121,7 +119,6 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
     }
 
     /**
-     * @group test2
      * @return void
      */
     public function testRunInstallationUnwirePlugin(): void
