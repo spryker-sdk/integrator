@@ -9,10 +9,12 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassLoader;
 
+use PhpParser\Node;
 use Composer\Autoload\ClassLoader as ComposerClassLoader;
 use PhpParser\Lexer;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
@@ -95,7 +97,10 @@ class ClassLoader implements ClassLoaderInterface
      */
     protected function getParent(array $originalSyntaxTree): ?string
     {
-        $namespace = current($originalSyntaxTree);
+        $namespace = (new NodeFinder())->findFirst($originalSyntaxTree, function (Node $node) {
+            return $node instanceof Namespace_;
+        });
+
         if (!($namespace instanceof Namespace_) || !$namespace->stmts) {
             return null;
         }
