@@ -17,9 +17,7 @@ use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\CommonClass\CommonClassModifierInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddClassToClassListVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\ReplaceNodePropertiesByNameVisitor;
-use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class WireClassConstantModifier implements WireClassConstantModifierInterface
@@ -89,7 +87,6 @@ class WireClassConstantModifier implements WireClassConstantModifierInterface
 
         if ($this->classMethodChecker->isMethodReturnArray($methodNode)) {
             $visitors = [
-                new AddUseVisitor($classNameToAdd),
                 new AddClassToClassListVisitor(
                     $targetMethodName,
                     $classNameToAdd,
@@ -102,13 +99,9 @@ class WireClassConstantModifier implements WireClassConstantModifierInterface
             return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
         }
 
-        $visitors = [
-            new AddUseVisitor($classNameToAdd),
-        ];
-        $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
+        $classInformationTransfer = $this->addVisitorsClassInformationTransfer($classInformationTransfer, []);
 
-        $classHelper = new ClassHelper();
-        $methodBody = [new Return_((new BuilderFactory())->classConstFetch($classHelper->getShortClassName($classNameToAdd), $constantName))];
+        $methodBody = [new Return_((new BuilderFactory())->classConstFetch($classNameToAdd, $constantName))];
 
         $methodNodeProperties = [ReplaceNodePropertiesByNameVisitor::STMTS => $methodBody];
         $this->commonClassModifier->replaceMethodBody($classInformationTransfer, $targetMethodName, $methodNodeProperties);

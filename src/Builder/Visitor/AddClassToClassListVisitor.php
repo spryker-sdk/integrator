@@ -225,7 +225,11 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
         foreach ($node->items as $item) {
             $nodeValue = $item->value->name->toString();
             if (!($item->value instanceof MethodCall)) {
-                $nodeValue = sprintf('%s::%s', $item->value->class->toString(), $item->value->name->toString());
+                $nodeValue = sprintf(
+                    '%s::%s',
+                    (new ClassHelper())->getShortClassName((string)$item->value->class->toString()),
+                    $item->value->name->toString(),
+                );
             }
             if ($nodeValue === $this->before && !$itemAdded) {
                 $items[] = $this->createArrayItemWithInstanceOf();
@@ -258,10 +262,7 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
     protected function createArrayItemWithInstanceOf(): ArrayItem
     {
         return new ArrayItem(
-            (new BuilderFactory())->classConstFetch(
-                (new ClassHelper())->getShortClassName($this->className),
-                $this->constantName,
-            ),
+            (new BuilderFactory())->classConstFetch($this->className, $this->constantName),
         );
     }
 
