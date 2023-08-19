@@ -49,8 +49,6 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
     }
 
     /**
-     * @group test1
-     *
      * @return void
      */
     public function testRunInstallationWirePlugin(): void

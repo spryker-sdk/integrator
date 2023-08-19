@@ -63,8 +63,8 @@ class ClassLoader implements ClassLoaderInterface
             ->setClassName($className)
             ->setFullyQualifiedClassName('\\' . $className);
 
-        $fileName = realpath((string)$this->composerClassLoader->findFile($className));
-        if (!$fileName) {
+        $fileName = $this->composerClassLoader->findFile($className);
+        if ($fileName === false || !realpath($fileName)) {
             return $classInformationTransfer;
         }
         $fileContents = file_get_contents($fileName);
@@ -78,7 +78,7 @@ class ClassLoader implements ClassLoaderInterface
         $classInformationTransfer->setClassTokenTree($syntaxTree)
             ->setOriginalClassTokenTree($originalSyntaxTree)
             ->setTokens($this->lexer->getTokens())
-            ->setFilePath($fileName);
+            ->setFilePath(realpath($fileName));
 
         $parentClass = $this->getParent($syntaxTree);
         if ($parentClass) {
