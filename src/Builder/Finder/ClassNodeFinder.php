@@ -75,4 +75,23 @@ class ClassNodeFinder implements ClassNodeFinderInterface
 
         return $node;
     }
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param string $methodName
+     *
+     * @return bool
+     */
+    public function hasClassMethodName(ClassInformationTransfer $classInformationTransfer, string $methodName): bool
+    {
+        /** @var \PhpParser\Node\Stmt\ClassMethod $node */
+        $node = (new NodeFinder())->findFirst($classInformationTransfer->getClassTokenTree(), function (Node $node) use ($methodName) {
+            return $node instanceof ClassMethod && $node->name->toString() === $methodName;
+        });
+        if ($node) {
+            return true;
+        }
+
+        return $classInformationTransfer->getParent() && $this->hasClassMethodName($classInformationTransfer->getParent(), $methodName);
+    }
 }

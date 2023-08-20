@@ -9,10 +9,12 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
-use ReflectionClass;
+use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Builder\ComposerClassLoader\ComposerClassLoader;
+use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Exception\ManifestApplyingException;
+use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 /**
@@ -21,6 +23,33 @@ use SprykerSdk\Integrator\IntegratorConfig;
  */
 class AddConfigArrayElementManifestStrategy extends AbstractManifestStrategy
 {
+    /**
+     * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
+     */
+    protected ClassLoaderInterface $classLoader;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
+     */
+    protected ClassNodeFinderInterface $classNodeFinder;
+
+    /**
+     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @param \SprykerSdk\Integrator\Helper\ClassHelperInterface $classHelper
+     * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface $classLoader
+     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
+     */
+    public function __construct(
+        IntegratorConfig $config,
+        ClassHelperInterface $classHelper,
+        ClassLoaderInterface $classLoader,
+        ClassNodeFinderInterface $classNodeFinder
+    ) {
+        parent::__construct($config, $classHelper);
+        $this->classLoader = $classLoader;
+        $this->classNodeFinder = $classNodeFinder;
+    }
+
     /**
      * @return string
      */
@@ -52,9 +81,9 @@ class AddConfigArrayElementManifestStrategy extends AbstractManifestStrategy
             ));
         }
 
-        $targetClassInfo = (new ReflectionClass($targetClassName));
+        $targetClassInformationTransfer = $this->classLoader->loadClass($targetClassName);
 
-        if (!$targetClassInfo->hasMethod($targetMethodName)) {
+        if (!$this->classNodeFinder->hasClassMethodName($targetClassInformationTransfer, $targetMethodName)) {
             $targetMethodNameExistOnProjectLayer = false;
             foreach ($this->config->getProjectNamespaces() as $namespace) {
                 $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass($targetClassName, $namespace);

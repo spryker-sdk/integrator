@@ -9,9 +9,10 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
-use ReflectionClass;
+use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface;
 use SprykerSdk\Integrator\Builder\ComposerClassLoader\ComposerClassLoader;
+use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Exception\ManifestApplyingException;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
@@ -22,17 +23,33 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
     protected ClassMetadataBuilderInterface $metadataBuilder;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
+     */
+    protected ClassLoaderInterface $classLoader;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
+     */
+    protected ClassNodeFinderInterface $classNodeFinder;
+
+    /**
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
      * @param \SprykerSdk\Integrator\Helper\ClassHelperInterface $classHelper
      * @param \SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface $metadataBuilder
+     * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface $classLoader
+     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      */
     public function __construct(
         IntegratorConfig $config,
         ClassHelperInterface $classHelper,
-        ClassMetadataBuilderInterface $metadataBuilder
+        ClassMetadataBuilderInterface $metadataBuilder,
+        ClassLoaderInterface $classLoader,
+        ClassNodeFinderInterface $classNodeFinder
     ) {
         parent::__construct($config, $classHelper);
         $this->metadataBuilder = $metadataBuilder;
+        $this->classLoader = $classLoader;
+        $this->classNodeFinder = $classNodeFinder;
     }
 
     /**
@@ -66,10 +83,10 @@ class WirePluginManifestStrategy extends AbstractManifestStrategy
             ));
         }
 
-        $targetClassInfo = (new ReflectionClass($targetClassName));
         $classMetadataTransfer = $this->metadataBuilder->build($manifest);
+        $targetClassInformationTransfer = $this->classLoader->loadClass($targetClassName);
 
-        if (!$targetClassInfo->hasMethod($targetMethodName) && !$classMetadataTransfer->getCall()) {
+        if (!$this->classNodeFinder->hasClassMethodName($targetClassInformationTransfer, $targetMethodName) && !$classMetadataTransfer->getCall()) {
             $targetMethodNameExistOnProjectLayer = false;
             foreach ($this->config->getProjectNamespaces() as $namespace) {
                 $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass($targetClassName, $namespace);
