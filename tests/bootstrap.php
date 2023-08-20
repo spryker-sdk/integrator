@@ -4,9 +4,6 @@ define('TMP_DIRECTORY_NAME', 'tmp');
 define('ROOT_TESTS', __DIR__);
 
 defined('INTEGRATOR_ROOT_DIR')
-    || define('INTEGRATOR_ROOT_DIR', dirname(__DIR__));
-
-defined('INTEGRATOR_ROOT_DIR')
 || define('INTEGRATOR_ROOT_DIR', dirname(__DIR__));
 
 defined('DATA_PROVIDER_DIR')
