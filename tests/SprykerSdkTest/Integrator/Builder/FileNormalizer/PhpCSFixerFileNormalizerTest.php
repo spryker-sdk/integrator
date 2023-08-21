@@ -27,7 +27,7 @@ class PhpCSFixerFileNormalizerTest extends TestCase
     {
         // Arrange
         $processExecutorMock = $this->createProcessExecutorMock(0, '');
-        $processExecutorMock->expects($this->once())->method('execute')->with(
+        $processExecutorMock->expects($this->atLeastOnce())->method('execute')->with(
             $this->callback(function ($command) {
                 return strpos($command[0], 'vendor/bin/phpcbf') !== false;
             }),

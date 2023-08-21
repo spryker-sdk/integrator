@@ -9,8 +9,12 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\Creator;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -20,6 +24,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException;
 use SprykerSdk\Integrator\Builder\Exception\NotFoundReturnExpressionException;
+use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -29,6 +34,11 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      * @var int
      */
     protected const SINGLE_TREE_RETURN_STATEMENT_COUNT_ELEMENTS = 1;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
+     */
+    protected ClassNodeFinderInterface $classNodeFinder;
 
     /**
      * @var \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface
@@ -51,17 +61,20 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     protected $parserFactory;
 
     /**
+     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface $methodStatementsCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface $methodDocBlockCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface $methodReturnTypeCreator
      * @param \PhpParser\ParserFactory $parserFactory
      */
     public function __construct(
+        ClassNodeFinderInterface $classNodeFinder,
         MethodStatementsCreatorInterface $methodStatementsCreator,
         MethodDocBlockCreatorInterface $methodDocBlockCreator,
         MethodReturnTypeCreatorInterface $methodReturnTypeCreator,
         ParserFactory $parserFactory
     ) {
+        $this->classNodeFinder = $classNodeFinder;
         $this->methodStatementsCreator = $methodStatementsCreator;
         $this->methodDocBlockCreator = $methodDocBlockCreator;
         $this->methodReturnTypeCreator = $methodReturnTypeCreator;
@@ -90,7 +103,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         }
 
         if ($this->isSingleReturnStatement($tree)) {
-            return $this->createSingleStatementMethodBody($classInformationTransfer, $tree, $value, $isLiteral);
+            return $this->createSingleStatementMethodBody($tree, $value, $isLiteral);
         }
 
         return $tree;
@@ -123,16 +136,74 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         $value
     ): ClassInformationTransfer {
         $nodeTraverser = new NodeTraverser();
-        $returnType = $this->methodReturnTypeCreator->createMethodReturnType($value);
+        $parentReturnType = null;
+        $parentClassMethod = null;
+        if ($classInformationTransfer->getParent()) {
+            $parentClassMethod = $this->classNodeFinder->findMethodNode($classInformationTransfer->getParent(), $methodName);
+            $parentReturnType = $parentClassMethod ? $this->getReturnType($parentClassMethod) : null;
+        }
+        $returnType = $parentReturnType ?: $this->methodReturnTypeCreator->createMethodReturnType($value);
+        $flags = $parentClassMethod ? $this->getModifierFromClassMethod($parentClassMethod) : Class_::MODIFIER_PUBLIC;
+        $docType = $parentClassMethod && $parentClassMethod->getDocComment() ?
+            new Doc($parentClassMethod->getDocComment()->getText()) :
+            $this->methodDocBlockCreator->createMethodDocBlock($value);
+
         $classMethod = new ClassMethod(
             $methodName,
-            ['flags' => Class_::MODIFIER_PUBLIC, 'returnType' => $returnType],
-            ['comments' => [$this->methodDocBlockCreator->createMethodDocBlock($value)]],
+            [
+                'flags' => $flags,
+                'returnType' => $returnType,
+            ],
+            [
+            'comments' =>
+                [
+                    $docType,
+                ],
+            ],
         );
+
+        $classMethod->stmts = [];
         $nodeTraverser->addVisitor(new AddMethodVisitor($classMethod));
 
         return $classInformationTransfer
             ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $classMethod
+     *
+     * @return mixed
+     */
+    public function getReturnType(ClassMethod $classMethod)
+    {
+        if (!$classMethod->getReturnType()) {
+            return null;
+        }
+        $returnType = null;
+        $parentReturnType = $classMethod->getReturnType();
+        $nullable = '';
+        if ($parentReturnType instanceof NullableType) {
+            $nullable = '?';
+            $parentReturnType = $parentReturnType->type;
+        }
+        if ($parentReturnType instanceof Identifier) {
+            $returnType = $nullable . $parentReturnType->name;
+        }
+        if ($parentReturnType instanceof FullyQualified) {
+            return new FullyQualified($parentReturnType->toString());
+        }
+
+        return $returnType;
+    }
+
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod $classMethod
+     *
+     * @return int
+     */
+    protected function getModifierFromClassMethod(ClassMethod $classMethod): int
+    {
+        return $classMethod->isProtected() ? Class_::MODIFIER_PROTECTED : Class_::MODIFIER_PUBLIC;
     }
 
     /**
@@ -159,7 +230,6 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param array<\PhpParser\Node\Stmt> $tree
      * @param mixed $value
      * @param bool $isLiteral
@@ -168,7 +238,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      *
      * @return array<\PhpParser\Node\Stmt\Return_>
      */
-    protected function createSingleStatementMethodBody(ClassInformationTransfer $classInformationTransfer, array $tree, $value, bool $isLiteral): array
+    protected function createSingleStatementMethodBody(array $tree, $value, bool $isLiteral): array
     {
         /** @var \PhpParser\Node\Stmt\Expression|null $returnExpression */
         $returnExpression = $tree[0] ?? null;
@@ -176,7 +246,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
             throw new NotFoundReturnExpressionException(sprintf('Not found any statements in value: `%s`', $value));
         }
         if (property_exists($returnExpression->expr, 'class')) {
-            return $this->createClassConstantReturnStatement($classInformationTransfer, $returnExpression);
+            return $this->createClassConstantReturnStatement($returnExpression);
         }
 
         $returnExpression = !$isLiteral && $returnExpression->expr instanceof ConstFetch && !in_array((string)$returnExpression->expr->name, ['true', 'false'], true)
@@ -187,30 +257,22 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param \PhpParser\Node\Stmt\Expression $expression
      *
      * @return array<\PhpParser\Node\Stmt\Return_>
      */
-    protected function createClassConstantReturnStatement(
-        ClassInformationTransfer $classInformationTransfer,
-        Expression $expression
-    ): array {
+    protected function createClassConstantReturnStatement(Expression $expression): array
+    {
         /** @var \PhpParser\Node\Expr\ClassConstFetch $expressionStatement */
         $expressionStatement = $expression->expr;
         /** @var \PhpParser\Node\Identifier $expressionName */
         $expressionName = $expressionStatement->name;
         /** @var \PhpParser\Node\Name\FullyQualified $expressionClass */
         $expressionClass = $expressionStatement->class;
-        $returnExpressionClass = $this->getShortClassNameAndAddToClassInformation(
-            $classInformationTransfer,
-            $expressionClass->toString() . '::' . $expressionName->name,
-        );
-        $returnExpressionClassParts = explode('::', $returnExpressionClass);
-        $expressionClass->parts = [$returnExpressionClassParts[0]];
+        $expressionClass->parts = [$expressionClass->toString()];
         $returnClassConstExpression = $this->createClassConstantExpression(
-            $returnExpressionClassParts[0],
-            $returnExpressionClassParts[1],
+            $expressionClass->toString(),
+            $expressionName->name,
         );
 
         return [new Return_($returnClassConstExpression)];

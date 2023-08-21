@@ -9,16 +9,12 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\PartialParser;
 
-use ArrayObject;
 use PhpParser\Error;
 use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeTraverser;
 use PhpParser\Parser;
-use SprykerSdk\Integrator\Builder\Visitor\ReplaceAndCollectFullyQualifiedClassNamesVisitor;
-use SprykerSdk\Integrator\Transfer\ExpressionPartialParserResultTransfer;
 
 class ExpressionPartialParser implements ExpressionPartialParserInterface
 {
@@ -43,34 +39,24 @@ class ExpressionPartialParser implements ExpressionPartialParserInterface
     /**
      * @param string $codeString
      *
-     * @return \SprykerSdk\Integrator\Transfer\ExpressionPartialParserResultTransfer
+     * @return \PhpParser\Node\Stmt\Expression
      */
-    public function parse(string $codeString): ExpressionPartialParserResultTransfer
+    public function parse(string $codeString): Expression
     {
         try {
             $ast = $this->parser->parse($this->normalizeCodeString($codeString));
         } catch (Error $e) {
-            return $this->createStringExprPartialDataResponse($codeString);
+            return $this->createStringExpr($codeString);
         }
 
-        if ($ast === null) {
-            return $this->createStringExprPartialDataResponse($codeString);
-        }
-
-        $traverser = new NodeTraverser();
-        $visitor = new ReplaceAndCollectFullyQualifiedClassNamesVisitor(new ArrayObject());
-
-        $traverser->addVisitor($visitor);
-        $traverser->traverse($ast);
-
-        if (!$this->isAstContainsExpression($ast)) {
-            return $this->createStringExprPartialDataResponse($codeString);
+        if ($ast === null || !$this->isAstContainsExpression($ast)) {
+            return $this->createStringExpr($codeString);
         }
 
         /** @var \PhpParser\Node\Stmt\Expression $expr */
         $expr = $ast[0];
 
-        return new ExpressionPartialParserResultTransfer($visitor->getFullyQualifiedClassNames(), $expr);
+        return $expr;
     }
 
     /**
@@ -90,11 +76,11 @@ class ExpressionPartialParser implements ExpressionPartialParserInterface
     /**
      * @param string $codeString
      *
-     * @return \SprykerSdk\Integrator\Transfer\ExpressionPartialParserResultTransfer
+     * @return \PhpParser\Node\Stmt\Expression
      */
-    protected function createStringExprPartialDataResponse(string $codeString): ExpressionPartialParserResultTransfer
+    protected function createStringExpr(string $codeString): Expression
     {
-        return new ExpressionPartialParserResultTransfer(new ArrayObject(), new Expression(new String_($codeString)));
+        return new Expression(new String_($codeString));
     }
 
     /**

@@ -12,7 +12,6 @@
 
     <exclude-pattern>tests/_tests_files/</exclude-pattern>
     <exclude-pattern>tests/_data/</exclude-pattern>
-    <exclude-pattern>tests/tmp/</exclude-pattern>
 
     <file>src/</file>
     <file>tests/</file>

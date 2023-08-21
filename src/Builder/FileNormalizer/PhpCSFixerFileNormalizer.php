@@ -45,7 +45,7 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
      */
     public function isApplicable(): bool
     {
-        return is_file($this->config->getPhpCsConfigPath()) && is_file($this->getCSFixPath());
+        return is_file($this->config->getPhpCsConfigPath());
     }
 
     /**
@@ -57,7 +57,14 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
      */
     public function normalize(array $filePaths): void
     {
-        $process = $this->processExecutor->execute([$this->getCSFixPath(), ...$this->getAbsoluteFilePaths($filePaths)]);
+        $command = [$this->getCSFixPath(), ...$this->getAbsoluteFilePaths($filePaths)];
+        $process = $this->processExecutor->execute($command);
+
+        // TODO remove when phpcbf will be able to fix all issues in file during the one iteration
+        if (defined('TEST_INTEGRATOR_MODE') && TEST_INTEGRATOR_MODE === 'true') {
+            $process = $this->processExecutor->execute($command);
+        }
+
         if ($process->getExitCode() > 0 && $process->getErrorOutput() !== '') {
             throw new RuntimeException($process->getErrorOutput());
         }
@@ -88,6 +95,22 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
      */
     protected function getCSFixPath(): string
     {
+        return is_file($this->getProjectCSFixPath()) ? $this->getProjectCSFixPath() : $this->getIntegratorCSFixPath();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getProjectCSFixPath(): string
+    {
         return $this->config->getProjectRootDirectory() . static::PHP_CS_FIX_RELATIVE_PATH;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getIntegratorCSFixPath(): string
+    {
+        return INTEGRATOR_ROOT_DIR . DIRECTORY_SEPARATOR . static::PHP_CS_FIX_RELATIVE_PATH;
     }
 }

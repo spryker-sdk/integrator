@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ArgumentBuilder;
 
-use ArrayObject;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 interface ArgumentBuilderInterface
@@ -28,13 +27,4 @@ interface ArgumentBuilderInterface
      * @return array<\PhpParser\Node\Arg>
      */
     public function getArguments(array $classArgumentMetadataTransfers): array;
-
-    /**
-     * @TODO Can be removed after removing UseVisitor
-     *
-     * @param \ArrayObject<int, \SprykerSdk\Integrator\Transfer\ClassArgumentMetadataTransfer> $classArgumentMetadataTransfers
-     *
-     * @return array<string>
-     */
-    public function getValueArguments(ArrayObject $classArgumentMetadataTransfers): array;
 }

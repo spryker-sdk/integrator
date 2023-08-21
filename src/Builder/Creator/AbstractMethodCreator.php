@@ -12,10 +12,6 @@ namespace SprykerSdk\Integrator\Builder\Creator;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\NodeTraverser;
-use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
-use SprykerSdk\Integrator\Helper\ClassHelper;
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class AbstractMethodCreator
 {
@@ -43,33 +39,6 @@ class AbstractMethodCreator
     ];
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $value
-     *
-     * @return string
-     */
-    protected function getShortClassNameAndAddToClassInformation(
-        ClassInformationTransfer $classInformationTransfer,
-        string $value
-    ): string {
-        $valueParts = explode('::', $value);
-        if (count($valueParts) == static::SIMPLE_VARIABLE_SEMICOLON_COUNT) {
-            return $value;
-        }
-
-        $classValueParts = explode('\\', $valueParts[0]);
-        if (!in_array($valueParts[0], static::CONST_PREPOSITIONS, true)) {
-            $nodeTraverser = new NodeTraverser();
-            $nodeTraverser->addVisitor(new AddUseVisitor($valueParts[0]));
-            $classInformationTransfer->setClassTokenTree(
-                $nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()),
-            );
-        }
-
-        return sprintf('%s::%s', end($classValueParts), $valueParts[1]);
-    }
-
-    /**
      * @param string $className
      * @param string $constantName
      *
@@ -77,10 +46,7 @@ class AbstractMethodCreator
      */
     protected function createClassConstantExpression(string $className, string $constantName): ClassConstFetch
     {
-        return (new BuilderFactory())->classConstFetch(
-            (new ClassHelper())->getShortClassName($className),
-            $constantName,
-        );
+        return (new BuilderFactory())->classConstFetch($className, $constantName);
     }
 
     /**

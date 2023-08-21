@@ -659,6 +659,7 @@ class IntegratorFactory
     public function createMethodCreator(): MethodCreatorInterface
     {
         return new MethodCreator(
+            $this->createClassNodeFinder(),
             $this->createMethodStatementsCreator(),
             $this->createMethodDocBlockCreator(),
             $this->createMethodReturnTypeCreator(),
@@ -955,6 +956,8 @@ class IntegratorFactory
     {
         return new ReturnClassWireClassInstanceModifierStrategy(
             $this->createCommonClassModifier(),
+            $this->createMethodCreator(),
+            $this->createClassNodeFinder(),
             $this->createReturnClassModifierApplicableModifierStrategy(),
         );
     }

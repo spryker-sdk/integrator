@@ -1,0 +1,7 @@
+coverage:
+    range: 70..80
+    round: nearest
+    precision: 2
+
+ignore:
+    - "src/Transfer"
