@@ -23,9 +23,9 @@ use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassLoader implements ClassLoaderInterface
 {
- /**
-  * @var \PhpParser\Parser
-  */
+    /**
+    * @var \PhpParser\Parser
+    */
     protected $parser;
 
     /**

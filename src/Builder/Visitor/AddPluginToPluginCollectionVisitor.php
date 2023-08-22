@@ -184,7 +184,7 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
         if (!$sourceNodeInterfaces) {
             return null;
         }
-                $sourceInterfaces = current($sourceNodeInterfaces)->implements;
+        $sourceInterfaces = current($sourceNodeInterfaces)->implements;
         foreach ($possibleNodeMethods as $possibleMethod) {
             $methodName = $possibleMethod->name->toString();
             $interfaces = array_map(static fn (Node\Param $param): string => $param->type ? $param->type->toString() : '', $possibleMethod->params ?: []);
