@@ -12,6 +12,7 @@ namespace SprykerSdkTest\Integrator\Communication\ReleaseApp;
 use GuzzleHttp\ClientInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingFetcher;
 use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingRequestDto;
 use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingResponseDto;
@@ -67,8 +68,11 @@ class ModuleRatingFetcherTest extends TestCase
      */
     protected function createClientMock(string $responseBody): ClientInterface
     {
+        $stream = $this->createMock(StreamInterface::class);
+        $stream->method('__toString')->willReturn($responseBody);
+
         $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')->willReturn($responseBody);
+        $response->method('getBody')->willReturn($stream);
 
         $client = $this->createMock(ClientInterface::class);
         $client->method('request')->willReturn($response);
