@@ -15,10 +15,10 @@ necessary steps.
 Those so-called "module manifests" reside in this repository:
 https://github.com/spryker-sdk/integrator-manifests
 
-## Manifest types
+## Manifest action types
 
 A manifest itself is a JSON file with predefined structure.
-All supported types of manifests described in [manifest-types](manifest-types.md).
+All supported types of manifests described in [manifest-action-types](manifest-action-types.md).
 
 ## Usage during development
 

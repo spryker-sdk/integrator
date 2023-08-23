@@ -34,8 +34,8 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
+use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
-use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class AddPluginToPluginListVisitor extends NodeVisitorAbstract
@@ -54,11 +54,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      * @var string
      */
     protected const PLUGINS_VARIBLE = 'plugins';
-
-    /**
-     * @var string
-     */
-    protected const STATEMENT_ARRAY = 'Expr_Array';
 
     /**
      * @var string
@@ -86,25 +81,33 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected ?Expression $indexExpr;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
+     */
+    protected ClassLoaderInterface $classLoader;
+
+    /**
      * @var \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
      */
-    private ArgumentBuilderInterface $argumentBuilder;
+    protected ArgumentBuilderInterface $argumentBuilder;
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassMetadataTransfer $classMetadataTransfer
      * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
      * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
+     * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface $classLoader
      * @param \PhpParser\Node\Stmt\Expression|null $indexExpr
      */
     public function __construct(
         ClassMetadataTransfer $classMetadataTransfer,
         PluginPositionResolverInterface $pluginPositionResolver,
         ArgumentBuilderInterface $argumentBuilder,
+        ClassLoaderInterface $classLoader,
         ?Expression $indexExpr = null
     ) {
         $this->classMetadataTransfer = $classMetadataTransfer;
         $this->pluginPositionResolver = $pluginPositionResolver;
         $this->argumentBuilder = $argumentBuilder;
+        $this->classLoader = $classLoader;
         $this->indexExpr = $indexExpr;
     }
 
@@ -242,12 +245,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     {
         return new If_(
             new ConstFetch(
-                new Name(
-                    (new ClassHelper())
-                        ->getShortClassName(
-                            (string)$this->classMetadataTransfer->getCondition(),
-                        ),
-                ),
+                new Name((string)$this->classMetadataTransfer->getCondition()),
             ),
             [
                 static::STMTS => [
@@ -369,6 +367,10 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     {
         foreach ($statement->stmts as $stmt) {
             if ($stmt instanceof Expression && $stmt->expr instanceof Assign) {
+                if ($stmt->expr->expr instanceof ArrayItem && $this->isArrayItemEqual($stmt->expr->expr)) {
+                    continue;
+                }
+
                 array_unshift($statement->stmts, $this->createNewAssignStatement($stmt->expr));
 
                 break;
@@ -384,7 +386,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected function createNewAssignStatement(Assign $reference): Expression
     {
         return new Expression(new Assign($reference->var, (new BuilderFactory())->new(
-            (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
+            $this->classMetadataTransfer->getSourceOrFail(),
         )));
     }
 
@@ -506,23 +508,40 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      */
     protected function isPluginAdded(Array_ $node): bool
     {
-        $classToAdd = $this->classMetadataTransfer->getSourceOrFail();
-
         foreach ($node->items as $item) {
-            if ($item === null || !($item->value instanceof New_)) {
-                continue;
-            }
-
-            $nodeClassName = $item->value->class->toString();
-            $usedParentClasses = class_exists($nodeClassName) ? (class_parents($nodeClassName) ?: []) : [];
-
-            if (
-                $this->isKeyEqualsToCurrentOne($item)
-                && ($nodeClassName === $classToAdd || in_array($classToAdd, $usedParentClasses))
-                && $this->isEqualArguments($item)
-            ) {
+            if ($this->isArrayItemEqual($item)) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \PhpParser\Node\Expr\ArrayItem|null $item
+     *
+     * @return bool
+     */
+    protected function isArrayItemEqual(?ArrayItem $item): bool
+    {
+        $classToAdd = $this->classMetadataTransfer->getSourceOrFail();
+
+        if ($item === null || !($item->value instanceof New_)) {
+            return false;
+        }
+
+        $nodeClassName = $item->value->class->toString();
+        $usedParentClasses = [];
+        if ($this->classLoader->classExist($nodeClassName)) {
+            $usedParentClasses = $this->classLoader->loadClass($nodeClassName)->getParentClassNames();
+        }
+
+        if (
+            $this->isKeyEqualsToCurrentOne($item)
+            && ($nodeClassName === $classToAdd || in_array($classToAdd, $usedParentClasses))
+            && $this->isEqualArguments($item)
+        ) {
+            return true;
         }
 
         return false;
@@ -552,9 +571,14 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     protected function isArgumentEqual(array $args): bool
     {
         $standard = new Standard();
-        $arguments = $this->argumentBuilder->getValueArguments($this->classMetadataTransfer->getConstructorArguments());
+        $arguments = $this->classMetadataTransfer->getConstructorArguments()->getArrayCopy();
         foreach ($args as $index => $arg) {
-            if ($standard->prettyPrintExpr($arg->value) === $arguments[$index]) {
+            $argument = $arguments[$index] ?? null;
+            if (!$argument) {
+                continue;
+            }
+            $argumentValue = json_decode($argument->getValue());
+            if ($standard->prettyPrintExpr($arg->value) === $argumentValue) {
                 return true;
             }
         }
@@ -604,10 +628,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         $args = $this->argumentBuilder->createAddPluginArguments($this->classMetadataTransfer, false);
 
         return new ArrayItem(
-            (new BuilderFactory())->new(
-                (new ClassHelper())->getShortClassName($this->classMetadataTransfer->getSourceOrFail()),
-                $args,
-            ),
+            (new BuilderFactory())->new($this->classMetadataTransfer->getSourceOrFail(), $args),
             $this->indexExpr !== null ? $this->indexExpr->expr : null,
         );
     }

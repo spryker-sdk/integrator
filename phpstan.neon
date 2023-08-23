@@ -19,3 +19,4 @@ parameters:
         - '#Access to an undefined property PhpParser\\[a-zA-Z0-9\|\\_]+::\$value#'
         - '#Binary operation "." between non-[a-zA-Z0-9]+-string and PhpParser\\[a-zA-Z0-9\|\\_]+ results in an error.#'
         - '#Property PhpParser\\Node\\Stmt\\ClassLike::\$stmts \(array<PhpParser\\Node\\Stmt>\) does not accept array<PhpParser\\Node>#'
+        - '#Unsafe access to private property SprykerSdk\\Integrator\\Builder\\ClassLoader\\ClassLoader::\$composerClassLoader through static::#'

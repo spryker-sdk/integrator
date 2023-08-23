@@ -52,10 +52,6 @@ class ConfigureModuleManifestStrategy extends AbstractManifestStrategy
         foreach ($this->config->getProjectNamespaces() as $namespace) {
             $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass($targetClassName, $namespace);
 
-            if (!$classInformationTransfer) {
-                continue;
-            }
-
             if ($this->isEmptyValue($value)) {
                 $value = $this->askValue(
                     'Provide value for ' . $classInformationTransfer->getClassName() . "::$targetPointName() configuration.",

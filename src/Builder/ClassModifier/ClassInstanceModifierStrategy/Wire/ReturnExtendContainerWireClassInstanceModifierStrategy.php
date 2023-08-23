@@ -14,7 +14,6 @@ use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginCollectionExtendContainerVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
@@ -88,7 +87,6 @@ class ReturnExtendContainerWireClassInstanceModifierStrategy implements WireClas
     protected function getWireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
     {
         return [
-            new AddUseVisitor($classMetadataTransfer->getSourceOrFail()),
             new AddPluginToPluginCollectionExtendContainerVisitor(
                 $classMetadataTransfer,
                 $this->argumentBuilder,

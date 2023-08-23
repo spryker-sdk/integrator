@@ -58,22 +58,18 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
             return $this->createNodeTreeFromArrayValue($classInformationTransfer, $value);
         }
 
-        return $this->createNodeTreeFromStringValue($classInformationTransfer, $value);
+        return $this->createNodeTreeFromStringValue($value);
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param mixed $value
      *
      * @return array
      */
-    protected function createNodeTreeFromStringValue(ClassInformationTransfer $classInformationTransfer, $value): array
+    protected function createNodeTreeFromStringValue($value): array
     {
         $arrayItems = [];
-        $valueItems = explode(
-            '::',
-            $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $value),
-        );
+        $valueItems = explode('::', $value);
         $arrayItems[] = new ArrayItem(
             $this->createClassConstantExpression($valueItems[0], $valueItems[1]),
         );
@@ -95,8 +91,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
             $keyParts = [];
 
             if (!is_int($key)) {
-                $keyShort = $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $key);
-                $keyParts = explode('::', $keyShort);
+                $keyParts = explode('::', $key);
             }
 
             if (is_array($item)) {
@@ -107,7 +102,6 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
             }
 
             if (is_string($item)) {
-                $item = $this->getShortClassNameAndAddToClassInformation($classInformationTransfer, $item);
                 $itemParts = explode('::', $item);
             }
 

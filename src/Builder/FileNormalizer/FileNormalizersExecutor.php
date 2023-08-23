@@ -51,6 +51,8 @@ class FileNormalizersExecutor implements FileNormalizersExecutorInterface
 
         foreach ($this->fileNormalizers as $fileNormalizer) {
             if (!$fileNormalizer->isApplicable()) {
+                $inputOutput->warning(sprintf('%s file normalizer, is not applicable for the project', get_class($fileNormalizer)));
+
                 continue;
             }
 
@@ -63,7 +65,7 @@ class FileNormalizersExecutor implements FileNormalizersExecutorInterface
             try {
                 $fileNormalizer->normalize($files);
             } catch (Exception $exception) {
-                $inputOutput->writeln(sprintf('Error during normalizing files: %s', $exception->getMessage()));
+                $inputOutput->warning(sprintf('Error during normalizing files: %s', $exception->getMessage()));
             }
         }
     }

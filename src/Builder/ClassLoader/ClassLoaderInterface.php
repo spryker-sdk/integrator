@@ -19,4 +19,11 @@ interface ClassLoaderInterface
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
     public function loadClass(string $className): ClassInformationTransfer;
+
+    /**
+     * @param string $className
+     *
+     * @return bool
+     */
+    public function classExist(string $className): bool;
 }

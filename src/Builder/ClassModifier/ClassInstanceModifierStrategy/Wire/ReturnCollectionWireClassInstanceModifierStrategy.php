@@ -11,10 +11,10 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrat
 
 use PhpParser\Node\Stmt\ClassMethod;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
+use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddPluginToPluginCollectionVisitor;
-use SprykerSdk\Integrator\Builder\Visitor\AddUseVisitor;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
@@ -39,18 +39,26 @@ class ReturnCollectionWireClassInstanceModifierStrategy implements WireClassInst
     protected PluginPositionResolverInterface $pluginPositionResolver;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
+     */
+    protected ClassLoaderInterface $classLoader;
+
+    /**
      * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface $applicableCheck
      * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
+     * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface $classLoader
      */
     public function __construct(
         ArgumentBuilderInterface $argumentBuilder,
         ApplicableModifierStrategyInterface $applicableCheck,
-        PluginPositionResolverInterface $pluginPositionResolver
+        PluginPositionResolverInterface $pluginPositionResolver,
+        ClassLoaderInterface $classLoader
     ) {
         $this->argumentBuilder = $argumentBuilder;
         $this->applicableCheck = $applicableCheck;
         $this->pluginPositionResolver = $pluginPositionResolver;
+        $this->classLoader = $classLoader;
     }
 
     /**
@@ -88,11 +96,11 @@ class ReturnCollectionWireClassInstanceModifierStrategy implements WireClassInst
     protected function getWireVisitors(ClassMetadataTransfer $classMetadataTransfer): array
     {
         return [
-            new AddUseVisitor($classMetadataTransfer->getSourceOrFail()),
             new AddPluginToPluginCollectionVisitor(
                 $classMetadataTransfer,
                 $this->argumentBuilder,
                 $this->pluginPositionResolver,
+                $this->classLoader,
             ),
         ];
     }
