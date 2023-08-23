@@ -61,8 +61,11 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
         $process = $this->processExecutor->execute($command);
 
         // TODO remove when phpcbf will be able to fix all issues in file during the one iteration
-        if (defined('TEST_INTEGRATOR_MODE') && TEST_INTEGRATOR_MODE === 'true') {
+        if (defined('TEST_INTEGRATOR_MODE') && TEST_INTEGRATOR_MODE === 'true' && $process->getExitCode() !== 0) {
             $process = $this->processExecutor->execute($command);
+            if ($process->getExitCode() !== 0) {
+                $process = $this->processExecutor->execute($command);
+            }
         }
 
         if ($process->getExitCode() > 0 && $process->getErrorOutput() !== '') {

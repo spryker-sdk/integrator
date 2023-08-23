@@ -260,6 +260,8 @@ class IntegratorFactory
             $this->getConfig(),
             $this->createClassHelper(),
             $this->createClassMetadataBuilder(),
+            $this->createClassLoader(),
+            $this->createClassNodeFinder(),
         );
     }
 
@@ -272,6 +274,8 @@ class IntegratorFactory
             $this->getConfig(),
             $this->createClassHelper(),
             $this->createClassMetadataBuilder(),
+            $this->createClassLoader(),
+            $this->createClassNodeFinder(),
         );
     }
 
@@ -283,6 +287,8 @@ class IntegratorFactory
         return new AddConfigArrayElementManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
+            $this->createClassLoader(),
+            $this->createClassNodeFinder(),
         );
     }
 
@@ -910,6 +916,7 @@ class IntegratorFactory
             $this->createPluginPositionResolver(),
             $this->createNodeExpressionPartialParser(),
             $this->createArgumentBuilder(),
+            $this->createClassLoader(),
         );
     }
 
@@ -922,6 +929,7 @@ class IntegratorFactory
             $this->createArgumentBuilder(),
             $this->createReturnCollectionApplicableModifierStrategy(),
             $this->createPluginPositionResolver(),
+            $this->createClassLoader(),
         );
     }
 

@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassResolver;
 
-use RuntimeException;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
@@ -19,17 +18,17 @@ class ClassResolver implements ClassResolverInterface
     /**
      * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
      */
-    protected $classLoader;
+    protected ClassLoaderInterface $classLoader;
 
     /**
      * @var \SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface
      */
-    protected $classGenerator;
+    protected ClassGeneratorInterface $classGenerator;
 
     /**
      * @var array<\SprykerSdk\Integrator\Transfer\ClassInformationTransfer>
      */
-    protected static $generatedClassList = [];
+    protected static array $generatedClassList = [];
 
     /**
      * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface $classLoader
@@ -47,11 +46,9 @@ class ClassResolver implements ClassResolverInterface
      * @param string $targetClassName
      * @param string $customOrganisation
      *
-     * @throws \RuntimeException
-     *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function resolveClass(string $targetClassName, string $customOrganisation = ''): ?ClassInformationTransfer
+    public function resolveClass(string $targetClassName, string $customOrganisation = ''): ClassInformationTransfer
     {
         $resolvedClassName = $targetClassName;
         if ($customOrganisation) {
@@ -59,19 +56,29 @@ class ClassResolver implements ClassResolverInterface
         }
 
         if (!isset(static::$generatedClassList[$resolvedClassName])) {
-            if (class_exists($resolvedClassName)) {
-                $classInformationTransfer = $this->classLoader->loadClass($resolvedClassName);
-            } else {
-                $classInformationTransfer = $this->classGenerator->generateClass($resolvedClassName, $targetClassName);
-            }
-
-            if ($classInformationTransfer === null) {
-                throw new RuntimeException(sprintf('Cannot resolve `%s`', $targetClassName));
-            }
-
-            static::$generatedClassList[$resolvedClassName] = $classInformationTransfer;
+            static::$generatedClassList[$resolvedClassName] = $this->loadOrCreateClassInformationTransfer(
+                $resolvedClassName,
+                $targetClassName,
+            );
         }
 
         return static::$generatedClassList[$resolvedClassName];
+    }
+
+    /**
+     * @param string $resolvedClassName
+     * @param string $targetClassName
+     *
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
+     */
+    protected function loadOrCreateClassInformationTransfer(
+        string $resolvedClassName,
+        string $targetClassName
+    ): ClassInformationTransfer {
+        if ($this->classLoader->classExist($resolvedClassName)) {
+            return $this->classLoader->loadClass($resolvedClassName);
+        }
+
+        return $this->classGenerator->generateClass($resolvedClassName, $targetClassName);
     }
 }

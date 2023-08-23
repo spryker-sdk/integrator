@@ -4,7 +4,7 @@ define('TMP_DIRECTORY_NAME', 'tmp');
 define('ROOT_TESTS', __DIR__);
 
 defined('INTEGRATOR_ROOT_DIR')
-    || define('INTEGRATOR_ROOT_DIR', dirname(__DIR__));
+|| define('INTEGRATOR_ROOT_DIR', dirname(__DIR__));
 
 defined('DATA_PROVIDER_DIR')
     || define('DATA_PROVIDER_DIR', INTEGRATOR_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'spryker-sdk' . DIRECTORY_SEPARATOR . 'manifest-test-data-provider');

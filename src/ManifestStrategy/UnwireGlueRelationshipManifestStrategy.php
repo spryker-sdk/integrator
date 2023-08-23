@@ -46,9 +46,6 @@ class UnwireGlueRelationshipManifestStrategy extends AbstractManifestStrategy
         foreach ($this->config->getProjectNamespaces() as $namespace) {
             $targetClassToBeChanged = $manifest[IntegratorConfig::MANIFEST_KEY_TARGET] ?? static::TARGET_CLASS_NAME;
             $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass($targetClassToBeChanged, $namespace);
-            if (!$classInformationTransfer) {
-                continue;
-            }
 
             $targetClass = $manifest[IntegratorConfig::MANIFEST_KEY_SOURCE];
             $targetClassKey = null;

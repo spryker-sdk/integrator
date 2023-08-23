@@ -9,16 +9,25 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassLoader;
 
+use Composer\Autoload\ClassLoader as ComposerClassLoader;
 use PhpParser\Lexer;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
-use ReflectionClass;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassLoader implements ClassLoaderInterface
 {
+    /**
+     * @var \Composer\Autoload\ClassLoader|null
+     */
+    private static ?ComposerClassLoader $composerClassLoader = null;
+
     /**
      * @var \PhpParser\Parser
      */
@@ -53,10 +62,8 @@ class ClassLoader implements ClassLoaderInterface
             ->setClassName($className)
             ->setFullyQualifiedClassName('\\' . $className);
 
-        $reflectionClass = new ReflectionClass($className);
-
-        $fileName = $reflectionClass->getFileName();
-        if (!$fileName) {
+        $fileName = $this->getFilePath($className);
+        if ($fileName === null || !realpath($fileName)) {
             return $classInformationTransfer;
         }
         $fileContents = file_get_contents($fileName);
@@ -70,16 +77,43 @@ class ClassLoader implements ClassLoaderInterface
         $classInformationTransfer->setClassTokenTree($syntaxTree)
             ->setOriginalClassTokenTree($originalSyntaxTree)
             ->setTokens($this->lexer->getTokens())
-            ->setFilePath($fileName);
+            ->setFilePath(realpath($fileName));
 
-        $parentClass = $reflectionClass->getParentClass();
+        $parentClass = $this->getParent($syntaxTree);
         if ($parentClass) {
             $classInformationTransfer->setParent(
-                $this->loadClass($parentClass->getName()),
+                $this->loadClass($parentClass),
             );
         }
 
         return $classInformationTransfer;
+    }
+
+    /**
+     * @param array $originalSyntaxTree
+     *
+     * @return string|null
+     */
+    protected function getParent(array $originalSyntaxTree): ?string
+    {
+        $namespace = (new NodeFinder())->findFirst($originalSyntaxTree, function (Node $node) {
+            return $node instanceof Namespace_;
+        });
+
+        if (!($namespace instanceof Namespace_) || !$namespace->stmts) {
+            return null;
+        }
+
+        foreach ($namespace->stmts as $stmt) {
+            if (!($stmt instanceof Class_)) {
+                continue;
+            }
+            if ($stmt->extends) {
+                return $stmt->extends->toString();
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -94,5 +128,41 @@ class ClassLoader implements ClassLoaderInterface
         $nodeTraverser->addVisitor(new NameResolver());
 
         return $nodeTraverser->traverse($originalSyntaxTree);
+    }
+
+    /**
+     * @param string $className
+     *
+     * @return bool
+     */
+    public function classExist(string $className): bool
+    {
+        return (bool)$this->getFilePath($className);
+    }
+
+    /**
+     * @param string $className
+     *
+     * @return string|null
+     */
+    protected function getFilePath(string $className): ?string
+    {
+        return $this->getComposerClassLoader()->findFile(ltrim($className, '\\')) ?: null;
+    }
+
+    /**
+     * @phpcsSuppress Spryker.Internal.SprykerPreferStaticOverSelf.StaticVsSelf
+     *
+     * @return \Composer\Autoload\ClassLoader
+     */
+    protected function getComposerClassLoader(): ComposerClassLoader
+    {
+        if (static::$composerClassLoader === null) {
+            static::$composerClassLoader = require file_exists(APPLICATION_ROOT_DIR . '/vendor/autoload.php') ?
+                APPLICATION_ROOT_DIR . '/vendor/autoload.php' :
+                INTEGRATOR_ROOT_DIR . '/vendor/autoload.php';
+        }
+
+        return static::$composerClassLoader;
     }
 }
