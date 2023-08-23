@@ -24,17 +24,11 @@ class ModuleRatingResponseMapper
     {
         $data = json_decode($responseBody, true, 512, \JSON_THROW_ON_ERROR);
 
-        if (!isset($data['result'])) {
+        if (!isset($data['result']) || !is_array($data['result'])) {
             throw new InvalidArgumentException(sprintf('Invalid rating response: %s', $responseBody));
         }
 
-        $modules = $data['result'];
-
-        if (!is_array($data['result'])) {
-            throw new InvalidArgumentException(sprintf('Invalid rating response: %s', $responseBody));
-        }
-
-        return new ModulesRatingResponseDto($this->mapModulesToResponse($modules));
+        return new ModulesRatingResponseDto($this->mapModulesToResponse($data['result']));
     }
 
     /**

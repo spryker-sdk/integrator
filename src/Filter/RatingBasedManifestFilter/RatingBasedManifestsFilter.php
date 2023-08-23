@@ -13,6 +13,7 @@ use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingFetcherInterface;
 use SprykerSdk\Integrator\Communication\ReleaseApp\ModulesRatingResponseDto;
 use SprykerSdk\Integrator\Configuration\ConfigurationProviderInterface;
 use SprykerSdk\Integrator\Filter\ManifestsFilterInterface;
+use SprykerSdk\Integrator\Helper\ModuleHelper;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 class RatingBasedManifestsFilter implements ManifestsFilterInterface
@@ -105,7 +106,7 @@ class RatingBasedManifestsFilter implements ManifestsFilterInterface
                     [$organization, $moduleName] = explode('.', $manifest[IntegratorConfig::MODULE_KEY]);
                     $moduleVersionName = $manifest[IntegratorConfig::MODULE_VERSION_KEY];
 
-                    $moduleId = sprintf('%s:%s:%s', $organization, $moduleName, $moduleVersionName);
+                    $moduleId = ModuleHelper::getModuleId($organization, $moduleName, $moduleVersionName);
 
                     if (!isset($modulesRatings[$moduleId]) || $modulesRatings[$moduleId] < $requiredRating) {
                         unset($manifests[$fullModuleName][$strategyName][$index]);
@@ -127,8 +128,7 @@ class RatingBasedManifestsFilter implements ManifestsFilterInterface
         $indexedModuleRating = [];
 
         foreach ($modulesRatingResponseDto->getModuleRatingResponseDtos() as $moduleRatingResponseDto) {
-            $moduleId = sprintf(
-                '%s:%s:%s',
+            $moduleId = ModuleHelper::getModuleId(
                 $moduleRatingResponseDto->getOrganization(),
                 $moduleRatingResponseDto->getName(),
                 $moduleRatingResponseDto->getVersion(),
