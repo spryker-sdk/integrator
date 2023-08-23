@@ -17,7 +17,7 @@ interface ClassGeneratorInterface
      * @param string $className
      * @param string|null $parentClass
      *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function generateClass(string $className, ?string $parentClass = null): ?ClassInformationTransfer;
+    public function generateClass(string $className, ?string $parentClass = null): ClassInformationTransfer;
 }

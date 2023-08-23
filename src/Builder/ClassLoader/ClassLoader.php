@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassLoader;
 
+use Composer\Autoload\ClassLoader as ComposerClassLoader;
 use PhpParser\Lexer;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -18,11 +19,15 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\Parser;
-use SprykerSdk\Integrator\Builder\ComposerClassLoader\ComposerClassLoader;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class ClassLoader implements ClassLoaderInterface
 {
+    /**
+     * @var \Composer\Autoload\ClassLoader|null
+     */
+    private static ?ComposerClassLoader $composerClassLoader = null;
+
     /**
      * @var \PhpParser\Parser
      */
@@ -57,7 +62,7 @@ class ClassLoader implements ClassLoaderInterface
             ->setClassName($className)
             ->setFullyQualifiedClassName('\\' . $className);
 
-        $fileName = ComposerClassLoader::getFilePath($className);
+        $fileName = $this->getFilePath($className);
         if ($fileName === null || !realpath($fileName)) {
             return $classInformationTransfer;
         }
@@ -123,5 +128,39 @@ class ClassLoader implements ClassLoaderInterface
         $nodeTraverser->addVisitor(new NameResolver());
 
         return $nodeTraverser->traverse($originalSyntaxTree);
+    }
+
+    /**
+     * @param string $className
+     *
+     * @return bool
+     */
+    public function classExist(string $className): bool
+    {
+        return (bool)$this->getFilePath($className);
+    }
+
+    /**
+     * @param string $className
+     *
+     * @return string|null
+     */
+    protected function getFilePath(string $className): ?string
+    {
+        return $this->getComposerClassLoader()->findFile(ltrim($className, '\\')) ?: null;
+    }
+
+    /**
+     * @return \Composer\Autoload\ClassLoader
+     */
+    protected function getComposerClassLoader(): ComposerClassLoader
+    {
+        if (self::$composerClassLoader === null) {
+            self::$composerClassLoader = require file_exists(APPLICATION_ROOT_DIR . '/vendor/autoload.php') ?
+                APPLICATION_ROOT_DIR . '/vendor/autoload.php' :
+                INTEGRATOR_ROOT_DIR . '/vendor/autoload.php';
+        }
+
+        return self::$composerClassLoader;
     }
 }

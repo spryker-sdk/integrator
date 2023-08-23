@@ -35,7 +35,6 @@ use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
-use SprykerSdk\Integrator\Builder\ComposerClassLoader\ComposerClassLoader;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
@@ -533,7 +532,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
         $nodeClassName = $item->value->class->toString();
         $usedParentClasses = [];
-        if (ComposerClassLoader::classExist($nodeClassName)) {
+        if ($this->classLoader->classExist($nodeClassName)) {
             $usedParentClasses = $this->classLoader->loadClass($nodeClassName)->getParentClassNames();
         }
 

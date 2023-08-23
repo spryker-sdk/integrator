@@ -11,7 +11,6 @@ namespace SprykerSdk\Integrator\ManifestStrategy;
 
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface;
-use SprykerSdk\Integrator\Builder\ComposerClassLoader\ComposerClassLoader;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
@@ -73,7 +72,7 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
         /** @phpstan-var class-string $targetClassName */
         [$targetClassName, $targetMethodName] = explode('::', $manifest[IntegratorConfig::MANIFEST_KEY_TARGET]);
 
-        if (!ComposerClassLoader::classExist($targetClassName)) {
+        if (!$this->classLoader->classExist($targetClassName)) {
             $inputOutput->writeln(sprintf(
                 'Target module %s/%s does not exists in your system.',
                 $this->classHelper->getOrganisationName($targetClassName),
@@ -83,36 +82,9 @@ class UnwirePluginManifestStrategy extends AbstractManifestStrategy
             return false;
         }
 
-        $targetClassInformationTransfer = $this->classLoader->loadClass($targetClassName);
-
-        if (!$this->classNodeFinder->hasClassMethodName($targetClassInformationTransfer, $targetMethodName)) {
-            $targetMethodNameExistOnProjectLayer = false;
-            foreach ($this->config->getProjectNamespaces() as $namespace) {
-                $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass($targetClassName, $namespace);
-                if ($classInformationTransfer) {
-                    $targetMethodNameExistOnProjectLayer = true;
-
-                    break;
-                }
-            }
-
-            if (!$targetMethodNameExistOnProjectLayer) {
-                $inputOutput->writeln(sprintf(
-                    'Your version of module %s/%s does not support needed plugin stack. Please, update it to use full functionality.',
-                    $this->classHelper->getOrganisationName($targetClassName),
-                    $this->classHelper->getModuleName($targetClassName),
-                ), InputOutputInterface::DEBUG);
-
-                return false;
-            }
-        }
-
         $applied = false;
         foreach ($this->config->getProjectNamespaces() as $namespace) {
             $classInformationTransfer = $this->createClassBuilderFacade()->resolveClass($targetClassName, $namespace);
-            if ($classInformationTransfer === null) {
-                continue;
-            }
 
             $classMetadataTransfer = $this->metadataBuilder->build($manifest);
 
