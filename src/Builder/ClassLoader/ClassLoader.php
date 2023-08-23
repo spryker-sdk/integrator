@@ -151,16 +151,18 @@ class ClassLoader implements ClassLoaderInterface
     }
 
     /**
+     * @phpcsSuppress Spryker.Internal.SprykerPreferStaticOverSelf.StaticVsSelf
+     *
      * @return \Composer\Autoload\ClassLoader
      */
     protected function getComposerClassLoader(): ComposerClassLoader
     {
-        if (self::$composerClassLoader === null) {
-            self::$composerClassLoader = require file_exists(APPLICATION_ROOT_DIR . '/vendor/autoload.php') ?
+        if (static::$composerClassLoader === null) {
+            static::$composerClassLoader = require file_exists(APPLICATION_ROOT_DIR . '/vendor/autoload.php') ?
                 APPLICATION_ROOT_DIR . '/vendor/autoload.php' :
                 INTEGRATOR_ROOT_DIR . '/vendor/autoload.php';
         }
 
-        return self::$composerClassLoader;
+        return static::$composerClassLoader;
     }
 }
