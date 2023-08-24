@@ -22,18 +22,18 @@ class ManifestToModulesRatingRequestMapper
      */
     public function mapManifestsToModulesRatingRequest(array $manifests): ModulesRatingRequestDto
     {
-        $moduleRatingRequestDtos = [];
+        $modulesRatingRequestDto = new ModulesRatingRequestDto();
 
         foreach ($manifests as $strategies) {
             foreach ($strategies as $strategy) {
                 foreach ($strategy as $manifest) {
                     [$organization, $moduleName] = explode('.', $manifest[IntegratorConfig::MODULE_KEY]);
                     $moduleVersionName = $manifest[IntegratorConfig::MODULE_VERSION_KEY];
-                    $moduleRatingRequestDtos[] = new ModuleRatingRequestDto($organization, $moduleName, $moduleVersionName);
+                    $modulesRatingRequestDto->addModuleRatingRequestDto(new ModuleRatingRequestDto($organization, $moduleName, $moduleVersionName));
                 }
             }
         }
 
-        return new ModulesRatingRequestDto($moduleRatingRequestDtos);
+        return $modulesRatingRequestDto;
     }
 }

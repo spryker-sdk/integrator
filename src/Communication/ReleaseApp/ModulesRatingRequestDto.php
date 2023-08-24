@@ -24,9 +24,19 @@ class ModulesRatingRequestDto implements JsonSerializable
     /**
      * @param array<\SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingRequestDto> $moduleRatingRequestDtos
      */
-    public function __construct(array $moduleRatingRequestDtos)
+    public function __construct(array $moduleRatingRequestDtos = [])
     {
         $this->moduleRatingRequestDtos = $moduleRatingRequestDtos;
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingRequestDto $moduleRatingRequestDto
+     *
+     * @return void
+     */
+    public function addModuleRatingRequestDto(ModuleRatingRequestDto $moduleRatingRequestDto): void
+    {
+        $this->moduleRatingRequestDtos[] = $moduleRatingRequestDto;
     }
 
     /**
