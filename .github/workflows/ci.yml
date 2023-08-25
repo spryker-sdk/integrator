@@ -119,8 +119,8 @@ jobs:
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                   restore-keys: ${{ runner.os }}-composer-
 
-            - name: Composer require dereuromark/composer-prefer-lowest package
-              run: composer require --dev dereuromark/composer-prefer-lowest
+            - name: Composer require spryker-sdk/composer-prefer-lowest package
+              run: composer require --dev spryker-sdk/composer-prefer-lowest
 
             - name: Composer prefer-lowest
               run: composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable -o
