@@ -11,11 +11,7 @@ defined('APPLICATION_SOURCE_DIR')
 defined('APPLICATION_VENDOR_DIR')
 ||  define('APPLICATION_VENDOR_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor');
 
-require APPLICATION_VENDOR_DIR . DIRECTORY_SEPARATOR . 'autoload.php';
-
-if (APPLICATION_VENDOR_DIR !== INTEGRATOR_ROOT_DIR) {
-    require INTEGRATOR_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
-}
+require INTEGRATOR_ROOT_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use SprykerSdk\Integrator\Console\ModuleInstallerConsole;
 use SprykerSdk\Integrator\Console\DiffGenerateConsole;
