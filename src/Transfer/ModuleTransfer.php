@@ -34,6 +34,11 @@ class ModuleTransfer
     protected $organization;
 
     /**
+     * @var string|null
+     */
+    protected ?string $version = null;
+
+    /**
      * @param string $module
      *
      * @return $this
@@ -83,6 +88,26 @@ class ModuleTransfer
     public function getOrganization(): string
     {
         return $this->organization;
+    }
+
+    /**
+     * @param string|null $version
+     *
+     * @return $this
+     */
+    public function setVersion(?string $version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getVersion(): ?string
+    {
+        return $this->version;
     }
 
     /**
