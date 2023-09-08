@@ -133,10 +133,18 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
      */
     protected function appendManifests(string $moduleManifestsDir, string $moduleFullName, string $currentVersion, array $manifests): array
     {
-        $json = file_get_contents($moduleManifestsDir . sprintf('%s/installer-manifest.json', $currentVersion));
+        $manifestFile = $moduleManifestsDir . sprintf('%s/installer-manifest.json', $currentVersion);
+
+        if (!is_file($manifestFile)) {
+            return $manifests;
+        }
+
+        $json = file_get_contents($manifestFile);
+
         if (!$json) {
             return $manifests;
         }
+
         $manifestFileData = json_decode($json, true);
 
         if ($manifestFileData) {

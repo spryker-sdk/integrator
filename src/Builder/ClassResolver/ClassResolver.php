@@ -81,4 +81,12 @@ class ClassResolver implements ClassResolverInterface
 
         return $this->classGenerator->generateClass($resolvedClassName, $targetClassName);
     }
+
+    /**
+     * @return void
+     */
+    public static function clearGeneratedClassList(): void
+    {
+        static::$generatedClassList = [];
+    }
 }

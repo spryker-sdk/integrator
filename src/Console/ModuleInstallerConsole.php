@@ -26,17 +26,17 @@ class ModuleInstallerConsole extends AbstractInstallerConsole
     /**
      * @var string
      */
-    protected const ARGUMENT_MODULES = 'modules';
+    public const ARGUMENT_MODULES = 'modules';
+
+    /**
+     * @var string
+     */
+    public const OPTION_SOURCE = 'source';
 
     /**
      * @var string
      */
     protected const ARGUMENT_MODULES_DESCRIPTION = 'Name of modules with versions (<module><:?version>) which should be built, separated by `,`.';
-
-    /**
-     * @var string
-     */
-    protected const OPTION_SOURCE = 'source';
 
     /**
      * @var string

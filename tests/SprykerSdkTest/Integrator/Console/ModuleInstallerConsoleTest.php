@@ -15,7 +15,11 @@ use SprykerSdk\Integrator\Console\ModuleInstallerConsole;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputJsonOutputAdapter;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
+use SprykerSdk\Integrator\IntegratorFacadeInterface;
+use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
+use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -66,6 +70,38 @@ class ModuleInstallerConsoleTest extends TestCase
         $this->assertInstanceOf(SymfonyConsoleInputJsonOutputAdapter::class, $io);
     }
 
+    public function testExecuteTransferBuilderShouldBuildProperTransferWithVersions(): void
+    {
+        //Arrange
+        $console = new ModuleInstallerConsole();
+
+        $input = $this->buildInput();
+        $input->setArgument(ModuleInstallerConsole::ARGUMENT_MODULES, 'Spryker.Acl:1.1.1,SprykerShop.Product');
+
+        //Act
+        /** @var IntegratorCommandArgumentsTransfer $argumentsTransfer */
+        $argumentsTransfer = $this->invokeMethod(
+            $console,
+            'buildCommandArgumentsTransfer',
+            [
+                $input, $this->buildOutput(), 'json',
+            ],
+        );
+
+        //Assert
+        $this->assertCount(2, $argumentsTransfer->getModules());
+
+        $module = $argumentsTransfer->getModules()[0];
+        $this->assertSame('Spryker', $module->getOrganization());
+        $this->assertSame('Acl', $module->getModule());
+        $this->assertSame('1.1.1', $module->getVersion());
+
+        $module = $argumentsTransfer->getModules()[1];
+        $this->assertSame('SprykerShop', $module->getOrganization());
+        $this->assertSame('Product', $module->getModule());
+        $this->assertNull($module->getVersion());
+    }
+
     /**
      * @param mixed $object
      * @param string $methodName
@@ -87,10 +123,22 @@ class ModuleInstallerConsoleTest extends TestCase
      */
     private function buildInput(): InputInterface
     {
-        $verboseOption = new InputOption('verboseOption', null, InputOutputInterface::DEBUG);
         $inputDefinition = new InputDefinition();
 
-        $inputDefinition->addOption($verboseOption);
+        $inputDefinition->addOption(
+            new InputOption(ModuleInstallerConsole::OPTION_FORMAT, null, InputOption::VALUE_OPTIONAL)
+        );
+        $inputDefinition->addOption(
+            new InputOption(ModuleInstallerConsole::OPTION_SOURCE, null, InputOption::VALUE_OPTIONAL)
+        );
+        $inputDefinition->addOption(
+            new InputOption(ModuleInstallerConsole::FORMAT_JSON, null, InputOption::VALUE_OPTIONAL)
+        );
+        $inputDefinition->addOption(
+            new InputOption(ModuleInstallerConsole::FLAG_DRY, null, InputOption::VALUE_OPTIONAL)
+        );
+
+        $inputDefinition->addArguments([new InputArgument(ModuleInstallerConsole::ARGUMENT_MODULES)]);
 
         return new ArrayInput([], $inputDefinition);
     }

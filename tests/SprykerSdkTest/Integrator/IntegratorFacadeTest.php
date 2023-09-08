@@ -9,8 +9,10 @@ declare(strict_types=1);
 
 namespace SprykerSdkTest\Integrator;
 
+use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
+use Symfony\Component\Process\Process;
 
 class IntegratorFacadeTest extends AbstractIntegratorTestCase
 {
@@ -23,6 +25,96 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
      * @var string
      */
     protected const ZIP_PATH = '_data/archive.zip';
+
+    /**
+     * @return void
+     */
+    public function testRunInstallationConfigureModuleWithVersionThatDoesNotExist(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin', '1.0.4')]),
+        );
+
+        // Assert
+        $testFilePath = $this->getProjectMockOriginalPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
+        $classPath = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunInstallationConfigureModuleWithSpecifiedNewerVersion(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin', '1.0.3')]),
+        );
+
+        // Assert
+        $testFilePath = $this->getProjectMockOriginalPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
+        $classPath = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
+
+        $process = Process::fromShellCommandline(sprintf('diff %s %s | grep -E \'^\\+[^+]\'', $testFilePath, $classPath));
+        $process->run();
+
+        $newLines = trim($process->getOutput());
+
+        $this->assertSame(<<<Diff
+        +use Spryker\Zed\TestIntegratorWirePlugin\Expander\ContextExpanderCollectionInterface;
+        +        return [
+        +            'NEW_VERSION' => new TestIntegratorWirePluginStringIndex(),
+        +        ];
+        Diff, $newLines
+        );
+
+        file_put_contents($classPath, file_get_contents($testFilePath));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunInstallationConfigureModuleWithSpecifiedOlderVersion(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin', '1.0.1')]),
+        );
+
+        // Assert
+        $testFilePath = $this->getProjectMockOriginalPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
+        $classPath = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
+
+        $process = Process::fromShellCommandline(sprintf('diff %s %s | grep -E \'^\\+[^+]\'', $testFilePath, $classPath));
+        $process->run();
+
+        $newLines = trim($process->getOutput());
+
+        $this->assertSame(<<<Diff
+        +use Spryker\Zed\TestIntegratorWirePlugin\Expander\ContextExpanderCollectionInterface;
+        +        return [
+        +            'OLD_VERSION' => new TestIntegratorWirePluginStringIndex(),
+        +        ];
+        Diff, $newLines
+        );
+
+        file_put_contents($classPath, file_get_contents($testFilePath));
+    }
 
     /**
      * @return void
