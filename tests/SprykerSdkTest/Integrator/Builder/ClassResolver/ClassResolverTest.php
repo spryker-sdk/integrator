@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
+ */
+
+declare(strict_types=1);
+
 namespace SprykerSdkTest\Integrator\Builder\ClassResolver;
 
+use ReflectionClass;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
@@ -33,6 +41,7 @@ class ClassResolverTest extends BaseTestCase
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
+     *
      * @return \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
      */
     protected function createClassLoaderMock(ClassInformationTransfer $classInformationTransfer): ClassLoaderInterface
@@ -49,6 +58,6 @@ class ClassResolverTest extends BaseTestCase
      */
     protected function getGeneratedClassList(): array
     {
-        return (new \ReflectionClass(ClassResolver::class))->getStaticPropertyValue('generatedClassList');
+        return (new ReflectionClass(ClassResolver::class))->getStaticPropertyValue('generatedClassList');
     }
 }

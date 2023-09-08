@@ -12,7 +12,6 @@ namespace SprykerSdk\Integrator\Manifest;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
-use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use ZipArchive;
 
 class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInterface
@@ -89,6 +88,7 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
 
     /**
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+     *
      * @return array<string, null|string>
      */
     public function getFilterModules(IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): array

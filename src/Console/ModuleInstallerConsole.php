@@ -94,7 +94,6 @@ class ModuleInstallerConsole extends AbstractInstallerConsole
         if ($moduleArguments) {
             $moduleArguments = array_map('trim', explode(',', $moduleArguments));
             foreach ($moduleArguments as $moduleArgument) {
-
                 $moduleParts = explode(':', $moduleArgument);
                 $version = $moduleParts[1] ?? null;
 

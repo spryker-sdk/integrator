@@ -12,12 +12,8 @@ namespace SprykerSdkTest\Integrator\Console;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use SprykerSdk\Integrator\Console\ModuleInstallerConsole;
-use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputJsonOutputAdapter;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
-use SprykerSdk\Integrator\IntegratorFacadeInterface;
-use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
-use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -70,6 +66,9 @@ class ModuleInstallerConsoleTest extends TestCase
         $this->assertInstanceOf(SymfonyConsoleInputJsonOutputAdapter::class, $io);
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteTransferBuilderShouldBuildProperTransferWithVersions(): void
     {
         //Arrange
@@ -79,7 +78,7 @@ class ModuleInstallerConsoleTest extends TestCase
         $input->setArgument(ModuleInstallerConsole::ARGUMENT_MODULES, 'Spryker.Acl:1.1.1,SprykerShop.Product');
 
         //Act
-        /** @var IntegratorCommandArgumentsTransfer $argumentsTransfer */
+        /** @var \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $argumentsTransfer */
         $argumentsTransfer = $this->invokeMethod(
             $console,
             'buildCommandArgumentsTransfer',
@@ -126,16 +125,16 @@ class ModuleInstallerConsoleTest extends TestCase
         $inputDefinition = new InputDefinition();
 
         $inputDefinition->addOption(
-            new InputOption(ModuleInstallerConsole::OPTION_FORMAT, null, InputOption::VALUE_OPTIONAL)
+            new InputOption(ModuleInstallerConsole::OPTION_FORMAT, null, InputOption::VALUE_OPTIONAL),
         );
         $inputDefinition->addOption(
-            new InputOption(ModuleInstallerConsole::OPTION_SOURCE, null, InputOption::VALUE_OPTIONAL)
+            new InputOption(ModuleInstallerConsole::OPTION_SOURCE, null, InputOption::VALUE_OPTIONAL),
         );
         $inputDefinition->addOption(
-            new InputOption(ModuleInstallerConsole::FORMAT_JSON, null, InputOption::VALUE_OPTIONAL)
+            new InputOption(ModuleInstallerConsole::FORMAT_JSON, null, InputOption::VALUE_OPTIONAL),
         );
         $inputDefinition->addOption(
-            new InputOption(ModuleInstallerConsole::FLAG_DRY, null, InputOption::VALUE_OPTIONAL)
+            new InputOption(ModuleInstallerConsole::FLAG_DRY, null, InputOption::VALUE_OPTIONAL),
         );
 
         $inputDefinition->addArguments([new InputArgument(ModuleInstallerConsole::ARGUMENT_MODULES)]);

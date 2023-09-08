@@ -9,10 +9,8 @@ declare(strict_types=1);
 
 namespace SprykerSdkTest\Integrator;
 
-use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Dependency\Console\SymfonyConsoleInputOutputAdapter;
-use Symfony\Component\Process\Process;
 
 class IntegratorFacadeTest extends AbstractIntegratorTestCase
 {
