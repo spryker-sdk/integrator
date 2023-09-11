@@ -113,7 +113,7 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
 
-//        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
+        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
     }
 
     /**
