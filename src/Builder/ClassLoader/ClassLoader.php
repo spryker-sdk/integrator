@@ -158,9 +158,14 @@ class ClassLoader implements ClassLoaderInterface
     protected function getComposerClassLoader(): ComposerClassLoader
     {
         if (static::$composerClassLoader === null) {
-            static::$composerClassLoader = require file_exists(APPLICATION_ROOT_DIR . '/vendor/autoload.php') ?
-                APPLICATION_ROOT_DIR . '/vendor/autoload.php' :
-                INTEGRATOR_ROOT_DIR . '/vendor/autoload.php';
+            if (file_exists(APPLICATION_ROOT_DIR . '/vendor/autoload.php')) {
+                static::$composerClassLoader = require APPLICATION_ROOT_DIR . '/vendor/autoload.php';
+                static::$composerClassLoader->unregister();
+
+                return static::$composerClassLoader;
+            }
+
+            static::$composerClassLoader = require INTEGRATOR_ROOT_DIR . '/vendor/autoload.php';
         }
 
         return static::$composerClassLoader;
