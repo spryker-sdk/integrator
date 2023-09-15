@@ -27,6 +27,74 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
     /**
      * @return void
      */
+    public function testRunInstallationConfigureModuleWithVersionThatDoesNotExist(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin', '1.0.4')]),
+        );
+
+        // Assert
+        $testFilePath = $this->getProjectMockOriginalPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
+        $classPath = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
+
+        $this->assertFileExists($classPath);
+        $this->assertFileExists($testFilePath);
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunInstallationConfigureModuleWithSpecifiedNewerVersion(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin', '1.0.3')]),
+        );
+
+        // Assert
+        $classPath = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
+
+        $classContent = (string)file_get_contents($classPath);
+
+        $this->assertStringContainsString('NEW_VERSION', $classContent);
+        $this->assertStringNotContainsString('OLD_VERSION', $classContent);
+    }
+
+    /**
+     * @return void
+     */
+    public function testRunInstallationConfigureModuleWithSpecifiedOlderVersion(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        // Act
+        $this->createIntegratorFacade()->runModuleManifestInstallation(
+            $ioAdapter,
+            $this->createCommandArgumentsTransfer(false, [$this->getModuleTransfer('Spryker.TestIntegratorWirePlugin', '1.0.1')]),
+        );
+
+        // Assert
+        $classPath = $this->getTestTmpDirPath() . '/src/Pyz/Zed/TestIntegratorWirePlugin/TestIntegratorWirePluginDependencyProvider.php';
+
+        $classContent = (string)file_get_contents($classPath);
+
+        $this->assertStringContainsString('OLD_VERSION', $classContent);
+        $this->assertStringNotContainsString('NEW_VERSION', $classContent);
+    }
+
+    /**
+     * @return void
+     */
     public function testRunInstallationConfigureModule(): void
     {
         // Arrange

@@ -12,7 +12,6 @@ namespace SprykerSdk\Integrator\Manifest;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer;
-use SprykerSdk\Integrator\Transfer\ModuleTransfer;
 use ZipArchive;
 
 class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInterface
@@ -59,18 +58,13 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
 
         $manifests = [];
         $moduleComposerData = $this->composerLockReader->getModuleVersions();
-        $filterModules = array_map(
-            function (ModuleTransfer $moduleTransfer): string {
-                return sprintf('%s.%s', $moduleTransfer->getOrganization(), $moduleTransfer->getModule());
-            },
-            $commandArgumentsTransfer->getModules(),
-        );
+
+        $filterModules = $this->getFilterModules($commandArgumentsTransfer);
+
         foreach ($moduleComposerData as $moduleFullName => $currentVersion) {
             $fromVersion = $lockedModules[$moduleFullName] ?? '0.0.0';
-            if (
-                ($filterModules && !in_array($moduleFullName, $filterModules)) ||
-                version_compare($fromVersion, $currentVersion, '>=')
-            ) {
+
+            if ($this->shouldBeSkipped($filterModules, $moduleFullName, $fromVersion, $currentVersion)) {
                 continue;
             }
 
@@ -80,7 +74,9 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
                 continue;
             }
 
-            $versions = $this->resolveManifestVersions($moduleManifestsDir, $fromVersion, $currentVersion);
+            $versions = isset($filterModules[$moduleFullName])
+                ? [$filterModules[$moduleFullName]]
+                : $this->resolveManifestVersions($moduleManifestsDir, $fromVersion, $currentVersion);
 
             foreach ($versions as $version) {
                 $manifests = $this->appendManifests($moduleManifestsDir, $moduleFullName, $version, $manifests);
@@ -88,6 +84,43 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
         }
 
         return $manifests;
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
+     *
+     * @return array<string, null|string>
+     */
+    public function getFilterModules(IntegratorCommandArgumentsTransfer $commandArgumentsTransfer): array
+    {
+        $filterModules = [];
+
+        foreach ($commandArgumentsTransfer->getModules() as $module) {
+            $filterModules[sprintf('%s.%s', $module->getOrganization(), $module->getModule())] = $module->getVersion();
+        }
+
+        return $filterModules;
+    }
+
+    /**
+     * @param array<string, null|string> $filterModules
+     * @param string $moduleFullName
+     * @param string $fromVersion
+     * @param string $currentVersion
+     *
+     * @return bool
+     */
+    protected function shouldBeSkipped(array $filterModules, string $moduleFullName, string $fromVersion, string $currentVersion): bool
+    {
+        if (!$filterModules) {
+            return version_compare($fromVersion, $currentVersion, '>=');
+        }
+
+        if (!array_key_exists($moduleFullName, $filterModules)) {
+            return true;
+        }
+
+        return $filterModules[$moduleFullName] === null && version_compare($fromVersion, $currentVersion, '>=');
     }
 
     /**
@@ -100,10 +133,18 @@ class RepositoryRepositoryManifestReader implements RepositoryManifestReaderInte
      */
     protected function appendManifests(string $moduleManifestsDir, string $moduleFullName, string $currentVersion, array $manifests): array
     {
-        $json = file_get_contents($moduleManifestsDir . sprintf('%s/installer-manifest.json', $currentVersion));
+        $manifestFile = $moduleManifestsDir . sprintf('%s/installer-manifest.json', $currentVersion);
+
+        if (!is_file($manifestFile)) {
+            return $manifests;
+        }
+
+        $json = file_get_contents($manifestFile);
+
         if (!$json) {
             return $manifests;
         }
+
         $manifestFileData = json_decode($json, true);
 
         if ($manifestFileData) {

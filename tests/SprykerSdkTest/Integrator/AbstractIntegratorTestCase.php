@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdkTest\Integrator;
 
+use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
 use SprykerSdk\Integrator\IntegratorFacade;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -127,6 +128,8 @@ abstract class AbstractIntegratorTestCase extends BaseTestCase
      */
     private function prepareTestEnv(): void
     {
+        ClassResolver::clearGeneratedClassList();
+
         $this->removeTmpDirectory();
         $this->createTmpDirectory();
         $this->createTmpStandaloneModulesDirectory();
