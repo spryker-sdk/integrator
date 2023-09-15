@@ -12,6 +12,11 @@ namespace SprykerSdk\Integrator\Builder\FileNormalizer;
 class CodeSnifferCompositeNormalizer implements FileNormalizerInterface
 {
     /**
+     * @var string
+     */
+    public const ERROR_MESSAGE = 'Unable to execute code fixer. Please manually execute it to adjust project code styles.';
+
+    /**
      * @var array<\SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface>
      */
     protected array $codeSniffNormalizers;
@@ -37,7 +42,7 @@ class CodeSnifferCompositeNormalizer implements FileNormalizerInterface
      */
     public function getErrorMessage(): ?string
     {
-        return 'Unable to execute code fixer. Please manually execute it to adjust project code styles.';
+        return static::ERROR_MESSAGE;
     }
 
     /**

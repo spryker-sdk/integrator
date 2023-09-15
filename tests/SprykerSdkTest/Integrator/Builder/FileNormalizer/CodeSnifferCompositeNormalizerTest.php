@@ -67,6 +67,21 @@ class CodeSnifferCompositeNormalizerTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testGetErrorMessageShouldReturnErrorMessage(): void
+    {
+        // Arrange
+        $codeSnifferCompositeNormalizer = new CodeSnifferCompositeNormalizer([$this->createMock(FileNormalizerInterface::class)]);
+
+        // Act
+        $errorMessage = $codeSnifferCompositeNormalizer->getErrorMessage();
+
+        // Assert
+        $this->assertSame(CodeSnifferCompositeNormalizer::ERROR_MESSAGE, $errorMessage);
+    }
+
+    /**
      * @param bool $isApplicable
      * @param bool $shouldCall
      * @param string|null $errorMessage
