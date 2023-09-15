@@ -14,7 +14,7 @@ class CodeSnifferCompositeNormalizer implements FileNormalizerInterface
     /**
      * @var string
      */
-    public const ERROR_MESSAGE = 'Unable to execute code fixer. Please manually execute it to adjust project code styles.';
+    public const ERROR_MESSAGE = 'Unable to execute code style fixer. Please manually execute it to adjust project code styles.';
 
     /**
      * @var array<\SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface>
