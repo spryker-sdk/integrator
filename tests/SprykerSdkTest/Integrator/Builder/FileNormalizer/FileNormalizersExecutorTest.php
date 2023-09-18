@@ -81,15 +81,34 @@ class FileNormalizersExecutorTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testExecuteShouldPutErrorMessageWhenErrorsMessageIsDefined(): void
+    {
+        $errorMessage = 'File normalizer error message';
+        $fileNormalizerMock = $this->createNormalizerMock(false, false, $errorMessage);
+        $fileStorage = new FileStorage();
+        $fileStorage->addFile('someClass.php');
+        $fileNormalizersExecutor = new FileNormalizersExecutor($fileStorage, [$fileNormalizerMock]);
+        $inputOutput = $this->createMock(InputOutputInterface::class);
+        $inputOutput->expects($this->once())->method('warning')->with($errorMessage);
+
+        //Act
+        $fileNormalizersExecutor->execute($inputOutput, false);
+    }
+
+    /**
      * @param bool $isApplicable
      * @param bool $shouldCall
+     * @param string|null $errorMessage
      *
      * @return \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface
      */
-    protected function createNormalizerMock(bool $isApplicable, bool $shouldCall): FileNormalizerInterface
+    protected function createNormalizerMock(bool $isApplicable, bool $shouldCall, ?string $errorMessage = null): FileNormalizerInterface
     {
         $fileNormalizersMock = $this->createMock(FileNormalizerInterface::class);
         $fileNormalizersMock->method('isApplicable')->willReturn($isApplicable);
+        $fileNormalizersMock->method('getErrorMessage')->willReturn($errorMessage);
         $fileNormalizersMock
             ->expects($shouldCall ? $this->once() : $this->never())
             ->method('normalize');

@@ -22,4 +22,9 @@ interface FileNormalizerInterface
      * @return bool
      */
     public function isApplicable(): bool;
+
+    /**
+     * @return string|null
+     */
+    public function getErrorMessage(): ?string;
 }

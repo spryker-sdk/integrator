@@ -49,6 +49,14 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
     }
 
     /**
+     * @return string|null
+     */
+    public function getErrorMessage(): ?string
+    {
+        return null;
+    }
+
+    /**
      * @param array $filePaths
      *
      * @throws \RuntimeException

@@ -65,6 +65,23 @@ class PhpCSFixerFileNormalizerTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testGetErrorMessageShouldReturnErrorMessage(): void
+    {
+        // Arrange
+        $processExecutorMock = $this->createProcessExecutorMock(2, 'process error');
+        $configMock = $this->createMock(IntegratorConfig::class);
+        $normalizer = new PhpCSFixerFileNormalizer($configMock, $processExecutorMock);
+
+        // Act
+        $errorMessage = $normalizer->getErrorMessage();
+
+        // Assert
+        $this->assertNull($errorMessage);
+    }
+
+    /**
      * @param int $exitCode
      * @param string $errorOutput
      *
