@@ -28,6 +28,10 @@ class MethodReturnTypeCreator extends AbstractReflectionClass implements MethodR
             $returnType = static::RETURN_TYPE_BOOL;
         }
 
+        if (is_float($value)) {
+            $returnType = static::RETURN_TYPE_FLOAT;
+        }
+
         if (is_int($value)) {
             $returnType = static::RETURN_TYPE_INT;
         }

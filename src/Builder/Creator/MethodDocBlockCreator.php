@@ -32,6 +32,9 @@ class MethodDocBlockCreator extends AbstractReflectionClass implements MethodDoc
         if (is_int($value)) {
             $docBlockReturnType = static::RETURN_TYPE_INT;
         }
+        if (is_float($value)) {
+            $docBlockReturnType = static::RETURN_TYPE_FLOAT;
+        }
         $docBlockReturnItems[] = ' * @return ' . $docBlockReturnType;
         $docBlockReturnItems[] = ' */';
 
