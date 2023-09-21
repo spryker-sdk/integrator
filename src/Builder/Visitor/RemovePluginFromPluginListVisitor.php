@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
@@ -50,6 +51,11 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
     protected $methodFound = false;
 
     /**
+     * @var bool
+     */
+    protected $cleanUpMethod = false;
+
+    /**
      * @var \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface
      */
     protected ArgumentBuilderInterface $argumentBuilder;
@@ -81,11 +87,32 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
         }
 
         if ($this->methodFound && $node instanceof Array_) {
-            $arrayItemsCount = count($node->items);
             $node = $this->removePluginFromArrayNode($node, $classNameToRemove);
-            if ($arrayItemsCount !== count($node->items)) {
-                $this->methodFound = false;
+            if (!$node->items) {
+                $this->cleanUpMethod = true;
             }
+        }
+
+        return $node;
+    }
+
+    /**
+     * @param \PhpParser\Node $node
+     *
+     * @return \PhpParser\Node|array<\PhpParser\Node>|int|null
+     */
+    public function leaveNode(Node $node)
+    {
+        if (!$this->methodFound || $node->getType() !== static::STATEMENT_CLASS_METHOD) {
+            return $node;
+        }
+
+        $this->methodFound = false;
+
+        if ($this->cleanUpMethod) {
+            $this->cleanUpMethod = false;
+
+            return NodeTraverser::REMOVE_NODE;
         }
 
         return $node;
