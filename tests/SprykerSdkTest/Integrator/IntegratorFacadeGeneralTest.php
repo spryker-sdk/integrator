@@ -66,6 +66,6 @@ class IntegratorFacadeGeneralTest extends AbstractIntegratorTestCase
             trim(file_get_contents($this->getProjectMockOriginalPath() . $glossaryPath)),
             trim(file_get_contents($testResultFile)),
         );
-        $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($testResultFile)));
+        $this->assertSame(file_get_contents($testFilePath), file_get_contents($testResultFile));
     }
 }

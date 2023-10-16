@@ -72,7 +72,7 @@ class GlossaryManifestStrategy extends AbstractManifestStrategy
         );
         $resultGlossaryFileLines = array_merge($existingGlossaryFileLines, $glossaryFileLinesForAdd);
         if (!$isDry) {
-            file_put_contents($this->config->getGlossaryFilePath(), implode(PHP_EOL, $resultGlossaryFileLines));
+            file_put_contents($this->config->getGlossaryFilePath(), implode(PHP_EOL, $resultGlossaryFileLines) . PHP_EOL);
         }
         $inputOutput->writeln(sprintf(
             'Glossary file `%s` successfully updated',
