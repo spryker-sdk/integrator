@@ -95,6 +95,8 @@ use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterfac
 use SprykerSdk\Integrator\Builder\FileNormalizer\PhpCSFixerFileNormalizer;
 use SprykerSdk\Integrator\Builder\FileStorage\FileStorageFactory;
 use SprykerSdk\Integrator\Builder\FileStorage\FileStorageInterface;
+use SprykerSdk\Integrator\Builder\Finder\ClassConstantFinder;
+use SprykerSdk\Integrator\Builder\Finder\ClassConstantFinderInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParser;
@@ -694,6 +696,8 @@ class IntegratorFactory
             $this->createMethodDocBlockCreator(),
             $this->createMethodReturnTypeCreator(),
             $this->createParserFactory(),
+            $this->createClassConstantFinder(),
+            $this->createClassLoader(),
         );
     }
 
@@ -718,7 +722,10 @@ class IntegratorFactory
      */
     public function createMethodStatementsCreator(): MethodStatementsCreatorInterface
     {
-        return new MethodStatementsCreator();
+        return new MethodStatementsCreator(
+            $this->createClassConstantFinder(),
+            $this->createClassLoader(),
+        );
     }
 
     /**
@@ -751,8 +758,8 @@ class IntegratorFactory
     public function createClassConstantModifier(): ClassConstantModifierInterface
     {
         return new ClassConstantModifier(
-            $this->createClassNodeFinder(),
             new ParserFactory(),
+            $this->createClassConstantFinder(),
         );
     }
 
@@ -1148,5 +1155,13 @@ class IntegratorFactory
     protected function createManifestToModulesRatingRequestMapper(): ManifestToModulesRatingRequestMapper
     {
         return new ManifestToModulesRatingRequestMapper();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Finder\ClassConstantFinderInterface
+     */
+    protected function createClassConstantFinder(): ClassConstantFinderInterface
+    {
+        return new ClassConstantFinder($this->createClassNodeFinder());
     }
 }

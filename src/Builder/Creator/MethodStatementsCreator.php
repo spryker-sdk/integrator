@@ -58,20 +58,21 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
             return $this->createNodeTreeFromArrayValue($classInformationTransfer, $value);
         }
 
-        return $this->createNodeTreeFromStringValue($value);
+        return $this->createNodeTreeFromStringValue($classInformationTransfer, $value);
     }
 
     /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param mixed $value
      *
-     * @return array
+     * @return array<mixed>
      */
-    protected function createNodeTreeFromStringValue($value): array
+    protected function createNodeTreeFromStringValue(ClassInformationTransfer $classInformationTransfer, $value): array
     {
         $arrayItems = [];
         $valueItems = explode('::', $value);
         $arrayItems[] = new ArrayItem(
-            $this->createClassConstantExpression($valueItems[0], $valueItems[1]),
+            $this->createClassConstantExpression($classInformationTransfer, $valueItems[0], $valueItems[1]),
         );
 
         return $arrayItems;
@@ -96,7 +97,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
 
             if (is_array($item)) {
                 $insideArrayItems = $this->createMethodStatementsFromValue($classInformationTransfer, $item);
-                $arrayItems[] = $this->createArrayItem([], $keyParts, $insideArrayItems);
+                $arrayItems[] = $this->createArrayItem($classInformationTransfer, [], $keyParts, $insideArrayItems);
 
                 continue;
             }
@@ -109,27 +110,32 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
                 $itemParts = [$item];
             }
 
-            $arrayItems[] = $this->createArrayItem($itemParts, $keyParts);
+            $arrayItems[] = $this->createArrayItem($classInformationTransfer, $itemParts, $keyParts);
         }
 
         return $arrayItems;
     }
 
     /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param array $itemParts
      * @param array $keyParts
      * @param array $insideArrayItems
      *
      * @return \PhpParser\Node\Expr\ArrayItem
      */
-    protected function createArrayItem(array $itemParts, array $keyParts = [], array $insideArrayItems = []): ArrayItem
-    {
+    protected function createArrayItem(
+        ClassInformationTransfer $classInformationTransfer,
+        array $itemParts,
+        array $keyParts = [],
+        array $insideArrayItems = []
+    ): ArrayItem {
         if (count($itemParts) === static::SIMPLE_VARIABLE_SEMICOLON_COUNT) {
-            return $this->createSingleSemicolonVariableArrayItem($itemParts, $keyParts);
+            return $this->createSingleSemicolonVariableArrayItem($classInformationTransfer, $itemParts, $keyParts);
         }
 
         if (!$keyParts && !$insideArrayItems) {
-            return new ArrayItem($this->createClassConstantExpression($itemParts[static::CONSTANT_TYPE_INDEX], $itemParts[static::CONSTANT_NAME_INDEX]));
+            return new ArrayItem($this->createClassConstantExpression($classInformationTransfer, $itemParts[static::CONSTANT_TYPE_INDEX], $itemParts[static::CONSTANT_NAME_INDEX]));
         }
         $countKeyParts = count($keyParts);
         $key = null;
@@ -139,7 +145,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
         }
 
         if ($countKeyParts === 2) {
-            $key = $this->createClassConstantExpression($keyParts[static::CONSTANT_TYPE_INDEX], $keyParts[static::CONSTANT_NAME_INDEX]);
+            $key = $this->createClassConstantExpression($classInformationTransfer, $keyParts[static::CONSTANT_TYPE_INDEX], $keyParts[static::CONSTANT_NAME_INDEX]);
         }
 
         if ($insideArrayItems) {
@@ -150,25 +156,26 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
         }
 
         return new ArrayItem(
-            $this->createClassConstantExpression($itemParts[static::CONSTANT_TYPE_INDEX], $itemParts[static::CONSTANT_NAME_INDEX]),
+            $this->createClassConstantExpression($classInformationTransfer, $itemParts[static::CONSTANT_TYPE_INDEX], $itemParts[static::CONSTANT_NAME_INDEX]),
             $key,
         );
     }
 
     /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param array $itemParts
      * @param array $keyParts
      *
      * @return \PhpParser\Node\Expr\ArrayItem
      */
-    protected function createSingleSemicolonVariableArrayItem(array $itemParts, array $keyParts): ArrayItem
+    protected function createSingleSemicolonVariableArrayItem(ClassInformationTransfer $classInformationTransfer, array $itemParts, array $keyParts): ArrayItem
     {
         if (in_array($itemParts[0], [true, false], true)) {
             return new ArrayItem(
                 new ConstFetch(new Name($itemParts[0] ? 'true' : 'false')),
                 (count($keyParts) == 1) ?
                     $this->createValueExpression($keyParts[static::CONSTANT_TYPE_INDEX]) :
-                    $this->createClassConstantExpression($keyParts[static::CONSTANT_TYPE_INDEX], $keyParts[static::CONSTANT_NAME_INDEX]),
+                    $this->createClassConstantExpression($classInformationTransfer, $keyParts[static::CONSTANT_TYPE_INDEX], $keyParts[static::CONSTANT_NAME_INDEX]),
             );
         }
         $singleItemParts = [];
@@ -190,7 +197,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
         if ($keyParts) {
             $key = (count($keyParts) == 1) ?
                 $this->createValueExpression($keyParts[static::CONSTANT_TYPE_INDEX]) :
-                $this->createClassConstantExpression($keyParts[static::CONSTANT_TYPE_INDEX], $keyParts[static::CONSTANT_NAME_INDEX]);
+                $this->createClassConstantExpression($classInformationTransfer, $keyParts[static::CONSTANT_TYPE_INDEX], $keyParts[static::CONSTANT_NAME_INDEX]);
         }
 
         return new ArrayItem(
