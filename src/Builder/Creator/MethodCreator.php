@@ -22,11 +22,10 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
-use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException;
 use SprykerSdk\Integrator\Builder\Exception\NotFoundReturnExpressionException;
-use SprykerSdk\Integrator\Builder\Finder\ClassConstantFinderInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
+use SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolverInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -68,8 +67,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface $methodDocBlockCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface $methodReturnTypeCreator
      * @param \PhpParser\ParserFactory $parserFactory
-     * @param \SprykerSdk\Integrator\Builder\Finder\ClassConstantFinderInterface $classConstantFinder
-     * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface $classLoader
+     * @param \SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolverInterface $prefixedConstNameResolver
      */
     public function __construct(
         ClassNodeFinderInterface $classNodeFinder,
@@ -77,10 +75,9 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         MethodDocBlockCreatorInterface $methodDocBlockCreator,
         MethodReturnTypeCreatorInterface $methodReturnTypeCreator,
         ParserFactory $parserFactory,
-        ClassConstantFinderInterface $classConstantFinder,
-        ClassLoaderInterface $classLoader
+        PrefixedConstNameResolverInterface $prefixedConstNameResolver
     ) {
-        parent::__construct($classConstantFinder, $classLoader);
+        parent::__construct($prefixedConstNameResolver);
 
         $this->classNodeFinder = $classNodeFinder;
         $this->methodStatementsCreator = $methodStatementsCreator;

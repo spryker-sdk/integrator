@@ -104,6 +104,8 @@ use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinterInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
+use SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolver;
+use SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolverInterface;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolver;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
 use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingFetcher;
@@ -621,6 +623,14 @@ class IntegratorFactory
     }
 
     /**
+     * @return \SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolverInterface
+     */
+    protected function createPrefixedConstNameResolver(): PrefixedConstNameResolverInterface
+    {
+        return new PrefixedConstNameResolver($this->createClassConstantFinder(), $this->createClassLoader());
+    }
+
+    /**
      * @return \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
      */
     public function createClassLoader(): ClassLoaderInterface
@@ -696,8 +706,7 @@ class IntegratorFactory
             $this->createMethodDocBlockCreator(),
             $this->createMethodReturnTypeCreator(),
             $this->createParserFactory(),
-            $this->createClassConstantFinder(),
-            $this->createClassLoader(),
+            $this->createPrefixedConstNameResolver(),
         );
     }
 
@@ -723,8 +732,7 @@ class IntegratorFactory
     public function createMethodStatementsCreator(): MethodStatementsCreatorInterface
     {
         return new MethodStatementsCreator(
-            $this->createClassConstantFinder(),
-            $this->createClassLoader(),
+            $this->createPrefixedConstNameResolver(),
         );
     }
 
