@@ -79,6 +79,30 @@ class ComposerLockReader implements ComposerLockReaderInterface
     }
 
     /**
+     * @param string $packageName
+     *
+     * @return array<string>|null
+     */
+    public function getPackageData(string $packageName): ?array
+    {
+        $composerLockData = $this->getProjectComposerLockData();
+
+        foreach (static::GROUP_PACKAGES as $packagesKey) {
+            if (!isset($composerLockData[$packagesKey])) {
+                continue;
+            }
+
+            foreach ($composerLockData[$packagesKey] as $packageData) {
+                if ($packageData['name'] === $packageName) {
+                    return $packageData;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param array<string, mixed> $packageData
      *
      * @return array<int, string>
