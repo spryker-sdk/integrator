@@ -163,6 +163,6 @@ class CodeSnifferCompositeNormalizer implements FileNormalizerInterface
      */
     protected function getInitialCsFixerConfig(): string
     {
-        return INTEGRATOR_ROOT_DIR . DIRECTORY_SEPARATOR . static::INTERNAL_PHP_CS_FIXER_CONFIG_PATH;
+        return dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . static::INTERNAL_PHP_CS_FIXER_CONFIG_PATH;
     }
 }
