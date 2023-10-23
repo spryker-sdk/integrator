@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdkTest\Integrator\Builder\FileNormalizer;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCompositeNormalizer;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface;
@@ -94,8 +95,7 @@ class CodeSnifferCompositeNormalizerTest extends TestCase
         bool $isSprykerPackageInstalled,
         bool $isCsFixerExecutableFound,
         bool $isCsFixerConfigFound
-    ): void
-    {
+    ): void {
         // Arrange & Assert
         $codeSnifferCompositeNormalizer = new CodeSnifferCompositeNormalizer(
             [$this->createNormalizerMock(true, true)],
@@ -144,12 +144,11 @@ class CodeSnifferCompositeNormalizerTest extends TestCase
     public function testNormalizeShouldRemoveMissedPhpcsConfigWhenExceptionThrown(): void
     {
         // Arrange & Assert
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $fileNormalizersMock = $this->createMock(FileNormalizerInterface::class);
         $fileNormalizersMock->method('isApplicable')->willReturn(true);
-        $fileNormalizersMock->method('normalize')->willThrowException(new \InvalidArgumentException(''));
-
+        $fileNormalizersMock->method('normalize')->willThrowException(new InvalidArgumentException(''));
 
         $codeSnifferCompositeNormalizer = new CodeSnifferCompositeNormalizer(
             [$fileNormalizersMock],
@@ -190,7 +189,7 @@ class CodeSnifferCompositeNormalizerTest extends TestCase
     {
         $composerLockReader = $this->createMock(ComposerLockReaderInterface::class);
         $composerLockReader->method('getPackageData')->willReturn(
-            $isSprykerPackageInstalled ? ['name' => CodeSnifferCompositeNormalizer::SPRYKER_CS_PACKAGE] : null
+            $isSprykerPackageInstalled ? ['name' => CodeSnifferCompositeNormalizer::SPRYKER_CS_PACKAGE] : null,
         );
 
         return $composerLockReader;
@@ -200,14 +199,14 @@ class CodeSnifferCompositeNormalizerTest extends TestCase
      * @param bool $isCsFixerExecutableFound
      * @param bool $isCsFixerConfigFound
      * @param bool $shouldInvokeConfigCopping
+     *
      * @return \Symfony\Component\Filesystem\Filesystem
      */
     protected function createFilesystemMock(
         bool $isCsFixerExecutableFound = false,
         bool $isCsFixerConfigFound = true,
         bool $shouldInvokeConfigCopping = false
-    ): Filesystem
-    {
+    ): Filesystem {
         $filesystem = $this->createMock(Filesystem::class);
 
         $filesystem->method('exists')
@@ -229,6 +228,9 @@ class CodeSnifferCompositeNormalizerTest extends TestCase
         return $filesystem;
     }
 
+    /**
+     * @return \SprykerSdk\Integrator\IntegratorConfig
+     */
     protected function createIntegratorConfigMock(): IntegratorConfig
     {
         $integratorConfig = $this->createMock(IntegratorConfig::class);
