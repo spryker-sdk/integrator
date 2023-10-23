@@ -23,17 +23,17 @@ class CodeSnifferCompositeNormalizer implements FileNormalizerInterface
     /**
      * @var string
      */
-    protected const SPRYKER_CS_PACKAGE = 'spryker/code-sniffer';
+    public const SPRYKER_CS_PACKAGE = 'spryker/code-sniffer';
 
     /**
      * @var string
      */
-    protected const PHP_CS_FIXER_PATH = 'vendor/bin/phpcbf';
+    public const PHP_CS_FIXER_PATH = 'vendor/bin/phpcbf';
 
     /**
      * @var string
      */
-    protected const PHP_CS_FIXER_CONFIG_PATH = 'phpcs.xml';
+    public const PHP_CS_FIXER_CONFIG_PATH = 'phpcs.xml';
 
     /**
      * @var string
@@ -107,7 +107,7 @@ class CodeSnifferCompositeNormalizer implements FileNormalizerInterface
             return;
         }
 
-        $this->filesystem->copy($this->getInitialCsFixerConfig(), $this->getProjectCSFixerConfigPath());
+        $this->filesystem->copy(static::getInitialCsFixerConfig(), $this->getProjectCSFixerConfigPath());
 
         try {
             $this->executeNormalizers($filePaths);
@@ -161,7 +161,7 @@ class CodeSnifferCompositeNormalizer implements FileNormalizerInterface
     /**
      * @return string
      */
-    protected function getInitialCsFixerConfig(): string
+    public static function getInitialCsFixerConfig(): string
     {
         return dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . static::INTERNAL_PHP_CS_FIXER_CONFIG_PATH;
     }
