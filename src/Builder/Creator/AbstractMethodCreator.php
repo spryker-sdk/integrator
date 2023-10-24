@@ -12,6 +12,8 @@ namespace SprykerSdk\Integrator\Builder\Creator;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
+use SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolverInterface;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
 class AbstractMethodCreator
 {
@@ -21,32 +23,38 @@ class AbstractMethodCreator
     protected const SIMPLE_VARIABLE_SEMICOLON_COUNT = 1;
 
     /**
-     * @var string
+     * @var \SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolverInterface
      */
-    protected const STATIC_CONST_PREPOSITION = 'static';
+    protected PrefixedConstNameResolverInterface $prefixedConstNameResolver;
 
     /**
-     * @var string
+     * @param \SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolverInterface $prefixedConstNameResolver
      */
-    protected const PARENT_CONST_PREPOSITION = 'parent';
+    public function __construct(PrefixedConstNameResolverInterface $prefixedConstNameResolver)
+    {
+        $this->prefixedConstNameResolver = $prefixedConstNameResolver;
+    }
 
     /**
-     * @var array
-     */
-    protected const CONST_PREPOSITIONS = [
-        self::STATIC_CONST_PREPOSITION,
-        self::PARENT_CONST_PREPOSITION,
-    ];
-
-    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param string $className
      * @param string $constantName
      *
      * @return \PhpParser\Node\Expr\ClassConstFetch
      */
-    protected function createClassConstantExpression(string $className, string $constantName): ClassConstFetch
-    {
-        return (new BuilderFactory())->classConstFetch($className, $constantName);
+    protected function createClassConstantExpression(
+        ClassInformationTransfer $classInformationTransfer,
+        string $className,
+        string $constantName
+    ): ClassConstFetch {
+        return (new BuilderFactory())->classConstFetch(
+            $className,
+            $this->prefixedConstNameResolver->resolveClassConstantName(
+                $classInformationTransfer,
+                $className,
+                $constantName,
+            ),
+        );
     }
 
     /**
