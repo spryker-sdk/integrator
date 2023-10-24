@@ -211,7 +211,9 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             $newStmts[] = $this->createNewConditionStatement($returnStmt->expr);
         }
         if ($returnStmt->expr instanceof FuncCall || $returnStmt->expr instanceof Array_) {
-            $newStmts[] = $this->createAssignEmptyArray(static::PLUGINS_VARIBLE);
+            $initialArray = $returnStmt->expr instanceof Array_ ? $returnStmt->expr : null;
+
+            $newStmts[] = $this->createAssignArray(static::PLUGINS_VARIBLE, $initialArray);
             $newStmts[] = $this->createNewConditionStatement((new BuilderFactory())->var(static::PLUGINS_VARIBLE));
             $returnStmt->expr = (new BuilderFactory())->var(static::PLUGINS_VARIBLE);
         }
@@ -223,15 +225,16 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 
     /**
      * @param string $varName
+     * @param \PhpParser\Node\Expr\Array_|null $initialArray
      *
      * @return \PhpParser\Node\Stmt\Expression
      */
-    protected function createAssignEmptyArray(string $varName): Expression
+    protected function createAssignArray(string $varName, ?Array_ $initialArray = null): Expression
     {
         return new Expression(
             new Assign(
                 (new BuilderFactory())->var($varName),
-                new Array_(),
+                $initialArray ?? new Array_(),
             ),
         );
     }
