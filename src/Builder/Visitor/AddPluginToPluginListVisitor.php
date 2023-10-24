@@ -211,9 +211,10 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
             $newStmts[] = $this->createNewConditionStatement($returnStmt->expr);
         }
         if ($returnStmt->expr instanceof FuncCall || $returnStmt->expr instanceof Array_) {
-            $initialArray = $returnStmt->expr instanceof Array_ ? $returnStmt->expr : null;
-
-            $newStmts[] = $this->createAssignArray(static::PLUGINS_VARIBLE, $initialArray);
+            $newStmts[] = $this->createAssignArray(
+                static::PLUGINS_VARIBLE,
+                $returnStmt->expr instanceof Array_ ? $returnStmt->expr : null
+            );
             $newStmts[] = $this->createNewConditionStatement((new BuilderFactory())->var(static::PLUGINS_VARIBLE));
             $returnStmt->expr = (new BuilderFactory())->var(static::PLUGINS_VARIBLE);
         }
