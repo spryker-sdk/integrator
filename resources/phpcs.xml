@@ -6,6 +6,11 @@
 
     <file>src/</file>
 
+    <exclude-pattern>*/src/Generated/*</exclude-pattern>
+    <exclude-pattern>*/src/Orm/*/Base/</exclude-pattern>
+    <exclude-pattern>*/src/Orm/*/Map/</exclude-pattern>
+    <exclude-pattern>*/src/Orm/Propel/</exclude-pattern>
+
     <rule ref="Spryker.Namespaces.UseStatement"/>
     <rule ref="Spryker.Namespaces.UseWithAliasing"/>
 </ruleset>
