@@ -17,7 +17,7 @@ interface ClassResolverInterface
      * @param string $targetClassName
      * @param string $customOrganisation
      *
-     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer|null
+     * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function resolveClass(string $targetClassName, string $customOrganisation = ''): ?ClassInformationTransfer;
+    public function resolveClass(string $targetClassName, string $customOrganisation = ''): ClassInformationTransfer;
 }

@@ -176,16 +176,21 @@ abstract class BaseTestCase extends PHPUnitTestCase
 
     /**
      * @param string|null $moduleName
+     * @param string|null $version
      *
      * @return \SprykerSdk\Integrator\Transfer\ModuleTransfer
      */
-    protected function getModuleTransfer(?string $moduleName = null): ModuleTransfer
+    protected function getModuleTransfer(?string $moduleName = null, ?string $version = null): ModuleTransfer
     {
         [$organization, $moduleName] = explode('.', $moduleName);
 
-        return (new ModuleTransfer())
+        $module = (new ModuleTransfer())
             ->setModule($moduleName)
             ->setOrganization($organization);
+
+        $module->setVersion($version);
+
+        return $module;
     }
 
     /**

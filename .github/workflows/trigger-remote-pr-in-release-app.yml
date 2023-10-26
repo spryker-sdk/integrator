@@ -1,10 +1,10 @@
-name: Trigger dependency update in SDK
+name: Trigger dependency update in Release App
 
 env:
   AUTH_TOKEN: ${{ secrets.PAT }}
   EVENT: integrator_dependency_updated
-  ORG: spryker-sdk
-  REPO: sdk
+  ORG: spryker
+  REPO: release-app
 
 on:
   push:

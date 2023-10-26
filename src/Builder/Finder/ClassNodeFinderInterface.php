@@ -38,4 +38,12 @@ interface ClassNodeFinderInterface
      * @return \PhpParser\Node\Stmt\Class_|null
      */
     public function findClassNode(ClassInformationTransfer $classInformationTransfer): ?Class_;
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param string $methodName
+     *
+     * @return bool
+     */
+    public function hasClassMethodName(ClassInformationTransfer $classInformationTransfer, string $methodName): bool;
 }

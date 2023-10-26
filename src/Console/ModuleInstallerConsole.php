@@ -26,17 +26,17 @@ class ModuleInstallerConsole extends AbstractInstallerConsole
     /**
      * @var string
      */
-    protected const ARGUMENT_MODULE_NAMES = 'module-names';
+    public const ARGUMENT_MODULES = 'modules';
 
     /**
      * @var string
      */
-    protected const ARGUMENT_MODULE_NAMES_DESCRIPTION = 'Name of modules which should be built, separated by `,`';
+    public const OPTION_SOURCE = 'source';
 
     /**
      * @var string
      */
-    protected const OPTION_SOURCE = 'source';
+    protected const ARGUMENT_MODULES_DESCRIPTION = 'Name of modules with versions (<module><:?version>) which should be built, separated by `,`.';
 
     /**
      * @var string
@@ -53,9 +53,9 @@ class ModuleInstallerConsole extends AbstractInstallerConsole
         $this->setName(static::COMMAND_NAME)
             ->setDescription('')
             ->addArgument(
-                static::ARGUMENT_MODULE_NAMES,
+                static::ARGUMENT_MODULES,
                 InputArgument::OPTIONAL,
-                static::ARGUMENT_MODULE_NAMES_DESCRIPTION,
+                static::ARGUMENT_MODULES_DESCRIPTION,
             )
             ->addOption(
                 static::OPTION_SOURCE,
@@ -89,17 +89,21 @@ class ModuleInstallerConsole extends AbstractInstallerConsole
     {
         $commandArgumentsTransfer = parent::buildCommandArgumentsTransfer($input);
 
-        $moduleArguments = (string)$input->getArgument(static::ARGUMENT_MODULE_NAMES);
+        $moduleArguments = (string)$input->getArgument(static::ARGUMENT_MODULES);
 
         if ($moduleArguments) {
             $moduleArguments = array_map('trim', explode(',', $moduleArguments));
             foreach ($moduleArguments as $moduleArgument) {
-                [$organization, $module] = explode('.', $moduleArgument);
+                $moduleParts = explode(':', $moduleArgument);
+                $version = $moduleParts[1] ?? null;
+
+                [$organization, $module] = explode('.', $moduleParts[0]);
 
                 $commandArgumentsTransfer->addModule(
                     (new ModuleTransfer())
                         ->setModule($module)
-                        ->setOrganization($organization),
+                        ->setOrganization($organization)
+                        ->setVersion($version),
                 );
             }
         }

@@ -25,6 +25,7 @@ use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException;
 use SprykerSdk\Integrator\Builder\Exception\NotFoundReturnExpressionException;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
+use SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolverInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddMethodVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -66,14 +67,18 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodDocBlockCreatorInterface $methodDocBlockCreator
      * @param \SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface $methodReturnTypeCreator
      * @param \PhpParser\ParserFactory $parserFactory
+     * @param \SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolverInterface $prefixedConstNameResolver
      */
     public function __construct(
         ClassNodeFinderInterface $classNodeFinder,
         MethodStatementsCreatorInterface $methodStatementsCreator,
         MethodDocBlockCreatorInterface $methodDocBlockCreator,
         MethodReturnTypeCreatorInterface $methodReturnTypeCreator,
-        ParserFactory $parserFactory
+        ParserFactory $parserFactory,
+        PrefixedConstNameResolverInterface $prefixedConstNameResolver
     ) {
+        parent::__construct($prefixedConstNameResolver);
+
         $this->classNodeFinder = $classNodeFinder;
         $this->methodStatementsCreator = $methodStatementsCreator;
         $this->methodDocBlockCreator = $methodDocBlockCreator;
@@ -103,7 +108,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         }
 
         if ($this->isSingleReturnStatement($tree)) {
-            return $this->createSingleStatementMethodBody($tree, $value, $isLiteral);
+            return $this->createSingleStatementMethodBody($classInformationTransfer, $tree, $value, $isLiteral);
         }
 
         return $tree;
@@ -230,6 +235,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     }
 
     /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param array<\PhpParser\Node\Stmt> $tree
      * @param mixed $value
      * @param bool $isLiteral
@@ -238,7 +244,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      *
      * @return array<\PhpParser\Node\Stmt\Return_>
      */
-    protected function createSingleStatementMethodBody(array $tree, $value, bool $isLiteral): array
+    protected function createSingleStatementMethodBody(ClassInformationTransfer $classInformationTransfer, array $tree, $value, bool $isLiteral): array
     {
         /** @var \PhpParser\Node\Stmt\Expression|null $returnExpression */
         $returnExpression = $tree[0] ?? null;
@@ -246,7 +252,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
             throw new NotFoundReturnExpressionException(sprintf('Not found any statements in value: `%s`', $value));
         }
         if (property_exists($returnExpression->expr, 'class')) {
-            return $this->createClassConstantReturnStatement($returnExpression);
+            return $this->createClassConstantReturnStatement($classInformationTransfer, $returnExpression);
         }
 
         $returnExpression = !$isLiteral && $returnExpression->expr instanceof ConstFetch && !in_array((string)$returnExpression->expr->name, ['true', 'false'], true)
@@ -257,11 +263,12 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
     }
 
     /**
+     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
      * @param \PhpParser\Node\Stmt\Expression $expression
      *
      * @return array<\PhpParser\Node\Stmt\Return_>
      */
-    protected function createClassConstantReturnStatement(Expression $expression): array
+    protected function createClassConstantReturnStatement(ClassInformationTransfer $classInformationTransfer, Expression $expression): array
     {
         /** @var \PhpParser\Node\Expr\ClassConstFetch $expressionStatement */
         $expressionStatement = $expression->expr;
@@ -271,6 +278,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         $expressionClass = $expressionStatement->class;
         $expressionClass->parts = [$expressionClass->toString()];
         $returnClassConstExpression = $this->createClassConstantExpression(
+            $classInformationTransfer,
             $expressionClass->toString(),
             $expressionName->name,
         );

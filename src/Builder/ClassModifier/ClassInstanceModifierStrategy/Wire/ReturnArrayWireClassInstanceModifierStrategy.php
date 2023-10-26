@@ -11,6 +11,7 @@ namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrat
 
 use PhpParser\Node\Stmt\ClassMethod;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
+use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface;
 use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface;
@@ -45,21 +46,29 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
     protected ArgumentBuilderInterface $argumentBuilder;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface
+     */
+    protected ClassLoaderInterface $classLoader;
+
+    /**
      * @param \SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Applicable\ApplicableModifierStrategyInterface $applicableCheck
      * @param \SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface $pluginPositionResolver
      * @param \SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface $nodeExpressionPartialParser
      * @param \SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface $argumentBuilder
+     * @param \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface $classLoader
      */
     public function __construct(
         ApplicableModifierStrategyInterface $applicableCheck,
         PluginPositionResolverInterface $pluginPositionResolver,
         ExpressionPartialParserInterface $nodeExpressionPartialParser,
-        ArgumentBuilderInterface $argumentBuilder
+        ArgumentBuilderInterface $argumentBuilder,
+        ClassLoaderInterface $classLoader
     ) {
         $this->applicableCheck = $applicableCheck;
         $this->pluginPositionResolver = $pluginPositionResolver;
         $this->nodeExpressionPartialParser = $nodeExpressionPartialParser;
         $this->argumentBuilder = $argumentBuilder;
+        $this->classLoader = $classLoader;
     }
 
     /**
@@ -99,7 +108,7 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
         ];
 
         if ($classMetadataTransfer->getIndex() === null) {
-            return [...$visitors, new AddPluginToPluginListVisitor($classMetadataTransfer, $this->pluginPositionResolver, $this->argumentBuilder)];
+            return [...$visitors, new AddPluginToPluginListVisitor($classMetadataTransfer, $this->pluginPositionResolver, $this->argumentBuilder, $this->classLoader)];
         }
 
         return [
@@ -108,6 +117,7 @@ class ReturnArrayWireClassInstanceModifierStrategy implements WireClassInstanceM
                 $classMetadataTransfer,
                 $this->pluginPositionResolver,
                 $this->argumentBuilder,
+                $this->classLoader,
                 $this->nodeExpressionPartialParser->parse($classMetadataTransfer->getIndex()),
             ),
         ];

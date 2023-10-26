@@ -37,6 +37,11 @@ class AbstractReflectionClass
     protected const RETURN_TYPE_INT = 'int';
 
     /**
+     * @var string
+     */
+    protected const RETURN_TYPE_FLOAT = 'float';
+
+    /**
      * @param mixed $value
      *
      * @return bool

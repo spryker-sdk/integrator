@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace SprykerSdkTest\Integrator\Builder\ClassLoader;
 
-use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
-use SprykerSdk\Integrator\Helper\ClassHelper;
+use Exception;
+use SprykerSdk\Integrator\Transfer\ClassInformationTransfer as TransferClassInformationTransfer;
 use SprykerSdkTest\Integrator\BaseTestCase;
 
 class ClassLoaderTest extends BaseTestCase
@@ -18,19 +18,66 @@ class ClassLoaderTest extends BaseTestCase
     /**
      * @return void
      */
-    public function testLoadClass(): void
+    public function testLoadClassWithoutParent(): void
     {
-        $transfer = $this->createClassLoader()->loadClass(ClassHelper::class);
+        // Arrange & Act
+        $transfer = $this->getFactory()->createClassLoader()->loadClass(Exception::class);
 
-        $this->assertEquals(ClassHelper::class, $transfer->getClassName());
+        // Assert
+        $this->assertEquals(Exception::class, $transfer->getClassName());
         $this->assertNull($transfer->getParent());
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader
+     * @return void
      */
-    protected function createClassLoader(): ClassLoader
+    public function testLoadClassWithParent(): void
     {
-        return $this->getFactory()->createClassLoader();
+        // Arrange & Act
+        $transfer = $this->getFactory()->createClassLoader()->loadClass(static::class);
+
+        // Assert
+        $this->assertEquals(static::class, $transfer->getClassName());
+        $this->assertInstanceOf(TransferClassInformationTransfer::class, $transfer->getParent());
+    }
+
+    /**
+     * @return void
+     */
+    public function testLoadClassWithNotExistingFile(): void
+    {
+        // Arrange & Act
+        $transfer = $this->getFactory()->createClassLoader()->loadClass('\\Bla\\BlaBla\\Test');
+
+        // Assert
+        $this->assertEquals('Bla\\BlaBla\\Test', $transfer->getClassName());
+        $this->assertNull($transfer->getParent());
+        $this->assertNull($transfer->getFilePath());
+        $this->assertSame([], $transfer->getTokens());
+        $this->assertSame([], $transfer->getOriginalClassTokenTree());
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassExist(): void
+    {
+        // Arrange & Act
+        $isExists = $this->getFactory()->createClassLoader()->classExist(static::class);
+
+        // Assert
+        $this->assertTrue($isExists);
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassNotExist(): void
+    {
+        // Arrange & Act
+        $isExists = $this->getFactory()->createClassLoader()->classExist('\\Bla\\BlaBla\\Test');
+
+        // Assert
+        $this->assertFalse($isExists);
     }
 }

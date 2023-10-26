@@ -29,22 +29,22 @@ abstract class AbstractInstallerConsole extends Command
     /**
      * @var string
      */
-    protected const OPTION_FORMAT = 'format';
+    public const OPTION_FORMAT = 'format';
+
+    /**
+     * @var string
+     */
+    public const FLAG_DRY = 'dry';
+
+    /**
+     * @var string
+     */
+    public const FORMAT_JSON = 'json';
 
     /**
      * @var string
      */
     protected const OPTION_FORMAT_DESCRIPTION = 'Define the format of the command output, example: json';
-
-    /**
-     * @var string
-     */
-    protected const FLAG_DRY = 'dry';
-
-    /**
-     * @var string
-     */
-    protected const FORMAT_JSON = 'json';
 
     /**
      * @return void

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator;
 
 use CzProject\GitPhp\Runners\CliRunner;
+use GuzzleHttp\Client;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
 use PhpParser\Lexer\Emulative;
@@ -86,6 +87,7 @@ use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface;
+use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCompositeNormalizer;
 use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSniffStyleFileNormalizer;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutor;
@@ -93,6 +95,8 @@ use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterfac
 use SprykerSdk\Integrator\Builder\FileNormalizer\PhpCSFixerFileNormalizer;
 use SprykerSdk\Integrator\Builder\FileStorage\FileStorageFactory;
 use SprykerSdk\Integrator\Builder\FileStorage\FileStorageInterface;
+use SprykerSdk\Integrator\Builder\Finder\ClassConstantFinder;
+use SprykerSdk\Integrator\Builder\Finder\ClassConstantFinderInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
 use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParser;
@@ -100,10 +104,17 @@ use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinter;
 use SprykerSdk\Integrator\Builder\Printer\ClassDiffPrinterInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
+use SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolver;
+use SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolverInterface;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolver;
 use SprykerSdk\Integrator\Builder\Visitor\PluginPositionResolver\PluginPositionResolverInterface;
+use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingFetcher;
+use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingFetcherInterface;
+use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingResponseMapper;
 use SprykerSdk\Integrator\Composer\ComposerLockReader;
 use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
+use SprykerSdk\Integrator\Configuration\ConfigurationProvider;
+use SprykerSdk\Integrator\Configuration\ConfigurationProviderInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutor;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
 use SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutor;
@@ -113,6 +124,10 @@ use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
 use SprykerSdk\Integrator\Executor\ReleaseGroup\DiffGenerator;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorage;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface;
+use SprykerSdk\Integrator\Filter\ManifestsFiltersExecutor;
+use SprykerSdk\Integrator\Filter\ManifestsFiltersExecutorInterface;
+use SprykerSdk\Integrator\Filter\RatingBasedManifestFilter\ManifestToModulesRatingRequestMapper;
+use SprykerSdk\Integrator\Filter\RatingBasedManifestFilter\RatingBasedManifestsFilter;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReader;
@@ -164,6 +179,7 @@ class IntegratorFactory
             $this->createRepositoryManifestReader(),
             $this->createManifestExecutor(),
             $this->createComposerLockReader(),
+            $this->createManifestsFiltersExecutor(),
         );
     }
 
@@ -260,6 +276,8 @@ class IntegratorFactory
             $this->getConfig(),
             $this->createClassHelper(),
             $this->createClassMetadataBuilder(),
+            $this->createClassLoader(),
+            $this->createClassNodeFinder(),
         );
     }
 
@@ -272,6 +290,8 @@ class IntegratorFactory
             $this->getConfig(),
             $this->createClassHelper(),
             $this->createClassMetadataBuilder(),
+            $this->createClassLoader(),
+            $this->createClassNodeFinder(),
         );
     }
 
@@ -283,6 +303,8 @@ class IntegratorFactory
         return new AddConfigArrayElementManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
+            $this->createClassLoader(),
+            $this->createClassNodeFinder(),
         );
     }
 
@@ -526,6 +548,18 @@ class IntegratorFactory
         return new FileNormalizersExecutor(
             $this->createFileStorage(),
             [
+                $this->createCodeSnifferCompositeNormalizer(),
+            ],
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface
+     */
+    public function createCodeSnifferCompositeNormalizer(): FileNormalizerInterface
+    {
+        return new CodeSnifferCompositeNormalizer(
+            [
                 $this->createPhpCSFixerNormalizer(),
                 $this->createCodeSniffStyleFileNormalizer(),
             ],
@@ -586,6 +620,14 @@ class IntegratorFactory
     public function createClassResolver(): ClassResolverInterface
     {
         return new ClassResolver($this->createClassLoader(), $this->createClassGenerator());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Resolver\PrefixedConstNameResolverInterface
+     */
+    protected function createPrefixedConstNameResolver(): PrefixedConstNameResolverInterface
+    {
+        return new PrefixedConstNameResolver($this->createClassConstantFinder(), $this->createClassLoader());
     }
 
     /**
@@ -664,6 +706,7 @@ class IntegratorFactory
             $this->createMethodDocBlockCreator(),
             $this->createMethodReturnTypeCreator(),
             $this->createParserFactory(),
+            $this->createPrefixedConstNameResolver(),
         );
     }
 
@@ -688,7 +731,9 @@ class IntegratorFactory
      */
     public function createMethodStatementsCreator(): MethodStatementsCreatorInterface
     {
-        return new MethodStatementsCreator();
+        return new MethodStatementsCreator(
+            $this->createPrefixedConstNameResolver(),
+        );
     }
 
     /**
@@ -721,8 +766,8 @@ class IntegratorFactory
     public function createClassConstantModifier(): ClassConstantModifierInterface
     {
         return new ClassConstantModifier(
-            $this->createClassNodeFinder(),
             new ParserFactory(),
+            $this->createClassConstantFinder(),
         );
     }
 
@@ -910,6 +955,7 @@ class IntegratorFactory
             $this->createPluginPositionResolver(),
             $this->createNodeExpressionPartialParser(),
             $this->createArgumentBuilder(),
+            $this->createClassLoader(),
         );
     }
 
@@ -922,6 +968,7 @@ class IntegratorFactory
             $this->createArgumentBuilder(),
             $this->createReturnCollectionApplicableModifierStrategy(),
             $this->createPluginPositionResolver(),
+            $this->createClassLoader(),
         );
     }
 
@@ -1078,5 +1125,51 @@ class IntegratorFactory
     protected function createPluginPositionResolver(): PluginPositionResolverInterface
     {
         return new PluginPositionResolver();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Filter\ManifestsFiltersExecutorInterface
+     */
+    protected function createManifestsFiltersExecutor(): ManifestsFiltersExecutorInterface
+    {
+        return new ManifestsFiltersExecutor([
+            new RatingBasedManifestsFilter(
+                $this->createConfigurationProvider(),
+                $this->createModuleRatingFetcher(),
+                $this->createManifestToModulesRatingRequestMapper(),
+            ),
+        ]);
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingFetcherInterface
+     */
+    protected function createModuleRatingFetcher(): ModuleRatingFetcherInterface
+    {
+        return new ModuleRatingFetcher(new Client(), $this->createConfigurationProvider(), new ModuleRatingResponseMapper());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Configuration\ConfigurationProviderInterface
+     */
+    protected function createConfigurationProvider(): ConfigurationProviderInterface
+    {
+        return new ConfigurationProvider();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Filter\RatingBasedManifestFilter\ManifestToModulesRatingRequestMapper
+     */
+    protected function createManifestToModulesRatingRequestMapper(): ManifestToModulesRatingRequestMapper
+    {
+        return new ManifestToModulesRatingRequestMapper();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Finder\ClassConstantFinderInterface
+     */
+    protected function createClassConstantFinder(): ClassConstantFinderInterface
+    {
+        return new ClassConstantFinder($this->createClassNodeFinder());
     }
 }

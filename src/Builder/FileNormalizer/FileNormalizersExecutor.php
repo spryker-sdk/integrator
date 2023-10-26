@@ -51,7 +51,11 @@ class FileNormalizersExecutor implements FileNormalizersExecutorInterface
 
         foreach ($this->fileNormalizers as $fileNormalizer) {
             if (!$fileNormalizer->isApplicable()) {
-                $inputOutput->warning(sprintf('%s file normalizer, is not applicable for the project', get_class($fileNormalizer)));
+                $errorMessage = $fileNormalizer->getErrorMessage();
+
+                if ($errorMessage !== null) {
+                    $inputOutput->warning($errorMessage);
+                }
 
                 continue;
             }

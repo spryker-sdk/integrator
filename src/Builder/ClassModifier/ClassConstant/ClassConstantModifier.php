@@ -10,11 +10,10 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\ClassModifier\ClassConstant;
 
 use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\ClassModifier\AddVisitorsTrait;
 use SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException;
-use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface;
+use SprykerSdk\Integrator\Builder\Finder\ClassConstantFinderInterface;
 use SprykerSdk\Integrator\Builder\Visitor\AddConstantVisitor;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
@@ -28,23 +27,23 @@ class ClassConstantModifier implements ClassConstantModifierInterface
     protected const SINGLE_EXPRESSION_COUNT = 1;
 
     /**
-     * @var \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface
-     */
-    protected $classNodeFinder;
-
-    /**
      * @var \PhpParser\ParserFactory
      */
     private ParserFactory $parserFactory;
 
     /**
-     * @param \SprykerSdk\Integrator\Builder\Finder\ClassNodeFinderInterface $classNodeFinder
-     * @param \PhpParser\ParserFactory $parserFactory
+     * @var \SprykerSdk\Integrator\Builder\Finder\ClassConstantFinderInterface
      */
-    public function __construct(ClassNodeFinderInterface $classNodeFinder, ParserFactory $parserFactory)
+    protected ClassConstantFinderInterface $classConstantFinder;
+
+    /**
+     * @param \PhpParser\ParserFactory $parserFactory
+     * @param \SprykerSdk\Integrator\Builder\Finder\ClassConstantFinderInterface $classConstantFinder
+     */
+    public function __construct(ParserFactory $parserFactory, ClassConstantFinderInterface $classConstantFinder)
     {
-        $this->classNodeFinder = $classNodeFinder;
         $this->parserFactory = $parserFactory;
+        $this->classConstantFinder = $classConstantFinder;
     }
 
     /**
@@ -55,9 +54,13 @@ class ClassConstantModifier implements ClassConstantModifierInterface
      *
      * @return \SprykerSdk\Integrator\Transfer\ClassInformationTransfer
      */
-    public function setConstant(ClassInformationTransfer $classInformationTransfer, string $constantName, $value, bool $isLiteral): ClassInformationTransfer
-    {
-        $parentConstant = $this->getFirstParentConstant($classInformationTransfer, $constantName);
+    public function setConstant(
+        ClassInformationTransfer $classInformationTransfer,
+        string $constantName,
+        $value,
+        bool $isLiteral
+    ): ClassInformationTransfer {
+        $parentConstant = $this->classConstantFinder->findParentConstantByName($classInformationTransfer, $constantName);
 
         $modifier = 'public';
         if ($parentConstant) {
@@ -77,29 +80,6 @@ class ClassConstantModifier implements ClassConstantModifierInterface
         ];
 
         return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
-    }
-
-    /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
-     * @param string $constantName
-     *
-     * @return \PhpParser\Node\Stmt\ClassConst|null
-     */
-    protected function getFirstParentConstant(ClassInformationTransfer $classInformationTransfer, string $constantName): ?ClassConst
-    {
-        $parentConstant = null;
-
-        do {
-            $classInformationTransfer = $classInformationTransfer->getParent();
-
-            if ($classInformationTransfer === null) {
-                break;
-            }
-
-            $parentConstant = $this->classNodeFinder->findConstantNode($classInformationTransfer, $constantName);
-        } while ($parentConstant === null);
-
-        return $parentConstant;
     }
 
     /**
