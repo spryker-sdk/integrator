@@ -15,4 +15,11 @@ interface ComposerLockReaderInterface
      * @return array<string>
      */
     public function getModuleVersions(): array;
+
+    /**
+     * @param string $packageName
+     *
+     * @return array|null
+     */
+    public function getPackageData(string $packageName): ?array;
 }
