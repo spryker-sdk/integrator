@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ruleset name="SprykerLibrary">
+    <arg name="colors"/>
+    <arg name="tab-width" value="4"/>
+    <arg value="nps"/>
+
+    <file>src/</file>
+
+    <exclude-pattern>*/src/Generated/*</exclude-pattern>
+    <exclude-pattern>*/src/Orm/*/Base/</exclude-pattern>
+    <exclude-pattern>*/src/Orm/*/Map/</exclude-pattern>
+    <exclude-pattern>*/src/Orm/Propel/</exclude-pattern>
+
+    <rule ref="Spryker.Namespaces.UseStatement"/>
+    <rule ref="Spryker.Namespaces.UseWithAliasing"/>
+</ruleset>

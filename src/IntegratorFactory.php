@@ -509,7 +509,7 @@ class IntegratorFactory
     {
         return new WireTransferManifestStrategy(
             $this->getConfig(),
-            new Filesystem(),
+            $this->createFilesystem(),
         );
     }
 
@@ -520,7 +520,7 @@ class IntegratorFactory
     {
         return new WireSchemaManifestStrategy(
             $this->getConfig(),
-            new Filesystem(),
+            $this->createFilesystem(),
         );
     }
 
@@ -563,6 +563,9 @@ class IntegratorFactory
                 $this->createPhpCSFixerNormalizer(),
                 $this->createCodeSniffStyleFileNormalizer(),
             ],
+            $this->createComposerLockReader(),
+            $this->getConfig(),
+            $this->createFilesystem(),
         );
     }
 
@@ -1163,6 +1166,14 @@ class IntegratorFactory
     protected function createManifestToModulesRatingRequestMapper(): ManifestToModulesRatingRequestMapper
     {
         return new ManifestToModulesRatingRequestMapper();
+    }
+
+    /**
+     * @return \Symfony\Component\Filesystem\Filesystem
+     */
+    protected function createFilesystem(): Filesystem
+    {
+        return new Filesystem();
     }
 
     /**
