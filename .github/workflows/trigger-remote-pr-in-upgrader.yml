@@ -1,25 +1,86 @@
-name: Trigger dependency update in Upgrader
+name: Update Spryker Upgrader
 
 env:
-  AUTH_TOKEN: ${{ secrets.PAT }}
-  EVENT: integrator_dependency_updated
-  ORG: spryker-sdk
-  REPO: upgrader
+    TARGET_BRANCH: master
+    TARGET_OWNER: spryker-sdk
+    TARGET_REPO: upgrader
+    SOURCE_PACKAGE_NAME: 'spryker-sdk/integrator'
+    PR_LABELS: 'composer dependencies'
+    PR_ASSIGNEES: pavelmaksimov25,DmytroKlymanSpryker
 
 on:
-  push:
-    branches:
-      - master
+    pull_request:
+        types: [closed]
+    workflow_dispatch:
 
 jobs:
-  trigger-external-pr:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger external repository pr creation
-        run: |
-          curl -d "{\"event_type\": \"${EVENT}\"}" \
-          -X POST \
-          -H "Content-Type: application/json" \
-          -H "Authorization: token ${AUTH_TOKEN}" \
-          -H "Accept: application/vnd.github.everest-preview+json" \
-          "https://api.github.com/repos/${ORG}/${REPO}/dispatches"
+    trigger-external-pr:
+        runs-on: ubuntu-latest
+        if: ${{ github.event.pull_request.merged == true }}
+
+        steps:
+            # https://github.com/marketplace/actions/setup-php-action
+            - name: "Install PHP"
+              uses: shivammathur/setup-php@2.27.0
+              with:
+                  php-version: 8.0
+                  tools: composer:v2
+
+            - run: |
+                  echo ${{ github.event.pull_request.merged }}
+                  echo ${{ github.event.pull_request }}
+
+            # https://github.com/marketplace/actions/get-current-pull-request
+            - name: "Collect PR data"
+              uses: 8BitJonny/gh-get-current-pr@2.2.0
+              id: PR
+              with:
+                  github-token: ${{ secrets.PAT }}
+                  sha: ${{ github.event.pull_request.head.sha }}
+
+            # https://github.com/marketplace/actions/checkout
+            - name: "Checkout target repository"
+              if: ${{ success() }}
+              uses: actions/checkout@v4
+              with:
+                  token: ${{ secrets.PAT }}
+                  repository: ${{ env.TARGET_OWNER }}/${{ env.TARGET_REPO }}
+                  path: ${{ env.TARGET_REPO }}
+                  fetch-depth: 0
+
+            - name: "Update composer dependency"
+              if: ${{ success() }}
+              run: |
+                  composer update ${{ env.SOURCE_PACKAGE_NAME }} --no-scripts --no-progress --no-install
+              working-directory: ${{ env.TARGET_REPO }}
+
+            - name: "Prepare PR Body"
+              if: ${{ success() }}
+              id: target-pr-body
+              run: |
+                  target_pr_body="This PR is automatically created by GitHub action to update dependency.
+                  Original PR [${{ steps.PR.outputs.number }}](${{ steps.PR.outputs.pr_url }})
+                  Original PR Body:
+                  ${{ steps.PR.outputs.pr_body }}"
+
+                  echo 'target_pr_body<<EOF' >> $GITHUB_OUTPUT
+                  echo "$target_pr_body" >> $GITHUB_OUTPUT
+                  echo 'EOF' >> $GITHUB_OUTPUT
+
+            # https://github.com/marketplace/actions/create-pull-request
+            - name: "Commit, push and create pull request."
+              if: ${{ success() }}
+              uses: peter-evans/create-pull-request@v5
+              with:
+                  token: ${{ secrets.PAT }}
+                  path: ${{ env.TARGET_REPO }}
+                  base: ${{ env.TARGET_BRANCH }}
+                  branch: ${{ format('{0}-dependency-{1}-{2}', fromJson(steps.PR.outputs.pr).head.ref, env.REPO, steps.PR.outputs.number) }}
+                  branch-suffix: timestamp
+                  title: ${{ format('Dependency update. {0}', steps.PR.outputs.pr_title) }}
+                  body: ${{ steps.target-pr-body.outputs.target_pr_body }}
+                  committer: SprykerReleaseBot <spryker-release-bot@spryker.com>
+                  author: SprykerReleaseBot <spryker-release-bot@spryker.com>
+                  labels: ${{ env.PR_LABELS }}
+                  delete-branch: true
+                  assignees: ${{ env.PR_ASSIGNEES }}
