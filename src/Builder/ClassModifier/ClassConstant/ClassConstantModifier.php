@@ -73,7 +73,7 @@ class ClassConstantModifier implements ClassConstantModifierInterface
 
         if ($isLiteral) {
             $value = $this->parseSingleValue((string)$value);
-        } else if (is_array($value)) {
+        } elseif (is_array($value)) {
             foreach ($value as $idx => $val) {
                 if (!is_string($val) || strpos($val, '::') === false) {
                     continue;
