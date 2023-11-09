@@ -84,8 +84,6 @@ class ClassConstantModifier implements ClassConstantModifierInterface
      * @param mixed $value
      * @param bool $isLiteral
      *
-     * @throws \SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException
-     *
      * @return mixed
      */
     protected function parseValue($value, bool $isLiteral)
@@ -126,8 +124,6 @@ class ClassConstantModifier implements ClassConstantModifierInterface
 
     /**
      * @param array<mixed> $value
-     *
-     * @throws \SprykerSdk\Integrator\Builder\Exception\LiteralValueParsingException
      *
      * @return array
      */
