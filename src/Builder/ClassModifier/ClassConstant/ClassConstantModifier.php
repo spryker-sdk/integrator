@@ -71,23 +71,34 @@ class ClassConstantModifier implements ClassConstantModifierInterface
             }
         }
 
-        if ($isLiteral) {
-            $value = $this->parseSingleValue((string)$value);
-        } elseif (is_array($value)) {
-            foreach ($value as $idx => $val) {
-                if (!is_string($val) || strpos($val, '::') === false) {
-                    continue;
-                }
-
-                $value[$idx] = $this->parseSingleValue($val);
-            }
-        }
+        $value = $this->parseValue($value, $isLiteral);
 
         $visitors = [
             new AddConstantVisitor($constantName, $value, $modifier),
         ];
 
         return $this->addVisitorsClassInformationTransfer($classInformationTransfer, $visitors);
+    }
+
+    /**
+     * @param mixed $value
+     * @param bool $isLiteral
+     *
+     * @return mixed
+     *
+     * @throws LiteralValueParsingException
+     */
+    protected function parseValue($value, bool $isLiteral)
+    {
+        if ($isLiteral) {
+            return $this->parseSingleValue((string)$value);
+        }
+
+        if (is_array($value)) {
+            return $this->parseArrayValue($value);
+        }
+
+        return $value;
     }
 
     /**
@@ -111,5 +122,25 @@ class ClassConstantModifier implements ClassConstantModifierInterface
         }
 
         return $tree[0]->expr;
+    }
+
+    /**
+     * @param array<mixed> $value
+     *
+     * @return array
+     *
+     * @throws LiteralValueParsingException
+     */
+    protected function parseArrayValue(array $value): array
+    {
+        foreach ($value as $idx => $val) {
+            if (!is_string($val) || strpos($val, '::') === false) {
+                continue;
+            }
+
+            $value[$idx] = $this->parseSingleValue($val);
+        }
+
+        return $value;
     }
 }
