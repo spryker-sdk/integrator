@@ -9,10 +9,10 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
-use SprykerSdk\Integrator\Common\UtilText\TextCaseHelper;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Exception\ManifestApplyingException;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Utils\Infrastructure\Helper\StrHelper;
 
 class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
 {
@@ -81,9 +81,9 @@ class CopyModuleFileManifestStrategy extends AbstractManifestStrategy
         [$organisation, $moduleName] = explode('.', $moduleName);
 
         return $this->config->getVendorDirectory()
-            . mb_strtolower(TextCaseHelper::camelCaseToDash($organisation))
+            . mb_strtolower(StrHelper::camelCaseToDash($organisation))
             . DIRECTORY_SEPARATOR
-            . mb_strtolower(TextCaseHelper::camelCaseToDash($moduleName))
+            . mb_strtolower(StrHelper::camelCaseToDash($moduleName))
             . DIRECTORY_SEPARATOR
             . $source;
     }

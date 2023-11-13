@@ -119,8 +119,6 @@ use SprykerSdk\Integrator\Executor\ManifestExecutor;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
 use SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutor;
 use SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutorInterface;
-use SprykerSdk\Integrator\Executor\ProcessExecutor;
-use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
 use SprykerSdk\Integrator\Executor\ReleaseGroup\DiffGenerator;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorage;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface;
@@ -156,6 +154,8 @@ use SprykerSdk\Integrator\ManifestStrategy\WireSchemaManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireTransferManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireWidgetManifestStrategy;
 use SprykerSdk\Integrator\VersionControlSystem\GitRepository;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 class IntegratorFactory
@@ -574,7 +574,7 @@ class IntegratorFactory
      */
     public function createCodeSniffStyleFileNormalizer(): FileNormalizerInterface
     {
-        return new CodeSniffStyleFileNormalizer($this->getConfig(), $this->createProcessExecutor());
+        return new CodeSniffStyleFileNormalizer($this->getConfig(), $this->createProcessRunnerService());
     }
 
     /**
@@ -582,15 +582,15 @@ class IntegratorFactory
      */
     public function createPhpCSFixerNormalizer(): FileNormalizerInterface
     {
-        return new PhpCSFixerFileNormalizer($this->getConfig(), $this->createProcessExecutor());
+        return new PhpCSFixerFileNormalizer($this->getConfig(), $this->createProcessRunnerService());
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Executor\ProcessExecutorInterface
+     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
-    public function createProcessExecutor(): ProcessExecutorInterface
+    public function createProcessRunnerService(): ProcessRunnerServiceInterface
     {
-        return new ProcessExecutor();
+        return new ProcessRunnerService();
     }
 
     /**
