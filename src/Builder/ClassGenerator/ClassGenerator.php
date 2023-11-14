@@ -14,10 +14,10 @@ use PhpParser\Builder\Namespace_;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Name;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
-use SprykerSdk\Integrator\Common\UtilText\TextCaseHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
+use SprykerSdk\Utils\Infrastructure\Helper\StrHelper;
 
 class ClassGenerator implements ClassGeneratorInterface
 {
@@ -163,7 +163,7 @@ class ClassGenerator implements ClassGeneratorInterface
     {
         if (in_array($organisation, $this->config->getCoreNonSplitOrganisations())) {
             return $this->config->getVendorDirectory()
-                . sprintf($this->config->getNonSplitRepositoryPathPattern(), TextCaseHelper::camelCaseToDash($organisation, false))
+                . sprintf($this->config->getNonSplitRepositoryPathPattern(), StrHelper::camelCaseToDash($organisation, false))
                 . $module
                 . DIRECTORY_SEPARATOR;
         }

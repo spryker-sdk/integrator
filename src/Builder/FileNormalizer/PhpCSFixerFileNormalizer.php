@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\FileNormalizer;
 
 use RuntimeException;
-use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 
 class PhpCSFixerFileNormalizer implements FileNormalizerInterface
 {
@@ -26,18 +26,18 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
     protected $config;
 
     /**
-     * @var \SprykerSdk\Integrator\Executor\ProcessExecutorInterface
+     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
-    protected ProcessExecutorInterface $processExecutor;
+    protected ProcessRunnerServiceInterface $processRunner;
 
     /**
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
-     * @param \SprykerSdk\Integrator\Executor\ProcessExecutorInterface $processExecutor
+     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      */
-    public function __construct(IntegratorConfig $config, ProcessExecutorInterface $processExecutor)
+    public function __construct(IntegratorConfig $config, ProcessRunnerServiceInterface $processRunner)
     {
         $this->config = $config;
-        $this->processExecutor = $processExecutor;
+        $this->processRunner = $processRunner;
     }
 
     /**
@@ -66,13 +66,13 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
     public function normalize(array $filePaths): void
     {
         $command = [$this->getCSFixPath(), ...$this->getAbsoluteFilePaths($filePaths)];
-        $process = $this->processExecutor->execute($command);
+        $process = $this->processRunner->run($command);
 
         // TODO remove when phpcbf will be able to fix all issues in file during the one iteration
         if (defined('TEST_INTEGRATOR_MODE') && TEST_INTEGRATOR_MODE === 'true' && $process->getExitCode() !== 0) {
-            $process = $this->processExecutor->execute($command);
+            $process = $this->processRunner->run($command);
             if ($process->getExitCode() !== 0) {
-                $process = $this->processExecutor->execute($command);
+                $process = $this->processRunner->run($command);
             }
         }
 
