@@ -21,11 +21,6 @@ use SprykerSdk\Integrator\VersionControlSystem\GitRepository;
 class DiffGenerator implements DiffGeneratorInterface
 {
     /**
-     * @var string
-     */
-    protected const DIFF_TO_DISPLAY_FILE_NAME = 'diff_to_display.diff';
-
-    /**
      * @var int
      */
     protected const GIT_ERROR_CODE_BRANCH_NOT_EXISTS = 128;
@@ -104,7 +99,13 @@ class DiffGenerator implements DiffGeneratorInterface
                 return;
             }
 
-            $this->storeDiff($releaseGroupId, $commandArgumentsTransfer->getBranchToCompareOrFail(), $commandArgumentsTransfer->getIntegrationBranchOrFail(), $inputOutput);
+            $this->storeDiff(
+                $releaseGroupId,
+                $commandArgumentsTransfer->getBranchToCompareOrFail(),
+                $commandArgumentsTransfer->getIntegrationBranchOrFail(),
+                $commandArgumentsTransfer->getDiffFileNameOrFail(),
+                $inputOutput
+            );
             $this->gitClean($currentBranchName);
         } catch (GitException $exception) {
             throw new RuntimeException(
@@ -133,6 +134,7 @@ class DiffGenerator implements DiffGeneratorInterface
         int $releaseGroupId,
         string $branchToCompare,
         string $integrationBranch,
+        string $diffFileName,
         InputOutputInterface $inputOutput
     ): void {
         if ($this->gitRepository->hasChanges()) {
@@ -149,9 +151,9 @@ class DiffGenerator implements DiffGeneratorInterface
             $gitDiffOutput = $this->gitRepository->getDiff('origin/' . $branchToCompare, $integrationBranch);
         }
 
-        $this->bucketFileStorage->addFile($releaseGroupId . DIRECTORY_SEPARATOR . static::DIFF_TO_DISPLAY_FILE_NAME, $gitDiffOutput);
+        $this->bucketFileStorage->addFile($releaseGroupId . DIRECTORY_SEPARATOR . $diffFileName, $gitDiffOutput);
         $inputOutput->writeln($gitDiffOutput, InputOutputInterface::VERBOSE);
-        $inputOutput->writeln(sprintf('%s was uploaded to the bucket', static::DIFF_TO_DISPLAY_FILE_NAME));
+        $inputOutput->writeln(sprintf('%s was uploaded to the bucket', $diffFileName));
     }
 
     /**
