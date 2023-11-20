@@ -104,7 +104,7 @@ class DiffGenerator implements DiffGeneratorInterface
                 $commandArgumentsTransfer->getBranchToCompareOrFail(),
                 $commandArgumentsTransfer->getIntegrationBranchOrFail(),
                 $commandArgumentsTransfer->getDiffFileNameOrFail(),
-                $inputOutput
+                $inputOutput,
             );
             $this->gitClean($currentBranchName);
         } catch (GitException $exception) {
@@ -124,6 +124,7 @@ class DiffGenerator implements DiffGeneratorInterface
      * @param int $releaseGroupId
      * @param string $branchToCompare
      * @param string $integrationBranch
+     * @param string $diffFileName
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $inputOutput
      *
      * @throws \RuntimeException

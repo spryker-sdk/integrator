@@ -269,7 +269,7 @@ class IntegratorCommandArgumentsTransfer
     public function getDiffFileNameOrFail(): string
     {
         if ($this->diffFileName === null) {
-            $this->throwNullValueException(static::INTEGRATION_BRANCH);
+            $this->throwNullValueException(static::DIFF_FILE_NAME);
         }
 
         return (string)$this->diffFileName;

@@ -208,6 +208,7 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $transfer->setReleaseGroupId(1);
         $transfer->setBranchToCompare('master');
         $transfer->setIntegrationBranch('integration-branch');
+        $transfer->setDiffFileName('diff_file.diff');
 
         return $transfer;
     }
