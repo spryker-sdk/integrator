@@ -126,7 +126,7 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
      *
      * @return void
      */
-    protected function applyValue(string $configFileName, string $target, mixed $value): void
+    protected function applyValue(string $configFileName, string $target, $value): void
     {
         $fileInformationTransfer = $this->fileBuilderFacade->loadFile($configFileName);
         $originalExpressions = $this->expressionsValueExtractor->extractExpressions($fileInformationTransfer->getOriginalTokenTree());
