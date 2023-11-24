@@ -19,7 +19,6 @@ class ValueExtractorStrategyCollection
      * @var array<string>
      */
     protected const STRATEGIES = [
-        ClassSourceFetchValueExtractorStrategy::class,
         ClassConstFetchValueExtractorStrategy::class,
         ConstFetchValueExtractorStrategy::class,
         FloatValueExtractorStrategy::class,
@@ -32,8 +31,6 @@ class ValueExtractorStrategyCollection
         FuncCallValueExtractor::class,
         TernaryValueExtractorStrategy::class,
         MethodCallExtractorStrategy::class,
-        StaticFuncCallValueExtractorStrategy::class,
-        AssignValueExtractor::class,
         VariableExtractorStrategy::class,
         DefaultIsLiteralExtractorStrategy::class,
     ];
