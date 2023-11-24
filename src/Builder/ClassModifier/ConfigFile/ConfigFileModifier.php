@@ -43,10 +43,13 @@ class ConfigFileModifier implements ConfigFileModifierInterface
     ): FileInformationTransfer {
         $valueStm = $this->expressionPartialParser->parse(sprintf('$var = %s;', $value));
 
-        /** @var \PhpParser\Node\Stmt\Class_|null $node */
+        /** @var \PhpParser\Node\Expr\ArrayItem|null $arrayItem */
         $arrayItem = (new NodeFinder())->findFirst($valueStm, function (Node $node) {
             return $node instanceof ArrayItem;
         });
+        if (!$arrayItem) {
+            return $fileInformationTransfer;
+        }
 
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new AddArrayItemToEnvConfigVisitor($target, $arrayItem));

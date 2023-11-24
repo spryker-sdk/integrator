@@ -27,7 +27,7 @@ class AddArrayItemToEnvConfigVisitor extends NodeVisitorAbstract
     protected $target;
 
     /**
-     * @var array<\PhpParser\Node>
+     * @var \PhpParser\Node\Expr\ArrayItem
      */
     protected $value;
 

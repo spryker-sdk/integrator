@@ -71,8 +71,10 @@ class ValueExtractorStrategyCollection
             return $this->strategiesCache;
         }
 
-        foreach (static::STRATEGIES as $strategy) {
-            $this->strategiesCache[] = new $strategy();
+        foreach (static::STRATEGIES as $strategyClass) {
+            /** @var \SprykerSdk\Integrator\Builder\Extractor\ValueExtractor\ValueExtractorStrategyInterface $strategy */
+            $strategy = new $strategyClass();
+            $this->strategiesCache[] = $strategy;
         }
 
         return $this->strategiesCache;

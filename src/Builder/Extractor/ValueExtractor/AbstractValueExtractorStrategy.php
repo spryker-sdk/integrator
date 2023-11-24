@@ -108,6 +108,6 @@ class AbstractValueExtractorStrategy
      */
     protected function isConstant(string $value): bool
     {
-        return strpos($value, '::');
+        return (bool)strpos($value, '::');
     }
 }

@@ -39,7 +39,10 @@ class ArrayDimValueExtractor implements ValueExtractorStrategyInterface
         $variable = $expression->var;
         /** @var \PhpParser\Node\Identifier $varName */
         $varName = $variable->name;
-        $key = $valueExtractorStrategyCollection->execute($expression->dim);
+        /** @var \PhpParser\Node\Expr $dim */
+        $dim = $expression->dim;
+
+        $key = $valueExtractorStrategyCollection->execute($dim);
 
         return new ExtractedValueTransfer(sprintf('$%s[%s]', $varName, $key->getValue()), true);
     }

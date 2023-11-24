@@ -49,8 +49,13 @@ class StaticFuncCallValueExtractorStrategy extends AbstractValueExtractorStrateg
             }
         }
 
+        /** @var \PhpParser\Node\Name $class */
+        $class = $expression->class;
+        /** @var \PhpParser\Node\Identifier $name */
+        $name = $expression->name;
+
         return new ExtractedValueTransfer(
-            sprintf('%s::%s(%s)', $this->getCalleeName($expression->class->parts), $expression->name->name, implode(', ', $arguments)),
+            sprintf('%s::%s(%s)', $this->getCalleeName($class->parts), $name->name, implode(', ', $arguments)),
             true,
         );
     }

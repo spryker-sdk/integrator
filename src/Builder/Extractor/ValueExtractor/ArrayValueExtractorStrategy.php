@@ -38,6 +38,7 @@ class ArrayValueExtractorStrategy extends AbstractValueExtractorStrategy impleme
         ValueExtractorStrategyCollection $valueExtractorStrategyCollection
     ): ExtractedValueTransfer {
         $array = [];
+        /** @var \PhpParser\Node\Expr\ArrayItem $item */
         foreach ($expression->items as $key => $item) {
             if (!$item->key) {
                 $array[] = $valueExtractorStrategyCollection->execute($item->value)->getValue();

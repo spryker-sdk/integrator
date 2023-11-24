@@ -35,6 +35,6 @@ class VariableExtractorStrategy implements ValueExtractorStrategyInterface
         Expr $expression,
         ValueExtractorStrategyCollection $valueExtractorStrategyCollection
     ): ExtractedValueTransfer {
-        return new ExtractedValueTransfer(sprintf('$%s', (string)$expression->name), true);
+        return new ExtractedValueTransfer(sprintf('$%s', is_string($expression->name) ? $expression->name : 'var'), true);
     }
 }
