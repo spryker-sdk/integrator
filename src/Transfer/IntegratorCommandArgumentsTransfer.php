@@ -46,6 +46,11 @@ class IntegratorCommandArgumentsTransfer
     /**
      * @var string
      */
+    public const DIFF_FILE_NAME = 'diffFileName';
+
+    /**
+     * @var string
+     */
     public const MODULES = 'modules';
 
     /**
@@ -77,6 +82,11 @@ class IntegratorCommandArgumentsTransfer
      * @var string|null
      */
     protected ?string $integrationBranch = null;
+
+    /**
+     * @var string|null
+     */
+    protected ?string $diffFileName = null;
 
     /**
      * @var array<\SprykerSdk\Integrator\Transfer\ModuleTransfer>
@@ -233,6 +243,36 @@ class IntegratorCommandArgumentsTransfer
         }
 
         return (string)$this->integrationBranch;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDiffFileName(): ?string
+    {
+        return $this->diffFileName;
+    }
+
+    /**
+     * @param string|null $diffFileName
+     *
+     * @return void
+     */
+    public function setDiffFileName(?string $diffFileName): void
+    {
+        $this->diffFileName = $diffFileName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDiffFileNameOrFail(): string
+    {
+        if ($this->diffFileName === null) {
+            $this->throwNullValueException(static::DIFF_FILE_NAME);
+        }
+
+        return (string)$this->diffFileName;
     }
 
     /**
