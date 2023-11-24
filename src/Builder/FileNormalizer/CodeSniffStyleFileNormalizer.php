@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\FileNormalizer;
 
 use RuntimeException;
-use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 
 class CodeSniffStyleFileNormalizer implements FileNormalizerInterface
 {
@@ -31,18 +31,18 @@ class CodeSniffStyleFileNormalizer implements FileNormalizerInterface
     protected $config;
 
     /**
-     * @var \SprykerSdk\Integrator\Executor\ProcessExecutorInterface
+     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
-    protected ProcessExecutorInterface $processExecutor;
+    protected ProcessRunnerServiceInterface $processRunner;
 
     /**
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
-     * @param \SprykerSdk\Integrator\Executor\ProcessExecutorInterface $processExecutor
+     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
      */
-    public function __construct(IntegratorConfig $config, ProcessExecutorInterface $processExecutor)
+    public function __construct(IntegratorConfig $config, ProcessRunnerServiceInterface $processRunner)
     {
         $this->config = $config;
-        $this->processExecutor = $processExecutor;
+        $this->processRunner = $processRunner;
     }
 
     /**
@@ -72,7 +72,7 @@ class CodeSniffStyleFileNormalizer implements FileNormalizerInterface
     {
         $projectConsolePath = $this->getProjectConsolePath();
         foreach ($this->getProjectRelativeFilePaths($filePaths) as $filePath) {
-            $process = $this->processExecutor->execute([$projectConsolePath, static::PHP_CS_FIX_COMMAND, $filePath]);
+            $process = $this->processRunner->run([$projectConsolePath, static::PHP_CS_FIX_COMMAND, $filePath]);
 
             if ($process->getExitCode() > 0 && $process->getErrorOutput() !== '') {
                 throw new RuntimeException($process->getErrorOutput());

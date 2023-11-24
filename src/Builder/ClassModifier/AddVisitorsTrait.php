@@ -27,8 +27,8 @@ trait AddVisitorsTrait
             $nodeTraverser->addVisitor($visitor);
         }
 
-        $classInformationTransfer->setClassTokenTree(
-            $nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()),
+        $classInformationTransfer->setTokenTree(
+            $nodeTraverser->traverse($classInformationTransfer->getTokenTree()),
         );
 
         return $classInformationTransfer;

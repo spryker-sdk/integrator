@@ -13,9 +13,9 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSniffStyleFileNormalizer;
 use SprykerSdk\Integrator\Builder\FileStorage\FileStorage;
-use SprykerSdk\Integrator\Executor\ProcessExecutor;
-use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Process\Process;
 
 class CodeSniffStyleFileNormalizerTest extends TestCase
@@ -27,7 +27,7 @@ class CodeSniffStyleFileNormalizerTest extends TestCase
     {
         // Arrange
         $processExecutorMock = $this->createProcessExecutorMock(0, '');
-        $processExecutorMock->expects($this->once())->method('execute')->with(
+        $processExecutorMock->expects($this->once())->method('run')->with(
             $this->callback(function ($command) {
                 return $command[1] === 'code:sniff:style -f';
             }),
@@ -85,13 +85,13 @@ class CodeSniffStyleFileNormalizerTest extends TestCase
      * @param int $exitCode
      * @param string $errorOutput
      *
-     * @return \SprykerSdk\Integrator\Executor\ProcessExecutorInterface
+     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
-    protected function createProcessExecutorMock(int $exitCode, string $errorOutput = ''): ProcessExecutorInterface
+    protected function createProcessExecutorMock(int $exitCode, string $errorOutput = ''): ProcessRunnerServiceInterface
     {
         $processMock = $this->createProcessMock($exitCode, $errorOutput);
-        $processExecutorMock = $this->createMock(ProcessExecutor::class);
-        $processExecutorMock->method('execute')->willReturn($processMock);
+        $processExecutorMock = $this->createMock(ProcessRunnerService::class);
+        $processExecutorMock->method('run')->willReturn($processMock);
 
         return $processExecutorMock;
     }

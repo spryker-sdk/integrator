@@ -111,7 +111,7 @@ class CommonClassModifier implements CommonClassModifierInterface
 
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new AddMethodVisitor($methodSyntaxTree));
-        $classInformationTransfer->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+        $classInformationTransfer->setTokenTree($nodeTraverser->traverse($classInformationTransfer->getTokenTree()));
 
         return $classInformationTransfer;
     }
@@ -156,7 +156,7 @@ class CommonClassModifier implements CommonClassModifierInterface
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new ReplaceNodePropertiesByNameVisitor($targetMethodName, $methodNodeProperties));
         $classInformationTransfer
-            ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+            ->setTokenTree($nodeTraverser->traverse($classInformationTransfer->getTokenTree()));
 
         return $classInformationTransfer;
     }
@@ -172,7 +172,7 @@ class CommonClassModifier implements CommonClassModifierInterface
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new RemoveMethodVisitor($methodNameToRemove));
         $classInformationTransfer
-            ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+            ->setTokenTree($nodeTraverser->traverse($classInformationTransfer->getTokenTree()));
 
         return $classInformationTransfer;
     }
@@ -234,7 +234,7 @@ class CommonClassModifier implements CommonClassModifierInterface
         $nodeTraverser->addVisitor(new AddStatementToStatementListVisitor($methodName, $arrayItems, $nodeComparer));
 
         return $classInformationTransfer
-                ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+                ->setTokenTree($nodeTraverser->traverse($classInformationTransfer->getTokenTree()));
     }
 
     /**

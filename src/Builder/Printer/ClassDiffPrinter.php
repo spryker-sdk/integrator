@@ -36,20 +36,20 @@ class ClassDiffPrinter implements ClassDiffPrinterInterface
     public function printDiff(ClassInformationTransfer $classInformationTransfer): string
     {
         $originalCode = '';
-        if ($classInformationTransfer->getOriginalClassTokenTree()) {
+        if ($classInformationTransfer->getOriginalTokenTree()) {
             $code = $this->classPrinter->printFormatPreserving(
-                $classInformationTransfer->getClassTokenTree(),
-                $classInformationTransfer->getOriginalClassTokenTree(),
+                $classInformationTransfer->getTokenTree(),
+                $classInformationTransfer->getOriginalTokenTree(),
                 $classInformationTransfer->getTokens(),
             );
             $originalCode = $this->classPrinter->printFormatPreserving(
-                $classInformationTransfer->getOriginalClassTokenTree(),
-                $classInformationTransfer->getOriginalClassTokenTree(),
+                $classInformationTransfer->getOriginalTokenTree(),
+                $classInformationTransfer->getOriginalTokenTree(),
                 $classInformationTransfer->getTokens(),
             );
         } else {
             $code = $this->classPrinter->prettyPrintFile(
-                $classInformationTransfer->getClassTokenTree(),
+                $classInformationTransfer->getTokenTree(),
             );
         }
 

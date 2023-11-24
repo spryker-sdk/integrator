@@ -57,7 +57,7 @@ class WireGlueRelationshipModifier extends AbstractGlueRelationshipModifier impl
         $methodBody = $this->getMethodBody($methodNode, $classNameToAdd, $keyClass, $keyConst);
 
         $this->nodeTraverser->addVisitor(new MethodBodyExtendVisitor($targetMethodName, $methodBody));
-        $classInformationTransfer->setClassTokenTree($this->nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+        $classInformationTransfer->setTokenTree($this->nodeTraverser->traverse($classInformationTransfer->getTokenTree()));
 
         return $classInformationTransfer;
     }

@@ -154,8 +154,8 @@ abstract class BaseTestCase extends PHPUnitTestCase
         $originalSyntaxTree = $parser->parse(file_get_contents($filePath));
         $syntaxTree = $this->traverseOriginalSyntaxTree($originalSyntaxTree);
 
-        $classInformationTransfer->setClassTokenTree($syntaxTree)
-            ->setOriginalClassTokenTree($originalSyntaxTree);
+        $classInformationTransfer->setTokenTree($syntaxTree)
+            ->setOriginalTokenTree($originalSyntaxTree);
 
         return $classInformationTransfer;
     }

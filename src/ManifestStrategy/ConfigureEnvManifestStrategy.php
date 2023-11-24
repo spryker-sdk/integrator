@@ -9,10 +9,14 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\ManifestStrategy;
 
+use SprykerSdk\Integrator\Builder\ClassModifier\ConfigFile\ConfigFileModifierInterface;
+use SprykerSdk\Integrator\Builder\Extractor\ExpressionExtractorInterface;
+use SprykerSdk\Integrator\Builder\FileBuilderFacade;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Exception\ManifestApplyingException;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Integrator\Transfer\FileInformationTransfer;
 
 class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
 {
@@ -22,17 +26,41 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
     protected $configurationEnvironmentStrategies;
 
     /**
+     * @var \SprykerSdk\Integrator\Builder\Extractor\ExpressionExtractorInterface
+     */
+    protected ExpressionExtractorInterface $expressionsValueExtractor;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\ClassModifier\ConfigFile\ConfigFileModifierInterface
+     */
+    protected ConfigFileModifierInterface $configFileModifier;
+
+    /**
+     * @var \SprykerSdk\Integrator\Builder\FileBuilderFacade
+     */
+    protected FileBuilderFacade $fileBuilderFacade;
+
+    /**
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
      * @param \SprykerSdk\Integrator\Helper\ClassHelperInterface $classHelper
+     * @param \SprykerSdk\Integrator\Builder\Extractor\ExpressionExtractorInterface $expressionsValueExtractor
+     * @param \SprykerSdk\Integrator\Builder\ClassModifier\ConfigFile\ConfigFileModifierInterface $configFileModifier
+     * @param \SprykerSdk\Integrator\Builder\FileBuilderFacade $fileBuilderFacade
      * @param array<array-key, \SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ConfigurationEnvironmentStrategyInterface> $configurationEnvironmentBuilders
      */
     public function __construct(
         IntegratorConfig $config,
         ClassHelperInterface $classHelper,
+        ExpressionExtractorInterface $expressionsValueExtractor,
+        ConfigFileModifierInterface $configFileModifier,
+        FileBuilderFacade $fileBuilderFacade,
         array $configurationEnvironmentBuilders
     ) {
         parent::__construct($config, $classHelper);
 
+        $this->fileBuilderFacade = $fileBuilderFacade;
+        $this->configFileModifier = $configFileModifier;
+        $this->expressionsValueExtractor = $expressionsValueExtractor;
         $this->configurationEnvironmentStrategies = $configurationEnvironmentBuilders;
     }
 
@@ -77,8 +105,8 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
                 $configFileName,
             ));
         }
-        if (!$isDry && !$this->targetExists($target)) {
-            file_put_contents($configFileName, $this->getConfigAppendData($target, $value), FILE_APPEND);
+        if (!$isDry) {
+            $this->applyValue($configFileName, $target, $value);
         }
 
         $inputOutput->writeln(sprintf(
@@ -92,15 +120,88 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
     }
 
     /**
+     * @param string $configFileName
+     * @param string $target
+     * @param mixed $value
+     *
+     * @return void
+     */
+    protected function applyValue(string $configFileName, string $target, mixed $value): void
+    {
+        $fileInformationTransfer = $this->fileBuilderFacade->loadFile($configFileName);
+        $originalExpressions = $this->expressionsValueExtractor->extractExpressions($fileInformationTransfer->getOriginalTokenTree());
+
+        if (!array_key_exists($target, $originalExpressions)) {
+            file_put_contents($configFileName, $this->getConfigAppendData($target, $value), FILE_APPEND);
+
+            return;
+        }
+
+        if (!is_array($value) || !empty($value[IntegratorConfig::MANIFEST_KEY_IS_LITERAL])) {
+            return;
+        }
+
+        $this->applyDiff(
+            $fileInformationTransfer,
+            $target,
+            $this->compareArrayExpression($value, $originalExpressions, $target),
+        );
+
+        $this->fileBuilderFacade->storeFile($fileInformationTransfer);
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Transfer\FileInformationTransfer $fileInformationTransfer
+     * @param string $target
+     * @param array $diffValueItems
+     *
+     * @return void
+     */
+    protected function applyDiff(FileInformationTransfer $fileInformationTransfer, string $target, array $diffValueItems): void
+    {
+        foreach ($diffValueItems as $item) {
+            if (!is_array($item)) {
+                $item = [$item];
+            }
+
+            $this->configFileModifier->addArrayItemToEnvConfig(
+                $fileInformationTransfer,
+                $target,
+                $this->prepareValue($item),
+            );
+        }
+    }
+
+    /**
+     * @param array $manifestValue
+     * @param array $originalExpressions
      * @param string $target
      *
-     * @return bool
+     * @return array
      */
-    protected function targetExists(string $target): bool
+    protected function compareArrayExpression(array $manifestValue, array $originalExpressions, string $target): array
     {
-        $configFileContent = (string)file_get_contents($this->config->getConfigPath());
+        $diff = [];
+        foreach ($manifestValue as $key => $value) {
+            if (is_int($key)) {
+                if (
+                    isset($originalExpressions[$target]) &&
+                    is_array($originalExpressions[$target]) &&
+                    !in_array($value, $originalExpressions[$target], true)
+                ) {
+                    $diff[] = $value;
+                }
 
-        return mb_strpos($configFileContent, $this->getConfigTarget($target)) !== false;
+                continue;
+            }
+
+            if (isset($originalExpressions[$target]) && isset($originalExpressions[$target][$key])) {
+                continue;
+            }
+            $diff[] = [$key => $value];
+        }
+
+        return $diff;
     }
 
     /**
@@ -117,16 +218,6 @@ class ConfigureEnvManifestStrategy extends AbstractManifestStrategy
         $data .= ';' . PHP_EOL;
 
         return $data;
-    }
-
-    /**
-     * @param string $target
-     *
-     * @return string
-     */
-    protected function getConfigTarget(string $target): string
-    {
-        return '$' . $this->config->getConfigVariableName() . '[' . $target . ']';
     }
 
     /**
