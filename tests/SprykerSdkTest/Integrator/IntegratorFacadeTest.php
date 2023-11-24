@@ -380,8 +380,6 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
         $this->assertFileExists($classPath);
         $this->assertFileExists($testFilePath);
 
-        file_put_contents('envConfig.php', file_get_contents($classPath));
-
         $this->assertSame(trim(file_get_contents($testFilePath)), trim(file_get_contents($classPath)));
 
         $this->assertDuplicatedTargetDoesNotExistInFile(
