@@ -26,17 +26,23 @@ class ClassPrinter extends Standard
      */
     protected function isMultiline(array $nodes): bool
     {
-        foreach ($nodes as $node) {
-            if ($node === null) {
-                continue;
-            }
-            $text = $this->origTokens->getTokenCode($node->getStartTokenPos() - 1, $node->getEndTokenPos() + 1, 0);
-            if (strpos($text, "\n") === false) {
-                return false;
-            }
+        if (!$nodes) {
+            return false;
         }
 
-        return true;
+        if (count($nodes) === 1) {
+            $node = current($nodes);
+            $startPos = $node->getStartTokenPos() - 1;
+            $endPos = $node->getEndTokenPos() + 1;
+            $text = $this->origTokens->getTokenCode($startPos, $endPos, 0);
+            if (false === strpos($text, "\n")) {
+                return false;
+            }
+
+            return true;
+        }
+
+        return parent::isMultiline($nodes);
     }
 
     /**
