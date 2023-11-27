@@ -47,15 +47,7 @@ class ConstFetchValueExtractorStrategy implements ValueExtractorStrategyInterfac
      */
     protected function filterValue($value): bool
     {
-        if ($value === 'true') {
-            return true;
-        }
-
-        if ($value === 'false') {
-            return false;
-        }
-
-        return (bool)$value;
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
