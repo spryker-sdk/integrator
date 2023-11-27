@@ -27,6 +27,9 @@ class ClassPrinter extends Standard
     protected function isMultiline(array $nodes): bool
     {
         foreach ($nodes as $node) {
+            if ($node === null) {
+                continue;
+            }
             $text = $this->origTokens->getTokenCode($node->getStartTokenPos() - 1, $node->getEndTokenPos() + 1, 0);
             if (strpos($text, "\n") === false) {
                 return false;
