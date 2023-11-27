@@ -30,7 +30,7 @@ class ClassPrinter extends Standard
             return false;
         }
 
-        if (count($nodes) === 1) {
+        if (count($nodes) === 1 && current($nodes) !== null) {
             $node = current($nodes);
             $startPos = $node->getStartTokenPos() - 1;
             $endPos = $node->getEndTokenPos() + 1;
