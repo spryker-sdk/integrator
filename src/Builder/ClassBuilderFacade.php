@@ -42,8 +42,8 @@ class ClassBuilderFacade implements ClassBuilderFacadeInterface
     public function storeClass(ClassInformationTransfer $classInformationTransfer): bool
     {
         return $this->getFactory()
-            ->createClassFileWriter()
-            ->storeClass($classInformationTransfer);
+            ->createFileWriter()
+            ->storeFile($classInformationTransfer);
     }
 
     /**

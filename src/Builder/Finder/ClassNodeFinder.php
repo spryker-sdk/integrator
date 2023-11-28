@@ -27,7 +27,7 @@ class ClassNodeFinder implements ClassNodeFinderInterface
     public function findMethodNode(ClassInformationTransfer $classInformationTransfer, string $targetMethodName): ?ClassMethod
     {
         /** @var \PhpParser\Node\Stmt\ClassMethod|null $node */
-        $node = (new NodeFinder())->findFirst($classInformationTransfer->getClassTokenTree(), function (Node $node) use ($targetMethodName) {
+        $node = (new NodeFinder())->findFirst($classInformationTransfer->getTokenTree(), function (Node $node) use ($targetMethodName) {
             return $node instanceof ClassMethod
                 && $node->name->toString() === $targetMethodName;
         });
@@ -44,7 +44,7 @@ class ClassNodeFinder implements ClassNodeFinderInterface
     public function findConstantNode(ClassInformationTransfer $classInformationTransfer, string $targetNodeName): ?ClassConst
     {
         /** @var \PhpParser\Node\Stmt\ClassConst|null $node */
-        $node = (new NodeFinder())->findFirst($classInformationTransfer->getClassTokenTree(), function (Node $node) use ($targetNodeName) {
+        $node = (new NodeFinder())->findFirst($classInformationTransfer->getTokenTree(), function (Node $node) use ($targetNodeName) {
             if (!($node instanceof ClassConst)) {
                 return false;
             }
@@ -69,7 +69,7 @@ class ClassNodeFinder implements ClassNodeFinderInterface
     public function findClassNode(ClassInformationTransfer $classInformationTransfer): ?Class_
     {
         /** @var \PhpParser\Node\Stmt\Class_|null $node */
-        $node = (new NodeFinder())->findFirst($classInformationTransfer->getClassTokenTree(), function (Node $node) {
+        $node = (new NodeFinder())->findFirst($classInformationTransfer->getTokenTree(), function (Node $node) {
             return $node instanceof Class_;
         });
 
@@ -85,7 +85,7 @@ class ClassNodeFinder implements ClassNodeFinderInterface
     public function hasClassMethodName(ClassInformationTransfer $classInformationTransfer, string $methodName): bool
     {
         /** @var \PhpParser\Node\Stmt\ClassMethod $node */
-        $node = (new NodeFinder())->findFirst($classInformationTransfer->getClassTokenTree(), function (Node $node) use ($methodName) {
+        $node = (new NodeFinder())->findFirst($classInformationTransfer->getTokenTree(), function (Node $node) use ($methodName) {
             return $node instanceof ClassMethod && $node->name->toString() === $methodName;
         });
         if ($node) {

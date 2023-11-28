@@ -10,43 +10,18 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\ClassLoader;
 
 use Composer\Autoload\ClassLoader as ComposerClassLoader;
-use PhpParser\Lexer;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\CloningVisitor;
-use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\Parser;
 use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
 
-class ClassLoader implements ClassLoaderInterface
+class ClassLoader extends AbstractLoader implements ClassLoaderInterface
 {
     /**
      * @var \Composer\Autoload\ClassLoader|null
      */
     private static ?ComposerClassLoader $composerClassLoader = null;
-
-    /**
-     * @var \PhpParser\Parser
-     */
-    protected $parser;
-
-    /**
-     * @var \PhpParser\Lexer
-     */
-    protected $lexer;
-
-    /**
-     * @param \PhpParser\Parser $parser
-     * @param \PhpParser\Lexer $lexer
-     */
-    public function __construct(Parser $parser, Lexer $lexer)
-    {
-        $this->parser = $parser;
-        $this->lexer = $lexer;
-    }
 
     /**
      * @param string $className
@@ -74,8 +49,8 @@ class ClassLoader implements ClassLoaderInterface
         $originalSyntaxTree = $this->parser->parse($fileContents);
         $syntaxTree = $originalSyntaxTree ? $this->traverseOriginalSyntaxTree($originalSyntaxTree) : [];
 
-        $classInformationTransfer->setClassTokenTree($syntaxTree)
-            ->setOriginalClassTokenTree($originalSyntaxTree)
+        $classInformationTransfer->setTokenTree($syntaxTree)
+            ->setOriginalTokenTree($originalSyntaxTree)
             ->setTokens($this->lexer->getTokens())
             ->setFilePath(realpath($fileName));
 
@@ -114,20 +89,6 @@ class ClassLoader implements ClassLoaderInterface
         }
 
         return null;
-    }
-
-    /**
-     * @param array<\PhpParser\Node\Stmt> $originalSyntaxTree
-     *
-     * @return array<\PhpParser\Node>
-     */
-    protected function traverseOriginalSyntaxTree(array $originalSyntaxTree): array
-    {
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new CloningVisitor());
-        $nodeTraverser->addVisitor(new NameResolver());
-
-        return $nodeTraverser->traverse($originalSyntaxTree);
     }
 
     /**

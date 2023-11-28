@@ -171,14 +171,14 @@ class AddPluginToPluginCollectionVisitor extends NodeVisitorAbstract
         /**
          * @var array<\PhpParser\Node\Stmt\ClassMethod> $possibleNodeMethods
          */
-        $possibleNodeMethods = (new NodeFinder())->find($returnClass->getClassTokenTree(), function (Node $node) {
+        $possibleNodeMethods = (new NodeFinder())->find($returnClass->getTokenTree(), function (Node $node) {
             return $node instanceof ClassMethod && $node->flags === Class_::MODIFIER_PUBLIC;
         });
 
         /**
          * @var array<\PhpParser\Node\Stmt\Class_> $sourceNodeInterfaces
          */
-        $sourceNodeInterfaces = (new NodeFinder())->find($sourceClass->getClassTokenTree(), function (Node $node) {
+        $sourceNodeInterfaces = (new NodeFinder())->find($sourceClass->getTokenTree(), function (Node $node) {
             return $node instanceof Class_ && $node->implements;
         });
         if (!$sourceNodeInterfaces) {

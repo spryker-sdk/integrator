@@ -171,7 +171,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         $nodeTraverser->addVisitor(new AddMethodVisitor($classMethod));
 
         return $classInformationTransfer
-            ->setClassTokenTree($nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+            ->setTokenTree($nodeTraverser->traverse($classInformationTransfer->getTokenTree()));
     }
 
     /**

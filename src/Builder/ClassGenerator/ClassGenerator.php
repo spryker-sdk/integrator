@@ -93,7 +93,7 @@ class ClassGenerator implements ClassGeneratorInterface
 
         $syntaxTree = [$classNamespaceBuilder->getNode()];
 
-        $classInformationTransfer->setClassTokenTree($syntaxTree)
+        $classInformationTransfer->setTokenTree($syntaxTree)
             ->setFilePath(
                 $moduleDir
                 . '/src'

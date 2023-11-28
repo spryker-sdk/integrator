@@ -80,7 +80,20 @@ class ArrayConfigurationEnvironmentStrategy implements ConfigurationEnvironmentS
      */
     protected function isComplicatedExpression(string $expression): bool
     {
-        return (bool)preg_match('/[\(\)\?]/', $expression);
+        return (bool)preg_match('/[\(\)\?]/', $expression) || $this->isClassIdentifier($expression);
+    }
+
+    /**
+     * @param string $expression
+     *
+     * @return bool
+     */
+    protected function isClassIdentifier(string $expression): bool
+    {
+        $containsBackslash = strpos($expression, '\\') !== false;
+        $containsDoubleColon = strpos($expression, '::') !== false;
+
+        return $containsBackslash && $containsDoubleColon;
     }
 
     /**
