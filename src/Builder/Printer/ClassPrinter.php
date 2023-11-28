@@ -35,11 +35,8 @@ class ClassPrinter extends Standard
             $startPos = $node->getStartTokenPos() - 1;
             $endPos = $node->getEndTokenPos() + 1;
             $text = $this->origTokens->getTokenCode($startPos, $endPos, 0);
-            if (strpos($text, "\n") === false) {
-                return false;
-            }
 
-            return true;
+            return strpos($text, "\n") !== false;
         }
 
         return parent::isMultiline($nodes);
