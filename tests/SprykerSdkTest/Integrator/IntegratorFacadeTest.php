@@ -570,6 +570,8 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
         // Arrange
         $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
 
+        file_put_contents($this->getTestTmpDirPath() . '/integrator.lock', 'test');
+
         // Act
         $this->createIntegratorFacade()->runCleanLock($ioAdapter);
 
