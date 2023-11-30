@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SprykerSdkTest\Integrator\IntegratorLock;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockCleaner;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReader;
