@@ -10,14 +10,10 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\IntegratorLock;
 
 use SprykerSdk\Integrator\IntegratorConfig;
+use Throwable;
 
-class IntegratorLockWriter implements IntegratorLockWriterInterface
+class IntegratorLockCleaner implements IntegratorLockCleanerInterface
 {
-    /**
-     * @var string
-     */
-    protected const REPLACE_4_WITH_2_SPACES = '/^(  +?)\\1(?=[^ ])/m';
-
     /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
@@ -32,20 +28,16 @@ class IntegratorLockWriter implements IntegratorLockWriterInterface
     }
 
     /**
-     * @param array $lockData
-     *
      * @return int
      */
-    public function storeLock(array $lockData): int
+    public function deleteLock(): int
     {
         $lockFilePath = $this->config->getIntegratorLockFilePath();
 
-        $json = json_encode($lockData, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
-        if (!$json) {
-            return 0;
+        try {
+            return unlink($lockFilePath) === false ? 1 : 0;
+        } catch (Throwable $exception) {
+            return 1;
         }
-
-        $json = preg_replace(static::REPLACE_4_WITH_2_SPACES, '$1', $json) . PHP_EOL;
-        return file_put_contents($lockFilePath, $json) === false ? 1 : 0;
     }
 }

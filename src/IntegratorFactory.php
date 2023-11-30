@@ -136,6 +136,8 @@ use SprykerSdk\Integrator\Filter\RatingBasedManifestFilter\ManifestToModulesRati
 use SprykerSdk\Integrator\Filter\RatingBasedManifestFilter\RatingBasedManifestsFilter;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
+use SprykerSdk\Integrator\IntegratorLock\IntegratorLockCleaner;
+use SprykerSdk\Integrator\IntegratorLock\IntegratorLockCleanerInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReader;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriter;
@@ -184,6 +186,7 @@ class IntegratorFactory
         return new ModuleManifestExecutor(
             $this->createIntegratorLockReader(),
             $this->createIntegratorLockWriter(),
+            $this->createIntegratorLockCleaner(),
             $this->createRepositoryManifestReader(),
             $this->createManifestExecutor(),
             $this->createComposerLockReader(),
@@ -239,6 +242,14 @@ class IntegratorFactory
     public function createIntegratorLockWriter(): IntegratorLockWriterInterface
     {
         return new IntegratorLockWriter($this->getConfig());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\IntegratorLock\IntegratorLockCleanerInterface
+     */
+    public function createIntegratorLockCleaner(): IntegratorLockCleanerInterface
+    {
+        return new IntegratorLockCleaner($this->getConfig());
     }
 
     /**

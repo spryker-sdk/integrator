@@ -35,4 +35,11 @@ interface ModuleManifestExecutorInterface
         InputOutputInterface $input,
         IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
     ): void;
+
+    /**
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
+     *
+     * @return void
+     */
+    public function runCleanLock(InputOutputInterface $input): void;
 }
