@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\IntegratorLock;
 
 use SprykerSdk\Integrator\IntegratorConfig;
-use Throwable;
 
 class IntegratorLockCleaner implements IntegratorLockCleanerInterface
 {
