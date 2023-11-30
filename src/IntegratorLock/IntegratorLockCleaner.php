@@ -34,10 +34,6 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
     {
         $lockFilePath = $this->config->getIntegratorLockFilePath();
 
-        try {
-            return unlink($lockFilePath) === false ? 1 : 0;
-        } catch (Throwable $exception) {
-            return 1;
-        }
+        return unlink($lockFilePath) === false ? 1 : 0;
     }
 }
