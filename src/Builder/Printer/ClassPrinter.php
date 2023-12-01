@@ -18,6 +18,31 @@ use PhpParser\PrettyPrinter\Standard;
 class ClassPrinter extends Standard
 {
     /**
+     * Determine whether a list of nodes uses multiline formatting.
+     *
+     * @param (\PhpParser\Node|null)[] $nodes Node list
+     *
+     * @return bool Whether multiline formatting is used
+     */
+    protected function isMultiline(array $nodes): bool
+    {
+        if (!$nodes) {
+            return false;
+        }
+
+        if (count($nodes) === 1 && current($nodes) !== null) {
+            $node = current($nodes);
+            $startPos = $node->getStartTokenPos() - 1;
+            $endPos = $node->getEndTokenPos() + 1;
+            $text = $this->origTokens->getTokenCode($startPos, $endPos, 0);
+
+            return strpos($text, "\n") !== false;
+        }
+
+        return parent::isMultiline($nodes);
+    }
+
+    /**
      * @param \PhpParser\Node\Expr\Array_ $node
      *
      * @return string

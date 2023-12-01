@@ -52,7 +52,7 @@ class UnwireGlueRelationshipModifier extends AbstractGlueRelationshipModifier im
 
         [$keyClass, $keyConst] = explode('::', $key);
         $this->nodeTraverser->addVisitor(new RemoveGlueRelationshipFromClassListVisitor($targetMethodName, $keyClass, $keyConst, $classNameToRemove));
-        $classInformationTransfer->setClassTokenTree($this->nodeTraverser->traverse($classInformationTransfer->getClassTokenTree()));
+        $classInformationTransfer->setTokenTree($this->nodeTraverser->traverse($classInformationTransfer->getTokenTree()));
 
         return $classInformationTransfer;
     }

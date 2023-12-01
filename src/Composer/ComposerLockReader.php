@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Composer;
 
-use SprykerSdk\Integrator\Common\UtilText\TextCaseHelper;
 use SprykerSdk\Integrator\IntegratorConfig;
+use SprykerSdk\Utils\Infrastructure\Helper\StrHelper;
 
 class ComposerLockReader implements ComposerLockReaderInterface
 {
@@ -110,7 +110,7 @@ class ComposerLockReader implements ComposerLockReaderInterface
     protected function getPackageVersion(array $packageData): array
     {
         [$org, $module] = explode('/', $packageData['name']);
-        $packageName = sprintf('%s.%s', TextCaseHelper::dashToCamelCase($org), TextCaseHelper::dashToCamelCase($module));
+        $packageName = sprintf('%s.%s', StrHelper::dashToCamelCase($org), StrHelper::dashToCamelCase($module));
 
         if (strpos($packageData['version'], 'dev-') !== false) {
             $versionFromExtra = $packageData['extra']['branch-alias']['dev-master'] ?? false;

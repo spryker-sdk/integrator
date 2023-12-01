@@ -31,6 +31,8 @@ use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGenerator;
 use SprykerSdk\Integrator\Builder\ClassGenerator\ClassGeneratorInterface;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoader;
 use SprykerSdk\Integrator\Builder\ClassLoader\ClassLoaderInterface;
+use SprykerSdk\Integrator\Builder\ClassLoader\FileLoader;
+use SprykerSdk\Integrator\Builder\ClassLoader\FileLoaderInterface;
 use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilder;
 use SprykerSdk\Integrator\Builder\ClassMetadataBuilder\ClassMetadataBuilderInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassConstant\ClassConstantModifier;
@@ -63,14 +65,14 @@ use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Wi
 use SprykerSdk\Integrator\Builder\ClassModifier\ClassInstanceModifierStrategy\Wire\WireClassInstanceModifierStrategyInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\CommonClass\CommonClassModifier;
 use SprykerSdk\Integrator\Builder\ClassModifier\CommonClass\CommonClassModifierInterface;
+use SprykerSdk\Integrator\Builder\ClassModifier\ConfigFile\ConfigFileModifier;
+use SprykerSdk\Integrator\Builder\ClassModifier\ConfigFile\ConfigFileModifierInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationship\Unwire\UnwireGlueRelationshipModifier;
 use SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationship\Unwire\UnwireGlueRelationshipModifierInterface;
 use SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationship\Wire\WireGlueRelationshipModifier;
 use SprykerSdk\Integrator\Builder\ClassModifier\GlueRelationship\Wire\WireGlueRelationshipModifierInterface;
 use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolver;
 use SprykerSdk\Integrator\Builder\ClassResolver\ClassResolverInterface;
-use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriter;
-use SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriterInterface;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ArrayConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\BooleanConfigurationEnvironmentStrategy;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\ClassConfigurationEnvironmentStrategy;
@@ -87,6 +89,10 @@ use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodReturnTypeCreatorInterface;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreator;
 use SprykerSdk\Integrator\Builder\Creator\MethodStatementsCreatorInterface;
+use SprykerSdk\Integrator\Builder\Extractor\ExpressionExtractor;
+use SprykerSdk\Integrator\Builder\Extractor\ExpressionExtractorInterface;
+use SprykerSdk\Integrator\Builder\Extractor\ValueExtractor\ValueExtractorStrategyCollection;
+use SprykerSdk\Integrator\Builder\FileBuilderFacade;
 use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCompositeNormalizer;
 use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSniffStyleFileNormalizer;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface;
@@ -95,6 +101,8 @@ use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizersExecutorInterfac
 use SprykerSdk\Integrator\Builder\FileNormalizer\PhpCSFixerFileNormalizer;
 use SprykerSdk\Integrator\Builder\FileStorage\FileStorageFactory;
 use SprykerSdk\Integrator\Builder\FileStorage\FileStorageInterface;
+use SprykerSdk\Integrator\Builder\FileWriter\FileWriter;
+use SprykerSdk\Integrator\Builder\FileWriter\FileWriterInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassConstantFinder;
 use SprykerSdk\Integrator\Builder\Finder\ClassConstantFinderInterface;
 use SprykerSdk\Integrator\Builder\Finder\ClassNodeFinder;
@@ -119,8 +127,6 @@ use SprykerSdk\Integrator\Executor\ManifestExecutor;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
 use SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutor;
 use SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutorInterface;
-use SprykerSdk\Integrator\Executor\ProcessExecutor;
-use SprykerSdk\Integrator\Executor\ProcessExecutorInterface;
 use SprykerSdk\Integrator\Executor\ReleaseGroup\DiffGenerator;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorage;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface;
@@ -130,6 +136,8 @@ use SprykerSdk\Integrator\Filter\RatingBasedManifestFilter\ManifestToModulesRati
 use SprykerSdk\Integrator\Filter\RatingBasedManifestFilter\RatingBasedManifestsFilter;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 use SprykerSdk\Integrator\Helper\ClassHelperInterface;
+use SprykerSdk\Integrator\IntegratorLock\IntegratorLockCleaner;
+use SprykerSdk\Integrator\IntegratorLock\IntegratorLockCleanerInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReader;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriter;
@@ -156,6 +164,8 @@ use SprykerSdk\Integrator\ManifestStrategy\WireSchemaManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireTransferManifestStrategy;
 use SprykerSdk\Integrator\ManifestStrategy\WireWidgetManifestStrategy;
 use SprykerSdk\Integrator\VersionControlSystem\GitRepository;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService;
+use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 class IntegratorFactory
@@ -176,6 +186,7 @@ class IntegratorFactory
         return new ModuleManifestExecutor(
             $this->createIntegratorLockReader(),
             $this->createIntegratorLockWriter(),
+            $this->createIntegratorLockCleaner(),
             $this->createRepositoryManifestReader(),
             $this->createManifestExecutor(),
             $this->createComposerLockReader(),
@@ -231,6 +242,14 @@ class IntegratorFactory
     public function createIntegratorLockWriter(): IntegratorLockWriterInterface
     {
         return new IntegratorLockWriter($this->getConfig());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\IntegratorLock\IntegratorLockCleanerInterface
+     */
+    public function createIntegratorLockCleaner(): IntegratorLockCleanerInterface
+    {
+        return new IntegratorLockCleaner($this->getConfig());
     }
 
     /**
@@ -360,6 +379,9 @@ class IntegratorFactory
         return new ConfigureEnvManifestStrategy(
             $this->getConfig(),
             $this->createClassHelper(),
+            $this->createExpressionsValueExtractor(),
+            $this->createConfigFileModifier(),
+            $this->createFileBuilderFacade(),
             $this->getConfigurationEnvironmentStrategies(),
         );
     }
@@ -533,11 +555,11 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Builder\ClassWriter\ClassFileWriterInterface
+     * @return \SprykerSdk\Integrator\Builder\FileWriter\FileWriterInterface
      */
-    public function createClassFileWriter(): ClassFileWriterInterface
+    public function createFileWriter(): FileWriterInterface
     {
-        return new ClassFileWriter($this->createClassPrinter(), $this->createFileStorage());
+        return new FileWriter($this->createClassPrinter(), $this->createFileStorage());
     }
 
     /**
@@ -574,7 +596,7 @@ class IntegratorFactory
      */
     public function createCodeSniffStyleFileNormalizer(): FileNormalizerInterface
     {
-        return new CodeSniffStyleFileNormalizer($this->getConfig(), $this->createProcessExecutor());
+        return new CodeSniffStyleFileNormalizer($this->getConfig(), $this->createProcessRunnerService());
     }
 
     /**
@@ -582,15 +604,15 @@ class IntegratorFactory
      */
     public function createPhpCSFixerNormalizer(): FileNormalizerInterface
     {
-        return new PhpCSFixerFileNormalizer($this->getConfig(), $this->createProcessExecutor());
+        return new PhpCSFixerFileNormalizer($this->getConfig(), $this->createProcessRunnerService());
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Executor\ProcessExecutorInterface
+     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
      */
-    public function createProcessExecutor(): ProcessExecutorInterface
+    public function createProcessRunnerService(): ProcessRunnerServiceInterface
     {
-        return new ProcessExecutor();
+        return new ProcessRunnerService();
     }
 
     /**
@@ -641,6 +663,19 @@ class IntegratorFactory
         $lexer = $this->createPhpParserLexer();
 
         return new ClassLoader(
+            $this->createPhpParserParser($lexer),
+            $lexer,
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ClassLoader\FileLoaderInterface
+     */
+    public function createFileLoader(): FileLoaderInterface
+    {
+        $lexer = $this->createPhpParserLexer();
+
+        return new FileLoader(
             $this->createPhpParserParser($lexer),
             $lexer,
         );
@@ -1182,5 +1217,41 @@ class IntegratorFactory
     protected function createClassConstantFinder(): ClassConstantFinderInterface
     {
         return new ClassConstantFinder($this->createClassNodeFinder());
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Extractor\ExpressionExtractorInterface
+     */
+    public function createExpressionsValueExtractor(): ExpressionExtractorInterface
+    {
+        return new ExpressionExtractor(
+            $this->createValueExtractorStrategyCollection(),
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\Extractor\ValueExtractor\ValueExtractorStrategyCollection
+     */
+    public function createValueExtractorStrategyCollection(): ValueExtractorStrategyCollection
+    {
+        return new ValueExtractorStrategyCollection();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\ClassModifier\ConfigFile\ConfigFileModifierInterface
+     */
+    public function createConfigFileModifier(): ConfigFileModifierInterface
+    {
+        return new ConfigFileModifier(
+            $this->createNodeExpressionPartialParser(),
+        );
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\FileBuilderFacade
+     */
+    protected function createFileBuilderFacade(): FileBuilderFacade
+    {
+        return new FileBuilderFacade();
     }
 }

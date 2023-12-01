@@ -27,6 +27,57 @@ class DiffGenerateConsoleTest extends TestCase
     /**
      * @return void
      */
+    public function testBuildCommandArgumentsTransfer(): void
+    {
+        // Arrange
+        $verboseOption = new InputOption('verboseOption', null, InputOutputInterface::DEBUG);
+        $inputDefinition = new InputDefinition();
+        $inputDefinition->addOption($verboseOption);
+        $console = new DiffGenerateConsole();
+        $arguments = [
+            'branch-to-compare' => 'test1',
+            'integration-branch' => 'test2',
+            'diff-file-name' => 'test3',
+            'release-group-id' => 10,
+        ];
+        $options = [
+            'format' => 'yaml',
+            'dry' => true,
+        ];
+        foreach ($options as $key => $value) {
+            $option = (new InputOption($key, null, InputOption::VALUE_OPTIONAL));
+            $option->setDefault($value);
+            $inputDefinition->addOption($option);
+        }
+        foreach ($arguments as $key => $value) {
+            $arg = (new InputArgument($key));
+            $arg->setDefault($value);
+            $inputDefinition->addArgument($arg);
+        }
+        $input = new ArrayInput([], $inputDefinition);
+
+        // Act
+        /** @var \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $integratorCommandArgumentsTransfer */
+        $integratorCommandArgumentsTransfer = $this->invokeMethod(
+            $console,
+            'buildCommandArgumentsTransfer',
+            [
+                $input, $this->buildOutput(), null,
+            ],
+        );
+
+        // Assert
+        $this->assertSame('test1', $integratorCommandArgumentsTransfer->getBranchToCompare());
+        $this->assertSame('test2', $integratorCommandArgumentsTransfer->getIntegrationBranch());
+        $this->assertSame('test3', $integratorCommandArgumentsTransfer->getDiffFileName());
+        $this->assertSame(10, $integratorCommandArgumentsTransfer->getReleaseGroupId());
+        $this->assertSame('yaml', $integratorCommandArgumentsTransfer->getFormat());
+        $this->assertTrue($integratorCommandArgumentsTransfer->getIsDry());
+    }
+
+    /**
+     * @return void
+     */
     public function testGetReleaseGroupSuccess(): void
     {
         // Arrange

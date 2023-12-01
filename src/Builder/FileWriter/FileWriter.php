@@ -7,13 +7,13 @@
 
 declare(strict_types=1);
 
-namespace SprykerSdk\Integrator\Builder\ClassWriter;
+namespace SprykerSdk\Integrator\Builder\FileWriter;
 
 use SprykerSdk\Integrator\Builder\FileStorage\FileStorageInterface;
 use SprykerSdk\Integrator\Builder\Printer\ClassPrinter;
-use SprykerSdk\Integrator\Transfer\ClassInformationTransfer;
+use SprykerSdk\Integrator\Transfer\FileInformationTransfer;
 
-class ClassFileWriter implements ClassFileWriterInterface
+class FileWriter implements FileWriterInterface
 {
     /**
      * @var \SprykerSdk\Integrator\Builder\Printer\ClassPrinter
@@ -36,21 +36,21 @@ class ClassFileWriter implements ClassFileWriterInterface
     }
 
     /**
-     * @param \SprykerSdk\Integrator\Transfer\ClassInformationTransfer $classInformationTransfer
+     * @param \SprykerSdk\Integrator\Transfer\FileInformationTransfer $classInformationTransfer
      *
      * @return bool
      */
-    public function storeClass(ClassInformationTransfer $classInformationTransfer): bool
+    public function storeFile(FileInformationTransfer $classInformationTransfer): bool
     {
-        if ($classInformationTransfer->getOriginalClassTokenTree()) {
+        if ($classInformationTransfer->getOriginalTokenTree()) {
             $code = $this->classPrinter->printFormatPreserving(
-                $classInformationTransfer->getClassTokenTree(),
-                $classInformationTransfer->getOriginalClassTokenTree(),
+                $classInformationTransfer->getTokenTree(),
+                $classInformationTransfer->getOriginalTokenTree(),
                 $classInformationTransfer->getTokens(),
             );
         } else {
             $code = $this->classPrinter->prettyPrintFile(
-                $classInformationTransfer->getClassTokenTree(),
+                $classInformationTransfer->getTokenTree(),
             );
         }
 

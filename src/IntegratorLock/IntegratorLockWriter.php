@@ -46,10 +46,7 @@ class IntegratorLockWriter implements IntegratorLockWriterInterface
         }
 
         $json = preg_replace(static::REPLACE_4_WITH_2_SPACES, '$1', $json) . PHP_EOL;
-        if (file_put_contents($lockFilePath, $json) === false) {
-            return 1;
-        }
 
-        return 0;
+        return file_put_contents($lockFilePath, $json) === false ? 1 : 0;
     }
 }

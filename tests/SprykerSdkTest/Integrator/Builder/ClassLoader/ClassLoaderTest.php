@@ -54,7 +54,7 @@ class ClassLoaderTest extends BaseTestCase
         $this->assertNull($transfer->getParent());
         $this->assertNull($transfer->getFilePath());
         $this->assertSame([], $transfer->getTokens());
-        $this->assertSame([], $transfer->getOriginalClassTokenTree());
+        $this->assertSame([], $transfer->getOriginalTokenTree());
     }
 
     /**

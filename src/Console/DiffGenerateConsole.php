@@ -65,6 +65,21 @@ class DiffGenerateConsole extends AbstractInstallerConsole
     /**
      * @var string
      */
+    protected const ARGUMENT_DIFF_FILE_NAME = 'diff-file-name';
+
+    /**
+     * @var string
+     */
+    protected const ARGUMENT_DIFF_FILE_NAME_DESCRIPTION = 'Name for the backet diff file. By default is `diff_to_display.diff`';
+
+    /**
+     * @var string
+     */
+    protected const ARGUMENT_DIFF_FILE_NAME_DEFAULT = 'diff_to_display.diff';
+
+    /**
+     * @var string
+     */
     protected const COMMAND_NAME = 'integrator:diff:generate';
 
     /**
@@ -97,6 +112,12 @@ class DiffGenerateConsole extends AbstractInstallerConsole
                 InputArgument::OPTIONAL,
                 static::ARGUMENT_INTEGRATION_BRANCH_DESCRIPTION,
                 static::ARGUMENT_INTEGRATION_BRANCH_DEFAULT,
+            )
+            ->addArgument(
+                static::ARGUMENT_DIFF_FILE_NAME,
+                InputArgument::OPTIONAL,
+                static::ARGUMENT_DIFF_FILE_NAME_DESCRIPTION,
+                static::ARGUMENT_DIFF_FILE_NAME_DEFAULT,
             );
     }
 
@@ -146,6 +167,7 @@ class DiffGenerateConsole extends AbstractInstallerConsole
         $transfer->setReleaseGroupId($this->getReleaseGroupIdOrFail($input));
         $transfer->setBranchToCompare($input->getArgument(static::ARGUMENT_BRANCH_TO_COMPARE));
         $transfer->setIntegrationBranch($input->getArgument(static::ARGUMENT_INTEGRATION_BRANCH));
+        $transfer->setDiffFileName($input->getArgument(static::ARGUMENT_DIFF_FILE_NAME));
 
         return $transfer;
     }

@@ -25,7 +25,7 @@ class ComposerLockReaderTest extends BaseTestCase
      */
     public function testGetModuleVersions(): void
     {
-        $composerLockReader = $this->createComposerLockReadr();
+        $composerLockReader = $this->createComposerLockReader();
 
         $this->assertCount(4, $composerLockReader->getModuleVersions());
         $this->assertArrayHasKey(static::DEFAULT_PACKAGE_NAME, $composerLockReader->getModuleVersions());
@@ -34,7 +34,7 @@ class ComposerLockReaderTest extends BaseTestCase
     /**
      * @return \SprykerSdk\Integrator\Composer\ComposerLockReader
      */
-    private function createComposerLockReadr(): ComposerLockReader
+    private function createComposerLockReader(): ComposerLockReader
     {
         $integratorConfigMock = $this->createMock(IntegratorConfig::class);
         $integratorConfigMock->method('getComposerLockFilePath')->willReturn('./tests/_data/composer/composer.lock');

@@ -6,16 +6,16 @@
     "require": {
         "php": ">=7.4",
         "ext-dom": "*",
-        "ext-simplexml": "*",
         "ext-json": "*",
+        "ext-simplexml": "*",
         "composer-plugin-api": "^1.0.0 || ^2.0.0",
         "aws/aws-sdk-php": "^3.257",
         "composer/composer": "^2.1.0",
         "czproject/git-php": "^4.1",
         "guzzlehttp/guzzle": "^7.4",
-        "laminas/laminas-filter": "^2.11.0",
         "nikic/php-parser": "^4.3.0",
         "sebastian/diff": "^4.0.0",
+        "spryker-sdk/utils": "^0.1.1",
         "symfony/console": "^5.3.0 || ^6.0",
         "symfony/finder": "^5.3.0 || ^6.0",
         "symfony/process": "^5.4 || ^6.0"
@@ -25,7 +25,7 @@
         "phpstan/phpstan": "^1.0.0",
         "phpunit/phpunit": "^9.5.0",
         "spryker-sdk/manifest-test-data-provider": "dev-master",
-        "spryker/code-sniffer": "dev-master",
+        "spryker/code-sniffer": "0.17.18",
         "symfony/filesystem": "^5.3.0 || ^6.0"
     },
     "autoload": {

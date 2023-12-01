@@ -561,4 +561,22 @@ class IntegratorFacadeTest extends AbstractIntegratorTestCase
 
         $this->assertNotEmpty(trim(file_get_contents($integratorLock)));
     }
+
+    /**
+     * @return void
+     */
+    public function testRunCleanLock(): void
+    {
+        // Arrange
+        $ioAdapter = $this->buildSymfonyConsoleInputOutputAdapter();
+
+        file_put_contents($this->getTestTmpDirPath() . '/integrator.lock', 'test');
+
+        // Act
+        $this->createIntegratorFacade()->runCleanLock($ioAdapter);
+
+        // Assert
+        $integratorLock = $this->getTestTmpDirPath() . '/integrator.lock';
+        $this->assertFileDoesNotExist($integratorLock);
+    }
 }

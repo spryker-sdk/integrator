@@ -45,6 +45,9 @@ class IntegratorLockUpdaterConsole extends AbstractInstallerConsole
             $commandArgumentsTransfer,
         );
 
+        $this->getFacade()
+            ->runCleanLock($io);
+
         return 0;
     }
 }
