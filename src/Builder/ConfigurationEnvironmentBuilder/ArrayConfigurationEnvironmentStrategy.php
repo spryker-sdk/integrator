@@ -80,7 +80,17 @@ class ArrayConfigurationEnvironmentStrategy implements ConfigurationEnvironmentS
      */
     protected function isComplicatedExpression(string $expression): bool
     {
-        return (bool)preg_match('/[\(\)\?]/', $expression) || $this->isClassIdentifier($expression);
+        return $this->hasComparison($expression) || $this->isClassIdentifier($expression);
+    }
+
+    /**
+     * @param string $expression
+     *
+     * @return bool
+     */
+    protected function hasComparison(string $expression): bool
+    {
+        return (bool)preg_match('/if\(.+\)\{|\?.+:/', $expression);
     }
 
     /**
