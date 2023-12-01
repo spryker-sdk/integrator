@@ -13,6 +13,7 @@ use SprykerSdk\Integrator\Composer\ComposerLockReaderInterface;
 use SprykerSdk\Integrator\Dependency\Console\InputOutputInterface;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
 use SprykerSdk\Integrator\Filter\ManifestsFiltersExecutorInterface;
+use SprykerSdk\Integrator\IntegratorLock\IntegratorLockCleanerInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface;
 use SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface;
@@ -51,8 +52,14 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
     private IntegratorLockReaderInterface $integratorLockReader;
 
     /**
+     * @var \SprykerSdk\Integrator\IntegratorLock\IntegratorLockCleanerInterface
+     */
+    private IntegratorLockCleanerInterface $integratorLockCleaner;
+
+    /**
      * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockReaderInterface $integratorLockReader
      * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriterInterface $integratorLockWriter
+     * @param \SprykerSdk\Integrator\IntegratorLock\IntegratorLockCleanerInterface $integratorLockCleaner
      * @param \SprykerSdk\Integrator\Manifest\RepositoryManifestReaderInterface $manifestReader
      * @param \SprykerSdk\Integrator\Executor\ManifestExecutorInterface $manifestExecutor
      * @param \SprykerSdk\Integrator\Composer\ComposerLockReaderInterface $composerLockReader
@@ -61,15 +68,17 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
     public function __construct(
         IntegratorLockReaderInterface $integratorLockReader,
         IntegratorLockWriterInterface $integratorLockWriter,
+        IntegratorLockCleanerInterface $integratorLockCleaner,
         RepositoryManifestReaderInterface $manifestReader,
         ManifestExecutorInterface $manifestExecutor,
         ComposerLockReaderInterface $composerLockReader,
         ManifestsFiltersExecutorInterface $manifestsFiltersExecutor
     ) {
         $this->integratorLockReader = $integratorLockReader;
-        $this->manifestExecutor = $manifestExecutor;
         $this->integratorLockWriter = $integratorLockWriter;
+        $this->integratorLockCleaner = $integratorLockCleaner;
         $this->manifestReader = $manifestReader;
+        $this->manifestExecutor = $manifestExecutor;
         $this->composerLockReader = $composerLockReader;
         $this->manifestsFiltersExecutor = $manifestsFiltersExecutor;
     }
@@ -110,5 +119,16 @@ class ModuleManifestExecutor implements ModuleManifestExecutorInterface
 
         $this->integratorLockWriter->storeLock($moduleVersions);
         $input->write('<info>The integration lock file has been updated according to the project state.</info>', true);
+    }
+
+    /**
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
+     *
+     * @return void
+     */
+    public function runCleanLock(InputOutputInterface $input): void
+    {
+        $this->integratorLockCleaner->deleteLock();
+        $input->write('<info>The integration lock file has been removed.</info>', true);
     }
 }

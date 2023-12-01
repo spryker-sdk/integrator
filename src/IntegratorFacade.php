@@ -47,6 +47,18 @@ class IntegratorFacade implements IntegratorFacadeInterface
     }
 
     /**
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
+     *
+     * @return void
+     */
+    public function runCleanLock(InputOutputInterface $input): void
+    {
+        $this->getFactory()
+            ->createModuleManifestExecutor()
+            ->runCleanLock($input);
+    }
+
+    /**
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
      *

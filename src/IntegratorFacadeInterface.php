@@ -37,6 +37,13 @@ interface IntegratorFacadeInterface
     ): void;
 
     /**
+     * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
+     *
+     * @return void
+     */
+    public function runCleanLock(InputOutputInterface $input): void;
+
+    /**
      * @param \SprykerSdk\Integrator\Transfer\IntegratorCommandArgumentsTransfer $commandArgumentsTransfer
      * @param \SprykerSdk\Integrator\Dependency\Console\InputOutputInterface $input
      *
