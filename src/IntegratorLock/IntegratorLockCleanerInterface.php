@@ -12,7 +12,7 @@ namespace SprykerSdk\Integrator\IntegratorLock;
 interface IntegratorLockCleanerInterface
 {
     /**
-     * @return int
+     * @return void
      */
-    public function deleteLock(): int;
+    public function deleteLock(): void;
 }

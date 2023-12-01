@@ -16,7 +16,7 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
     /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
-    protected $config;
+    protected IntegratorConfig $config;
 
     /**
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
@@ -27,12 +27,12 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
     }
 
     /**
-     * @return int
+     * @return void
      */
-    public function deleteLock(): int
+    public function deleteLock(): void
     {
         $lockFilePath = $this->config->getIntegratorLockFilePath();
 
-        return unlink($lockFilePath) === false ? 1 : 0;
+        unlink($lockFilePath);
     }
 }
