@@ -127,6 +127,7 @@ use SprykerSdk\Integrator\Executor\ManifestExecutor;
 use SprykerSdk\Integrator\Executor\ManifestExecutorInterface;
 use SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutor;
 use SprykerSdk\Integrator\Executor\Module\ModuleManifestExecutorInterface;
+use SprykerSdk\Integrator\Executor\ProcessExecutor;
 use SprykerSdk\Integrator\Executor\ReleaseGroup\DiffGenerator;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorage;
 use SprykerSdk\Integrator\FileStorage\BucketFileStorageInterface;
@@ -249,7 +250,7 @@ class IntegratorFactory
      */
     public function createIntegratorLockCleaner(): IntegratorLockCleanerInterface
     {
-        return new IntegratorLockCleaner($this->getConfig());
+        return new IntegratorLockCleaner($this->getConfig(), new ProcessExecutor());
     }
 
     /**
