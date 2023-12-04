@@ -20,13 +20,13 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
     protected IntegratorConfig $config;
 
     /**
-     * @var ProcessExecutor
+     * @var \SprykerSdk\Integrator\Executor\ProcessExecutor
      */
     protected ProcessExecutor $processExecutor;
 
     /**
-     * @param IntegratorConfig $config
-     * @param ProcessExecutor $processExecutor
+     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @param \SprykerSdk\Integrator\Executor\ProcessExecutor $processExecutor
      */
     public function __construct(IntegratorConfig $config, ProcessExecutor $processExecutor)
     {
@@ -53,6 +53,7 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
 
     /**
      * @param string $filepath
+     *
      * @return bool
      */
     protected function isLockFileChangeTrackedByGit(string $filepath): bool
