@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdkTest\Integrator\IntegratorLock;
 
+use SprykerSdk\Integrator\Executor\ProcessExecutor;
 use SprykerSdk\Integrator\IntegratorConfig;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockCleaner;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReader;
@@ -108,7 +109,7 @@ class IntegratorLockTest extends BaseTestCase
      */
     private function createIntegratorLockCleaner(string $tmpIntegratorLockFilePath): IntegratorLockCleaner
     {
-        return new IntegratorLockCleaner($this->mockIntegratorConfig($tmpIntegratorLockFilePath));
+        return new IntegratorLockCleaner($this->mockIntegratorConfig($tmpIntegratorLockFilePath), new ProcessExecutor());
     }
 
     /**

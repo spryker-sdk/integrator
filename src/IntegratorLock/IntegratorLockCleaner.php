@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\IntegratorLock;
 
+use SprykerSdk\Integrator\Executor\ProcessExecutor;
 use SprykerSdk\Integrator\IntegratorConfig;
 
 class IntegratorLockCleaner implements IntegratorLockCleanerInterface
@@ -19,11 +20,18 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
     protected IntegratorConfig $config;
 
     /**
-     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @var \SprykerSdk\Integrator\Executor\ProcessExecutor
      */
-    public function __construct(IntegratorConfig $config)
+    protected ProcessExecutor $processExecutor;
+
+    /**
+     * @param \SprykerSdk\Integrator\IntegratorConfig $config
+     * @param \SprykerSdk\Integrator\Executor\ProcessExecutor $processExecutor
+     */
+    public function __construct(IntegratorConfig $config, ProcessExecutor $processExecutor)
     {
         $this->config = $config;
+        $this->processExecutor = $processExecutor;
     }
 
     /**
@@ -34,5 +42,24 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
         $lockFilePath = $this->config->getIntegratorLockFilePath();
 
         unlink($lockFilePath);
+
+        if (!$this->isLockFileChangeTrackedByGit($lockFilePath)) {
+            return;
+        }
+
+        $this->processExecutor->execute(['git', 'add', $lockFilePath]);
+        $this->processExecutor->execute(['git', 'commit', '-m', 'Removed `integrator.lock` file.']);
+    }
+
+    /**
+     * @param string $filepath
+     *
+     * @return bool
+     */
+    protected function isLockFileChangeTrackedByGit(string $filepath): bool
+    {
+        $process = $this->processExecutor->execute(['git', 'status', '--porcelain', $filepath]);
+
+        return $process->getOutput() !== '';
     }
 }
