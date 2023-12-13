@@ -5160,12 +5160,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/manifest-test-data-provider.git",
-                "reference": "85d86e336a3bc52073d495c0a148fc1297520039"
+                "reference": "c1f19eefc14a97faa742d387828d2e07e404e397"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/manifest-test-data-provider/zipball/85d86e336a3bc52073d495c0a148fc1297520039",
-                "reference": "85d86e336a3bc52073d495c0a148fc1297520039",
+                "url": "https://api.github.com/repos/spryker-sdk/manifest-test-data-provider/zipball/c1f19eefc14a97faa742d387828d2e07e404e397",
+                "reference": "c1f19eefc14a97faa742d387828d2e07e404e397",
                 "shasum": ""
             },
             "require": {
@@ -5182,7 +5182,7 @@
                 "issues": "https://github.com/spryker-sdk/manifest-test-data-provider/issues",
                 "source": "https://github.com/spryker-sdk/manifest-test-data-provider/tree/master"
             },
-            "time": "2023-11-28T13:09:25+00:00"
+            "time": "2023-12-13T14:44:09+00:00"
         },
         {
             "name": "spryker/code-sniffer",
