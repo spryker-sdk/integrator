@@ -3,7 +3,7 @@
 
 defined('APPLICATION_ROOT_DIR') || define('APPLICATION_ROOT_DIR', getcwd() );
 
-defined('INTEGRATOR_ROOT_DIR') || define('INTEGRATOR_ROOT_DIR', dirname(__DIR__) );
+defined('INTEGRATOR_ROOT_DIR') || define('INTEGRATOR_ROOT_DIR', dirname(__DIR__, 4) );
 
 defined('APPLICATION_SOURCE_DIR')
 || define('APPLICATION_SOURCE_DIR', APPLICATION_ROOT_DIR . DIRECTORY_SEPARATOR . 'src');
