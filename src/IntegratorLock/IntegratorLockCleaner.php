@@ -67,6 +67,6 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
     {
         $process = $this->processExecutor->execute(['git', 'check-ignore', $filepath]);
 
-        return !$process->getOutput();
+        return (bool)$process->getOutput();
     }
 }
