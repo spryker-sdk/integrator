@@ -55,7 +55,7 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
 
         $this->processExecutor->execute([sprintf('echo %s >> %s', $this->config::INTEGRATOR_LOCK, static::GITIGNORE_FILE)]);
         $this->processExecutor->execute(['git', 'add', $lockFilePath]);
-        $this->processExecutor->execute(['git', 'commit', '-m', sprintf('Removed `%s` file.', $this->config::INTEGRATOR_LOCK)]);
+        $process = $this->processExecutor->execute(['git', 'commit', '-m', sprintf('Removed `%s` file.', $this->config::INTEGRATOR_LOCK), '-n']);
     }
 
     /**
