@@ -34,3 +34,4 @@ tests/tmp
 
 # resources
 data/
+integrator.lock

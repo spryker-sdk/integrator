@@ -52,10 +52,14 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
         if (file_exists($lockFilePath)) {
             unlink($lockFilePath);
         }
+        $gitignorePath = $this->config->getProjectRootDirectory() . static::GITIGNORE_FILE;
 
-        $this->processExecutor->execute([sprintf('echo %s >> %s', $this->config::INTEGRATOR_LOCK, static::GITIGNORE_FILE)]);
-        $this->processExecutor->execute(['git', 'add', $lockFilePath]);
-        $process = $this->processExecutor->execute(['git', 'commit', '-m', sprintf('Removed `%s` file.', $this->config::INTEGRATOR_LOCK), '-n']);
+        if (strpos((string)file_get_contents($gitignorePath), $this->config::INTEGRATOR_LOCK) === false) {
+            file_put_contents($gitignorePath, $this->config::INTEGRATOR_LOCK . PHP_EOL, FILE_APPEND);
+        }
+
+        $this->processExecutor->execute(['git', 'add', $lockFilePath, $gitignorePath]);
+        $this->processExecutor->execute(['git', 'commit', '-m', sprintf('Removed `%s` file.', $this->config::INTEGRATOR_LOCK), '-n']);
     }
 
     /**

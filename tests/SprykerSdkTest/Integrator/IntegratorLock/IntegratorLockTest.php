@@ -76,9 +76,8 @@ class IntegratorLockTest extends BaseTestCase
     {
         $tmpIntegratorLockFilePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . IntegratorConfig::INTEGRATOR_LOCK;
         touch($tmpIntegratorLockFilePath);
-        $compareFilePath = ROOT_TESTS . '/_data/composer/spryker_lock_test_write_lock.json';
 
-        file_put_contents($tmpIntegratorLockFilePath, file_get_contents($compareFilePath));
+        file_put_contents($tmpIntegratorLockFilePath, 'test');
 
         $integratorLockCleaner = $this->createIntegratorLockCleaner($tmpIntegratorLockFilePath);
         $integratorLockCleaner->deleteLock();
@@ -114,7 +113,7 @@ class IntegratorLockTest extends BaseTestCase
     private function createIntegratorLockCleaner(string $tmpIntegratorLockFilePath): IntegratorLockCleaner
     {
         $processMock = $this->createMock(Process::class);
-        $processMock->method('getOutput')->willReturn(IntegratorConfig::INTEGRATOR_LOCK);
+        $processMock->method('getOutput')->willReturn('');
 
         $processExecutorMock = $this->createMock(ProcessExecutor::class);
         $processExecutorMock->method('execute')->willReturn($processMock);
