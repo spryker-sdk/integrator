@@ -46,7 +46,7 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
     {
         $lockFilePath = $this->config->getIntegratorLockFilePath();
 
-        if ($this->isLockFileIgnoredByGit($lockFilePath)) {
+        if ($this->isLockFileIgnoredByGit($lockFilePath) && !file_exists($lockFilePath)) {
             return;
         }
         if (file_exists($lockFilePath)) {
@@ -54,7 +54,7 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
         }
         $gitignorePath = $this->config->getProjectRootDirectory() . static::GITIGNORE_FILE;
 
-        if (strpos((string)file_get_contents($gitignorePath), $this->config::INTEGRATOR_LOCK) === false) {
+        if (!file_exists($gitignorePath) || strpos((string)file_get_contents($gitignorePath), $this->config::INTEGRATOR_LOCK) === false) {
             file_put_contents($gitignorePath, $this->config::INTEGRATOR_LOCK . PHP_EOL, FILE_APPEND);
         }
 
