@@ -23,6 +23,15 @@ class IntegratorLockTest extends BaseTestCase
     /**
      * @return void
      */
+    protected function setUp(): void
+    {
+        @unlink(sys_get_temp_dir() . DIRECTORY_SEPARATOR . IntegratorConfig::INTEGRATOR_LOCK);
+        @unlink(sys_get_temp_dir() . DIRECTORY_SEPARATOR . '.gitignore');
+    }
+
+    /**
+     * @return void
+     */
     public function testWriteFileLock(): void
     {
         $compareFilePath = ROOT_TESTS . '/_data/composer/spryker_lock_test_write_lock.json';
@@ -130,6 +139,8 @@ class IntegratorLockTest extends BaseTestCase
 
         $integratorConfigMock->method('getIntegratorLockFilePath')
             ->willReturn($tmpIntegratorLockFilePath);
+        $integratorConfigMock->method('getProjectRootDirectory')
+            ->willReturn(sys_get_temp_dir() . DIRECTORY_SEPARATOR);
 
         return $integratorConfigMock;
     }
