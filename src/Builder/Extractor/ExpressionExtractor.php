@@ -66,7 +66,7 @@ class ExpressionExtractor implements ExpressionExtractorInterface
 
                         continue;
                     }
-                    $expressions[$key] = [...$expressions[$key], ...$this->getValue($chainAssignValue->getValue())];
+                    $expressions[$key] = array_merge($expressions[$key], $this->getValue($chainAssignValue->getValue()));
                 } catch (ValueExtractorException $exception) {
                     continue;
                 }
