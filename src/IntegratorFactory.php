@@ -250,7 +250,7 @@ class IntegratorFactory
      */
     public function createIntegratorLockCleaner(): IntegratorLockCleanerInterface
     {
-        return new IntegratorLockCleaner($this->getConfig(), new ProcessExecutor());
+        return new IntegratorLockCleaner($this->getConfig(), new ProcessExecutor(), $this->createFilesystem());
     }
 
     /**

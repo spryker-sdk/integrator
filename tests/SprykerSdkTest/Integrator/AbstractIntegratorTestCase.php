@@ -63,7 +63,7 @@ abstract class AbstractIntegratorTestCase extends BaseTestCase
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Business\IntegratorFacade
+     * @return \SprykerSdk\Integrator\IntegratorFacade
      */
     protected function createIntegratorFacade(): IntegratorFacade
     {
