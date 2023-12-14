@@ -18,6 +18,11 @@ class IntegratorConfig
     /**
      * @var string
      */
+    public const INTEGRATOR_LOCK = 'integrator.lock';
+
+    /**
+     * @var string
+     */
     public const MANIFEST_KEY_TARGET = 'target';
 
     /**
@@ -366,7 +371,7 @@ class IntegratorConfig
      */
     public function getIntegratorLockFilePath(): string
     {
-        return $this->getProjectRootDirectory() . 'integrator.lock';
+        return $this->getProjectRootDirectory() . static::INTEGRATOR_LOCK;
     }
 
     /**

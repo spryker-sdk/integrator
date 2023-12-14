@@ -11,9 +11,15 @@ namespace SprykerSdk\Integrator\IntegratorLock;
 
 use SprykerSdk\Integrator\Executor\ProcessExecutor;
 use SprykerSdk\Integrator\IntegratorConfig;
+use Symfony\Component\Filesystem\Filesystem;
 
 class IntegratorLockCleaner implements IntegratorLockCleanerInterface
 {
+    /**
+     * @var string
+     */
+    protected const GITIGNORE_FILE = '.gitignore';
+
     /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
@@ -25,13 +31,20 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
     protected ProcessExecutor $processExecutor;
 
     /**
+     * @var \Symfony\Component\Filesystem\Filesystem
+     */
+    protected Filesystem $filesystem;
+
+    /**
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
      * @param \SprykerSdk\Integrator\Executor\ProcessExecutor $processExecutor
+     * @param \Symfony\Component\Filesystem\Filesystem $filesystem
      */
-    public function __construct(IntegratorConfig $config, ProcessExecutor $processExecutor)
+    public function __construct(IntegratorConfig $config, ProcessExecutor $processExecutor, Filesystem $filesystem)
     {
         $this->config = $config;
         $this->processExecutor = $processExecutor;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -41,14 +54,24 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
     {
         $lockFilePath = $this->config->getIntegratorLockFilePath();
 
-        unlink($lockFilePath);
-
-        if (!$this->isLockFileChangeTrackedByGit($lockFilePath)) {
+        if ($this->isLockFileIgnoredByGit($lockFilePath)) {
             return;
         }
+        $gitAddCommand = ['git', 'add'];
+        if ($this->filesystem->exists($lockFilePath)) {
+            $this->filesystem->remove($lockFilePath);
+            $gitAddCommand[] = $lockFilePath;
+        }
+        $gitignorePath = $this->config->getProjectRootDirectory() . static::GITIGNORE_FILE;
 
-        $this->processExecutor->execute(['git', 'add', $lockFilePath]);
-        $this->processExecutor->execute(['git', 'commit', '-m', 'Removed `integrator.lock` file.']);
+        if (!$this->filesystem->exists($gitignorePath) || strpos((string)file_get_contents($gitignorePath), $this->config::INTEGRATOR_LOCK) === false) {
+            $this->filesystem->appendToFile($gitignorePath, PHP_EOL . $this->config::INTEGRATOR_LOCK . PHP_EOL);
+            $gitAddCommand[] = $gitignorePath;
+        }
+        if (count($gitAddCommand) > 2) {
+            $this->processExecutor->execute($gitAddCommand);
+            $this->processExecutor->execute(['git', 'commit', '-m', sprintf('Removed `%s` file.', $this->config::INTEGRATOR_LOCK), '-n']);
+        }
     }
 
     /**
@@ -56,10 +79,10 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
      *
      * @return bool
      */
-    protected function isLockFileChangeTrackedByGit(string $filepath): bool
+    protected function isLockFileIgnoredByGit(string $filepath): bool
     {
-        $process = $this->processExecutor->execute(['git', 'status', '--porcelain', $filepath]);
+        $process = $this->processExecutor->execute(['git', 'check-ignore', $filepath]);
 
-        return $process->getOutput() !== '';
+        return (bool)$process->getOutput();
     }
 }

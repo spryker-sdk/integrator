@@ -15,9 +15,20 @@ use SprykerSdk\Integrator\IntegratorLock\IntegratorLockCleaner;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockReader;
 use SprykerSdk\Integrator\IntegratorLock\IntegratorLockWriter;
 use SprykerSdkTest\Integrator\BaseTestCase;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 
 class IntegratorLockTest extends BaseTestCase
 {
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        @unlink(sys_get_temp_dir() . DIRECTORY_SEPARATOR . IntegratorConfig::INTEGRATOR_LOCK);
+        @unlink(sys_get_temp_dir() . DIRECTORY_SEPARATOR . '.gitignore');
+    }
+
     /**
      * @return void
      */
@@ -34,7 +45,7 @@ class IntegratorLockTest extends BaseTestCase
                 ],
             ],
         ];
-        $tmpIntegratorLockFilePath = tempnam(sys_get_temp_dir(), 'integrator.lock.');
+        $tmpIntegratorLockFilePath = $this->createTmpIntegratorLockFilePath();
 
         $integratorLockWriter = $this->createIntegratorLockWriter($tmpIntegratorLockFilePath);
         $integratorLockWriter->storeLock($lockData);
@@ -52,7 +63,7 @@ class IntegratorLockTest extends BaseTestCase
      */
     public function testReadFileLock(): void
     {
-        $tmpIntegratorLockFilePath = tempnam(sys_get_temp_dir(), 'integrator.lock.');
+        $tmpIntegratorLockFilePath = $this->createTmpIntegratorLockFilePath();
         $compareFilePath = ROOT_TESTS . '/_data/composer/spryker_lock_test_write_lock.json';
 
         file_put_contents($tmpIntegratorLockFilePath, file_get_contents($compareFilePath));
@@ -71,10 +82,9 @@ class IntegratorLockTest extends BaseTestCase
      */
     public function testDeleteFileLock(): void
     {
-        $tmpIntegratorLockFilePath = tempnam(sys_get_temp_dir(), 'integrator.lock.');
-        $compareFilePath = ROOT_TESTS . '/_data/composer/spryker_lock_test_write_lock.json';
+        $tmpIntegratorLockFilePath = $this->createTmpIntegratorLockFilePath();
 
-        file_put_contents($tmpIntegratorLockFilePath, file_get_contents($compareFilePath));
+        file_put_contents($tmpIntegratorLockFilePath, 'test');
 
         $integratorLockCleaner = $this->createIntegratorLockCleaner($tmpIntegratorLockFilePath);
         $integratorLockCleaner->deleteLock();
@@ -109,7 +119,13 @@ class IntegratorLockTest extends BaseTestCase
      */
     private function createIntegratorLockCleaner(string $tmpIntegratorLockFilePath): IntegratorLockCleaner
     {
-        return new IntegratorLockCleaner($this->mockIntegratorConfig($tmpIntegratorLockFilePath), new ProcessExecutor());
+        $processMock = $this->createMock(Process::class);
+        $processMock->method('getOutput')->willReturn('');
+
+        $processExecutorMock = $this->createMock(ProcessExecutor::class);
+        $processExecutorMock->method('execute')->willReturn($processMock);
+
+        return new IntegratorLockCleaner($this->mockIntegratorConfig($tmpIntegratorLockFilePath), $processExecutorMock, new Filesystem());
     }
 
     /**
@@ -123,6 +139,8 @@ class IntegratorLockTest extends BaseTestCase
 
         $integratorConfigMock->method('getIntegratorLockFilePath')
             ->willReturn($tmpIntegratorLockFilePath);
+        $integratorConfigMock->method('getProjectRootDirectory')
+            ->willReturn(sys_get_temp_dir() . DIRECTORY_SEPARATOR);
 
         return $integratorConfigMock;
     }
@@ -135,5 +153,16 @@ class IntegratorLockTest extends BaseTestCase
     private function removeFile(string $path): void
     {
         $this->createFilesystem()->remove($path);
+    }
+
+    /**
+     * @return string
+     */
+    protected function createTmpIntegratorLockFilePath(): string
+    {
+        $tmpIntegratorLockFilePath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . IntegratorConfig::INTEGRATOR_LOCK;
+        touch($tmpIntegratorLockFilePath);
+
+        return $tmpIntegratorLockFilePath;
     }
 }
