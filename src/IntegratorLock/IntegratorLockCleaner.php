@@ -54,20 +54,24 @@ class IntegratorLockCleaner implements IntegratorLockCleanerInterface
     {
         $lockFilePath = $this->config->getIntegratorLockFilePath();
 
-        if ($this->isLockFileIgnoredByGit($lockFilePath) && !$this->filesystem->exists($lockFilePath)) {
+        if ($this->isLockFileIgnoredByGit($lockFilePath)) {
             return;
         }
+        $gitAddCommand = ['git', 'add'];
         if ($this->filesystem->exists($lockFilePath)) {
             $this->filesystem->remove($lockFilePath);
+            $gitAddCommand[] = $lockFilePath;
         }
         $gitignorePath = $this->config->getProjectRootDirectory() . static::GITIGNORE_FILE;
 
         if (!$this->filesystem->exists($gitignorePath) || strpos((string)file_get_contents($gitignorePath), $this->config::INTEGRATOR_LOCK) === false) {
             $this->filesystem->appendToFile($gitignorePath, PHP_EOL . $this->config::INTEGRATOR_LOCK . PHP_EOL);
+            $gitAddCommand[] = $gitignorePath;
         }
-
-        $this->processExecutor->execute(['git', 'add', $lockFilePath, $gitignorePath]);
-        $this->processExecutor->execute(['git', 'commit', '-m', sprintf('Removed `%s` file.', $this->config::INTEGRATOR_LOCK), '-n']);
+        if (count($gitAddCommand) > 2) {
+            $this->processExecutor->execute($gitAddCommand);
+            $this->processExecutor->execute(['git', 'commit', '-m', sprintf('Removed `%s` file.', $this->config::INTEGRATOR_LOCK), '-n']);
+        }
     }
 
     /**
