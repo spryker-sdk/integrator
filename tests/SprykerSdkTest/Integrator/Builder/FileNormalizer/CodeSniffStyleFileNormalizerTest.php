@@ -55,6 +55,24 @@ class CodeSniffStyleFileNormalizerTest extends TestCase
     /**
      * @return void
      */
+    public function testExecuteSuccessWhenProjectDirIsSetAndHasSubPath(): void
+    {
+        // Arrange
+        $codesnifferCommandExecutor = $this->createCodeSnifferCommandExecutorMock();
+        $configMock = $this->createMock(IntegratorConfig::class);
+        $configMock->method('getProjectRootDirectory')->willReturn('projectDir');
+        $normalizer = new CodeSniffStyleFileNormalizer($configMock, $codesnifferCommandExecutor);
+
+        $fileStorage = new FileStorage();
+        $fileStorage->addFile('projectDir/someClass.php');
+
+        // Act
+        $normalizer->normalize($fileStorage->flush());
+    }
+
+    /**
+     * @return void
+     */
     public function testGetErrorMessageShouldReturnErrorMessage(): void
     {
         // Arrange
