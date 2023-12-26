@@ -93,6 +93,7 @@ use SprykerSdk\Integrator\Builder\Extractor\ExpressionExtractor;
 use SprykerSdk\Integrator\Builder\Extractor\ExpressionExtractorInterface;
 use SprykerSdk\Integrator\Builder\Extractor\ValueExtractor\ValueExtractorStrategyCollection;
 use SprykerSdk\Integrator\Builder\FileBuilderFacade;
+use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCommandExecutor;
 use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCompositeNormalizer;
 use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSniffStyleFileNormalizer;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface;
@@ -597,7 +598,7 @@ class IntegratorFactory
      */
     public function createCodeSniffStyleFileNormalizer(): FileNormalizerInterface
     {
-        return new CodeSniffStyleFileNormalizer($this->getConfig(), $this->createProcessRunnerService());
+        return new CodeSniffStyleFileNormalizer($this->getConfig(), $this->createCodeSnifferCommandExecutor());
     }
 
     /**
@@ -605,7 +606,7 @@ class IntegratorFactory
      */
     public function createPhpCSFixerNormalizer(): FileNormalizerInterface
     {
-        return new PhpCSFixerFileNormalizer($this->getConfig(), $this->createProcessRunnerService());
+        return new PhpCSFixerFileNormalizer($this->getConfig(), $this->createCodeSnifferCommandExecutor());
     }
 
     /**
@@ -614,6 +615,14 @@ class IntegratorFactory
     public function createProcessRunnerService(): ProcessRunnerServiceInterface
     {
         return new ProcessRunnerService();
+    }
+
+    /**
+     * @return \SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCommandExecutor
+     */
+    public function createCodeSnifferCommandExecutor(): CodeSnifferCommandExecutor
+    {
+        return new CodeSnifferCommandExecutor($this->createProcessRunnerService());
     }
 
     /**

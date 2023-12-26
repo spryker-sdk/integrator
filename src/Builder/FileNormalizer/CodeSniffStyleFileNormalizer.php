@@ -9,9 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\FileNormalizer;
 
-use RuntimeException;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 
 class CodeSniffStyleFileNormalizer implements FileNormalizerInterface
 {
@@ -31,18 +29,18 @@ class CodeSniffStyleFileNormalizer implements FileNormalizerInterface
     protected $config;
 
     /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @var \SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCommandExecutor
      */
-    protected ProcessRunnerServiceInterface $processRunner;
+    protected CodeSnifferCommandExecutor $codeSnifferCommandExecutor;
 
     /**
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @param \SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCommandExecutor $codeSnifferCommandExecutor
      */
-    public function __construct(IntegratorConfig $config, ProcessRunnerServiceInterface $processRunner)
+    public function __construct(IntegratorConfig $config, CodeSnifferCommandExecutor $codeSnifferCommandExecutor)
     {
         $this->config = $config;
-        $this->processRunner = $processRunner;
+        $this->codeSnifferCommandExecutor = $codeSnifferCommandExecutor;
     }
 
     /**
@@ -64,19 +62,15 @@ class CodeSniffStyleFileNormalizer implements FileNormalizerInterface
     /**
      * @param array $filePaths
      *
-     * @throws \RuntimeException
-     *
      * @return void
      */
     public function normalize(array $filePaths): void
     {
         $projectConsolePath = $this->getProjectConsolePath();
         foreach ($this->getProjectRelativeFilePaths($filePaths) as $filePath) {
-            $process = $this->processRunner->run([$projectConsolePath, static::PHP_CS_FIX_COMMAND, $filePath]);
-
-            if ($process->getExitCode() > 0 && $process->getErrorOutput() !== '') {
-                throw new RuntimeException($process->getErrorOutput());
-            }
+            $this->codeSnifferCommandExecutor->executeCodeSnifferCommand(
+                [$projectConsolePath, static::PHP_CS_FIX_COMMAND, $filePath],
+            );
         }
     }
 
