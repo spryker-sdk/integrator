@@ -18,7 +18,7 @@ class CodeSnifferCommandExecutor
     /**
      * @var int
      */
-    public const EXECUTION_ATTEMPTS = 2;
+    public const EXECUTION_ATTEMPTS = 3;
 
     /**
      * @var int
