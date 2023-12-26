@@ -11,11 +11,12 @@ namespace SprykerSdk\Integrator\Builder\FileNormalizer;
 
 use RuntimeException;
 use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
+use Symfony\Component\Process\Process;
 
 class CodeSnifferCommandExecutor
 {
     /**
-     * @var int<1, max>
+     * @var int
      */
     public const EXECUTION_ATTEMPTS = 2;
 
@@ -40,8 +41,6 @@ class CodeSnifferCommandExecutor
     /**
      * @param array<string> $command
      *
-     * @throws \RuntimeException
-     *
      * @return void
      */
     public function executeCodeSnifferCommand(array $command): void
@@ -51,19 +50,31 @@ class CodeSnifferCommandExecutor
         while ($leftAttempts > 0) {
             $process = $this->processRunner->run($command);
 
+            --$leftAttempts;
+
             if ($process->getExitCode() === static::SUCCESS_COMMAND_CODE) {
                 break;
             }
 
-            --$leftAttempts;
-        }
-
-        if ($process->getExitCode() !== static::SUCCESS_COMMAND_CODE) {
-            $errorOutput = $process->getErrorOutput();
-
-            if ($errorOutput !== '') {
-                throw new RuntimeException($errorOutput);
+            if ($leftAttempts === 0 && $process->getExitCode() !== static::SUCCESS_COMMAND_CODE) {
+                $this->throwFailedExecutionException($process);
             }
+        }
+    }
+
+    /**
+     * @param \Symfony\Component\Process\Process $process
+     *
+     * @throws \RuntimeException
+     *
+     * @return void
+     */
+    protected function throwFailedExecutionException(Process $process): void
+    {
+        $errorOutput = $process->getErrorOutput();
+
+        if ($errorOutput !== '') {
+            throw new RuntimeException($errorOutput);
         }
     }
 }
