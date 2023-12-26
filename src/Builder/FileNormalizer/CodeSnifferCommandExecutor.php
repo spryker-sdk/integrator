@@ -15,7 +15,7 @@ use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 class CodeSnifferCommandExecutor
 {
     /**
-     * @var int
+     * @var int<1, max>
      */
     public const EXECUTION_ATTEMPTS = 2;
 
@@ -58,7 +58,7 @@ class CodeSnifferCommandExecutor
             --$leftAttempts;
         }
 
-        if (isset($process) && $process->getExitCode() !== static::SUCCESS_COMMAND_CODE) {
+        if ($process->getExitCode() !== static::SUCCESS_COMMAND_CODE) {
             $errorOutput = $process->getErrorOutput();
 
             if ($errorOutput !== '') {
