@@ -4,7 +4,7 @@
     "description": "Integrator module",
     "license": "proprietary",
     "require": {
-        "php": " >=8.0",
+        "php": ">=8.0",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-simplexml": "*",
