@@ -5152,16 +5152,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/manifest-test-data-provider.git",
-                "reference": "2f28877e0951653ebf80e813ad19371e1ab6b443"
+                "reference": "b7db10575bc116a6493fbc1fe393c3b66ca64261"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/manifest-test-data-provider/zipball/2f28877e0951653ebf80e813ad19371e1ab6b443",
-                "reference": "2f28877e0951653ebf80e813ad19371e1ab6b443",
+                "url": "https://api.github.com/repos/spryker-sdk/manifest-test-data-provider/zipball/b7db10575bc116a6493fbc1fe393c3b66ca64261",
+                "reference": "b7db10575bc116a6493fbc1fe393c3b66ca64261",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.4"
+                "php": ">=8.0"
             },
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
@@ -5173,7 +5173,7 @@
                 "issues": "https://github.com/spryker-sdk/manifest-test-data-provider/issues",
                 "source": "https://github.com/spryker-sdk/manifest-test-data-provider/tree/feature/sdk-5711-drop-php74"
             },
-            "time": "2024-01-03T09:50:55+00:00"
+            "time": "2024-01-03T10:07:55+00:00"
         },
         {
             "name": "spryker/code-sniffer",
