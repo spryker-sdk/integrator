@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1904e24631b4b7b9faceff3576dad552",
+    "content-hash": "3f48c9384df2bad660963dc0329c2e15",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -5148,22 +5148,21 @@
         },
         {
             "name": "spryker-sdk/manifest-test-data-provider",
-            "version": "dev-master",
+            "version": "dev-feature/sdk-5711-drop-php74",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/manifest-test-data-provider.git",
-                "reference": "c1f19eefc14a97faa742d387828d2e07e404e397"
+                "reference": "2f28877e0951653ebf80e813ad19371e1ab6b443"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/manifest-test-data-provider/zipball/c1f19eefc14a97faa742d387828d2e07e404e397",
-                "reference": "c1f19eefc14a97faa742d387828d2e07e404e397",
+                "url": "https://api.github.com/repos/spryker-sdk/manifest-test-data-provider/zipball/2f28877e0951653ebf80e813ad19371e1ab6b443",
+                "reference": "2f28877e0951653ebf80e813ad19371e1ab6b443",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.4"
             },
-            "default-branch": true,
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -5172,9 +5171,9 @@
             "description": "Data provider for manifests generation and integration tests",
             "support": {
                 "issues": "https://github.com/spryker-sdk/manifest-test-data-provider/issues",
-                "source": "https://github.com/spryker-sdk/manifest-test-data-provider/tree/master"
+                "source": "https://github.com/spryker-sdk/manifest-test-data-provider/tree/feature/sdk-5711-drop-php74"
             },
-            "time": "2023-12-13T14:44:09+00:00"
+            "time": "2024-01-03T09:50:55+00:00"
         },
         {
             "name": "spryker/code-sniffer",
