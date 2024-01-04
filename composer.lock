@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4367c9f90a5f8bba432af29e06a99b5c",
+    "content-hash": "b159819a031831f03ef589d41822527f",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -5178,16 +5178,16 @@
         },
         {
             "name": "spryker/code-sniffer",
-            "version": "0.17.19",
+            "version": "0.17.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker/code-sniffer.git",
-                "reference": "2156a1d4d257e20dacc955872c8f6b9c7b8be3fd"
+                "reference": "5374a2c2ad29c361a6aeec0c81730aed438d08e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker/code-sniffer/zipball/2156a1d4d257e20dacc955872c8f6b9c7b8be3fd",
-                "reference": "2156a1d4d257e20dacc955872c8f6b9c7b8be3fd",
+                "url": "https://api.github.com/repos/spryker/code-sniffer/zipball/5374a2c2ad29c361a6aeec0c81730aed438d08e4",
+                "reference": "5374a2c2ad29c361a6aeec0c81730aed438d08e4",
                 "shasum": ""
             },
             "require": {
@@ -5232,7 +5232,7 @@
                 "issues": "https://github.com/spryker/code-sniffer/issues",
                 "source": "https://github.com/spryker/code-sniffer"
             },
-            "time": "2023-11-02T19:16:04+00:00"
+            "time": "2024-01-04T17:11:52+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -5373,5 +5373,5 @@
     "platform-dev": {
         "ext-zip": "*"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
