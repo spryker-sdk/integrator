@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f48c9384df2bad660963dc0329c2e15",
+    "content-hash": "1904e24631b4b7b9faceff3576dad552",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -5148,21 +5148,22 @@
         },
         {
             "name": "spryker-sdk/manifest-test-data-provider",
-            "version": "dev-feature/sdk-5711-drop-php74",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spryker-sdk/manifest-test-data-provider.git",
-                "reference": "b7db10575bc116a6493fbc1fe393c3b66ca64261"
+                "reference": "a8755b741d3d8ced800ae23a2254427fc4e730e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spryker-sdk/manifest-test-data-provider/zipball/b7db10575bc116a6493fbc1fe393c3b66ca64261",
-                "reference": "b7db10575bc116a6493fbc1fe393c3b66ca64261",
+                "url": "https://api.github.com/repos/spryker-sdk/manifest-test-data-provider/zipball/a8755b741d3d8ced800ae23a2254427fc4e730e0",
+                "reference": "a8755b741d3d8ced800ae23a2254427fc4e730e0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0"
             },
+            "default-branch": true,
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -5171,9 +5172,9 @@
             "description": "Data provider for manifests generation and integration tests",
             "support": {
                 "issues": "https://github.com/spryker-sdk/manifest-test-data-provider/issues",
-                "source": "https://github.com/spryker-sdk/manifest-test-data-provider/tree/feature/sdk-5711-drop-php74"
+                "source": "https://github.com/spryker-sdk/manifest-test-data-provider/tree/master"
             },
-            "time": "2024-01-03T10:07:55+00:00"
+            "time": "2024-01-04T08:16:27+00:00"
         },
         {
             "name": "spryker/code-sniffer",

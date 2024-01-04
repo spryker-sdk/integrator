@@ -24,7 +24,7 @@
         "ext-zip": "*",
         "phpstan/phpstan": "^1.0.0",
         "phpunit/phpunit": "^9.5.0",
-        "spryker-sdk/manifest-test-data-provider": " dev-feature/sdk-5711-drop-php74",
+        "spryker-sdk/manifest-test-data-provider": "dev-master",
         "spryker/code-sniffer": "^0.17.19",
         "symfony/filesystem": "^6.0"
     },
