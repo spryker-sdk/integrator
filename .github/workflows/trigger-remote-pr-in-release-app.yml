@@ -9,8 +9,8 @@ env:
     PR_ASSIGNEES: pavelmaksimov25,DmytroKlymanSpryker
 
 on:
-    pull_request:
-        types: [closed]
+    release:
+        types: [published]
     workflow_dispatch:
 
 jobs:
