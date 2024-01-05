@@ -10,13 +10,10 @@ declare(strict_types=1);
 namespace SprykerSdkTest\Integrator\Builder\FileNormalizer;
 
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
+use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCommandExecutor;
 use SprykerSdk\Integrator\Builder\FileNormalizer\PhpCSFixerFileNormalizer;
 use SprykerSdk\Integrator\Builder\FileStorage\FileStorage;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerService;
-use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
-use Symfony\Component\Process\Process;
 
 class PhpCSFixerFileNormalizerTest extends TestCase
 {
@@ -26,36 +23,10 @@ class PhpCSFixerFileNormalizerTest extends TestCase
     public function testExecuteSuccess(): void
     {
         // Arrange
-        $processExecutorMock = $this->createProcessExecutorMock(0, '');
-        $processExecutorMock->expects($this->atLeastOnce())->method('run')->with(
-            $this->callback(function ($command) {
-                return strpos($command[0], 'vendor/bin/phpcbf') !== false;
-            }),
-        );
-
+        $codesnifferCommandExecutor = $this->createCodeSnifferCommandExecutorMock();
         // Arrange
         $configMock = $this->createMock(IntegratorConfig::class);
-        $normalizer = new PhpCSFixerFileNormalizer($configMock, $processExecutorMock);
-
-        $fileStorage = new FileStorage();
-        $fileStorage->addFile('someClass.php');
-
-        // Act
-        $normalizer->normalize($fileStorage->flush());
-    }
-
-    /**
-     * @return void
-     */
-    public function testExecuteFailed(): void
-    {
-        // Assert
-        $this->expectException(RuntimeException::class);
-
-        // Arrange
-        $processExecutorMock = $this->createProcessExecutorMock(2, 'process error');
-        $configMock = $this->createMock(IntegratorConfig::class);
-        $normalizer = new PhpCSFixerFileNormalizer($configMock, $processExecutorMock);
+        $normalizer = new PhpCSFixerFileNormalizer($configMock, $codesnifferCommandExecutor);
 
         $fileStorage = new FileStorage();
         $fileStorage->addFile('someClass.php');
@@ -70,9 +41,9 @@ class PhpCSFixerFileNormalizerTest extends TestCase
     public function testGetErrorMessageShouldReturnErrorMessage(): void
     {
         // Arrange
-        $processExecutorMock = $this->createProcessExecutorMock(2, 'process error');
+        $codesnifferCommandExecutor = $this->createMock(CodeSnifferCommandExecutor::class);
         $configMock = $this->createMock(IntegratorConfig::class);
-        $normalizer = new PhpCSFixerFileNormalizer($configMock, $processExecutorMock);
+        $normalizer = new PhpCSFixerFileNormalizer($configMock, $codesnifferCommandExecutor);
 
         // Act
         $errorMessage = $normalizer->getErrorMessage();
@@ -82,32 +53,19 @@ class PhpCSFixerFileNormalizerTest extends TestCase
     }
 
     /**
-     * @param int $exitCode
-     * @param string $errorOutput
-     *
-     * @return \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @return \SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCommandExecutor
      */
-    protected function createProcessExecutorMock(int $exitCode, string $errorOutput = ''): ProcessRunnerServiceInterface
+    protected function createCodeSnifferCommandExecutorMock(): CodeSnifferCommandExecutor
     {
-        $processMock = $this->createProcessMock($exitCode, $errorOutput);
-        $processExecutorMock = $this->createMock(ProcessRunnerService::class);
-        $processExecutorMock->method('run')->willReturn($processMock);
+        $codeSnifferCommandExecutor = $this->createMock(CodeSnifferCommandExecutor::class);
+        $codeSnifferCommandExecutor->expects($this->once())
+            ->method('executeCodeSnifferCommand')
+            ->with(
+                $this->callback(function ($command) {
+                    return strpos($command[0], 'vendor/bin/phpcbf') !== false;
+                }),
+            );
 
-        return $processExecutorMock;
-    }
-
-    /**
-     * @param int $exitCode
-     * @param string $errorOutput
-     *
-     * @return \Symfony\Component\Process\Process
-     */
-    protected function createProcessMock(int $exitCode, string $errorOutput = ''): Process
-    {
-        $processMock = $this->createMock(Process::class);
-        $processMock->method('getExitCode')->willReturn($exitCode);
-        $processMock->method('getErrorOutput')->willReturn($errorOutput);
-
-        return $processMock;
+        return $codeSnifferCommandExecutor;
     }
 }

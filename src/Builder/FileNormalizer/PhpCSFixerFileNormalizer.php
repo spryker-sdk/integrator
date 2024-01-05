@@ -9,9 +9,7 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\FileNormalizer;
 
-use RuntimeException;
 use SprykerSdk\Integrator\IntegratorConfig;
-use SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface;
 
 class PhpCSFixerFileNormalizer implements FileNormalizerInterface
 {
@@ -26,18 +24,18 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
     protected $config;
 
     /**
-     * @var \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface
+     * @var \SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCommandExecutor
      */
-    protected ProcessRunnerServiceInterface $processRunner;
+    protected CodeSnifferCommandExecutor $codeSnifferCommandExecutor;
 
     /**
      * @param \SprykerSdk\Integrator\IntegratorConfig $config
-     * @param \SprykerSdk\Utils\Infrastructure\Service\ProcessRunnerServiceInterface $processRunner
+     * @param \SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCommandExecutor $codeSnifferCommandExecutor
      */
-    public function __construct(IntegratorConfig $config, ProcessRunnerServiceInterface $processRunner)
+    public function __construct(IntegratorConfig $config, CodeSnifferCommandExecutor $codeSnifferCommandExecutor)
     {
         $this->config = $config;
-        $this->processRunner = $processRunner;
+        $this->codeSnifferCommandExecutor = $codeSnifferCommandExecutor;
     }
 
     /**
@@ -59,26 +57,13 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
     /**
      * @param array $filePaths
      *
-     * @throws \RuntimeException
-     *
      * @return void
      */
     public function normalize(array $filePaths): void
     {
-        $command = [$this->getCSFixPath(), ...$this->getAbsoluteFilePaths($filePaths)];
-        $process = $this->processRunner->run($command);
-
-        // TODO remove when phpcbf will be able to fix all issues in file during the one iteration
-        if (defined('TEST_INTEGRATOR_MODE') && TEST_INTEGRATOR_MODE === 'true' && $process->getExitCode() !== 0) {
-            $process = $this->processRunner->run($command);
-            if ($process->getExitCode() !== 0) {
-                $process = $this->processRunner->run($command);
-            }
-        }
-
-        if ($process->getExitCode() > 0 && $process->getErrorOutput() !== '') {
-            throw new RuntimeException($process->getErrorOutput());
-        }
+        $this->codeSnifferCommandExecutor->executeCodeSnifferCommand(
+            [$this->getCSFixPath(), ...$this->getAbsoluteFilePaths($filePaths)],
+        );
     }
 
     /**

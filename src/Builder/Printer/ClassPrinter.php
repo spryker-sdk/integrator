@@ -20,7 +20,7 @@ class ClassPrinter extends Standard
     /**
      * Determine whether a list of nodes uses multiline formatting.
      *
-     * @param (\PhpParser\Node|null)[] $nodes Node list
+     * @param list<\PhpParser\Node|null> $nodes Node list
      *
      * @return bool Whether multiline formatting is used
      */
