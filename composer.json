@@ -15,7 +15,7 @@
         "guzzlehttp/guzzle": "^7.4",
         "nikic/php-parser": "^4.13.0",
         "sebastian/diff": "^4.0.0",
-        "spryker-sdk/utils": "^0.2.0",
+        "spryker-sdk/utils": "^0.2.2",
         "symfony/console": "^6.0",
         "symfony/finder": "^6.0",
         "symfony/process": "^6.0"

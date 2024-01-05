@@ -44,13 +44,7 @@ jobs:
                     restore-keys: ${{ runner.os }}-composer-
 
             -   name: Composer install
-                run: |
-                    composer --version
-                    if [[ ${{ matrix.php-version }} == '8.2' || ${{ matrix.php-version }} == '8.3' ]]; then
-                      composer update laminas/laminas-servicemanager laminas/laminas-stdlib laminas/laminas-filter --prefer-stable --optimize-autoloader
-                    else
-                      composer install --prefer-dist --no-interaction --optimize-autoloader
-                    fi
+                run: composer install --prefer-dist --no-interaction --optimize-autoloader
 
             -   name: Check PHP for syntax errors
                 run: find ./src -path src -prune -o -type f -name '*.php' -print0 | xargs -0 -n1 -P4 php -l -n | (! grep -v "No syntax errors detected" )
