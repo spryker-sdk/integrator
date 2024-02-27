@@ -88,14 +88,14 @@ class AbstractValueExtractorStrategy
 
                 continue;
             }
-            if (!$this->isConstant($key)) {
+            if (is_string($key) && !$this->isConstant($key)) {
                 $key = sprintf('\'%s\'', $key);
             }
-            if (!$this->isConstant($value)) {
+            if (is_string($key) && !$this->isConstant($value)) {
                 $value = sprintf('\'%s\'', $value);
             }
 
-            $result[] = sprintf('%s => %s', $key, $value);
+            $result[] = $key . ' => ' . $value;
         }
 
         return sprintf('[%s]', implode(', ', $result));

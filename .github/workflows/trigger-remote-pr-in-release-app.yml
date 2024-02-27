@@ -6,7 +6,7 @@ env:
     TARGET_REPO: release-app
     SOURCE_PACKAGE_NAME: 'spryker-sdk/integrator'
     PR_LABELS: 'composer dependencies'
-    PR_ASSIGNEES: pavelmaksimov25,DmytroKlymanSpryker
+    PR_ASSIGNEES: vol4onok,asmarovydlo
 
 on:
     release:
