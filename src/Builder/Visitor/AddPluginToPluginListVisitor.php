@@ -366,10 +366,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     {
         foreach ($statement->stmts as $stmt) {
             if ($stmt instanceof Expression && $stmt->expr instanceof Assign) {
-//                if ($stmt->expr->expr instanceof New_ && $this->isArrayItemEqual($stmt->expr->expr)) {
-//                    continue;
-//                }
-
                 if ($stmt->expr->expr instanceof New_ && $stmt->expr->expr->class->toString() === $this->classMetadataTransfer->getSource()) {
                     continue;
                 }
