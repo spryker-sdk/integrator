@@ -34,7 +34,7 @@ class ClassPrinter extends Standard
             $node = current($nodes);
             $startPos = $node->getStartTokenPos() - 1;
             $endPos = $node->getEndTokenPos() + 1;
-            $text = $this->origTokens->getTokenCode($startPos, $endPos, 0);
+            $text = $this->origTokens !== null ? $this->origTokens->getTokenCode($startPos, $endPos, 0) : '';
 
             return strpos($text, "\n") !== false;
         }

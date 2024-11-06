@@ -11,8 +11,8 @@ namespace SprykerSdk\Integrator\Builder\Visitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -100,7 +100,7 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
      */
     protected function isArrayMergeFuncCallNode(FuncCall $node): bool
     {
-        return $node->name instanceof Name && $node->name->parts[0] === static::ARRAY_MERGE_FUNCTION;
+        return $node->name instanceof Name && $node->name->name === static::ARRAY_MERGE_FUNCTION;
     }
 
     /**
@@ -341,7 +341,7 @@ class AddMethodCallToCallListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return \PhpParser\Node\Expr\ArrayItem
+     * @return \PhpParser\Node\ArrayItem
      */
     protected function createArrayItemWithMethodCall(): ArrayItem
     {

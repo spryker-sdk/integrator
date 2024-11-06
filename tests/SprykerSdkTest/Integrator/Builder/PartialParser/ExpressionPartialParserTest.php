@@ -25,7 +25,7 @@ class ExpressionPartialParserTest extends TestCase
     public function testParseShouldReturnStringExprWhenInvalidPhpCode(): void
     {
         // Arrange
-        $parser = new ExpressionPartialParser((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
+        $parser = new ExpressionPartialParser((new ParserFactory())->createForHostVersion());
         $code = 'some invalid code';
 
         // Act
@@ -59,7 +59,7 @@ class ExpressionPartialParserTest extends TestCase
     public function testParseShouldReturnStringExprWhenGlobalConstantSet(): void
     {
         // Arrange
-        $parser = new ExpressionPartialParser((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
+        $parser = new ExpressionPartialParser((new ParserFactory())->createForHostVersion());
         $code = 'SOME_VALUE';
 
         // Act
@@ -76,7 +76,7 @@ class ExpressionPartialParserTest extends TestCase
     public function testParseShouldReturnExprWhenWellFormedPhpCodeSet(): void
     {
         // Arrange
-        $parser = new ExpressionPartialParser((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
+        $parser = new ExpressionPartialParser((new ParserFactory())->createForHostVersion());
         $code = '<?php new \ArrayObject();';
 
         // Act
@@ -84,7 +84,7 @@ class ExpressionPartialParserTest extends TestCase
 
         // Assert
         $this->assertInstanceOf(New_::class, $parserResult->expr);
-        $this->assertSame('ArrayObject', $parserResult->expr->class->parts[0]);
+        $this->assertSame('ArrayObject', $parserResult->expr->class->name);
     }
 
     /**
@@ -93,25 +93,20 @@ class ExpressionPartialParserTest extends TestCase
     public function testParseShouldReturnExprWithUsedClassesWhenFQCNSet(): void
     {
         // Arrange
-        $parser = new ExpressionPartialParser((new ParserFactory())->create(ParserFactory::PREFER_PHP7));
+        $parser = new ExpressionPartialParser((new ParserFactory())->createForHostVersion());
         $code = '\\Spryker\\Shared\\Config\\Config::get(\\Spryker\\Shared\\Log\\LogConstants::LOG_QUEUE_NAME)';
         $dumper = new NodeDumper();
 
         // Act
         $parserResult = $parser->parse($code);
-        $dumpedExpr = $dumper->dump($parserResult->expr);
+        $dumpedExpr = $dumper->dump($parserResult->expr, $code);
 
         // Assert
         $this->assertEquals(
             <<<'DUMP'
             Expr_StaticCall(
                 class: Name_FullyQualified(
-                    parts: array(
-                        0: Spryker
-                        1: Shared
-                        2: Config
-                        3: Config
-                    )
+                    name: Spryker\Shared\Config\Config
                 )
                 name: Identifier(
                     name: get
@@ -121,12 +116,7 @@ class ExpressionPartialParserTest extends TestCase
                         name: null
                         value: Expr_ClassConstFetch(
                             class: Name_FullyQualified(
-                                parts: array(
-                                    0: Spryker
-                                    1: Shared
-                                    2: Log
-                                    3: LogConstants
-                                )
+                                name: Spryker\Shared\Log\LogConstants
                             )
                             name: Identifier(
                                 name: LOG_QUEUE_NAME

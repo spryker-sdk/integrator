@@ -10,7 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\ClassModifier\ConfigFile;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use SprykerSdk\Integrator\Builder\PartialParser\ExpressionPartialParserInterface;
@@ -43,7 +43,7 @@ class ConfigFileModifier implements ConfigFileModifierInterface
     ): FileInformationTransfer {
         $valueStm = $this->expressionPartialParser->parse(sprintf('$var = %s;', $value));
 
-        /** @var \PhpParser\Node\Expr\ArrayItem|null $arrayItem */
+        /** @var \PhpParser\Node\ArrayItem|null $arrayItem */
         $arrayItem = (new NodeFinder())->findFirst($valueStm, function (Node $node) {
             return $node instanceof ArrayItem;
         });

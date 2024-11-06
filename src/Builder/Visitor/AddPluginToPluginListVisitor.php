@@ -12,10 +12,10 @@ namespace SprykerSdk\Integrator\Builder\Visitor;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
@@ -30,7 +30,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
@@ -40,11 +40,6 @@ use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class AddPluginToPluginListVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var string
-     */
-    public const STMTS = 'stmts';
-
     /**
      * @var string
      */
@@ -252,7 +247,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
                 new Name((string)$this->classMetadataTransfer->getCondition()),
             ),
             [
-                static::STMTS => [
+                'stmts' => [
                     $this->getAssignPlugin($name),
                 ],
             ],
@@ -269,7 +264,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
         return new Expression(
             new Assign(
                 new ArrayDimFetch($name),
-                $this->createArrayItemWithInstanceOf(),
+                $this->createArrayItemWithInstanceOf()->value,
             ),
         );
     }
@@ -313,7 +308,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
      */
     protected function isArrayMergeFuncCallNode(FuncCall $node): bool
     {
-        return $node->name instanceof Name && $node->name->parts[0] === static::ARRAY_MERGE_FUNCTION;
+        return $node->name instanceof Name && $node->name->name === static::ARRAY_MERGE_FUNCTION;
     }
 
     /**
@@ -371,9 +366,10 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     {
         foreach ($statement->stmts as $stmt) {
             if ($stmt instanceof Expression && $stmt->expr instanceof Assign) {
-                if ($stmt->expr->expr instanceof ArrayItem && $this->isArrayItemEqual($stmt->expr->expr)) {
-                    continue;
-                }
+//                if ($stmt->expr->expr instanceof New_ && $this->isArrayItemEqual($stmt->expr->expr)) {
+//                    continue;
+//                }
+
                 if ($stmt->expr->expr instanceof New_ && $stmt->expr->expr->class->toString() === $this->classMetadataTransfer->getSource()) {
                     continue;
                 }
@@ -525,7 +521,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param \PhpParser\Node\Expr\ArrayItem|null $item
+     * @param \PhpParser\Node\ArrayItem|null $item
      *
      * @return bool
      */
@@ -555,7 +551,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param \PhpParser\Node\Expr\ArrayItem $item
+     * @param \PhpParser\Node\ArrayItem $item
      *
      * @return bool
      */
@@ -594,7 +590,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param \PhpParser\Node\Expr\ArrayItem $node
+     * @param \PhpParser\Node\ArrayItem $node
      *
      * @return bool
      */
@@ -606,7 +602,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param \PhpParser\Node\Expr\ArrayItem $node
+     * @param \PhpParser\Node\ArrayItem $node
      *
      * @return string|null
      */
@@ -628,7 +624,7 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return \PhpParser\Node\Expr\ArrayItem
+     * @return \PhpParser\Node\ArrayItem
      */
     protected function createArrayItemWithInstanceOf(): ArrayItem
     {
@@ -647,6 +643,6 @@ class AddPluginToPluginListVisitor extends NodeVisitorAbstract
     {
         $this->methodFound = false;
 
-        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        return NodeVisitor::DONT_TRAVERSE_CHILDREN;
     }
 }

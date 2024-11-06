@@ -53,11 +53,6 @@ class ClassMethodChecker extends AbstractMethodChecker implements ClassMethodChe
     public const METHOD_FIELD_NAME = 'name';
 
     /**
-     * @var string
-     */
-    public const METHOD_FIELD_PARTS = 'parts';
-
-    /**
      * @var array
      */
     protected const SINGLE_STATEMENT_EXPRESSION_FIELDS = [
@@ -138,7 +133,7 @@ class ClassMethodChecker extends AbstractMethodChecker implements ClassMethodChe
         if (!$methodNode || !$methodNode->stmts) {
             return true;
         }
-        $parser = $this->parserFactory->create(ParserFactory::PREFER_PHP7);
+        $parser = $this->parserFactory->createForHostVersion();
         $previousValue = $parser->parse(sprintf('<?php %s;', $value));
         if (!$previousValue) {
             return false;

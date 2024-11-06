@@ -36,7 +36,7 @@ class FileLoader extends AbstractLoader implements FileLoaderInterface
 
         $fileInformationTransfer->setTokenTree($syntaxTree)
             ->setOriginalTokenTree($originalSyntaxTree)
-            ->setTokens($this->lexer->getTokens());
+            ->setTokens($this->parser->getTokens());
 
         return $fileInformationTransfer;
     }

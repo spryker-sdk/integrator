@@ -34,6 +34,6 @@ class AbstractAddStatementToStatementListStrategy
 
         return $node->stmts[0] instanceof Return_
             && $node->stmts[0]->expr instanceof FuncCall
-            && $expression->name->parts[0] === static::ARRAY_MERGE_FUNCTION;
+            && $expression->name->name === static::ARRAY_MERGE_FUNCTION;
     }
 }

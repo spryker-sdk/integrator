@@ -36,16 +36,19 @@ class NameMethodStatementChecker extends AbstractMethodChecker implements Method
         if (is_string($previousValue->name) && is_string($currentValue->name) && $previousValue->name !== $currentValue->name) {
             return false;
         }
+
         if (
-            $this->isExistsStatementField($previousValue->name, $currentValue->name, 'parts')
-            && $previousValue->name->parts !== $currentValue->name->parts
+            $this->isExistsStatementField($previousValue->name, $currentValue->name, 'name')
+            && $previousValue->name->name !== $currentValue->name->name
         ) {
             return false;
         }
-        if (property_exists($previousValue->name, 'parts') && !property_exists($currentValue->name, 'parts')) {
+
+        if (property_exists($previousValue->name, 'name') && !property_exists($currentValue->name, 'name')) {
             return false;
         }
-        if (!property_exists($previousValue->name, 'parts') && property_exists($currentValue->name, 'parts')) {
+
+        if (!property_exists($previousValue->name, 'name') && property_exists($currentValue->name, 'name')) {
             return false;
         }
 

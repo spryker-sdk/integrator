@@ -56,7 +56,7 @@ class ConfigReader implements ConfigReaderInterface
     {
         $configFileContent = $this->getFileContent($configPath);
 
-        $parser = $this->parserFactory->create(ParserFactory::PREFER_PHP7);
+        $parser = $this->parserFactory->createForHostVersion();
 
         $ast = $parser->parse($configFileContent);
 

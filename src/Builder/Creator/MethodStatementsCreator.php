@@ -10,7 +10,8 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\Creator;
 
 use PhpParser\BuilderFactory;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\ArrayItem;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -122,7 +123,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
      * @param array $keyParts
      * @param array $insideArrayItems
      *
-     * @return \PhpParser\Node\Expr\ArrayItem
+     * @return \PhpParser\Node\ArrayItem
      */
     protected function createArrayItem(
         ClassInformationTransfer $classInformationTransfer,
@@ -150,7 +151,9 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
 
         if ($insideArrayItems) {
             return new ArrayItem(
-                (new BuilderFactory())->val($insideArrayItems),
+                (new BuilderFactory())->val(
+                    new Array_($insideArrayItems),
+                ),
                 $key,
             );
         }
@@ -166,7 +169,7 @@ class MethodStatementsCreator extends AbstractMethodCreator implements MethodSta
      * @param array $itemParts
      * @param array $keyParts
      *
-     * @return \PhpParser\Node\Expr\ArrayItem
+     * @return \PhpParser\Node\ArrayItem
      */
     protected function createSingleSemicolonVariableArrayItem(ClassInformationTransfer $classInformationTransfer, array $itemParts, array $keyParts): ArrayItem
     {

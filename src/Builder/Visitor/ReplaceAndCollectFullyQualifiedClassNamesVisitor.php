@@ -38,7 +38,7 @@ class ReplaceAndCollectFullyQualifiedClassNamesVisitor extends NodeVisitorAbstra
             return $node;
         }
 
-        $this->fullyQualifiedClassNames->append(implode('\\', $node->parts));
+        $this->fullyQualifiedClassNames->append($node->name);
 
         return new Name($node->getLast());
     }

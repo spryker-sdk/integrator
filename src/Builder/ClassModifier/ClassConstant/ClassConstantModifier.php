@@ -109,7 +109,7 @@ class ClassConstantModifier implements ClassConstantModifierInterface
     protected function parseSingleValue(string $value): Expr
     {
         /** @var array<\PhpParser\Node\Stmt\Expression> $tree */
-        $tree = $this->parserFactory->create(ParserFactory::PREFER_PHP7)->parse(sprintf('<?php %s;', $value));
+        $tree = $this->parserFactory->createForHostVersion()->parse(sprintf('<?php %s;', $value));
 
         if ($tree === null) {
             throw new LiteralValueParsingException(sprintf('Value is not valid statement PHP code: `%s`', $value));

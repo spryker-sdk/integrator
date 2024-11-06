@@ -10,13 +10,14 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\Creator;
 
 use PhpParser\Comment\Doc;
+use PhpParser\Modifiers;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
@@ -102,7 +103,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         }
 
         $preparedValue = $this->createPreparedValueForParser($value);
-        $tree = $this->parserFactory->create(ParserFactory::PREFER_PHP7)->parse($preparedValue);
+        $tree = $this->parserFactory->createForHostVersion()->parse($preparedValue);
         if (!$tree) {
             throw new LiteralValueParsingException(sprintf('Value is not valid PHP code: `%s`', $value));
         }
@@ -148,7 +149,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
             $parentReturnType = $parentClassMethod ? $this->getReturnType($parentClassMethod) : null;
         }
         $returnType = $parentReturnType ?: $this->methodReturnTypeCreator->createMethodReturnType($value);
-        $flags = $parentClassMethod ? $this->getModifierFromClassMethod($parentClassMethod) : Class_::MODIFIER_PUBLIC;
+        $flags = $parentClassMethod ? $this->getModifierFromClassMethod($parentClassMethod) : Modifiers::PUBLIC;
         $docType = $parentClassMethod && $parentClassMethod->getDocComment() ?
             new Doc($parentClassMethod->getDocComment()->getText()) :
             $this->methodDocBlockCreator->createMethodDocBlock($value);
@@ -192,7 +193,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
             $parentReturnType = $parentReturnType->type;
         }
         if ($parentReturnType instanceof Identifier) {
-            $returnType = $nullable . $parentReturnType->name;
+            return new Identifier($nullable . $parentReturnType->name);
         }
         if ($parentReturnType instanceof FullyQualified) {
             return new FullyQualified($parentReturnType->toString());
@@ -208,7 +209,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
      */
     protected function getModifierFromClassMethod(ClassMethod $classMethod): int
     {
-        return $classMethod->isProtected() ? Class_::MODIFIER_PROTECTED : Class_::MODIFIER_PUBLIC;
+        return $classMethod->isProtected() ? Modifiers::PROTECTED : Modifiers::PUBLIC;
     }
 
     /**
@@ -276,7 +277,7 @@ class MethodCreator extends AbstractMethodCreator implements MethodCreatorInterf
         $expressionName = $expressionStatement->name;
         /** @var \PhpParser\Node\Name\FullyQualified $expressionClass */
         $expressionClass = $expressionStatement->class;
-        $expressionClass->parts = [$expressionClass->toString()];
+        $expressionClass->name = (new Name([$expressionClass->toString()]))->name;
         $returnClassConstExpression = $this->createClassConstantExpression(
             $classInformationTransfer,
             $expressionClass->toString(),
