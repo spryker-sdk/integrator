@@ -10,9 +10,9 @@ declare(strict_types=1);
 namespace SprykerSdk\Integrator\Builder\Visitor;
 
 use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Variable;
@@ -27,7 +27,7 @@ class AddArrayItemToEnvConfigVisitor extends NodeVisitorAbstract
     protected $target;
 
     /**
-     * @var \PhpParser\Node\Expr\ArrayItem
+     * @var \PhpParser\Node\ArrayItem
      */
     protected $value;
 
@@ -48,7 +48,7 @@ class AddArrayItemToEnvConfigVisitor extends NodeVisitorAbstract
 
     /**
      * @param string $target
-     * @param \PhpParser\Node\Expr\ArrayItem $value
+     * @param \PhpParser\Node\ArrayItem $value
      */
     public function __construct(string $target, ArrayItem $value)
     {

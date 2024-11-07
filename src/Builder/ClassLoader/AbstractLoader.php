@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SprykerSdk\Integrator\Builder\ClassLoader;
 
-use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
@@ -23,18 +22,11 @@ abstract class AbstractLoader
     protected $parser;
 
     /**
-     * @var \PhpParser\Lexer
-     */
-    protected $lexer;
-
-    /**
      * @param \PhpParser\Parser $parser
-     * @param \PhpParser\Lexer $lexer
      */
-    public function __construct(Parser $parser, Lexer $lexer)
+    public function __construct(Parser $parser)
     {
         $this->parser = $parser;
-        $this->lexer = $lexer;
     }
 
     /**

@@ -14,7 +14,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\UseUse;
+use PhpParser\Node\UseItem;
 use SprykerSdk\Integrator\Builder\Finder\UseStatementsFinder\UseStatementsFinderInterface;
 
 class ClassConstExpressionCompareStrategy implements CompareStrategyInterface
@@ -109,7 +109,7 @@ class ClassConstExpressionCompareStrategy implements CompareStrategyInterface
         $useStatements = $this->useStatementsFinder->findUseStatements($classTokenTree);
 
         foreach ($useStatements as $useStatement) {
-            $names[] = array_map(static fn (UseUse $use): string => $use->name->toString(), $useStatement->uses);
+            $names[] = array_map(static fn (UseItem $use): string => $use->name->toString(), $useStatement->uses);
         }
 
         return array_merge(...$names);

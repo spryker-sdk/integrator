@@ -11,13 +11,13 @@ namespace SprykerSdk\Integrator\Builder\Visitor;
 
 use InvalidArgumentException;
 use PhpParser\Node;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinter\Standard;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
@@ -25,16 +25,6 @@ use SprykerSdk\Integrator\Transfer\ClassMetadataTransfer;
 
 class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var string
-     */
-    protected const STATEMENT_ARRAY = 'Expr_Array';
-
-    /**
-     * @var string
-     */
-    protected const STATEMENT_ASSIGN = 'Expr_Assign';
-
     /**
      * @var string
      */
@@ -112,7 +102,7 @@ class RemovePluginFromPluginListVisitor extends NodeVisitorAbstract
         if ($this->cleanUpMethod) {
             $this->cleanUpMethod = false;
 
-            return NodeTraverser::REMOVE_NODE;
+            return NodeVisitor::REMOVE_NODE;
         }
 
         return $node;

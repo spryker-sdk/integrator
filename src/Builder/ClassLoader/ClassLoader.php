@@ -51,7 +51,7 @@ class ClassLoader extends AbstractLoader implements ClassLoaderInterface
 
         $classInformationTransfer->setTokenTree($syntaxTree)
             ->setOriginalTokenTree($originalSyntaxTree)
-            ->setTokens($this->lexer->getTokens())
+            ->setTokens($this->parser->getTokens())
             ->setFilePath(realpath($fileName));
 
         $parentClass = $this->getParent($syntaxTree);

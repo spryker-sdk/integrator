@@ -12,14 +12,14 @@ namespace SprykerSdk\Integrator\Builder\Visitor;
 use PhpParser\BuilderFactory;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use SprykerSdk\Integrator\Helper\ClassHelper;
 
@@ -59,11 +59,6 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
      * @var string
      */
     protected $after;
-
-    /**
-     * @var \PhpParser\Node
-     */
-    protected $parentNode;
 
     /**
      * @param string $methodName
@@ -123,7 +118,7 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
      */
     protected function isArrayMergeFuncCallNode(FuncCall $node): bool
     {
-        return $node->name instanceof Name && $node->name->parts[0] === static::ARRAY_MERGE_FUNCTION;
+        return $node->name instanceof Name && $node->name->name === static::ARRAY_MERGE_FUNCTION;
     }
 
     /**
@@ -257,7 +252,7 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return \PhpParser\Node\Expr\ArrayItem
+     * @return \PhpParser\Node\ArrayItem
      */
     protected function createArrayItemWithInstanceOf(): ArrayItem
     {
@@ -273,6 +268,6 @@ class AddClassToClassListVisitor extends NodeVisitorAbstract
     {
         $this->methodFound = false;
 
-        return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        return NodeVisitor::DONT_TRAVERSE_CHILDREN;
     }
 }

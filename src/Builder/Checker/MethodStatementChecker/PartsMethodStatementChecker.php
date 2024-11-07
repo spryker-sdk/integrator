@@ -22,7 +22,7 @@ class PartsMethodStatementChecker extends AbstractMethodChecker implements Metho
      */
     public function isApplicable($previousValue, $currentValue): bool
     {
-        return $this->isExistsStatementField($previousValue, $currentValue, ClassMethodChecker::METHOD_FIELD_PARTS);
+        return $this->isExistsStatementField($previousValue, $currentValue, ClassMethodChecker::METHOD_FIELD_NAME);
     }
 
     /**
@@ -33,6 +33,6 @@ class PartsMethodStatementChecker extends AbstractMethodChecker implements Metho
      */
     public function isSameStatement($previousValue, $currentValue): bool
     {
-        return $this->isSameStatementsArrayPart($currentValue->parts, $previousValue->parts);
+        return $this->isSameStatementsArrayPart($currentValue->name, $previousValue->name);
     }
 }

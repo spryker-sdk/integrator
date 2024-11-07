@@ -12,11 +12,8 @@ namespace SprykerSdk\Integrator;
 use CzProject\GitPhp\Runners\CliRunner;
 use GuzzleHttp\Client;
 use PhpParser\BuilderFactory;
-use PhpParser\Lexer;
-use PhpParser\Lexer\Emulative;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
-use PhpParser\Parser\Php7;
 use PhpParser\ParserFactory;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilder;
 use SprykerSdk\Integrator\Builder\ArgumentBuilder\ArgumentBuilderInterface;
@@ -670,11 +667,8 @@ class IntegratorFactory
      */
     public function createClassLoader(): ClassLoaderInterface
     {
-        $lexer = $this->createPhpParserLexer();
-
         return new ClassLoader(
-            $this->createPhpParserParser($lexer),
-            $lexer,
+            $this->createPhpParserParser(),
         );
     }
 
@@ -683,11 +677,8 @@ class IntegratorFactory
      */
     public function createFileLoader(): FileLoaderInterface
     {
-        $lexer = $this->createPhpParserLexer();
-
         return new FileLoader(
-            $this->createPhpParserParser($lexer),
-            $lexer,
+            $this->createPhpParserParser(),
         );
     }
 
@@ -905,17 +896,11 @@ class IntegratorFactory
     }
 
     /**
-     * @param \PhpParser\Lexer|null $lexer
-     *
      * @return \PhpParser\Parser
      */
-    public function createPhpParserParser(?Lexer $lexer = null): Parser
+    public function createPhpParserParser(): Parser
     {
-        if (!$lexer) {
-            $lexer = $this->createPhpParserLexer();
-        }
-
-        return new Php7($lexer);
+        return (new ParserFactory())->createForHostVersion();
     }
 
     /**
@@ -924,20 +909,6 @@ class IntegratorFactory
     public function getPhpParserNodeTraverser(): NodeTraverser
     {
         return new NodeTraverser();
-    }
-
-    /**
-     * @return \PhpParser\Lexer
-     */
-    public function createPhpParserLexer(): Lexer
-    {
-        return new Emulative([
-            'usedAttributes' => [
-                'comments',
-                'startLine', 'endLine',
-                'startTokenPos', 'endTokenPos',
-            ],
-        ]);
     }
 
     /**
@@ -1163,7 +1134,7 @@ class IntegratorFactory
     public function createNodeExpressionPartialParser(): ExpressionPartialParserInterface
     {
         return new ExpressionPartialParser(
-            (new ParserFactory())->create(ParserFactory::PREFER_PHP7),
+            $this->createPhpParserParser(),
         );
     }
 

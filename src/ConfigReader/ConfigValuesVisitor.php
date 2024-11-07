@@ -91,7 +91,7 @@ class ConfigValuesVisitor extends NodeVisitorAbstract
     {
         $values = [];
 
-        /** @var \PhpParser\Node\Expr\ArrayItem $item */
+        /** @var \PhpParser\Node\ArrayItem $item */
         foreach ($array->items as $item) {
             $itemValue = $item->value;
 
