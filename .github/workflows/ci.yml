@@ -56,11 +56,7 @@ jobs:
 
             -   name: Run tests
                 run: |
-                    if [[ ${{ matrix.php-version }} == '8.2' ]]; then
-                     XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover coverage.xml
-                    else
                      composer test
-                    fi
 
             -   name: Code Coverage Report
                 if: success() && matrix.php-version == '8.2'
