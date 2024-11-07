@@ -31,7 +31,7 @@ class StringConfigurationEnvironmentStrategyTest extends TestCase
     /**
      * @return \Generator
      */
-    public function isApplicableDataProvider(): Generator
+    public static function isApplicableDataProvider(): Generator
     {
         yield [false, []];
         yield [false, 12345];
@@ -57,7 +57,7 @@ class StringConfigurationEnvironmentStrategyTest extends TestCase
     /**
      * @return \Generator
      */
-    public function getFormattedExpressionDataProvider(): Generator
+    public static function getFormattedExpressionDataProvider(): Generator
     {
         yield ['\'       lorem ipsum\'', "       lorem ipsum'''''''''''''''"];
         yield ['\'lorem ipsum\'', 'lorem ipsum'];

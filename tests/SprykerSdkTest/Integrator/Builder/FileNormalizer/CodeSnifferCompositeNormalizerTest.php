@@ -111,7 +111,7 @@ class CodeSnifferCompositeNormalizerTest extends TestCase
     /**
      * @return array<array<bool>>
      */
-    public function missedPhpConfigConditionsDataProvider(): array
+    public static function missedPhpConfigConditionsDataProvider(): array
     {
         return [
             [false, true, false],

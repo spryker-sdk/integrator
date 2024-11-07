@@ -35,7 +35,7 @@ class ModuleRatingResponseMapperTest extends TestCase
     /**
      * @return array<string, array<string>>
      */
-    public function invalidResponseDataProvider(): array
+    public static function invalidResponseDataProvider(): array
     {
         return [
             'invalid_json' => ['{invalid json'],
