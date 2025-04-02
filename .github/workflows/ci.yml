@@ -25,7 +25,7 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php-version }}
-                    extensions: mbstring, intl, pdo_mysql
+                    extensions: mbstring, intl, pdo_mysql, xdebug
 
             -   name: Validate composer.json and composer.lock
                 run: composer validate
@@ -36,7 +36,7 @@ jobs:
                     echo "::set-output name=dir::$(composer config cache-files-dir)"
 
             -   name: Composer cache
-                uses: actions/cache@v2
+                uses: actions/cache@v4
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -56,7 +56,7 @@ jobs:
 
             -   name: Run tests
                 run: |
-                     composer test
+                    XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --only-summary-for-coverage-text tests
 
 #               Disabled on requested by Anton Shopin within
 #               https://spryker.atlassian.net/browse/FRW-10059
