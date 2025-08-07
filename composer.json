@@ -14,7 +14,7 @@
         "czproject/git-php": "^4.1",
         "guzzlehttp/guzzle": "^7.4",
         "nikic/php-parser": "^5.1.0",
-        "sebastian/diff": "^6.0.0",
+        "sebastian/diff": "^5.0.0 || ^6.0.0",
         "spryker-sdk/utils": "^0.2.2",
         "symfony/console": "^6.0",
         "symfony/finder": "^6.0",
