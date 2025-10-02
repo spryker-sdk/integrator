@@ -4,7 +4,7 @@
     "description": "Integrator module",
     "license": "proprietary",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-simplexml": "*",
@@ -13,7 +13,7 @@
         "composer/composer": "^2.6.0",
         "czproject/git-php": "^4.1",
         "guzzlehttp/guzzle": "^7.4",
-        "nikic/php-parser": "^5.1.0",
+        "nikic/php-parser": "^5.3.0",
         "sebastian/diff": "^5.0.0 || ^6.0.0",
         "spryker-sdk/utils": "^0.2.2",
         "symfony/console": "^6.0",
