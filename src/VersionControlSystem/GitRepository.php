@@ -14,6 +14,17 @@ use CzProject\GitPhp\GitRepository as CzGitRepository;
 
 class GitRepository extends CzGitRepository
 {
+
+    /**
+     * Uses for excluding core files from suite git diff.
+     * @var array<string>
+     */
+    public const EXCLUDE_FILES_DIFF = [
+        'src/Spryker/*',
+        'src/SprykerFeature/*',
+        'src/SprykerShop/*',
+    ];
+
     /**
      * @throws \CzProject\GitPhp\GitException
      *
@@ -38,7 +49,7 @@ class GitRepository extends CzGitRepository
     public function getDiff(string $originalBranch, string $currentBranch): string
     {
         $gitDiffOutput = $this->execute(
-            ['diff', $originalBranch . '..' . $currentBranch, '--ignore-blank-lines'],
+            array_merge(['diff', $originalBranch . '..' . $currentBranch, '--ignore-blank-lines', '--'], $this->getGitExcludeFiles()),
         );
 
         return implode(PHP_EOL, $gitDiffOutput);
@@ -52,5 +63,13 @@ class GitRepository extends CzGitRepository
     public function deleteBranch(string $name): void
     {
         $this->execute(['branch', '-D', $name]);
+    }
+
+    /**
+     * @return array
+     */
+    public function getGitExcludeFiles(): array
+    {
+        return static::EXCLUDE_FILES_DIFF ? array_map(fn (string $path): string => ':!' . $path, static::EXCLUDE_FILES_DIFF) : [];
     }
 }
