@@ -14,11 +14,11 @@ use CzProject\GitPhp\GitRepository as CzGitRepository;
 
 class GitRepository extends CzGitRepository
 {
-
-    /**
-     * Uses for excluding core files from suite git diff.
-     * @var array<string>
-     */
+ /**
+  * Uses for excluding core files from suite git diff.
+  *
+  * @var array<string>
+  */
     public const EXCLUDE_FILES_DIFF = [
         'src/Spryker/*',
         'src/SprykerFeature/*',
