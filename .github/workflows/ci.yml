@@ -54,6 +54,9 @@ jobs:
             -   name: CodeStyle checks
                 run: composer cs-check
 
+            -   name: Use lowest PHP_CodeSniffer version
+                run: composer update squizlabs/php_codesniffer --prefer-lowest
+
             -   name: Run tests
                 run: |
                     XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-text --only-summary-for-coverage-text tests
