@@ -23,7 +23,7 @@
     "require-dev": {
         "ext-zip": "*",
         "phpstan/phpstan": "^1.0.0",
-        "phpunit/phpunit": "^11.4.0",
+        "phpunit/phpunit": "^10.5.0 || ^11.4.0",
         "spryker-sdk/manifest-test-data-provider": "dev-master",
         "spryker/code-sniffer": "^0.17.19",
         "symfony/filesystem": "^6.0"

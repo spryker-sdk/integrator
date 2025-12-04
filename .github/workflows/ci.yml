@@ -9,7 +9,7 @@ on:
 
 jobs:
     validation:
-        runs-on: ubuntu-20.04
+        runs-on: ubuntu-latest
         strategy:
             fail-fast: false
             matrix:
@@ -53,6 +53,9 @@ jobs:
 
             -   name: CodeStyle checks
                 run: composer cs-check
+
+            -   name: Use lowest PHP_CodeSniffer version
+                run: composer update squizlabs/php_codesniffer --prefer-lowest
 
             -   name: Run tests
                 run: |
