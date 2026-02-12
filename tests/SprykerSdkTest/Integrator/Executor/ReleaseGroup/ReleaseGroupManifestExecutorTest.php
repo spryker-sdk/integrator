@@ -40,11 +40,15 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $gitMock = $this->createMock(GitRepository::class);
         $gitMock->method('hasChanges')->willReturn(true);
         $gitMock->method('getCurrentBranchName')->willReturn('testBranch');
+        $callCount = 0;
         $gitMock->expects($this->exactly(2))->method('getDiff')
-            ->will($this->onConsecutiveCalls(
-                $this->throwException(new GitException('', 128)),
-                'diff',
-            ));
+            ->willReturnCallback(function () use (&$callCount) {
+                if (++$callCount === 1) {
+                    throw new GitException('', 128);
+                }
+
+                return 'diff';
+            });
 
         $executorMock = $this->createManifestExecutorMock();
         $manifestExecutor = new DiffGenerator($reader, $fileStorageMock, $executorMock, $gitMock);
@@ -76,11 +80,15 @@ class ReleaseGroupManifestExecutorTest extends BaseTestCase
         $gitMock->method('hasChanges')->willReturn(true);
         $gitMock->method('getCurrentBranchName')->willReturn('HEAD detached at');
         $gitMock->expects($this->once())->method('getHeadHashCommit')->willReturn('testBranch');
+        $callCount2 = 0;
         $gitMock->expects($this->exactly(2))->method('getDiff')
-            ->will($this->onConsecutiveCalls(
-                $this->throwException(new GitException('', 128)),
-                'diff',
-            ));
+            ->willReturnCallback(function () use (&$callCount2) {
+                if (++$callCount2 === 1) {
+                    throw new GitException('', 128);
+                }
+
+                return 'diff';
+            });
 
         $executorMock = $this->createManifestExecutorMock();
         $manifestExecutor = new DiffGenerator($reader, $fileStorageMock, $executorMock, $gitMock);
