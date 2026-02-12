@@ -49,6 +49,7 @@ class StringConfigurationEnvironmentStrategyTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isApplicableDataProvider')]
     public function testIsApplicable(bool $expRes, $value): void
     {
         $this->assertSame($expRes, $this->strategy->isApplicable($value));
@@ -71,6 +72,7 @@ class StringConfigurationEnvironmentStrategyTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getFormattedExpressionDataProvider')]
     public function testGetFormattedExpression(string $expRes, string $value): void
     {
         $this->assertSame($expRes, $this->strategy->getFormattedExpression($value));

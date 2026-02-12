@@ -22,6 +22,7 @@ class ModuleRatingResponseMapperTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidResponseDataProvider')]
     public function testMapToModulesRatingResponseDtoShouldReturnExceptionWhenInvalidResponse(string $responseBody): void
     {
         //Arrange

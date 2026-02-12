@@ -91,6 +91,7 @@ class CodeSnifferCompositeNormalizerTest extends TestCase
      *
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('missedPhpConfigConditionsDataProvider')]
     public function testNormalizeShouldSkipConfigCoppingWhenConditionFalse(
         bool $isSprykerPackageInstalled,
         bool $isCsFixerExecutableFound,
