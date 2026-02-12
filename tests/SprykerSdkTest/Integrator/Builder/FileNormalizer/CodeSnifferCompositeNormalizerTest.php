@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace SprykerSdkTest\Integrator\Builder\FileNormalizer;
 
 use InvalidArgumentException;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SprykerSdk\Integrator\Builder\FileNormalizer\CodeSnifferCompositeNormalizer;
 use SprykerSdk\Integrator\Builder\FileNormalizer\FileNormalizerInterface;
@@ -92,7 +91,7 @@ class CodeSnifferCompositeNormalizerTest extends TestCase
      *
      * @return void
      */
-    #[DataProvider('missedPhpConfigConditionsDataProvider')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('missedPhpConfigConditionsDataProvider')]
     public function testNormalizeShouldSkipConfigCoppingWhenConditionFalse(
         bool $isSprykerPackageInstalled,
         bool $isCsFixerExecutableFound,

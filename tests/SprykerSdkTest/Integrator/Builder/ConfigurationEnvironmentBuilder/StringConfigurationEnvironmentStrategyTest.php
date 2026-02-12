@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace SprykerSdkTest\Integrator\Builder\ConfigurationEnvironmentBuilder;
 
 use Generator;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\StringConfigurationEnvironmentStrategy;
 
 class StringConfigurationEnvironmentStrategyTest extends TestCase
@@ -44,13 +44,14 @@ class StringConfigurationEnvironmentStrategyTest extends TestCase
 
     /**
      * @group test1
+     * @dataProvider isApplicableDataProvider
      *
      * @param bool $expRes
      * @param mixed $value
      *
      * @return void
      */
-    #[DataProvider('isApplicableDataProvider')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('isApplicableDataProvider')]
     public function testIsApplicable(bool $expRes, $value): void
     {
         $this->assertSame($expRes, $this->strategy->isApplicable($value));
@@ -66,12 +67,14 @@ class StringConfigurationEnvironmentStrategyTest extends TestCase
     }
 
     /**
+     * @dataProvider getFormattedExpressionDataProvider
+     *
      * @param string $expRes
      * @param string $value
      *
      * @return void
      */
-    #[DataProvider('getFormattedExpressionDataProvider')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('getFormattedExpressionDataProvider')]
     public function testGetFormattedExpression(string $expRes, string $value): void
     {
         $this->assertSame($expRes, $this->strategy->getFormattedExpression($value));
