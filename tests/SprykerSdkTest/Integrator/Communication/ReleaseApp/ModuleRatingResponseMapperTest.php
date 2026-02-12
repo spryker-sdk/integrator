@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SprykerSdkTest\Integrator\Communication\ReleaseApp;
 
 use Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SprykerSdk\Integrator\Communication\ReleaseApp\ModuleRatingResponseMapper;
 
@@ -22,6 +23,7 @@ class ModuleRatingResponseMapperTest extends TestCase
      *
      * @return void
      */
+    #[DataProvider('invalidResponseDataProvider')]
     public function testMapToModulesRatingResponseDtoShouldReturnExceptionWhenInvalidResponse(string $responseBody): void
     {
         //Arrange
