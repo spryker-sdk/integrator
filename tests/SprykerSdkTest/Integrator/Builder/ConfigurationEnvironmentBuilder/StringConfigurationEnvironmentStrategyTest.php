@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace SprykerSdkTest\Integrator\Builder\ConfigurationEnvironmentBuilder;
 
 use Generator;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SprykerSdk\Integrator\Builder\ConfigurationEnvironmentBuilder\StringConfigurationEnvironmentStrategy;
 
@@ -43,7 +42,6 @@ class StringConfigurationEnvironmentStrategyTest extends TestCase
     }
 
     /**
-     * @group test1
      * @dataProvider isApplicableDataProvider
      *
      * @param bool $expRes
