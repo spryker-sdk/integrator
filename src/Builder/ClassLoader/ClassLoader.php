@@ -65,7 +65,7 @@ class ClassLoader extends AbstractLoader implements ClassLoaderInterface
     }
 
     /**
-     * @param array<\PhpParser\Node\Stmt> $originalSyntaxTree
+     * @param array<\PhpParser\Node> $originalSyntaxTree
      *
      * @return string|null
      */

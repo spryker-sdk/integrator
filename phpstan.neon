@@ -21,3 +21,13 @@ parameters:
             identifier: missingType.iterableValue
         -
             identifier: missingType.generics
+        -
+            identifier: identical.alwaysFalse
+        -
+            identifier: identical.alwaysTrue
+        -
+            identifier: ternary.alwaysTrue
+        -
+            identifier: booleanAnd.rightAlwaysTrue
+        -
+            identifier: require.fileNotFound
