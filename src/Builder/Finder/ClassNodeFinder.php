@@ -84,7 +84,7 @@ class ClassNodeFinder implements ClassNodeFinderInterface
      */
     public function hasClassMethodName(ClassInformationTransfer $classInformationTransfer, string $methodName): bool
     {
-        /** @var \PhpParser\Node\Stmt\ClassMethod $node */
+        /** @var \PhpParser\Node\Stmt\ClassMethod|null $node */
         $node = (new NodeFinder())->findFirst($classInformationTransfer->getTokenTree(), function (Node $node) use ($methodName) {
             return $node instanceof ClassMethod && $node->name->toString() === $methodName;
         });

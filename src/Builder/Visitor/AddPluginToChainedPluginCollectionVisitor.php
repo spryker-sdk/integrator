@@ -177,19 +177,15 @@ class AddPluginToChainedPluginCollectionVisitor extends NodeVisitorAbstract
      */
     protected function isStatementAddPluginMethodCall(Stmt $stmt): bool
     {
-        if ($stmt instanceof Expression === false) {
+        if (!$stmt instanceof Expression) {
             return false;
         }
 
-        if ($stmt instanceof Expression && $stmt->expr instanceof MethodCall === false) {
+        if (!$stmt->expr instanceof MethodCall) {
             return false;
         }
 
-        if (
-            $stmt instanceof Expression
-            && $stmt->expr instanceof MethodCall
-            && strpos(strtolower($stmt->expr->name->toString()), 'add') === false
-        ) {
+        if (strpos(strtolower($stmt->expr->name->toString()), 'add') === false) {
             return false;
         }
 

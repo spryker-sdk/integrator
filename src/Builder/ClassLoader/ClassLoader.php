@@ -52,7 +52,7 @@ class ClassLoader extends AbstractLoader implements ClassLoaderInterface
         $classInformationTransfer->setTokenTree($syntaxTree)
             ->setOriginalTokenTree($originalSyntaxTree)
             ->setTokens($this->parser->getTokens())
-            ->setFilePath(realpath($fileName));
+            ->setFilePath(realpath($fileName) ?: null);
 
         $parentClass = $this->getParent($syntaxTree);
         if ($parentClass) {
@@ -65,7 +65,7 @@ class ClassLoader extends AbstractLoader implements ClassLoaderInterface
     }
 
     /**
-     * @param array $originalSyntaxTree
+     * @param array<\PhpParser\Node\Stmt> $originalSyntaxTree
      *
      * @return string|null
      */
@@ -120,13 +120,17 @@ class ClassLoader extends AbstractLoader implements ClassLoaderInterface
     {
         if (static::$composerClassLoader === null) {
             if (file_exists(APPLICATION_ROOT_DIR . '/vendor/autoload.php')) {
-                static::$composerClassLoader = require APPLICATION_ROOT_DIR . '/vendor/autoload.php';
-                static::$composerClassLoader->unregister();
+                /** @var \Composer\Autoload\ClassLoader $loader */
+                $loader = require APPLICATION_ROOT_DIR . '/vendor/autoload.php';
+                $loader->unregister();
+                static::$composerClassLoader = $loader;
 
                 return static::$composerClassLoader;
             }
 
-            static::$composerClassLoader = require INTEGRATOR_ROOT_DIR . '/vendor/autoload.php';
+            /** @var \Composer\Autoload\ClassLoader $loader */
+            $loader = require INTEGRATOR_ROOT_DIR . '/vendor/autoload.php';
+            static::$composerClassLoader = $loader;
         }
 
         return static::$composerClassLoader;

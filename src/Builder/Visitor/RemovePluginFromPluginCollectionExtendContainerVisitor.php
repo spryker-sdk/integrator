@@ -74,7 +74,7 @@ class RemovePluginFromPluginCollectionExtendContainerVisitor extends NodeVisitor
      */
     protected function handleContainerExtendClosure(Closure $closure): Closure
     {
-        $pluginToRemoveIndex = 0;
+        $pluginToRemoveIndex = null;
 
         foreach ($closure->stmts as $index => $stmt) {
             if ($stmt instanceof Expression === false) {

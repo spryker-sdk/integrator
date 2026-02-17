@@ -100,10 +100,8 @@ class RemoveGlueRelationshipFromClassListVisitor extends NodeVisitorAbstract
             return $node;
         }
 
-        /** @var \PhpParser\Node\Expr\ClassConstFetch $firstParam */
         $firstParam = $node->expr->args[0]->value;
 
-        /** @var \PhpParser\Node\Expr\New_ $secondParam */
         $secondParam = $node->expr->args[1]->value;
 
         if (!($firstParam instanceof ClassConstFetch) || $firstParam->class->toString() !== $this->keyClassToRemove || $firstParam->name->toString() !== $this->keyToRemove) {

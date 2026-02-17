@@ -18,6 +18,6 @@ parameters:
         - '#Property PhpParser\\Node\\Stmt\\ClassLike::\$stmts \(array<PhpParser\\Node\\Stmt>\) does not accept array<PhpParser\\Node>#'
         - '#Unsafe access to private property SprykerSdk\\Integrator\\Builder\\ClassLoader\\ClassLoader::\$composerClassLoader through static::#'
         -
-            identifier: missing.iterableValue
+            identifier: missingType.iterableValue
         -
-            identifier: missing.generics
+            identifier: missingType.generics

@@ -42,7 +42,7 @@ class ClassHelper implements ClassHelperInterface
             return '';
         }
 
-        return explode('\\', ltrim($className, '\\'))[0] ?? '';
+        return explode('\\', ltrim($className, '\\'))[0];
     }
 
     /**
