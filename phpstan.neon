@@ -4,9 +4,6 @@ parameters:
         - src/
     bootstrapFiles:
         - tests/bootstrap.php
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
-    treatPhpDocTypesAsCertain: false
 
     earlyTerminatingMethodCalls:
         SprykerSdk\Integrator\Transfer\AbstractTransfer:
