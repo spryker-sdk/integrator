@@ -124,10 +124,6 @@ class RemovePluginFromChainedPluginCollectionVisitor extends NodeVisitorAbstract
             }
         }
 
-        if (!$methodCall->var instanceof MethodCall) {
-            return $methodCall;
-        }
-
         $methodCall->var = $this->processMethodCall($methodCall->var);
 
         return $methodCall;

@@ -99,7 +99,7 @@ class RemovePluginFromPluginCollectionExtendContainerVisitor extends NodeVisitor
         }
 
         if ($pluginToRemoveIndex !== null) {
-            array_splice($closure->stmts, $pluginToRemoveIndex, 1);
+            array_splice($closure->stmts, (int)$pluginToRemoveIndex, 1);
         }
 
         return $closure;
