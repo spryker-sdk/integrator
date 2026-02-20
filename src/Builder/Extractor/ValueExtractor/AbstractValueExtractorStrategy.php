@@ -88,7 +88,7 @@ class AbstractValueExtractorStrategy
 
                 continue;
             }
-            if (is_string($key) && !$this->isConstant($key)) {
+            if (!$this->isConstant($key)) {
                 $key = sprintf('\'%s\'', $key);
             }
             if (is_string($value) && !$this->isConstant($value)) {

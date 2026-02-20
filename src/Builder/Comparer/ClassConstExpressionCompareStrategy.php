@@ -33,8 +33,8 @@ class ClassConstExpressionCompareStrategy implements CompareStrategyInterface
     }
 
     /**
-     * @param \PhpParser\Node\Expr\ClassConstFetch $node
-     * @param \PhpParser\Node\Expr\ClassConstFetch $nodeToCompare
+     * @param \PhpParser\Node $node
+     * @param \PhpParser\Node $nodeToCompare
      * @param array<\PhpParser\Node> $classTokenTree
      *
      * @return bool

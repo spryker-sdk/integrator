@@ -19,7 +19,7 @@ class ChainAssignValueTransfer
     protected array $keys = [];
 
     /**
-     * @var \PhpParser\Node\Expr|null;
+     * @var \PhpParser\Node\Expr|null
      */
     protected ?Expr $value = null;
 

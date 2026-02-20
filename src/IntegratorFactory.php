@@ -888,7 +888,7 @@ class IntegratorFactory
     }
 
     /**
-     * @return \SprykerSdk\Integrator\Helper\ClassHelperInterface;
+     * @return \SprykerSdk\Integrator\Helper\ClassHelperInterface
      */
     public function createClassHelper(): ClassHelperInterface
     {

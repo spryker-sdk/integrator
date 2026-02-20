@@ -74,7 +74,7 @@ class RemovePluginFromPluginCollectionExtendContainerVisitor extends NodeVisitor
      */
     protected function handleContainerExtendClosure(Closure $closure): Closure
     {
-        $pluginToRemoveIndex = 0;
+        $pluginToRemoveIndex = null;
 
         foreach ($closure->stmts as $index => $stmt) {
             if ($stmt instanceof Expression === false) {
@@ -99,7 +99,7 @@ class RemovePluginFromPluginCollectionExtendContainerVisitor extends NodeVisitor
         }
 
         if ($pluginToRemoveIndex !== null) {
-            array_splice($closure->stmts, $pluginToRemoveIndex, 1);
+            array_splice($closure->stmts, (int)$pluginToRemoveIndex, 1);
         }
 
         return $closure;

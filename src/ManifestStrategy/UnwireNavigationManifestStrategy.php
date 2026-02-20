@@ -47,10 +47,10 @@ class UnwireNavigationManifestStrategy extends AbstractNavigationManifestStrateg
     }
 
     /**
-     * @param array<string|int, array<int|string, mixed>> $navigation
+     * @param array<string|int, mixed> $navigation
      * @param array<string|int, array<string, mixed|null>|null> $manifestData
      *
-     * @return array<string|int, array<int|string, mixed>>
+     * @return array<string|int, mixed>
      */
     protected function applyNewNavigation(
         array $navigation,
