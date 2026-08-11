@@ -19,6 +19,11 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
     protected const PHP_CS_FIX_RELATIVE_PATH = 'vendor/bin/phpcbf';
 
     /**
+     * @var string
+     */
+    protected const SORTED_USES_SNIFF = 'SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses';
+
+    /**
      * @var \SprykerSdk\Integrator\IntegratorConfig
      */
     protected $config;
@@ -61,8 +66,16 @@ class PhpCSFixerFileNormalizer implements FileNormalizerInterface
      */
     public function normalize(array $filePaths): void
     {
+        $absoluteFilePaths = $this->getAbsoluteFilePaths($filePaths);
+
+        // `Spryker.Namespaces.UseStatement` and `AlphabeticallySortedUses` fix the same use statements
+        // against each other, so on bigger files the fixer never settles, gives up after 50 passes
+        // and leaves the file unformatted. Sorting is therefore applied as a separate second run.
         $this->codeSnifferCommandExecutor->executeCodeSnifferCommand(
-            [$this->getCSFixPath(), ...$this->getAbsoluteFilePaths($filePaths)],
+            [$this->getCSFixPath(), '--exclude=' . static::SORTED_USES_SNIFF, ...$absoluteFilePaths],
+        );
+        $this->codeSnifferCommandExecutor->executeCodeSnifferCommand(
+            [$this->getCSFixPath(), '--sniffs=' . static::SORTED_USES_SNIFF, ...$absoluteFilePaths],
         );
     }
 
