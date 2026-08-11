@@ -14,7 +14,7 @@ This is a development only "require-dev" library:
 composer require --dev spryker-sdk/integrator
 ```
 
-Available options:
+Available options 1:
 - `--format` - Define the format of the command output, example: json
 
 ## Available commands
