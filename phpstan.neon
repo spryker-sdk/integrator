@@ -30,4 +30,10 @@ parameters:
         -
             identifier: booleanAnd.rightAlwaysTrue
         -
+            identifier: booleanAnd.alwaysTrue
+        -
+            identifier: booleanNot.alwaysTrue
+        -
+            identifier: deadCode.unreachable
+        -
             identifier: require.fileNotFound
