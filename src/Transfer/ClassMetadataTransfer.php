@@ -763,7 +763,7 @@ class ClassMetadataTransfer extends AbstractTransfer
     public function fromArray(array $data, bool $ignoreMissingProperty = false)
     {
         foreach ($data as $property => $value) {
-            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? null;
+            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? '';
 
             switch ($normalizedPropertyName) {
                 case 'target':
