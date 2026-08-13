@@ -58,11 +58,12 @@ class PhpCSFixerFileNormalizerTest extends TestCase
     protected function createCodeSnifferCommandExecutorMock(): CodeSnifferCommandExecutor
     {
         $codeSnifferCommandExecutor = $this->createMock(CodeSnifferCommandExecutor::class);
-        $codeSnifferCommandExecutor->expects($this->once())
+        $codeSnifferCommandExecutor->expects($this->exactly(2))
             ->method('executeCodeSnifferCommand')
             ->with(
                 $this->callback(function ($command) {
-                    return strpos($command[0], 'vendor/bin/phpcbf') !== false;
+                    return strpos($command[0], 'vendor/bin/phpcbf') !== false
+                        && (strpos($command[1], '--exclude=') === 0 || strpos($command[1], '--sniffs=') === 0);
                 }),
             );
 
