@@ -32,10 +32,9 @@ class NullInputOutputTest extends TestCase
      */
     public function testWrite(): void
     {
-        $this->expectOutputString('Output message');
-        $this->command->write('Output message');
-
         $this->expectOutputString('Output messageOutput message 2<br>Output message 3<br>');
+
+        $this->command->write('Output message');
         $this->command->write(
             [
                 'Output message 2',

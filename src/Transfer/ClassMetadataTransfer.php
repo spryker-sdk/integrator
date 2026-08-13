@@ -763,7 +763,7 @@ class ClassMetadataTransfer extends AbstractTransfer
     public function fromArray(array $data, bool $ignoreMissingProperty = false)
     {
         foreach ($data as $property => $value) {
-            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? null;
+            $normalizedPropertyName = $this->transferPropertyNameMap[$property] ?? '';
 
             switch ($normalizedPropertyName) {
                 case 'target':
@@ -776,6 +776,19 @@ class ClassMetadataTransfer extends AbstractTransfer
 
                     break;
                 case 'call':
+                    if (is_array($value)) {
+                        $type = $this->transferMetadata[$normalizedPropertyName]['type'];
+
+                        $value = (new $type())->fromArray($value, $ignoreMissingProperty);
+                    }
+
+                    if ($this->isPropertyStrict($normalizedPropertyName)) {
+                        $this->assertInstanceOfTransfer($normalizedPropertyName, $value);
+                    }
+                    $this->$normalizedPropertyName = $value;
+                    $this->modifiedProperties[$normalizedPropertyName] = true;
+
+                    break;
                 case 'before':
                 case 'after':
                 case 'prependArguments':
