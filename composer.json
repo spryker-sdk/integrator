@@ -14,7 +14,7 @@
         "czproject/git-php": "^4.1",
         "guzzlehttp/guzzle": "^7.7",
         "nikic/php-parser": "^5.7.0",
-        "spryker-sdk/utils": "^0.2.2",
+        "spryker-sdk/utils": "^0.2.7",
         "symfony/console": "^6.4 || ^7.0",
         "symfony/finder": "^6.4 || ^7.0",
         "symfony/process": "^6.4 || ^7.0"
