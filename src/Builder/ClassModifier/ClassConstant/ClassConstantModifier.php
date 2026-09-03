@@ -96,6 +96,10 @@ class ClassConstantModifier implements ClassConstantModifierInterface
             return $this->parseArrayValue($value);
         }
 
+        if (is_string($value) && strpos($value, '::') !== false) {
+            return $this->parseSingleValue($value);
+        }
+
         return $value;
     }
 
