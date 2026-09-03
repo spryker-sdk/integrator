@@ -16,7 +16,20 @@
     <file>src/</file>
     <file>tests/</file>
 
-    <rule ref="vendor/spryker/code-sniffer/SprykerStrict/ruleset.xml"/>
+    <rule ref="vendor/spryker/code-sniffer/SprykerStrict/ruleset.xml">
+        <!-- excluded on purpose: SprykerStrict pulls in the full Spryker/ruleset.xml,
+             which requires docblocks (DocBlock/DocBlockConst/InlineDocBlock/DocBlockReturnVoid/DocBlockParam),
+             directly contradicting SprykerStrict.TypeHints.*.UselessAnnotation, which forbids
+             them. Without this exclude, phpcbf oscillates forever on typed methods/properties.
+             TODO: revisit and clean up doc types properly instead of excluding. -->
+        <exclude name="Spryker.Commenting.DocBlock"/>
+        <exclude name="Spryker.Commenting.InlineDocBlock"/>
+        <exclude name="Spryker.Commenting.DocBlockReturnVoid"/>
+        <exclude name="Spryker.Commenting.DocBlockParam"/>
+        <exclude name="SprykerStrict.TypeHints.ParameterTypeHint.UselessAnnotation"/>
+        <exclude name="SprykerStrict.TypeHints.PropertyTypeHint.UselessAnnotation"/>
+        <exclude name="SprykerStrict.TypeHints.ReturnTypeHint.UselessAnnotation"/>
+    </rule>
 
     <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
         <exclude-pattern>src/Builder/Printer/ClassPrinter\.php</exclude-pattern>
