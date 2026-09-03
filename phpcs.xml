@@ -23,7 +23,6 @@
              them. Without this exclude, phpcbf oscillates forever on typed methods/properties.
              TODO: revisit and clean up doc types properly instead of excluding. -->
         <exclude name="Spryker.Commenting.DocBlock"/>
-        <exclude name="Spryker.Commenting.DocBlockConst"/>
         <exclude name="Spryker.Commenting.InlineDocBlock"/>
         <exclude name="Spryker.Commenting.DocBlockReturnVoid"/>
         <exclude name="Spryker.Commenting.DocBlockParam"/>
